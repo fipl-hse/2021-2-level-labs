@@ -105,7 +105,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :return: a dictionary with three keys – name, freq, n_words
     """
     pass
-
+help
 
 def save_profile(profile: dict) -> int:
     """
