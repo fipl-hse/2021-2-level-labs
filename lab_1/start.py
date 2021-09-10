@@ -3,6 +3,7 @@ Language detection starter
 """
 
 
+
 if __name__ == '__main__':
 
     english_text = """A man walks into a bar and orders a glass of water. 
