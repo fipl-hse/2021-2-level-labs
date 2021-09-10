@@ -4,7 +4,7 @@ Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
+def token(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
