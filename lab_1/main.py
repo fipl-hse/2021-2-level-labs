@@ -7,7 +7,7 @@ Language detection
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words
+    removes punctuation and other symbols from words list
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
