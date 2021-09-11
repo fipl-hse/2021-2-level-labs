@@ -8,7 +8,7 @@ def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
-    :param text: a text
+    :param text: a text TEXT ADDED
     :return: a list of lower-cased tokens without punctuation
     """
     pass
