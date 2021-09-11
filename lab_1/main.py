@@ -11,6 +11,10 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    text= text.split()
+    return text
+
+
     pass
 
 
