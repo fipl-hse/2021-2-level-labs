@@ -34,13 +34,13 @@ class DetectLanguageTest(unittest.TestCase):
         actual = detect_language(unknown_profile, en_profile, de_profile)
         self.assertEqual(expected, actual)
 
-    def test_detect_language_ideal(self):
+    def test_detect_language_deutsch_ideal(self):
         """
-        Ideal scenario
+        Ideal scenario with deutsch
         """
 
         unknown_profile = {'name': 'unk',
-                           'freq': {'happy': 5, 'she': 2, 'man': 1},
+                           'freq': {'weiß': 5, 'überlegen': 2, 'nicht': 1},
                            'n_words': 3}
 
         en_profile = {'name': 'en',
@@ -52,6 +52,47 @@ class DetectLanguageTest(unittest.TestCase):
                                'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
                       'n_words': 8}
 
-        expected = en_profile['name']
+        expected = de_profile['name']
+        actual = detect_language(unknown_profile, en_profile, de_profile)
+        self.assertEqual(expected, actual)
+
+    def test_detect_language_bad_input(self):
+        """
+        Bad input scenario
+        """
+
+        unknown_profile = []
+
+        en_profile = {'name': 'en',
+                      'freq': {'happy': 2, 'he': 1, 'man': 1},
+                      'n_words': 3}
+
+        de_profile = {'name': 'de',
+                      'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
+                               'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
+                      'n_words': 8}
+
+        expected = None
+        actual = detect_language(unknown_profile, en_profile, de_profile)
+        self.assertEqual(expected, actual)
+
+    def test_detect_language_bad_input_profile(self):
+        """
+        Bad input scenario
+        """
+
+        unknown_profile = {'name': 'de',
+                           'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
+                                    'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
+                           'n_words': 8}
+
+        en_profile = 123
+
+        de_profile = {'name': 'de',
+                      'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
+                               'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
+                      'n_words': 8}
+
+        expected = None
         actual = detect_language(unknown_profile, en_profile, de_profile)
         self.assertEqual(expected, actual)
