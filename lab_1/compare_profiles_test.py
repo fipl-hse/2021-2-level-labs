@@ -4,7 +4,7 @@ Checks the first lab language comparison function
 """
 
 import unittest
-from main import calculate_distance
+from main import compare_profiles
 
 
 class CompareProfilesTest(unittest.TestCase):
@@ -26,7 +26,7 @@ class CompareProfilesTest(unittest.TestCase):
                       'n_words': 8}
 
         expected = 0.25
-        actual = calculate_distance(en_profile, de_profile, 4)
+        actual = compare_profiles(en_profile, de_profile, 4)
         self.assertEqual(expected, actual)
 
     def test_compare_profiles_no_intersections_ideal(self):
@@ -43,7 +43,7 @@ class CompareProfilesTest(unittest.TestCase):
                       'n_words': 7}
 
         expected = 0.0
-        actual = calculate_distance(en_profile, de_profile, 4)
+        actual = compare_profiles(en_profile, de_profile, 4)
         self.assertEqual(expected, actual)
 
     def test_compare_profiles_identical(self):
@@ -59,7 +59,7 @@ class CompareProfilesTest(unittest.TestCase):
                           'n_words': 3}
 
         expected = 1.0
-        actual = calculate_distance(first_profile, second_profile, 2)
+        actual = compare_profiles(first_profile, second_profile, 2)
         self.assertEqual(expected, actual)
 
     def test_compare_profiles_bad_input(self):
@@ -74,7 +74,7 @@ class CompareProfilesTest(unittest.TestCase):
                       'n_words': 7}
 
         expected = None
-        actual = calculate_distance(en_profile, de_profile, 4)
+        actual = compare_profiles(en_profile, de_profile, 4)
         self.assertEqual(expected, actual)
 
     def test_compare_profiles_bad_input_top_n(self):
@@ -91,5 +91,5 @@ class CompareProfilesTest(unittest.TestCase):
                       'n_words': 7}
 
         expected = None
-        actual = calculate_distance(en_profile, de_profile, dict())
+        actual = compare_profiles(en_profile, de_profile, dict())
         self.assertEqual(expected, actual)
