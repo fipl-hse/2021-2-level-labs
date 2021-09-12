@@ -31,7 +31,7 @@ class DetectLanguageTest(unittest.TestCase):
                       'n_words': 8}
 
         expected = en_profile['name']
-        actual = detect_language(unknown_profile, en_profile, de_profile)
+        actual = detect_language(unknown_profile, en_profile, de_profile, 2)
         self.assertEqual(expected, actual)
 
     def test_detect_language_deutsch_ideal(self):
@@ -53,7 +53,7 @@ class DetectLanguageTest(unittest.TestCase):
                       'n_words': 8}
 
         expected = de_profile['name']
-        actual = detect_language(unknown_profile, en_profile, de_profile)
+        actual = detect_language(unknown_profile, en_profile, de_profile, 2)
         self.assertEqual(expected, actual)
 
     def test_detect_language_bad_input(self):
@@ -73,7 +73,7 @@ class DetectLanguageTest(unittest.TestCase):
                       'n_words': 8}
 
         expected = None
-        actual = detect_language(unknown_profile, en_profile, de_profile)
+        actual = detect_language(unknown_profile, en_profile, de_profile, 2)
         self.assertEqual(expected, actual)
 
     def test_detect_language_bad_input_profile(self):
@@ -94,5 +94,5 @@ class DetectLanguageTest(unittest.TestCase):
                       'n_words': 8}
 
         expected = None
-        actual = detect_language(unknown_profile, en_profile, de_profile)
+        actual = detect_language(unknown_profile, en_profile, de_profile, 2)
         self.assertEqual(expected, actual)
