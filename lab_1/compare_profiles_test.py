@@ -25,8 +25,8 @@ class CompareProfilesTest(unittest.TestCase):
                                'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
                       'n_words': 8}
 
-        expected = 0.25
-        actual = compare_profiles(en_profile, de_profile, 4)
+        expected = 0.33
+        actual = compare_profiles(en_profile, de_profile, 3)
         self.assertEqual(expected, actual)
 
     def test_compare_profiles_no_intersections_ideal(self):

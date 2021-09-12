@@ -44,7 +44,7 @@ class GetTopNWordsTest(unittest.TestCase):
         Get top number of words with bad argument inputs
         """
         bad_inputs = ['string', (), None, 9, 9.34, True, [None], []]
-        expected = []
+        expected = None
         for bad_input in bad_inputs:
             actual = get_top_n_words(bad_input, 2)
             self.assertEqual(expected, actual)

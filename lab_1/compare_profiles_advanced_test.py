@@ -27,8 +27,8 @@ class CompareProfilesAdvancedTest(unittest.TestCase):
 
         expected = {'name': 'en',
                     'common': ['a', 'man'],
-                    'score': 0.222,
-                    'max_length_word': 'man',
+                    'score': 0.5,
+                    'max_length_word': 'happy',
                     'min_length_word': 'a',
                     'average_token_length': 2.75,
                     'sorted_common': ['a', 'man']}
@@ -52,7 +52,7 @@ class CompareProfilesAdvancedTest(unittest.TestCase):
 
         expected = {'name': 'de',
                     'common': ['möchte', 'nicht', 'weiß', 'ich'],
-                    'score': 0.714,
+                    'score': 0.66,
                     'max_length_word': 'möchte',
                     'min_length_word': 'ich',
                     'average_token_length': 5.75,

@@ -58,7 +58,7 @@ class TokenizeTest(unittest.TestCase):
         Tokenize bad input argument scenario
         """
         bad_inputs = [[], {}, (), None, 9, 9.34, True]
-        expected = []
+        expected = None
         for bad_input in bad_inputs:
             actual = tokenize(bad_input)
             self.assertEqual(expected, actual)

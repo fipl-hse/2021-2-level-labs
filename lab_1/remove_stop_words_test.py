@@ -28,7 +28,7 @@ class RemoveStopWordsTest(unittest.TestCase):
         """
         bad_inputs_first = [{}, (), None, 9, 9.34, True]
         bad_inputs_second = [{}, (), None, 9, 9.34, True]
-        expected = []
+        expected = None
         for bad_input in range(0, 5):
             actual_1 = remove_stop_words(bad_inputs_first[bad_input], bad_inputs_second[bad_input])
             actual_2 = remove_stop_words([], bad_inputs_second[bad_input])

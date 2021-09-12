@@ -60,3 +60,13 @@ class LoadProfileTest(unittest.TestCase):
         path_to_profile = os.path.join(LoadProfileTest.PATH_TO_PROFILES_FOLDER, 'noneexistent.json')
         actual = load_profile(path_to_profile)
         self.assertEqual(expected, actual)
+
+    def test_load_profile_bad_input_type(self):
+        """
+        Bad input scenario
+        """
+        expected = None
+
+        path_to_profile = []
+        actual = load_profile(path_to_profile)
+        self.assertEqual(expected, actual)
