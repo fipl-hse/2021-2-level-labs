@@ -30,7 +30,7 @@ class CompareProfilesAdvancedTest(unittest.TestCase):
                     'score': 0.222,
                     'max_length_word': 'man',
                     'min_length_word': 'a',
-                    'average_token_length': 0,
+                    'average_token_length': 2.75,
                     'sorted_common': ['a', 'man']}
 
         actual = compare_profiles_advanced(unk_profile, en_profile, 2)
@@ -55,7 +55,7 @@ class CompareProfilesAdvancedTest(unittest.TestCase):
                     'score': 0.714,
                     'max_length_word': 'möchte',
                     'min_length_word': 'ich',
-                    'average_token_length': 0,
+                    'average_token_length': 5.75,
                     'sorted_common': ['ich', 'möchte', 'nicht', 'weiß']}
 
         actual = compare_profiles_advanced(unk_profile, de_profile, 4)
