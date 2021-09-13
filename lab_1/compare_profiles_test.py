@@ -22,7 +22,7 @@ class CompareProfilesTest(unittest.TestCase):
 
         de_profile = {'name': 'de',
                       'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
-                               'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
+                               'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 2},
                       'n_words': 8}
 
         expected = 0.33
