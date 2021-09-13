@@ -13,6 +13,7 @@ def tokenize(text: str) -> list or None:
     """
     text = text.split()
     return text
+    #test comment
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
