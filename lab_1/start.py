@@ -14,7 +14,7 @@ if __name__ == '__main__':
     with open('texts/unknown.txt', 'r', encoding='utf-8') as file_to_read:
         unknown_text = file_to_read.read()
 
-    expected = 'en'
+    EXPECTED = 'en'
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
