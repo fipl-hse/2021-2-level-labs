@@ -1,7 +1,6 @@
 """
 Lab 1
 Language detection
-test
 """
 
 
