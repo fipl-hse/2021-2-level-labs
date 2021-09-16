@@ -1,7 +1,7 @@
 Lab 1
 Language detection
 """Изменения"""
-
+"status_check"
 
 def tokenize(text: str) -> list or None:
     """
