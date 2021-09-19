@@ -14,7 +14,7 @@ def tokenize(text: str) -> list or None:
     text = text.split()
     return text
     print ('hello')
-    print ('y')
+    print ('yу')
 
 
     pass
