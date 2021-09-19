@@ -3,51 +3,53 @@ Lab 1
 Language detection
 """
 import re
-# import nltk
+import nltk
 
 def tokenize(text: str) -> list or None:
+
     text = re.split(r"[^\w\s]", text)
     text = "".join(text)
     text = text.lower()
     tokens = re.findall(r"\w+", text)
     return tokens
 
-text = '''  
-At first, von Frisch thought the bees were responding only to the scent of the food.
-But what did the third dance mean? And if bees were responding only to the scent,
-how could they also ‘sniff down’ food hundreds of metres away from the hive*, food
-which was sometimes downwind? On a hunch, he started gradually moving the
-feeding dish further and further away and noticed as he did so that the dances of the
-returning scout bees also started changing. If he placed the feeding dish over nine
-metres away, the second type of dance, the sickle version, came into play.
-But once he moved it past 36 metres, the scouts would then start dancing the third,
-quite different, waggle dance.
-The measurement of the actual distance too, he concluded, was precise. For
-example, a feeding dish 300 metres away was indicated by 15 complete runs
-through the pattern in 30 seconds. When the dish was moved to 60 metres away,
-the number dropped to eleven.'''
 
-tokenize(text)
+unknown_text = open('unknown.txt', encoding='utf-8').read()
+en_text = open('en.txt', encoding='utf-8').read()
+de_text = open('de.txt', encoding='utf-8').read()
+
+
+# print(tokenize(en_text))
+# print(tokenize(de_text))
+# print(tokenize(unknown_text))
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
+    filt_tokens = []
     for token in tokens:
         if token not in stop_words:
             filt_tokens.append(token)
             tokens = filt_tokens
     return tokens
 
-tokens = tokenize(text)
-# stop_words = nltk.corpus.stopwords.words('english')
-# stop_words = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"]
-stop_words = ['the', 'a', 'is']
-filt_tokens = []
 
-remove_stop_words(tokens, stop_words)
+tokens_en = tokenize(en_text)
+tokens_de = tokenize(de_text)
+tokens_unknown = tokenize(unknown_text)
+
+stop_words_en = nltk.corpus.stopwords.words('english')
+stop_words_de = nltk.corpus.stopwords.words('german')
+stop_words_unknown = []
+
+
+# print(remove_stop_words(tokens_en, stop_words_en))
+# print(remove_stop_words(tokens_de, stop_words_de))
+# print(remove_stop_words(tokens_unknown, stop_words_unknown))
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
 
+    freq_dict = {}
     for word in tokens:
         if word not in freq_dict:
             freq_dict[word] = 1
@@ -55,17 +57,28 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freq_dict[word] += 1
     return freq_dict
 
-freq_dict = {}
-tokens = remove_stop_words(tokens, stop_words)
 
-calculate_frequencies(tokens)
+tokens_en = remove_stop_words(tokens_en, stop_words_en)
+tokens_de = remove_stop_words(tokens_de, stop_words_de)
+tokens_unknown = remove_stop_words(tokens_unknown, stop_words_unknown)
+
+
+# print(calculate_frequencies(tokens_en))
+# print(calculate_frequencies(tokens_de))
+# print(calculate_frequencies(tokens_unknown))
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+
+    words = len(freq_dict)
+    freq_val = reversed(sorted(freq_dict.values()))
+    sorted_freq = {}
 
     for i in freq_val:
         for k in freq_dict.keys():
             if freq_dict[k] == i:
                 sorted_freq[k] = freq_dict[k]
+
+    sf_val = [sorted_freq.values()]
 
     if top_n > words:
         top_words = sorted_freq
@@ -76,15 +89,23 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         top_words = dict(zip(s, v))
         return top_words
 
-sorted_freq = {}
-new_dicts = {v: k for k, v in freq_dict.items()}
-freq_dict = calculate_frequencies(tokens)
-top_n = len(new_dicts)
-words = len(freq_dict)
-freq_val = reversed(sorted(freq_dict.values()))
-sf_val = [sorted_freq.values()]
 
-get_top_n_words(freq_dict, top_n)
+freq_dict_en = calculate_frequencies(tokens_en)
+freq_dict_de = calculate_frequencies(tokens_de)
+freq_dict_unknown = calculate_frequencies(tokens_unknown)
+
+new_dicts_en = {v: k for k, v in freq_dict_en.items()}
+new_dicts_de = {v: k for k, v in freq_dict_de.items()}
+new_dicts_unknown = {v: k for k, v in freq_dict_unknown.items()}
+
+top_n_en = len(new_dicts_en)
+top_n_de = len(new_dicts_de)
+top_n_unknown = len(new_dicts_unknown)
+
+
+# print(get_top_n_words(freq_dict_en, top_n_en))
+# print(get_top_n_words(freq_dict_de, top_n_de))
+# print(get_top_n_words(freq_dict_unknown, top_n_unknown))
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
