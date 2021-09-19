@@ -36,6 +36,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         return None
     if not isinstance(stop_words, list):
         return tokens
+    if not len(tokens):
+        return None
 
     # Remove stop words from tokens
     tokens = [token for token in tokens if token not in stop_words]
@@ -129,8 +131,8 @@ def compare_profiles(unknown_profile: dict,
             or not isinstance(top_n, int)):
         return None
     # Get sets of top N tokens of given profiles
-    compare_top = set(get_top_n_words(profile_to_compare, top_n))
-    unknown_top = set(get_top_n_words(profile_to_compare, top_n))
+    compare_top = set(get_top_n_words(profile_to_compare["freq"], top_n))
+    unknown_top = set(get_top_n_words(unknown_profile["freq"], top_n))
     # Find set of shared tokens
     shared = compare_top.intersection(unknown_top)
     # Find distance between profiles
