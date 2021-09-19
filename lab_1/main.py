@@ -34,10 +34,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     # Check for bad input
     if not isinstance(tokens, list):
         return None
-    if not isinstance(stop_words, list):
-        return tokens
     if not len(tokens):
         return None
+    if not isinstance(stop_words, list):
+        return tokens
 
     # Remove stop words from tokens
     tokens = [token for token in tokens if token not in stop_words]
@@ -136,7 +136,7 @@ def compare_profiles(unknown_profile: dict,
     # Find set of shared tokens
     shared = compare_top.intersection(unknown_top)
     # Find distance between profiles
-    distance = len(shared) / len(unknown_top)
+    distance = round(len(shared) / len(unknown_top), 2)
     return distance
 
 
@@ -164,9 +164,9 @@ def detect_language(unknown_profile: dict,
         first_name_alphabetically = min(profile_1["name"], profile_2["name"])
         return first_name_alphabetically
     elif distance_1 > distance_2:
-        return profile_1
+        return profile_1["name"]
     else:
-        return profile_2
+        return profile_2["name"]
 
 
 def compare_profiles_advanced(unknown_profile: dict,
