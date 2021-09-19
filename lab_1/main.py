@@ -12,11 +12,10 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
     text = text.split()
+    for i in range(len(text)):
+        text[i] = text[i].lower()
     return text
-    print ('hello')
-    print ('yу')
-
-
+#tokenize (text)
     pass
 
 
@@ -27,6 +26,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+    tokens = [n for n in tokens if n not in stop_words]
+    return tokens
+#remove_stop_words(tokenize(text), ['']))
     pass
 
 
@@ -36,6 +38,14 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+    freq_dict = {}
+    for word in tokens:
+        if word not in freq_dict:
+            freq_dict[word] = 1
+        else:
+            freq_dict[word] += 1
+    return freq_dict
+#(calculate_frequencies(rem(texts(text), [''])))
     pass
 
 
