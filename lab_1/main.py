@@ -1,9 +1,10 @@
-import json
-
 """
 Lab 1
 Language detection
 """
+
+import json
+from os.path import exists
 
 
 def tokenize(text: str) -> list or None:
@@ -263,8 +264,11 @@ def load_profile(path_to_file: str) -> dict or None:
     # Check for bad input
     if not isinstance(path_to_file, str):
         return None
-    with open(path_to_file) as f:
-        profile = json.load(f)
+    if not exists(path_to_file):
+        return None
+    # Load profile from file
+    with open(path_to_file, encoding="utf8") as file:
+        profile = json.load(file)
     if profile:
         return profile
     return None
@@ -290,6 +294,6 @@ def save_profile(profile: dict) -> int:
     # Generate file name from profile name
     path_to_file = "{}.json".format(profile["name"])
     # Save profile in json file
-    with open(path_to_file, "w") as f:
-        json.dump(profile, f)
+    with open(path_to_file, "w", encoding="utf8") as file:
+        json.dump(profile, file)
     return 0
