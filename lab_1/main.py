@@ -11,8 +11,19 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    text = text.split()
-    return text
+    if type(text) == str:
+        symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', '}', '}',
+                   '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7',
+                   '8', '9', '0']
+        text = text.lower()
+        for i in symbols:
+            text = text.replace(i, '')
+        text = text.split()
+        print(text)
+        return text
+    else:
+        return None
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
