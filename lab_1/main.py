@@ -45,7 +45,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
         else:
             freq_dict[word] += 1
     return freq_dict
-#(calculate_frequencies(rem(texts(text), [''])))
+##(calculate_frequencies(rem(texts(text), [''])))
     pass
 
 
