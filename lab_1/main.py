@@ -34,7 +34,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     # Check for bad input
     if not isinstance(tokens, list):
         return None
-    if not len(tokens):
+    if not tokens:
         return None
     if not isinstance(stop_words, list):
         return tokens
@@ -60,7 +60,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
         # Check for bad list contents
         if not isinstance(token, str):
             return None
-        
+
         if token not in frequencies:
             frequencies[token] = 0
         frequencies[token] += 1
@@ -161,12 +161,12 @@ def detect_language(unknown_profile: dict,
     distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
     distance_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if distance_1 == distance_2:
-        first_name_alphabetically = min(profile_1["name"], profile_2["name"])
-        return first_name_alphabetically
+        name = min(profile_1["name"], profile_2["name"])
     elif distance_1 > distance_2:
-        return profile_1["name"]
+        name = profile_1["name"]
     else:
-        return profile_2["name"]
+        name = profile_2["name"]
+    return name
 
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -234,13 +234,13 @@ def detect_language_advanced(unknown_profile: dict,
     # Generate reports on every eligible profile
     reports = []
     for profile in profiles:
-        if profile["name"] in languages or not len(languages):
+        if profile["name"] in languages or not languages:
             report = compare_profiles_advanced(unknown_profile,
                                                profile,
                                                top_n)
             reports.append(report)
     # If no report is available, language input was bad
-    if not len(reports):
+    if not reports:
         return None
     # Secondarily sort by profile name.
     # This is used as a fallback when scores are equal.
