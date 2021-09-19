@@ -12,12 +12,12 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
     # Check for bad input
-    if type(text) is not str:
+    if not isinstance(text, str):
         return None
 
     # Remove non-alphabetic characters
-    text = ''.join([i for i in text if i.isalpha()])
-    
+    text = ''.join([i for i in text if i.isalpha() or i.isspace()])
+
     # Convert to lowercase and split into tokens
     text = text.lower()
     text = text.split()
@@ -32,9 +32,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     # Check for bad input
-    if type(tokens) is not list:
+    if not isinstance(tokens, list):
         return None
-    if type(stop_words) is not list:
+    if not isinstance(stop_words, list):
         return tokens
 
     # Remove stop words from tokens
@@ -49,12 +49,16 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     # Check for bad input
-    if type(tokens) is not list:
+    if not isinstance(tokens, list):
         return None
 
     # Record the frequency of tokens in a dictionary
     frequencies = {}
     for token in tokens:
+        # Check for bad list contents
+        if not isinstance(token, str):
+            return None
+        
         if token not in frequencies:
             frequencies[token] = 0
         frequencies[token] += 1
@@ -69,7 +73,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
     # Check for bad input
-    if type(freq_dict) is not dict or type(top_n) is not int:
+    if (not isinstance(freq_dict, dict)
+            or not isinstance(top_n, int)):
         return None
     # Convert frequency dictionary to list of tuples
     tokens = freq_dict.items()
@@ -82,7 +87,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     return tokens
 
 
-def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+def create_language_profile(language: str,
+                            text: str,
+                            stop_words: list) -> dict or None:
     """
     Creates a language profile
     :param language: a language
@@ -91,9 +98,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
     # Check for bad input
-    if (type(language) is not str
-            or type(text) is not str
-            or type(stop_words) is not list):
+    if (not isinstance(language, str)
+            or not isinstance(text, str)
+            or not isinstance(stop_words, list)):
         return None
     # Get frequencies
     tokens = tokenize(text)
@@ -106,7 +113,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     return profile
 
 
-def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+def compare_profiles(unknown_profile: dict,
+                     profile_to_compare: dict,
+                     top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
@@ -115,9 +124,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
     # Check for bad input
-    if (type(unknown_profile) is not dict
-            or type(profile_to_compare) is not dict
-            or type(top_n) is not int):
+    if (not isinstance(unknown_profile, dict)
+            or not isinstance(profile_to_compare, dict)
+            or not isinstance(top_n, int)):
         return None
     # Get sets of top N tokens of given profiles
     compare_top = set(get_top_n_words(profile_to_compare, top_n))
@@ -129,7 +138,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return distance
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict,
+                    profile_1: dict,
+                    profile_2: dict,
+                    top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -139,10 +151,10 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
     # Check for bad input
-    if (type(unknown_profile) is not dict
-            or type(profile_1) is not dict
-            or type(profile_2) is not dict
-            or type(top_n) is not int):
+    if (not isinstance(unknown_profile, dict)
+            or not isinstance(profile_1, dict)
+            or not isinstance(profile_2, dict)
+            or not isinstance(top_n, int)):
         return None
     distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
     distance_2 = compare_profiles(unknown_profile, profile_2, top_n)
@@ -155,7 +167,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         return profile_2
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict,
+                              profile_to_compare: dict,
+                              top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -167,7 +181,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     pass
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict,
+                             profiles: list,
+                             languages: list,
+                             top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
