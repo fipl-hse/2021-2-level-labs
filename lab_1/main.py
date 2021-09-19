@@ -1,3 +1,5 @@
+import json
+
 """
 Lab 1
 Language detection
@@ -258,9 +260,14 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if path_to_file:
-        return
-    return
+    # Check for bad input
+    if not isinstance(path_to_file, str):
+        return None
+    with open(path_to_file) as f:
+        profile = json.load(f)
+    if profile:
+        return profile
+    return None
 
 
 def save_profile(profile: dict) -> int:
@@ -269,6 +276,20 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    if profile:
-        return
-    return
+    # Check for bad input
+    if not isinstance(profile, dict):
+        return 1
+    if ("name" not in profile.keys()
+            or "freq" not in profile.keys()
+            or "n_words" not in profile.keys()):
+        return 1
+    if (not isinstance(profile["name"], str)
+            or not isinstance(profile["freq"], dict)
+            or not isinstance(profile["n_words"], int)):
+        return 1
+    # Generate file name from profile name
+    path_to_file = "{}.json".format(profile["name"])
+    # Save profile in json file
+    with open(path_to_file, "w") as f:
+        json.dump(profile, f)
+    return 0
