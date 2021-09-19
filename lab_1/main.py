@@ -258,7 +258,9 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if path_to_file:
+        return
+    return
 
 
 def save_profile(profile: dict) -> int:
@@ -267,4 +269,6 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+    if profile:
+        return
+    return
