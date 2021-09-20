@@ -1,17 +1,24 @@
 """
 Lab 1
-Language detection 123
+Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
+def tokenize(text):
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    pass
+    text_1 = ''
+    for i in text:
+        if i.isalpha() or i == ' ':
+            text_1 += i
+
+    text_1 = text_1.lower().split()
+    print(text_1)
+    return text_1
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -114,3 +121,8 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
+
+text = """A man walks into a bar and orders a glass of water. 
+                      The bartender points a gun at him and the man thanks him and leaves.
+                      Why did the man thank the bartender?"""
+tokenize(text)
