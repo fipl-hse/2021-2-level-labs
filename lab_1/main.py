@@ -12,13 +12,19 @@ def tokenize(text):
     :return: a list of lower-cased tokens without punctuation
     """
 
-    special_characters = ['.', ',', '-', '!', "'", '"', '#', '$', '%', '&', '(', ')', '*', '+', '/', ':', ';', '<', '=',
-                          '>', '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~', '\t']
+    word = []
+    tokens = []
     if isinstance(text, str):
         text = text.lower()
-        for i in special_characters:
-            text = text.replace(i, '')
-        tokens = text.split()
+        for i in text:
+            if i.isalpha():
+                word.append(i)
+            elif i.isspace():
+                if word:
+                    tokens.append(''.join(word))
+                word = []
+        if len(word) != 0:
+            tokens.append(''.join(word))
         return tokens
     else:
         return None
