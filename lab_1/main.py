@@ -3,15 +3,20 @@ Lab 1
 Language detection
 """
 
-
 def tokenize(text: str) -> list or None:
-    """
-    Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
-    """
-    pass
+    if type(text) == str:
+        low_text = text.lower()
+        clean_text = ''
+        for i in low_text:
+            if i.isalpha():
+                clean_text += i
+            elif i.isspace():
+                clean_text += i
+        clean_text = clean_text.replace('\n', ' ')
+        tokens = clean_text.split()
+        return tokens
+    else:
+        return None
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
