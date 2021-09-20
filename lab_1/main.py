@@ -5,13 +5,46 @@ Language detection
 
 
 def tokenize(text: str) -> list or None:
+
+    english_text = """A man walks into a bar and orders a glass of water. 
+                          The bartender points a gun at him and the man thanks him and leaves.
+                          Why did the man thank the bartender?"""
+
+    german_text = """Stell dir vor, du bist der Kapitän eines Frachtschiffes, das 30 Meter lang und 5 Meter breit ist.
+                         Voll beladen hat es einen Tiefgang von 2 Metern, nicht beladen nur von einem Meter. 
+                         Seine Höchstgeschwindigkeit betägt 18 Knoten. Wie alt ist der Kapitän?"""
+
+    unknown_text = """A man is lying in his bed, trying to sleep. 
+                          He picks up the phone and makes a call.
+                          He waits for a while and hangs up before anyone could answer the phone.
+                          Then he sleeps peacefully."""
+    import re
+
+    english_text_lower = english_text.lower()
+    german_text_lower = german_text.lower()
+    unknown_text_lower = unknown_text.lower()
+
+    english_text_lower = re.sub(r'[^a-zA-Z ]', '', str(english_text_lower))
+    english_text_tokens = english_text_lower.split()
+
+    german_text_lower = re.sub(r'[^a-zA-Z ]', '', str(german_text_lower))
+    german_text_tokens = german_text_lower.split()
+
+    unknown_text_lower = re.sub(r'[^a-zA-Z ]', '', str(unknown_text_lower))
+    unknown_text_tokens = unknown_text_lower.split()
+
+    print(english_text_tokens)
+    print(german_text_tokens)
+    print(unknown_text_tokens)
+
+
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    print('hello')
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
