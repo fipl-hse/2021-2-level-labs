@@ -15,7 +15,7 @@ def tokenize(text: str) -> list or None:
     for i in range(len(text)):
         text[i] = text[i].lower()
     return text
-#tokenize (text)
+##tokenize (text)
     pass
 
 
@@ -28,7 +28,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     tokens = [n for n in tokens if n not in stop_words]
     return tokens
-#remove_stop_words(tokenize(text), ['']))
+##remove_stop_words(tokenize(text), ['']))
     pass
 
 
