@@ -56,6 +56,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
+    top = list(freq_dict.items())
+    top_sort = sorted(top, key=lambda x: -x[1])
+    top_n = top_sort[:5]
+    return top_n
+##get_top_n_words(calculate_frequencies(rem(texts(text), [''])), 5)
     pass
 
 
