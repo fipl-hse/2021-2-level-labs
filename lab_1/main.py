@@ -25,6 +25,18 @@ def tokenize(text: str) -> list or None:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    tokens_1 = []
+    if type(stop_words) != list:
+        return None
+    if type(tokens) != list:
+        return None
+    for token in tokens:
+        if token not in stop_words:
+            tokens_1.append(token)
+    print(tokens_1)
+    return tokens_1
+
+
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -32,9 +44,20 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     pass
-
+stop_words = ['the', 'a', 'is']
 
 def calculate_frequencies(tokens: list) -> dict or None:
+    freqs_dict = {}
+    if type(tokens) != list:
+        return None
+    for token in tokens:
+        if type(token) != str:
+            return None
+        if token not in freqs_dict:
+            freqs_dict[token] = 1
+        else:
+            freqs_dict[token] += 1
+    return (freqs_dict)
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
@@ -44,6 +67,11 @@ def calculate_frequencies(tokens: list) -> dict or None:
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    freq_dict = sorted(freq_dict, key=lambda x:(-x[1],x[0]))
+    other_name = freq_dict[:top_n]
+
+    print(other_name)
+    return other_name
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
