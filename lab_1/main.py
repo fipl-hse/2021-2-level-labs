@@ -4,16 +4,19 @@ Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
+def tokenize(text: str):
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    import re
     text = text.split()
+    for i in range (len(text)):
+        text[i] = text[i].lower()
+        text[i] = re.sub('[!|:|;|.|,|?|(|)|"|"|]', '', text[i])
     return text
-
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
