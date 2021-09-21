@@ -1,10 +1,11 @@
+#coding=utf-8
 """
 Lab 1
 Language detection
 """
 
 
-def tokenize(text):
+def tokenize(text: str) -> list or None:
     if type(text) != str:
         return None
     text = text.lower()
@@ -14,10 +15,16 @@ def tokenize(text):
             preprocessed += text[i]
     tokens = preprocessed.split()
     return tokens
-text = input('Enter the text: ')
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
+    pass
 
 
-def remove_stop_words(tokens, stop_words):
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     if type(tokens) != list:
             return None
     if type(stop_words) != list:
@@ -25,9 +32,15 @@ def remove_stop_words(tokens, stop_words):
     tokens = [token for token in tokens if token not in stop_words]
     return tokens
 stop_words = ['a','the','is','ein','eine','den','die','das','der']
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
+    pass
 
-
-def calculate_frequencies(tokens):
+def calculate_frequencies(tokens: list) -> dict or None:
     if type(tokens) != list:
         return None
     for x in tokens:
@@ -41,16 +54,30 @@ def calculate_frequencies(tokens):
             freq_dict[token] = 1
     print (freq_dict)
     return freq_dict
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
+    pass
 
-
-def get_top_n_words(freq_dict, top_n):
+def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    if type(freq_dict) != dict:
+        return None
     freq_dict = list(freq_dict.items())
     freq_sort = sorted(freq_dict, key=lambda i: -i[1])
     top_words = freq_sort[:top_n]
     print (top_words)
     return top_words
 
-get_top_n_words(calculate_frequencies(remove_stop_words(tokenize(text),stop_words)),5)
+#get_top_n_words(calculate_frequencies(remove_stop_words(tokenize(text),stop_words)),5)
+    """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
+    pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
