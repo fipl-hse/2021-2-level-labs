@@ -12,7 +12,7 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
-                        '=', '{', '[', '}', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     if isinstance(text, str):
         text = text.lower()
@@ -45,7 +45,14 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    frequency_dictionary = {}
+    if isinstance(tokens, list):
+        for word in tokens:
+            if word in frequency_dictionary:
+                frequency_dictionary[word] += 1
+            else:
+                frequency_dictionary[word] = 1
+        return frequency_dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
