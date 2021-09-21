@@ -83,7 +83,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         tokens = remove_stop_words(tokenize(text), stop_words)
         frequency_dictionary = calculate_frequencies(tokens)
         n_words = len(frequency_dictionary.keys())
-        profile = {"name": language, "freq": frequency_dictionary, "n_words": list}
+        profile = {"name": language, "freq": frequency_dictionary, "n_words": n_words}
         return profile
 
 
