@@ -11,16 +11,15 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', '}',
-                        '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '\t', '1', '2', '3', '4', '5',
-                        '6', '7', '8', '9', '0']
+    invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', '}', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '.', '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     if isinstance(text, str):
         text = text.lower()
         for symbols in invaluable_trash:
             text = text.replace(symbols, '')
         text = text.split()
         return text
-
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -30,7 +29,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+    if isinstance(tokens, list) and isinstance(stop_words, list):
+        for words in stop_words:
+            tokens.remove(words)
+        return tokens
+    elif not isinstance(stop_words, list) and not isinstance(tokens, list):
+        return None
+    elif not isinstance(stop_words, list):
+        return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
