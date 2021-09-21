@@ -4,25 +4,29 @@ Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
-    """
-    Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
-    """
-    text = text.split()
-    return text
+def tokenize(text):
+    text = text.lower()
+    preprocessed = ''
+    for i in range(len(text)):
+        if text[i].isalnum() or text[i] == ' ':
+            preprocessed += text[i]
+    tokens = preprocessed.split()
+    return tokens
+text = input('Enter the text: ')
+tokenize(text)
 
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
-    pass
+
+def remove_stop_words(tokens, stop_words):
+    new_tokens = []
+    for token in tokens:
+        if token not in stop_words:
+            new_tokens.append(token)
+    print (new_tokens)
+    return new_tokens
+
+stop_words = ['a','the','is']
+remove_stop_words(tokenize(text),stop_words)
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
