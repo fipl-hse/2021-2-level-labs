@@ -11,6 +11,8 @@ def tokenize(text):
         if text[i].isalnum() or text[i] == ' ':
             preprocessed += text[i]
     tokens = preprocessed.split()
+    if type(text) != str:
+        return None
     return tokens
 text = input('Enter the text: ')
 
