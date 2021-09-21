@@ -12,6 +12,8 @@ def tokenize(text: str):
     :return: a list of lower-cased tokens without punctuation
     """
     import re
+    if type(text) != str:
+        return None
     text = text.split()
     for i in range (len(text)):
         text[i] = text[i].lower()
@@ -26,6 +28,8 @@ def remove_stop_words(text : list, stop_words: list):
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+    if type(text) != list or type(stop_words) != list:
+        return None
     lenth = len(text)
     i=0
     for count in range(lenth):
@@ -40,6 +44,8 @@ def calculate_frequencies(text: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+    if type(text) != list:
+        return None
     freq_dict = {}
     for char in text:
         freq_dict[char] = text.count(char)
