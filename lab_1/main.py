@@ -5,25 +5,32 @@ Language detection
 
 
 def tokenize(text):
+    if type(text) != str:
+        return None
     text = text.lower()
     preprocessed = ''
     for i in range(len(text)):
         if text[i].isalnum() or text[i] == ' ':
             preprocessed += text[i]
     tokens = preprocessed.split()
-    if type(text) != str:
-        return None
     return tokens
-text = input('Enter the text: ')
+#text = input('Enter the text: ')
 
 
 def remove_stop_words(tokens, stop_words):
+    if type(tokens) != list:
+            return None
+    if type(stop_words) != list:
+            return tokens
     new_tokens = [token for token in tokens if token not in stop_words]
     return new_tokens
 stop_words = ['a','the','is','ein','eine','den','die','das','der']
 
 
 def calculate_frequencies(new_tokens):
+    for p in new_tokens:
+        if type(new_tokens) != list or type(p) != str:
+            return None
     freq_dict = {}
     for new_token in new_tokens:
         if new_token in freq_dict:
