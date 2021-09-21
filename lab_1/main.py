@@ -9,16 +9,15 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if isinstance(text, str):
-        symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890\t\n\r"""
+    if not isinstance(text, str):
+        return None
+    else:
+        symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890\t"""
         for i in text:
             if i in symbols:
                 text = text.replace(i, '')
-            text = text.lower()
-        tokens = text.split()
+            tokens = text.lower().split()
         return tokens
-    else:
-        return None
     pass
 
 
@@ -29,13 +28,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    for i in tokens:
-        if i.isalpha:
-            if i in stop_words:
-                tokens.remove(i)
-            return tokens
-        else:
+    tokens_copy = tokens.copy()
+    for i in tokens_copy:
+        if not i.isalpha():
             return None
+        else:
+            if i in stop_words:
+                tokens_copy.remove(i)
+            return tokens_copy
     pass
 
 
