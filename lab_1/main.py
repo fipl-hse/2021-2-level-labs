@@ -29,13 +29,25 @@ stop_words = ['a','the','is']
 remove_stop_words(tokenize(text),stop_words)
 
 
-def calculate_frequencies(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
+def calculate_frequencies(new_tokens):
+    freqs = {}
+    for new_token in new_tokens:
+        if new_token in freqs:
+            freqs[new_token] += 1
+        else:
+            freqs[new_token] = 1
+        freqs_list = list(freqs.items())
+        freqs_list.sort(key=lambda i: i[1])
+    #print(freqs_list)
+    #for x,y in freqs_list:
+    #    new_freqs = {}
+    #    new_freqs[x].append(y)
+    #    print (new_freqs)
+            #new_freqs = {}
+            #new_freqs[y[0]] = y[1]
+    print (freqs_list)
+    return freqs_list
+calculate_frequencies(remove_stop_words(tokenize(text),stop_words))
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
