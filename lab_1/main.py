@@ -4,32 +4,34 @@ Language detection
 """
 
 
-def tokenize(text):
-    if isinstance(text, str):
+def tokenize(text: str) -> list or None:
+    if not isinstance(text, str):
+        return None
+    else:
         tokens = ''
         for i in text:
-            if i.isalpha() or i == ' ':
+            if i.isalpha() or i.isspace():
                 tokens += i
 
         tokens = tokens.lower().split()
         return tokens
-    else:
+
+
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    if not (isinstance(stop_words, list) and isinstance(tokens, list)):
         return None
-
-
-def remove_stop_words(tokens, stop_words):
-    if isinstance(stop_words, list) and isinstance(tokens, list):
+    else:
         tokens_new = []
         for i in tokens:
             if i not in stop_words:
-                tokens_new += [i]
+                tokens_new.append(i)
         return tokens_new
-    else:
+
+
+def calculate_frequencies(tokens_new: list) -> dict or None:
+    if not (isinstance(tokens_new, list) and isinstance(tokens_new[0], str)):
         return None
-
-
-def calculate_frequencies(tokens_new):
-    if isinstance(tokens_new, list) and isinstance(tokens_new[0], str):
+    else:
         freq_dict = {}
         for i in tokens_new:
             if i not in freq_dict:
@@ -37,50 +39,49 @@ def calculate_frequencies(tokens_new):
             else:
                 freq_dict[i] += 1
         return freq_dict
-    else:
+
+
+
+def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    if not isinstance(freq_dict, dict):
         return None
-
-
-
-def get_top_n_words(freq_dict, top_n):
-    if isinstance(freq_dict, dict):
+    else:
         top_n_words = []
         if top_n > len(freq_dict):
             top_n = len(freq_dict)
+        freq_dict_copy = freq_dict.copy()
         for i in range(top_n):
-            max_value = max(freq_dict.values())
-            for k, v in freq_dict.items():
+            max_value = max(freq_dict_copy.values())
+            for k, v in freq_dict_copy.items():
                 if v == max_value:
                     max_key = k
                     break
-            top_n_words.extend([max_key])
-            del freq_dict[max_key]
+            top_n_words.append(max_key)
+            del freq_dict_copy[max_key]
         return top_n_words
-    else:
-        return None
 
-def create_language_profile(language, text, stop_words):
+def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
-    if isinstance(language, str) and isinstance(freq_dict, dict):
+    if not (isinstance(language, str) and isinstance(freq_dict, dict)):
+        return None
+    else:
         language_profile = {'name': language,
                             'freq': freq_dict,
                             'n_words': len(freq_dict)}
         return language_profile
-    else:
+
+
+def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
         return None
-
-
-def compare_profiles(unknown_profile, profile_to_compare, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    else:
         top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
         top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
         overall_tokens = []
         for i in top_n_words_unknown_profile:
             if i in top_n_words_profile_to_compare:
-                overall_tokens.extend([i])
-        return round(float(len(overall_tokens)/len(top_n_words_unknown_profile)), 2)
-    else:
-        return None
+                overall_tokens.append(i)
+        return round(float(len(overall_tokens) / len(top_n_words_unknown_profile)), 2)
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -141,3 +142,4 @@ def save_profile(profile: dict) -> int:
 #stop_words = []
 
 #print(create_language_profile(language, text, stop_words))
+#print(tokenize(text))
