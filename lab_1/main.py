@@ -4,6 +4,7 @@ Language detection
 """
 
 def tokenize(text: str) -> list or None:
+
     if type(text) == str:
         low_text = text.lower()
         clean_text = ''
@@ -20,14 +21,17 @@ def tokenize(text: str) -> list or None:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
-    pass
 
+    if type(tokens) != list or tokens == []:
+        return None
+    if type(stop_words) != list:
+        return tokens
+
+    for i in stop_words:
+        for n in tokens:
+            if i == n:
+                tokens.remove(i)
+    return tokens
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
