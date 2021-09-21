@@ -4,7 +4,7 @@ Language detection
 """
 
 
-def tokenize(text):
+def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
@@ -26,8 +26,6 @@ def tokenize(text):
         if len(word) != 0:
             tokens.append(''.join(word))
         return tokens
-    else:
-        return None
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -37,7 +35,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+
+    if isinstance(tokens, list):
+        for i in tokens:
+            if isinstance(i, str):
+                tokens = [i for i in tokens if i not in stop_words]
+                return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -46,7 +49,17 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+
+    freq_dict = {}
+    if isinstance(tokens, list):
+        for i in tokens:
+            if isinstance(i, str):
+                for e in tokens:
+                    if e in freq_dict:
+                        freq_dict[e] += 1
+                    else:
+                        freq_dict[e] = 1
+                return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -56,7 +69,21 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+
+    top_words = []
+    if isinstance(freq_dict, dict):
+        for key in freq_dict:
+            if isinstance(key, str) and isinstance(freq_dict[key], int):
+                top_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
+                if len(top_words) <= top_n:
+                    return top_words
+                else:
+                    for i in top_words:
+                        if (top_words.index(i)+1) > top_n:
+                            top_words.remove(i)
+                    return top_words
+        else:
+            return top_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
