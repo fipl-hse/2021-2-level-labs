@@ -1,3 +1,4 @@
+#coding=utf-8
 """
 Lab 1
 Language detection
@@ -5,6 +6,15 @@ Language detection
 
 
 def tokenize(text: str) -> list or None:
+    if type(text) != str:
+        return None
+    text = text.lower()
+    marks = '''!()-[]{};?@#$%:'"/,.\^&*_<>'''
+    for x in text:
+        if x in marks:
+            text = text.replace(x,'')
+    tokens = text.split()
+    return tokens
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words list
