@@ -18,7 +18,7 @@ text = input('Enter the text: ')
 def remove_stop_words(tokens, stop_words):
     new_tokens = [token for token in tokens if token not in stop_words]
     return new_tokens
-stop_words = ['a','the','is']
+stop_words = ['a','the','is','ein','eine','den','die','das','der']
 
 
 def calculate_frequencies(new_tokens):
