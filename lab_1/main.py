@@ -1,7 +1,6 @@
-Lab 1
+"""Lab 1
 Language detection
-"""Изменения"""
-"status_check"
+"""
 
 def tokenize(text: str) -> list or None:
     """
@@ -10,6 +9,16 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    if isinstance(text, str):
+        symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890\t\n\r"""
+        for i in text:
+            if i in symbols:
+                text = text.replace(i, '')
+            text = text.lower()
+        text = text.split()
+        return text
+    else:
+        return None
     pass
 
 
