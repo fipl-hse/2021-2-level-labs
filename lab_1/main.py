@@ -63,9 +63,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
-        freq_dict = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
+        freq_list = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
         popularity_of_words = []
-        for tuple_element in freq_dict:
+        for tuple_element in freq_list:
             popularity_of_words.append(tuple_element[0])
         popularity_of_words = popularity_of_words[:top_n]
         return popularity_of_words
@@ -79,7 +79,12 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
+        tokens = remove_stop_words(tokenize(text), stop_words)
+        frequency_dictionary = calculate_frequencies(tokens)
+        n_words = len(frequency_dictionary.keys())
+        profile = {"name": language, "freq": frequency_dictionary, "n_words": list}
+        return profile
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
