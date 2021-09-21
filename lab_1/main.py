@@ -26,10 +26,14 @@ def remove_stop_words(text : list, stop_words: list):
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    for char in text:
-        if char in stop_words:
-            text.remove(char)
-        return text
+    lenth = len(text)
+    i=0
+    for count in range(lenth):
+        if text[i] in stop_words:
+            text.remove(text[i])
+        else:
+            i+=1
+    return text
 def calculate_frequencies(text: list) -> dict or None:
     """
     Calculates frequencies of given tokens
