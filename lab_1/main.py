@@ -15,8 +15,8 @@ def tokenize(text: str) -> list or None:
             if i in symbols:
                 text = text.replace(i, '')
             text = text.lower()
-        text = text.split()
-        return text
+        tokens = text.split()
+        return tokens
     else:
         return None
     pass
@@ -29,6 +29,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+    for i in tokens:
+        if i.isalpha:
+            if i in stop_words:
+                tokens.remove(i)
+            return tokens
+        else:
+            return None
     pass
 
 
