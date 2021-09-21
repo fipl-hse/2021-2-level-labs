@@ -13,51 +13,33 @@ def tokenize(text):
     tokens = preprocessed.split()
     return tokens
 text = input('Enter the text: ')
-tokenize(text)
-
 
 
 def remove_stop_words(tokens, stop_words):
-    new_tokens = []
-    for token in tokens:
-        if token not in stop_words:
-            new_tokens.append(token)
-    print (new_tokens)
+    new_tokens = [token for token in tokens if token not in stop_words]
     return new_tokens
-
 stop_words = ['a','the','is']
-remove_stop_words(tokenize(text),stop_words)
 
 
 def calculate_frequencies(new_tokens):
-    freqs = {}
+    freq_dict = {}
     for new_token in new_tokens:
-        if new_token in freqs:
-            freqs[new_token] += 1
+        if new_token in freq_dict:
+            freq_dict[new_token] += 1
         else:
-            freqs[new_token] = 1
-        freqs_list = list(freqs.items())
-        freqs_list.sort(key=lambda i: i[1])
-    #print(freqs_list)
-    #for x,y in freqs_list:
-    #    new_freqs = {}
-    #    new_freqs[x].append(y)
-    #    print (new_freqs)
-            #new_freqs = {}
-            #new_freqs[y[0]] = y[1]
-    print (freqs_list)
-    return freqs_list
-calculate_frequencies(remove_stop_words(tokenize(text),stop_words))
+            freq_dict[new_token] = 1
+    print (freq_dict)
+    return freq_dict
 
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
+def get_top_n_words(freq_dict, top_n):
+    freq_dict = list(freq_dict.items())
+    freq_sort = sorted(freq_dict, key=lambda i: -i[1])
+    top_words = freq_sort[:top_n]
+    print (top_words)
+    return top_words
+
+get_top_n_words(calculate_frequencies(remove_stop_words(tokenize(text),stop_words)),5)
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
