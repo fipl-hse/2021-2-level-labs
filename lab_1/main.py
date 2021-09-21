@@ -15,28 +15,31 @@ def tokenize(text: str):
     text = text.split()
     for i in range (len(text)):
         text[i] = text[i].lower()
-        text[i] = re.sub('[!|:|;|.|,|?|(|)|"|"|]', '', text[i])
+        text[i] = re.sub('[!|:|;|.|,|?|(|)|"|"|\']', '', text[i])
     return text
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+def remove_stop_words(text : list, stop_words: list):
     """
     Removes stop words
+    :rtype: object
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
-
-
-def calculate_frequencies(tokens: list) -> dict or None:
+    for char in text:
+        if char in stop_words:
+            text.remove(char)
+        return text
+def calculate_frequencies(text: list) -> dict or None:
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
-
-
+    freq_dict = {}
+    for char in text:
+        freq_dict[char] = text.count(char)
+    return freq_dict
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     Returns the most common words
@@ -44,8 +47,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
-
+    top_dict = {}
+    freq_list = list(freq_dict.values())
+    freq_list = freq_list.sort()
+    freq_list = freq_list[::-1]
+    freq_list = freq_list[0, top_n]
+    for i in freq_list:
+        top_dict[i] = freq_dict[i]
+    top_list = list(top_dict.values())
+    return top_list
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
