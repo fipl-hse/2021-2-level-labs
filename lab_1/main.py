@@ -5,24 +5,24 @@ Language detection
 
 def tokenize(text: str) -> list or None:
 
-    if type(text) == str:
-        low_text = text.lower()
-        clean_text = ''
-        for i in low_text:
-            if i.isalpha():
-                clean_text += i
-            elif i.isspace():
-                clean_text += i
-        clean_text = clean_text.replace('\n', ' ')
-        tokens = clean_text.split()
-        return tokens
-    else:
+    if type(text) != str:
         return None
+
+    low_text = text.lower()
+    clean_text = ''
+    for i in low_text:
+        if i.isalpha():
+            clean_text += i
+        elif i.isspace():
+            clean_text += i
+    clean_text = clean_text.replace('\n', ' ')
+    tokens = clean_text.split()
+    return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
-    if type(tokens) != list or tokens == []:
+    if type(tokens) != list or not tokens:
         return None
     if type(stop_words) != list:
         return tokens
@@ -33,13 +33,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                 tokens.remove(i)
     return tokens
 
+
 def calculate_frequencies(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
+
+    if type(tokens) != list:
+        return None
+    for i in tokens:
+        if not i:
+            return None
+
+    frec_dict = {i: tokens.count(i) for i in tokens}
+    return frec_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
