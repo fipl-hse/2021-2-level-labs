@@ -6,7 +6,7 @@ Language detection
 
 import re
 def tokenize(text):
-    if type(text) == str:
+    while isinstance(text, str):
         tokens = []
         contemp_string = ''
         text = text.lower()
@@ -29,7 +29,7 @@ def tokenize(text):
 def remove_stop_words(tokens, stop_words):
     tokens_without_stopwords = []
     for token in tokens:
-        if not type(token) == str:
+        while not isinstance(token, str):
             return None
         else:
             continue
@@ -37,7 +37,7 @@ def remove_stop_words(tokens, stop_words):
         return tokens
     else:
         for word in stop_words:
-            if not type(word) == str:
+            while not isinstance(word, str):
                 return tokens
             else:
                 continue
@@ -49,9 +49,9 @@ def remove_stop_words(tokens, stop_words):
 
 def calculate_frequencies(tokens):
     freq_dict = {}
-    if type(tokens) == list:
+    while isinstance(tokens, list):
         for token in tokens:
-            if type(token) == str:
+            while isinstance(token, str):
                 if token in freq_dict:
                     value = freq_dict[token]
                     freq_dict[token] = value + 1
@@ -61,12 +61,11 @@ def calculate_frequencies(tokens):
                 return None
     else:
         return None
-
     return freq_dict
 
 
 def get_top_n_words(freq_dict, top_n):
-    if type(freq_dict) == dict and type(top_n) == int:
+    while isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_dict_sorted = {}
         values = list(freq_dict.values())
         keys = list(freq_dict.keys())
