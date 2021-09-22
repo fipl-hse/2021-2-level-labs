@@ -31,7 +31,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
         for words in stop_words:
-            tokens.remove(words)
+            if stop_words in tokens:
+                tokens.remove(words)
         return tokens
     elif not isinstance(stop_words, list) and not isinstance(tokens, list):
         return None
