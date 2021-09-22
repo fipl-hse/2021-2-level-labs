@@ -81,7 +81,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         for i in top_n_words_unknown_profile:
             if i in top_n_words_profile_to_compare:
                 common.append(i)
-        return round(float(len(common) / len(top_n_words_unknown_profile)), 2)
+        return round(len(common) / len(top_n_words_unknown_profile), 2)
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -151,9 +151,3 @@ def save_profile(profile: dict) -> int:
     """
     pass
 
-#language = 'en'
-#text = 'He is a happy happy man.'
-#stop_words = []
-
-#print(create_language_profile(language, text, stop_words))
-#print(tokenize(text))
