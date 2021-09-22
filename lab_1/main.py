@@ -4,7 +4,7 @@ Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
+def tokenize():
 
     english_text = """A man walks into a bar and orders a glass of water. 
                           The bartender points a gun at him and the man thanks him and leaves.
@@ -36,7 +36,7 @@ def tokenize(text: str) -> list or None:
     print(english_text_tokens)
     print(german_text_tokens)
     print(unknown_text_tokens)
-
+tokenize()
 
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -45,7 +45,7 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+def remove_stop_words():
     stop_words_eng = ['ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 'about', 'once', 'during',
                       'out', 'very', 'having', 'with', 'they', 'own', 'an', 'be', 'some', 'for', 'do', 'its', 'yours',
                       'such', 'into', 'of', 'most', 'itself', 'other', 'off', 'is', 's', 'am', 'or', 'who', 'as',
@@ -57,11 +57,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                       'you', 'herself', 'has', 'just', 'where', 'too', 'only', 'myself', 'which', 'those', 'i', 'after',
                       'few', 'whom', 't', 'being', 'if', 'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how',
                       'further', 'was', 'here', 'than']
-    clean_eng_word = english_text_tokens[:]
-    for word in english_text_tokens:
+    clean_eng_text = english_text_tokens[:]
+    for word in clean_eng_text:
         if word in stop_words_eng:
-            clean_eng_word.remove(word)
-    print(clean_eng_word)
+            clean_eng_text.remove(word)
+    print(clean_eng_text)
 
     stop_words_ge = ['aber', 'als', 'am', 'an', 'auch', 'auf', 'aus', 'bei', 'bin', 'bis', 'bist', 'da', 'dadurch',
                      'daher', 'darum', 'das', 'daß', 'dass', 'dein', 'deine', 'dem', 'den', 'der', 'des', 'dessen',
@@ -76,12 +76,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                      'weshalb', 'wie', 'wieder', 'wieso', 'wir', 'wird', 'wirst', 'wo', 'woher', 'wohin', 'zu', 'zum',
                      'zur', 'über']
 
-    clean_ge_word = german_text_tokens[:]
-    for word in german_text_tokens:
+    clean_ge_text = german_text_tokens[:]
+    for word in clean_ge_text:
         if word in stop_words_ge:
-            clean_ge_word.remove(word)
-    print(clean_ge_word)
+            clean_ge_text.remove(word)
+    print(clean_ge_text)
 
+remove_stop_words()
 
     """
     Removes stop words
