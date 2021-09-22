@@ -64,11 +64,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_list = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
-        popularity_of_words = []
+        top_n_words = []
         for tuple_element in freq_list:
-            popularity_of_words.append(tuple_element[0])
-        popularity_of_words = popularity_of_words[:top_n]
-        return popularity_of_words
+            top_n_words.append(tuple_element[0])
+        top_n_words = top_n_words[:top_n]
+        return top_n_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -95,7 +95,12 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+        top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
+        top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+        common_things = list(set(top_n_words_unknown) & set(top_n_words_compare))
+        share_of_common_things = round(len(common_things)/len(top_n_words_unknown),2)
+        return share_of_common_things
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
