@@ -42,18 +42,36 @@ def calculate_frequencies(tokens: list) -> dict or None:
         if not i:
             return None
 
-    frec_dict = {i: tokens.count(i) for i in tokens}
-    return frec_dict
+    freq_dict = {i: tokens.count(i) for i in tokens}
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
+
+    if type(freq_dict) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+    if not freq_dict or top_n <= 0:
+        return []
+
+    sort_values = sorted(freq_dict.values(), reverse=True)  # составляет список значений и сортирует его
+    dict_keys = list(freq_dict.keys())  # составляет список ключей
+    sort_dict = {}
+
+    for i in sort_values:
+        for k in dict_keys:
+            if freq_dict[k] == i:  # вызывает значение из словаря по ключу и сравнивает его со значением из sort_values
+                sort_dict[k] = freq_dict[k]  # добавляет пару в новый отсортированный словарь
+                dict_keys.remove(k)  # удаляет использованный ключ из списка, чтобы чтобы ключ с повторяющимся значением не игнорировался
+
+    freq_list = list(sort_dict.keys())
+
+    if top_n > len(freq_list):
+        return freq_list
+    else:
+        top_n_words = freq_list[:top_n]
+    return top_n_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
