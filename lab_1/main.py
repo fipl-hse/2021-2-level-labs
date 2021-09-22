@@ -85,15 +85,17 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile
-    :param unknown_profile: a dictionary
-    :param profile_1: a dictionary
-    :param profile_2: a dictionary
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    pass
+    percentage_1 = compare_profiles(unknown_profile, profile_1, top_n)
+    percentage_2 = compare_profiles(unknown_profile, profile_2, top_n)
+    if not (isinstance(percentage_1, float) and isinstance(percentage_2, float)):
+        return None
+    else:
+        if percentage_1 > percentage_2:
+            return profile_1['name']
+        elif percentage_1 < percentage_2:
+            return profile_2['name']
+        else:
+            return [profile_1['name'], profile_2['name']].sort()[0]
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
