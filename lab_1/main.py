@@ -2,8 +2,6 @@
 Lab 1
 Language detection
 """
-
-
 import re
 def tokenize(text):
     while isinstance(text, str):
@@ -24,8 +22,6 @@ def tokenize(text):
         return tokens
     else:
         return None
-
-
 def remove_stop_words(tokens, stop_words):
     tokens_without_stopwords = []
     for token in tokens:
@@ -45,8 +41,6 @@ def remove_stop_words(tokens, stop_words):
         if not token in stop_words:
             tokens_without_stopwords.append(token)
     return tokens_without_stopwords
-
-
 def calculate_frequencies(tokens):
     freq_dict = {}
     while isinstance(tokens, list):
@@ -62,8 +56,6 @@ def calculate_frequencies(tokens):
     else:
         return None
     return freq_dict
-
-
 def get_top_n_words(freq_dict, top_n):
     while isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_dict_sorted = {}
@@ -77,7 +69,6 @@ def get_top_n_words(freq_dict, top_n):
                 for k in freq_dict.keys():
                     if freq_dict[k] == v:
                         freq_dict_sorted[k] = v
-
         if not freq_dict_sorted == {}:
             values = list(freq_dict_sorted.values())
             keys = list(freq_dict_sorted.keys())
@@ -101,28 +92,20 @@ def get_top_n_words(freq_dict, top_n):
             return keys
     else:
         return None
-
-
 def create_language_profile(language, text, stop_words):
-    if type(language) == str and type(text) == str and type(stop_words) == list:
+    while isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
         language_profile = {}
         language_profile['name'] = language
-    
         tokens = tokenize(text)
         tokensWithoutStopWords = remove_stop_words(tokens, stop_words)
         freq = calculate_frequencies(tokensWithoutStopWords)
-
-    
         language_profile['freq'] = freq
         language_profile['n_words'] = len(freq)
-
         return language_profile
     else:
         return None
-
-
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
-    if type(unknown_profile) == dict and type(profile_to_compare) == dict and type(top_n) == int:
+    while isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
         freq_list_up = unknown_profile['freq']
         top_n_up = get_top_n_words(freq_list_up, top_n)
 
@@ -137,9 +120,8 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
         return compare_profiles
     else:
         return None
-
 def detect_language(unknown_profile, profile_1, profile_2, top_n):
-    if type(unknown_profile) == dict and type(profile_1) == dict and type(profile_2) == dict and type(top_n) == int:
+    while isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int):
         compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
         compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
         if compare_1 > compare_2:
@@ -150,7 +132,7 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
             return max(profile_1['name'], profile_2['name']) 
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+'''def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
