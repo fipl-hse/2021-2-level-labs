@@ -17,7 +17,8 @@ def tokenize(text: str):
     text = text.split()
     for i in range (len(text)):
         text[i] = text[i].lower()
-        text[i] = re.sub('[!|:|;|.|,|?|(|)|"|"|\']', '', text[i])
+        text[i] = re.sub('[`|~|!|@|#|$|%|^|&|*|(|)|_|\-|=|+|\[|\{|\]|\}|;|:|\'|"|,|<|.|>|/|?]', '', text[i])
+    text = list(filter(None, text))
     return text
 
 def remove_stop_words(text : list, stop_words: list):
@@ -44,7 +45,7 @@ def calculate_frequencies(text: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if type(text) != list:
+    if type(text) != list or None in text:
         return None
     freq_dict = {}
     for char in text:
