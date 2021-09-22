@@ -75,14 +75,20 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
-    """
-    Creates a language profile
-    :param language: a language
-    :param text: a text
-    :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
+
+    if type(language) != str or not language:
+        return None
+    if type(text) != str or not text:
+        return None
+    if type(stop_words) != list:
+        return None
+
+    tokens = tokenize(text)
+    tokens = remove_stop_words(tokens, stop_words)
+    freq_dict = calculate_frequencies(tokens)
+
+    language_profile = dict(name=language, freq=freq_dict, n_words=len(freq_dict))
+    return language_profile
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
