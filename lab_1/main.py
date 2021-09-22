@@ -67,11 +67,15 @@ def calculate_frequencies(tokens: list) -> dict or None:
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    freq_dict = sorted(freq_dict, key=lambda x:(-x[1],x[0]))
-    other_name = freq_dict[:top_n]
-
-    print(other_name)
-    return other_name
+    if type(freq_dict) != dict:
+        return None
+    freq_dict = sorted(freq_dict.items(), key=lambda x:-x[1])
+    if len(freq_dict) == 0:
+        return []
+    freq_2_dict = list()
+    for word in freq_dict:
+        freq_2_dict.append(word[0])
+    return list(freq_2_dict[:top_n])
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
