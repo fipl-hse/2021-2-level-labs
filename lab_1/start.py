@@ -8,12 +8,14 @@ PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
 
 if __name__ == '__main__':
-    
+
     """
     Lab 1
     Language detection
     """
-    
+
+
+    # noinspection PyBroadException
     def tokenize(text: str) -> list or None:
         """
         Splits a text into tokens, converts the tokens into lowercase,
@@ -21,19 +23,19 @@ if __name__ == '__main__':
             :param text: a text
             :return: a list of lower-cased tokens without punctuation
         """
-        
-        text_new = ""
-        for i in text:
-            if i not in """!@#$%^&*()_+-={}[]:"|;'\<>?,./""":
-                text_new += i
+        try:
+            text_new = ""
+            for i in text:
+                if i not in """!@#$%^&*()_+-={}[]:"|;'\<>?,./""":
+                    text_new += i
 
-        text_new = text_new.lower()
-        text_new = text_new.split()
+            text_new = text_new.lower()
+            text_new = text_new.split()
 
-        return text_new
-        
-        pass
-    
+            return text_new
+        except:
+            return None
+
     def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         """
         Removes stop words
@@ -41,25 +43,39 @@ if __name__ == '__main__':
         :param stop_words: a list of stop words
         :return: a list of tokens without stop words
         """
-        pass
-    
-    def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-        """
-        Removes stop words
-        :param tokens: a list of tokens
-        :param stop_words: a list of stop words
-        :return: a list of tokens without stop words
-        """
-        pass
+        tokens_update = ""
+
+        for word in tokens:
+            if word.isalnum():
+                if word not in stop_words:
+                    tokens_update += word
+            else:
+                return None
+
+        tokens_update = tokens_update.split()
+
+        return tokens_update
 
 
+    # noinspection PyBroadException
     def calculate_frequencies(tokens: list) -> dict or None:
         """
         Calculates frequencies of given tokens
         :param tokens: a list of tokens
         :return: a dictionary with frequencies
         """
-        pass
+        frequencies = {}
+        try:
+            for word in tokens:
+                if word.isalnum():
+                    if word in tokens:
+                        frequencies[word] += 1
+                    else:
+                        frequencies.update(word : 1)
+                else:
+                    return None
+        except:
+            return None
 
 
     def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -69,8 +85,14 @@ if __name__ == '__main__':
         :param top_n: a number of the most common words
         :return: a list of the most common words
         """
-        pass
-
+        most_common = []
+        try:
+            while top_n > 0:
+                for i in range(len(freq_dict)):
+                    most_common[i] = list(freq_dict.keys())[list(freq_dict.values()).index(i)]
+                top_n -= 1
+        except:
+            return  None
 
     def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
         """
@@ -145,7 +167,8 @@ if __name__ == '__main__':
         :param profile: a dictionary
         :return: 0 if everything is ok, 1 if not
         """
-        pass    
+        pass
+
 
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'en.txt'), 'r', encoding='utf-8') as file_to_read:
         en_text = file_to_read.read()
