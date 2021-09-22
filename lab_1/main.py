@@ -24,13 +24,13 @@ def tokenize(text: str) -> list or None:
     german_text_lower = german_text.lower()
     unknown_text_lower = unknown_text.lower()
 
-    english_text_lower = re.sub(r'[^a-zA-Z ]', '', str(english_text_lower))
+    english_text_lower = re.sub(r'[^a-z ]', '', str(english_text_lower))
     english_text_tokens = english_text_lower.split()
 
-    german_text_lower = re.sub(r'[^a-zA-Z ]', '', str(german_text_lower))
+    german_text_lower = re.sub(r'[^a-zäöüß ]', '', str(german_text_lower))
     german_text_tokens = german_text_lower.split()
 
-    unknown_text_lower = re.sub(r'[^a-zA-Z ]', '', str(unknown_text_lower))
+    unknown_text_lower = re.sub(r'[^a-zäöüß ]', '', str(unknown_text_lower))
     unknown_text_tokens = unknown_text_lower.split()
 
     print(english_text_tokens)
