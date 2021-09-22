@@ -95,15 +95,19 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_to_compare, dict) \
+            and isinstance(top_n, int):
         top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
         top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
         common_things = list(set(top_n_words_unknown) & set(top_n_words_compare))
-        share_of_common_things = round(len(common_things)/len(top_n_words_unknown),2)
+        share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
         return share_of_common_things
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict,
+                    profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -112,7 +116,21 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_1, dict) \
+            and isinstance(profile_2, dict) \
+            and isinstance(top_n, int):
+        share_the_first_language = compare_profiles(unknown_profile, profile_1, top_n)
+        share_the_second_language = compare_profiles(unknown_profile, profile_2, top_n)
+        if share_the_first_language == share_the_second_language:
+            if_two_language = sorted([profile_1["name"], profile_2["name"]])
+            language_name = if_two_language[0]
+        elif share_the_first_language > share_the_second_language:
+            language_name = profile_1["name"]
+        else:
+            language_name = profile_2["name"]
+        return language_name
+
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
