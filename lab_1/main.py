@@ -11,18 +11,18 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if type(text) == str:
-        symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', '}', '}',
+    if type(text) != str:
+        return None
+
+    else:
+        symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-','–', '+', '=', '{', '[', '}', '}',
                    '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7',
                    '8', '9', '0']
         text = text.lower()
         for i in symbols:
             text = text.replace(i, '')
         text = text.split()
-        print(text)
         return text
-    else:
-        return None
 
 
 
@@ -33,7 +33,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+    if type(tokens) == list:
+        for i in tokens:
+            if type(i) == str:
+                tokens = [i for i in tokens if i not in stop_words]
+                print(tokens)
+                return tokens
+    else:
+        return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -42,7 +49,14 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    frequency_dictionary = {}
+    if type(tokens) == list:
+        for i in tokens:
+            if i in frequency_dictionary:
+                frequency_dictionary[i] += 1
+            else:
+                frequency_dictionary[i] = 1
+        return frequency_dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
