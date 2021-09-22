@@ -31,7 +31,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
             return None
     tokens = [token for token in tokens if token not in stop_words]
     return tokens
-stop_words = ['a','the','is','ein','eine','den','die','das','der']
+#stop_words = ['a','the','is','ein','eine','den','die','das','der']
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -64,11 +64,19 @@ def calculate_frequencies(tokens: list) -> dict or None:
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if type(freq_dict) != dict:
         return None
+    if type(top_n) != int:
+        return None
     freq_dict = list(freq_dict.items())
     freq_sort = sorted(freq_dict, key=lambda i: -i[1])
+    #if top_n > len(freq_sort):
+    #    top_words = freq_sort
+    #else:
     top_words = freq_sort[:top_n]
-    print (top_words)
-    return top_words
+    for x in top_words:
+        new_top_words = []
+        new_top_words.append(x[0])
+    print (new_top_words)
+    return new_top_words
 
 #get_top_n_words(calculate_frequencies(remove_stop_words(tokenize(text),stop_words)),5)
     """
