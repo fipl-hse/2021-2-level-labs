@@ -76,9 +76,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
 
-    if type(language) != str or not language:
-        return None
-    if type(text) != str or not text:
+    if type(language) != str or type(text) != str:
         return None
     if type(stop_words) != list:
         return None
@@ -92,15 +90,26 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
-    """
-    Compares profiles and calculates the distance using top n words
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: the distance
-    """
-    pass
 
+    if type(unknown_profile) != dict or type(profile_to_compare) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+
+    freq_dict_unk = unknown_profile['freq']
+    freq_dict = profile_to_compare['freq']
+
+    top_n_words_unk = get_top_n_words(freq_dict_unk, top_n)
+    top_n_words = get_top_n_words(freq_dict, top_n)
+
+    count_common = 0
+    for i in top_n_words_unk:
+        for k in top_n_words:
+            if i == k:
+                count_common += 1
+
+    distance = round(count_common / len(top_n_words_unk), 2)
+    return distance
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
