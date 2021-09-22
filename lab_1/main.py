@@ -132,16 +132,32 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
             return max(profile_1['name'], profile_2['name']) 
 
 
-'''def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
-    """
-    Compares profiles and calculates some advanced parameters
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-    min_length_word, average_token_length
-    """
-    pass
+def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+        report = {}
+        report['name'] = profile_to_compare['name']
+        top_n_words1 = get_top_n_words(unknown_profile['freq'], top_n)
+        top_n_words2 = get_top_n_words(profile_to_compare['freq'], top_n)
+        common_words = []
+        for word in top_n_words1:
+            if word in top_n_words2:
+                common_words.append(word)
+        report['common'] = common_words
+        score = compare_profiles(unknown_profile, profile_to_compare, top_n)
+        report['score'] = score
+        keys = list(profile_to_compare['freq'].keys())
+        max_length_word = max(keys, key=len)
+        min_length_word = min(keys, key=len)
+        report['max_length_word'] = max_length_word
+        report['min_length_word'] = min_length_word
+        all_keys_len = len(''.join(keys))
+        average_token_length = all_keys_len / len(keys)
+        report['average_token_length'] = average_token_length
+        sorted_common = sorted(common_words)
+        report['sorted_common'] = sorted_common
+        return report
+    else:
+        return None
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
