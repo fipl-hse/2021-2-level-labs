@@ -2,6 +2,8 @@
 Lab 1
 Language detection
 """
+import re
+import nltk
 
 
 def tokenize(text: str) -> list or None:
@@ -11,7 +13,21 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    pass
+    if type(text) != str:
+        return None
+    text = text.lower()
+    text = re.split(r"['()\w']", text)
+    text = "".join(text)
+    tokens = re.findall(r"[\w+]", text)
+    return tokens
+
+    text_en = open('en.txt', encoding='utf-8').read()
+    text_de = open('de.txt', encoding='utf-8').read()
+    # text_fr = open('fr.txt', encoding='utf-8').read()
+
+    print(tokenize(text_en))
+    print(tokenize(text_de))
+    # print(tokenize(text_fr))
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -21,6 +37,25 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+
+    if tokens != list:
+        return None
+
+    tokens_n = []
+    for token in tokens:
+        if token not in stop_words:
+            tokens_n.append(token)
+            tokens = tokens_n
+    return tokens
+
+    tokens_en = tokenize(text_en)
+    tokens_ge = tokenize(text_ge)
+    # tokens_fr = tokenize(text_fr)
+
+    en_stop_words = nltk.corpus.stopwords.words('english')
+    ge_stop_words = nltk.corpus.stopwords.words('german')
+    # fr_stop_words = nltk.corpus.stopwords.words('french')
+
     pass
 
 
@@ -30,6 +65,15 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+
+    freq_dict = {}
+    for token in tokens:
+        if token in freq_dict:
+            freq_dict[token] += 1
+        else:
+            freq_dict[token] = 1
+    return freq_dict
+
     pass
 
 
@@ -40,6 +84,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
+    freq_dict = sorted(freq_dict.items(), key=lambda x: -x[1])
+    if len(freq_dict) == 0:
+        return []
+    freq_n = list()
+    for word in freq_dict:
+        freq_n.append(word[0])
+    return list(freq_n[:top_n])
+
     pass
 
 
