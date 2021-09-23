@@ -120,7 +120,41 @@ def calculate_frequencies(tokens: list) -> dict or None:
     pass
 
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+def get_top_n_words(): -> list or None:
+    wordfreq_lst_eng = list(freqs_eng.items())
+
+    wordfreq_lst_sorted_eng = sorted(wordfreq_lst_eng,
+                                 key=lambda x: (-x[1], x[0]))
+    print('English words sorted by frequency:', wordfreq_lst_sorted_eng)
+
+    eng_top5 = wordfreq_lst_sorted_eng[:5]
+
+    for w, f in eng_top5:
+        print('{}: {} time(s)'.format(w, f))
+
+    wordfreq_lst_ge = list(freqs_ge.items())
+
+    wordfreq_lst_sorted_ge = sorted(wordfreq_lst_ge,
+                                 key=lambda x: (-x[1], x[0]))
+    print('German words sorted by frequency:', wordfreq_lst_sorted_ge)
+
+    ge_top5 = wordfreq_lst_sorted_ge[:5]
+
+    for w, f in ge_top5:
+        print('{}: {} time(s)'.format(w, f))
+
+    wordfreq_lst_un = list(freqs_un.items())
+
+    wordfreq_lst_sorted_un = sorted(wordfreq_lst_un,
+                                 key=lambda x: (-x[1], x[0]))
+    print('Unknown language words sorted by frequency:', wordfreq_lst_sorted_un)
+
+    unk_top5 = wordfreq_lst_sorted_un[:5]
+
+    for w, f in un_top5:
+        print('{}: {} time(s)'.format(w, f))
+
+get_top_n_words()
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
