@@ -3,6 +3,7 @@ Language detection starter
 """
 
 import os
+import string
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
@@ -14,8 +15,6 @@ if __name__ == '__main__':
     Language detection
     """
 
-
-    # noinspection PyBroadException
     def tokenize(text: str) -> list or None:
         """
         Splits a text into tokens, converts the tokens into lowercase,
@@ -26,7 +25,7 @@ if __name__ == '__main__':
         try:
             text_new = ""
             for i in text:
-                if i not in """!@#$%^&*()_+-={}[]:"|;'\<>?,./""":
+                if i not in string.punctuation:
                     text_new += i
 
             text_new = text_new.lower()
@@ -35,6 +34,7 @@ if __name__ == '__main__':
             return text_new
         except:
             return None
+
 
     def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         """
@@ -45,35 +45,31 @@ if __name__ == '__main__':
         """
         tokens_update = ""
 
-        for word in tokens:
-            if word.isalnum():
+        try:
+            for word in tokens:
                 if word not in stop_words:
-                    tokens_update += word
-            else:
-                return None
+                    tokens_update += word + " "
 
-        tokens_update = tokens_update.split()
+            tokens_update = tokens_update.split()
 
-        return tokens_update
+            return tokens_update
+        except:
+            return None
 
-
-    # noinspection PyBroadException
     def calculate_frequencies(tokens: list) -> dict or None:
         """
         Calculates frequencies of given tokens
         :param tokens: a list of tokens
         :return: a dictionary with frequencies
         """
-        frequencies = {}
+        freq = {}
         try:
             for word in tokens:
-                if word.isalnum():
-                    if word in tokens:
-                        frequencies[word] += 1
-                    else:
-                        frequencies.update(word : 1)
+                if word in list(freq.keys()):
+                    freq[word] += 1
                 else:
-                    return None
+                    freq[word] = 1
+            return freq
         except:
             return None
 
@@ -86,13 +82,17 @@ if __name__ == '__main__':
         :return: a list of the most common words
         """
         most_common = []
+        freq_dict_temp = dict(freq_dict)
+        chart = sorted(list(freq_dict.values()), reverse=True)
+        chart = chart[:top_n]
         try:
-            while top_n > 0:
-                for i in range(len(freq_dict)):
-                    most_common[i] = list(freq_dict.keys())[list(freq_dict.values()).index(i)]
-                top_n -= 1
+            for i in chart:
+                word = list(freq_dict_temp.keys())[list(freq_dict_temp.values()).index(i)]
+                most_common.append(word)
+                freq_dict_temp.pop(word)
+            return most_common
         except:
-            return  None
+            return None
 
     def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
         """
@@ -180,7 +180,20 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    EXPECTED = 'en'
-    RESULT = ''
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    english = tokenize(en_text)
+    stop_words_en = []
+    english = remove_stop_words(english, stop_words_en)
+    en_freq = calculate_frequencies(english)
+
+    german = tokenize(de_text)
+    stop_words_de = []
+    german = remove_stop_words(german, stop_words_de)
+    de_freq = calculate_frequencies(german)
+
+    unknown = tokenize(unknown_text)
+    stop_words_unknown = []
+    unknown = remove_stop_words(unknown, stop_words_unknown)
+    unknown_freq = calculate_frequencies(unknown)
+
+
+
