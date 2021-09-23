@@ -33,17 +33,12 @@ def tokenize():
     unknown_text_lower = re.sub(r'[^a-zäöüß ]', '', str(unknown_text_lower))
     unknown_text_tokens = unknown_text_lower.split()
 
-    print(english_text_tokens)
-    print(german_text_tokens)
-    print(unknown_text_tokens)
+    return english_text_tokens
+    return german_text_tokens
+    return unknown_text_tokens
 tokenize()
 
-    """
-    Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
-    """
+
 
 def remove_stop_words():
     stop_words_eng = ['ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 'about', 'once', 'during',
@@ -61,7 +56,7 @@ def remove_stop_words():
     for word in clean_eng_text:
         if word in stop_words_eng:
             clean_eng_text.remove(word)
-    print(clean_eng_text)
+    return clean_eng_text
 
     stop_words_ge = ['aber', 'als', 'am', 'an', 'auch', 'auf', 'aus', 'bei', 'bin', 'bis', 'bist', 'da', 'dadurch',
                      'daher', 'darum', 'das', 'daß', 'dass', 'dein', 'deine', 'dem', 'den', 'der', 'des', 'dessen',
@@ -80,17 +75,16 @@ def remove_stop_words():
     for word in clean_ge_text:
         if word in stop_words_ge:
             clean_ge_text.remove(word)
-    print(clean_ge_text)
+    return clean_ge_text
+
+    clean_un_text = unknown_text_tokens[:]
+    for word in clean_un_text:
+        if word in stop_words_eng:
+            clean_un_text.remove(word)
+        elif word in stop_words_ge:
+            clean_un_text.remove(word)
 
 remove_stop_words()
-
-    """
-    Removes stop words
-    :param tokens: a lst of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
-    pass
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
