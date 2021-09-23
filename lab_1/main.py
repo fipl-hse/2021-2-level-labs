@@ -3,15 +3,31 @@ Lab 1
 Language detection
 """
 
+"""
+Lab 1
+Language detection
+"""
+
 
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
+        :param text: a text
+        :return: a list of lower-cased tokens without punctuation
     """
-    pass
+    try:
+        text_new = ""
+        for i in text:
+            if i not in string.punctuation:
+                text_new += i
+
+        text_new = text_new.lower()
+        text_new = text_new.split()
+
+        return text_new
+    except:
+        return None
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -21,7 +37,18 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+    tokens_update = ""
+
+    try:
+        for word in tokens:
+            if word not in stop_words:
+                tokens_update += word + " "
+
+        tokens_update = tokens_update.split()
+
+        return tokens_update
+    except:
+        return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -30,7 +57,16 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    freq = {}
+    try:
+        for word in tokens:
+            if word in list(freq.keys()):
+                freq[word] += 1
+            else:
+                freq[word] = 1
+        return freq
+    except:
+        return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -40,7 +76,18 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+    most_common = []
+    freq_dict_temp = dict(freq_dict)
+    chart = sorted(list(freq_dict.values()), reverse=True)
+    chart = chart[:top_n]
+    try:
+        for i in chart:
+            word = list(freq_dict_temp.keys())[list(freq_dict_temp.values()).index(i)]
+            most_common.append(word)
+            freq_dict_temp.pop(word)
+        return most_common
+    except:
+        return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -117,3 +164,29 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
+
+
+with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'en.txt'), 'r', encoding='utf-8') as file_to_read:
+    en_text = file_to_read.read()
+
+with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'de.txt'), 'r', encoding='utf-8') as file_to_read:
+    de_text = file_to_read.read()
+
+with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as \
+        file_to_read:
+    unknown_text = file_to_read.read()
+
+english = tokenize(en_text)
+stop_words_en = []
+english = remove_stop_words(english, stop_words_en)
+en_freq = calculate_frequencies(english)
+
+german = tokenize(de_text)
+stop_words_de = []
+german = remove_stop_words(german, stop_words_de)
+de_freq = calculate_frequencies(german)
+
+unknown = tokenize(unknown_text)
+stop_words_unknown = []
+unknown = remove_stop_words(unknown, stop_words_unknown)
+unknown_freq = calculate_frequencies(unknown)
