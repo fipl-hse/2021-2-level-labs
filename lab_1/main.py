@@ -164,29 +164,3 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
-
-
-with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'en.txt'), 'r', encoding='utf-8') as file_to_read:
-    en_text = file_to_read.read()
-
-with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'de.txt'), 'r', encoding='utf-8') as file_to_read:
-    de_text = file_to_read.read()
-
-with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as \
-        file_to_read:
-    unknown_text = file_to_read.read()
-
-english = tokenize(en_text)
-stop_words_en = []
-english = remove_stop_words(english, stop_words_en)
-en_freq = calculate_frequencies(english)
-
-german = tokenize(de_text)
-stop_words_de = []
-german = remove_stop_words(german, stop_words_de)
-de_freq = calculate_frequencies(german)
-
-unknown = tokenize(unknown_text)
-stop_words_unknown = []
-unknown = remove_stop_words(unknown, stop_words_unknown)
-unknown_freq = calculate_frequencies(unknown)
