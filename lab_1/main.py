@@ -63,12 +63,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if type(freq_dict) != dict or type(top_n) != int or None in freq_dict:
         return None
     top_dict = {}
-    freq_list = list(freq_dict.values())
-    freq_list = freq_list.sort()
-    freq_list = freq_list[0, top_n]
+    freq_list = sorted(freq_dict.values())
+    freq_list = freq_list[::-1]
     for i in freq_list:
-        top_dict[i] = freq_dict[i]
-    top_list = list(top_dict.values())
+        for j in freq_dict.keys():
+            if freq_dict[j] == i:
+                top_dict[j] = freq_dict[j]
+    top_list = list(top_dict.keys())
+    top_list = top_list[:top_n]
     return top_list
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
