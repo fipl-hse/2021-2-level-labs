@@ -8,7 +8,7 @@ def tokenize(text: str) -> list or None:
     if type(text) != str:
         return None
     text = text.lower()
-    marks = '''!()-[]{};?@#$%:'"/.,\^&*_<>№'''
+    marks = '''1234567890!()-§[]{};?@#$%:'"/.,\^&*_<>№'''
     for i in text:
         if i in marks:
             text = text.replace(i,'')
