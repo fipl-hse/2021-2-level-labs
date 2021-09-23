@@ -88,6 +88,30 @@ remove_stop_words()
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
+    freqs_eng = {}
+    for token in clean_eng_text:
+        if token not in freqs_eng:
+            freqs_eng[token] = 1
+        else:
+            freqs_eng[token] += 1
+    return freqs_eng
+
+    freqs_ge = {}
+    for token in clean_ge_text:
+        if token not in freqs_ge:
+            freqs_ge[token] = 1
+        else:
+            freqs_ge[token] += 1
+    return freqs_ge
+
+    freqs_un = {}
+    for token in clean_un_text:
+        if token not in freqs_un:
+            freqs_un[token] = 1
+        else:
+            freqs_un[token] += 1
+    return freqs_un
+
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
