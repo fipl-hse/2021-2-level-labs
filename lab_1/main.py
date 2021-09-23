@@ -52,7 +52,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
         if i not in dictionary: #является ли элемент списка ключом в словаре
             dictionary[i] = 1 #если не явл., то созд. такой ключ со значением 1
         else:
-            dictionary[i] += 1 #если явл., то значение увеличивается на 1
+            dictionary[i] = dictionary[i]+1 #если явл., то значение увеличивается на 1
     return dictionary
     """
     Calculates frequencies of given tokens
@@ -63,6 +63,21 @@ def calculate_frequencies(tokens: list) -> dict or None:
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    if type(freq_dict) != dict:
+        return None
+    sorted_freq_list = sorted(freq_dict.values())
+    sorted_dict_N = {}
+    sorted_freq_list = sorted_freq_list [::-1]
+    for i in sorted_freq_list:
+        for k in freq_dict.keys():
+            if freq_dict[k] == i:
+                sorted_dict_N[k] = freq_dict[k]
+    TOP_N_list = sorted_dict_N.keys()
+    TOP_N_list = list(TOP_N_list)
+    TOP_N_list = TOP_N_list [:top_n]
+    return TOP_N_list
+
+
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
