@@ -20,7 +20,6 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    pass
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -39,7 +38,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -59,22 +57,24 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if type(freq_dict) != dict:
         return None
-    sorted_freq_list = sorted(freq_dict.values())
-    sorted_dict_N = {}
-    sorted_freq_list = sorted_freq_list [::-1]
-    for i in sorted_freq_list:
-        for k in freq_dict.keys():
-            if freq_dict[k] == i:
-                sorted_dict_N[k] = freq_dict[k]
-    TOP_N_list = sorted_dict_N.keys()
-    TOP_N_list = list(TOP_N_list)
-    TOP_N_list = TOP_N_list [:top_n]
+    sorted_freq_list = sorted(freq_dict.values()) #СПИСОК отсортированных от меньшего к большему значений словаря
+    #который был принят на вход
+    sorted_dict_N = {} #создала словарь
+    sorted_freq_list = sorted_freq_list [::-1] #СПИСОК отсортированных от БОЛЬШЕГО к МЕНЬШЕМУ значений словаря
+    #который был принят на вход
+    for i in sorted_freq_list: #прохожусь по каждому элементу отсортированного списка
+        for k in freq_dict.keys(): #для каждого ключа в списке ключей принятого на вход словаря:
+            if freq_dict[k] == i: #если значение конкр. ключа k из принятого на вход словаря
+                # совпадает с элементом из отсортированного списка
+                sorted_dict_N[k] = freq_dict[k] # то в новом словаре создаётся та же пара ключ-значение
+    TOP_N_list = sorted_dict_N.keys() #в этой переменной записаны ключи нового словаря
+    TOP_N_list = list(TOP_N_list) #преобразование переменной в список
+    TOP_N_list = TOP_N_list [:top_n] #вывод первых N по популярности слов
     return TOP_N_list
 
 
@@ -84,7 +84,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
