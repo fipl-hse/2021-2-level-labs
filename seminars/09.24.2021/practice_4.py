@@ -4,13 +4,43 @@ Seminar 4
 Data Type: String
 """
 
-
 # Common information about strings
 #
 # strings are immutable
 # strings are iterable
 # strings are case-sensitive
 
+# Create a string
+example = 'Hello'  # or "Hello"
+print(example)
+
+# String concatenation
+greeting = example + ' there!'
+print(greeting)
+
+# String multiplication
+several_hellos = example * 5
+print(several_hellos)
+
+# String formatting
+# .format() method
+example = '{} there!'.format(example)
+print(example)
+# f-strings
+example = f'{greeting} - this is the "greeting" variable.'
+print(example)
+
+
+# String methods (some of them)
+# .split() -> split by the delimiter
+# .join() - join by the delimiter
+# .upper() - uppercase copy of the string
+# .lower() - lowercase copy of the string
+# .isalpha() - if all the characters in the text are letters
+# .strip() - remove the given element (space by default) from the both ends of the string
+# .find() - search the string for the specified value (return the index of the first occurrence)
+
+# TASKS
 
 # Task 1:
 def multiply_string(input_string: str, how_many: int) -> str:
