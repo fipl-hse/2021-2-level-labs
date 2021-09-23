@@ -25,7 +25,7 @@ def tokenize(text: str) -> list or None:
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     tokens_right = []
-    if type(tokens) != list:
+    if type(tokens) != list or None in tokens: #предохраняет от пустых элементов в спике
         return None
     if type(stop_words) != list:
         return None
@@ -43,6 +43,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
+    dictionary = {} #создаём словарь
+    if type(tokens) != list or None in tokens: #является ли tokens списком
+        return None
+    for i in tokens: #проходимся по каждому токену
+        if type(i) != str: #если эл-т списка tokens не явл. строкой, то возвр. None
+            return None
+        if i not in dictionary: #является ли элемент списка ключом в словаре
+            dictionary[i] = 1 #если не явл., то созд. такой ключ со значением 1
+        else:
+            dictionary[i] += 1 #если явл., то значение увеличивается на 1
+    return dictionary
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
