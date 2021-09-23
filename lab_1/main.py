@@ -86,6 +86,19 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+    if len(text) == 0:
+        return None
+    if type(stop_words) != list:
+        return None
+    if type(language) != str:
+        return None
+    profile = {}
+    profile ['name'] = language
+    new_tokenization = tokenize(text)
+    new_remove_stop_words = remove_stop_words(new_tokenization, stop_words)
+    profile['freq'] = calculate_frequencies(new_remove_stop_words)
+    profile['n_words'] = len(profile['freq'])
+    return profile
     """
     Creates a language profile
     :param language: a language
