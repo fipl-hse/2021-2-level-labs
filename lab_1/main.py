@@ -24,6 +24,15 @@ def tokenize(text: str) -> list or None:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    tokens_right = []
+    if type(tokens) != list:
+        return None
+    if type(stop_words) != list:
+        return None
+    for i in tokens:
+        if i not in stop_words:
+            tokens_right.append(i)
+    return tokens_right
     """
     Removes stop words
     :param tokens: a list of tokens
