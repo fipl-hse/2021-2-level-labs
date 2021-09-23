@@ -3,6 +3,7 @@ Lab 1
 Language detection
 """
 import re
+import json
 
 
 def tokenize(text: str) -> list or None:
@@ -206,6 +207,55 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+    if isinstance(unknown_profile,dict) and isinstance(profiles, list) and isinstance(languages, list) and isinstance(top_n, int):
+        if not languages:
+            profiles_words = {}
+            for i in range(len(profiles)):
+                number = compare_profiles(unknown_profile, profiles[i], top_n)
+                name = profiles[i]['name']
+                profiles_words[name] = number
+            list_of_keys = list(profiles_words.keys())
+            if len(profiles) == 1:
+                name_for_1 = profiles[0]['name']
+                return name_for_1
+            if profiles_words[list_of_keys[0]] > profiles_words[list_of_keys[1]]:
+                return list_of_keys[0]
+            elif profiles_words[list_of_keys[0]] < profiles_words[list_of_keys[1]]:
+                return list_of_keys[1]
+            elif profiles_words[list_of_keys[0]] == profiles_words[list_of_keys[1]]:
+                names = [list_of_keys[0], list_of_keys[1]]
+                names.sort()
+                return names[0]
+        else:
+            true_profiles = []
+            for i in range(len(profiles)):
+                if profiles[i]['name'] in languages:
+                    true_profiles.append(profiles[i])
+            if true_profiles == []:
+                return None
+            if len(true_profiles) == 1:
+                name_for_1 = profiles[0]['name']
+                return name_for_1
+            profiles_words = {}
+            for i in range(len(true_profiles)):
+                number = compare_profiles(unknown_profile, true_profiles[i], top_n)
+                name = true_profiles[i]['name']
+                profiles_words[name] = number
+            list_of_keys = list(profiles_words.keys())
+            if len(true_profiles) == 1:
+                return true_profiles[0]
+            if profiles_words[list_of_keys[0]] > profiles_words[list_of_keys[1]]:
+                return list_of_keys[0]
+            elif profiles_words[list_of_keys[0]] < profiles_words[list_of_keys[1]]:
+                return list_of_keys[1]
+            elif profiles_words[list_of_keys[0]] == profiles_words[list_of_keys[1]]:
+                names = [list_of_keys[0], list_of_keys[1]]
+                names.sort()
+                return names[0]
+
+
+    else:
+        return None
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -218,15 +268,28 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
 
 
 def load_profile(path_to_file: str) -> dict or None:
+    if isinstance(path_to_file,str):
+        try:
+            with open(path_to_file, 'r', encoding='utf-8') as f:
+                text = json.load(f)
+            return text
+        except FileNotFoundError:
+            return None
+    else:
+        return None
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
 
 
 def save_profile(profile: dict) -> int:
+    if isinstance(profile,dict):
+        json.dumps(profile,profile['name'])
+        return 0
+    else:
+        return 1
     """
     Saves a language profile
     :param profile: a dictionary
