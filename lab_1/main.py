@@ -2,6 +2,7 @@
 Lab 1
 Language detection
 """
+import string
 
 def tokenize(text: str) -> list or None:
     """
@@ -22,7 +23,6 @@ def tokenize(text: str) -> list or None:
         return text_new
     except:
         return None
-
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
