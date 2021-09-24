@@ -113,7 +113,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
 
-    if type(unknown_profile)!= dict or type(profile_1) != dict or type(profile_2) != dict:
+    if type(unknown_profile) != dict or type(profile_1) != dict or type(profile_2) != dict:
         return None
     if type(top_n) != int:
         return None
@@ -132,15 +132,34 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
-    """
-    Compares profiles and calculates some advanced parameters
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-    min_length_word, average_token_length
-    """
-    pass
+
+    if type(unknown_profile) != dict or type(profile_to_compare) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+
+    top_n_words = get_top_n_words(profile_to_compare['freq'], top_n)
+    top_n_words_unk = get_top_n_words(unknown_profile['freq'], top_n)
+
+    top_n_common = []
+    for i in top_n_words:
+        if i in top_n_words_unk:
+            top_n_common.append(i)
+    score = len(top_n_common) / len(top_n_words_unk)
+    sorted_common = sorted(top_n_common)
+
+    tokens = list(profile_to_compare['freq'].keys())
+    max_len = max(tokens, key=len)
+    min_len = min(tokens, key=len)
+    tokens_len = []
+    for i in tokens:
+        tokens_len.append(len(i))
+    average_len = sum(tokens_len) / len(tokens)
+
+    report = {'name': profile_to_compare['name'], 'common': top_n_common, 'score': score,
+              'max_length_word': max_len, 'min_length_word': min_len, 'average_token_length': average_len,
+              'sorted_common': sorted_common}
+    return report
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
