@@ -4,20 +4,15 @@ Language detection
 """
 
 
-def tokenize():
+def tokenize(english_text: str, german_text: str, unknown_text:str) -> list or None:
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
+    pass
 
-    english_text = """A man walks into a bar and orders a glass of water. 
-                          The bartender points a gun at him and the man thanks him and leaves.
-                          Why did the man thank the bartender?"""
-
-    german_text = """Stell dir vor, du bist der Kapitän eines Frachtschiffes, das 30 Meter lang und 5 Meter breit ist.
-                         Voll beladen hat es einen Tiefgang von 2 Metern, nicht beladen nur von einem Meter. 
-                         Seine Höchstgeschwindigkeit betägt 18 Knoten. Wie alt ist der Kapitän?"""
-
-    unknown_text = """A man is lying in his bed, trying to sleep. 
-                          He picks up the phone and makes a call.
-                          He waits for a while and hangs up before anyone could answer the phone.
-                          Then he sleeps peacefully."""
     import re
 
     english_text_lower = english_text.lower()
@@ -33,14 +28,20 @@ def tokenize():
     unknown_text_lower = re.sub(r'[^a-zäöüß ]', '', str(unknown_text_lower))
     unknown_text_tokens = unknown_text_lower.split()
 
-    return english_text_tokens
-    return german_text_tokens
-    return unknown_text_tokens
-tokenize()
+    print(english_text_tokens)
+    print(german_text_tokens)
+    print(unknown_text_tokens)
+tokenize(print(tokenize('A man walks into a bar and orders a glass of water. The bartender points a gun at him and the man thanks him and leaves. Why did the man thank the bartender?', 'Stell dir vor, du bist der Kapitän eines Frachtschiffes, das 30 Meter lang und 5 Meter breit ist. Voll beladen hat es einen Tiefgang von 2 Metern, nicht beladen nur von einem Meter. Seine Höchstgeschwindigkeit betägt 18 Knoten. Wie alt ist der Kapitän?', 'A man is lying in his bed, trying to sleep. He picks up the phone and makes a call. He waits for a while and hangs up before anyone could answer the phone.Then he sleeps peacefully.'))
 
 
-
-def remove_stop_words():
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    """
+        Removes stop words
+        :param tokens: a list of tokens
+        :param stop_words: a list of stop words
+        :return: a list of tokens without stop words
+        """
+    pass
     stop_words_eng = ['ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 'about', 'once', 'during',
                       'out', 'very', 'having', 'with', 'they', 'own', 'an', 'be', 'some', 'for', 'do', 'its', 'yours',
                       'such', 'into', 'of', 'most', 'itself', 'other', 'off', 'is', 's', 'am', 'or', 'who', 'as',
@@ -86,8 +87,14 @@ def remove_stop_words():
 
 remove_stop_words()
 
-
 def calculate_frequencies(tokens: list) -> dict or None:
+    """
+        Calculates frequencies of given tokens
+        :param tokens: a list of tokens
+        :return: a dictionary with frequencies
+        """
+    pass
+
     freqs_eng = {}
     for token in clean_eng_text:
         if token not in freqs_eng:
@@ -112,15 +119,17 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freqs_un[token] += 1
     return freqs_un
 
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
 
 
 def get_top_n_words(): -> list or None:
+    """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
+    pass
+
     wordfreq_lst_eng = list(freqs_eng.items())
 
     wordfreq_lst_sorted_eng = sorted(wordfreq_lst_eng,
@@ -155,13 +164,6 @@ def get_top_n_words(): -> list or None:
         print('{}: {} time(s)'.format(w, f))
 
 get_top_n_words()
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
