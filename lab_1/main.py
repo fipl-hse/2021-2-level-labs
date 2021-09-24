@@ -20,7 +20,7 @@ def tokenize(text):
         return None
     
   
- def remove_stop_words(tokens, stop_words):
+def remove_stop_words(tokens, stop_words):
     """
     Removes stop words
     :param tokens: a list of tokens
