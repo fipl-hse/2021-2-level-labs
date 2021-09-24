@@ -68,10 +68,6 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     tokens = remove_stop_words(tokens, stop_words)
 
 
-
-
-    else:
-        return None
     pass
 
 
