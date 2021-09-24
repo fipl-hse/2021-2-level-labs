@@ -18,7 +18,6 @@ def tokenize(text: str) -> list or None:
         return tokens
     else:
         return None
-    pass
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -31,36 +30,48 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                 return None
     except:
         return None
-    pass
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
-
+    print(tokens)
+    if type(tokens) is list:
+        for i in tokens:
+            if isinstance(i, str):
+                freq_dict = {i:tokens.count(i) for i in tokens}
+                return freq_dict
+            else:
+                return None
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+        if freq_dict != {} and top_n > 0:
+            new_dict = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
+            count = 1
+            top_list = []
+            first,snd = zip(* new_dict)
+            for i in first:
+                if count <= top_n:
+                    top_list.append(i)
+                    count += 1
+                if count > top_n:
+                    break
+            return top_list
+        else:
+            return []
+    else:
+        return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
-    """
-    Creates a language profile
-    :param language: a language
-    :param text: a text
-    :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
-    """
+    #if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
+    tokens = tokenize(text)
+    tokens = remove_stop_words(tokens, stop_words)
+
+
+
+
+    else:
+        return None
     pass
 
 
