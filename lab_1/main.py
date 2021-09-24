@@ -11,10 +11,14 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    text = text.split()
-    return text
-
-
+    text_without_symbols = ""
+    for i in str(text):
+        if i == " " or i.isalpha():
+            text_without_symbols += i
+    good_text = text_without_symbols.lower()
+    tokens = good_text.split()
+    return tokens or None
+tokens = tokenize("The weather is sunny and the man is happy")
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
@@ -23,7 +27,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+
+
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
