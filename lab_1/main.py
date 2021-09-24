@@ -23,9 +23,6 @@ def tokenize(text: str) -> list or None:
 
         return text
 
-
-
-
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     checking_tokens = []
     if type(tokens) != list and type(stop_words) != list:
