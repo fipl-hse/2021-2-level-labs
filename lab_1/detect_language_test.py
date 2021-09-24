@@ -22,6 +22,7 @@ class DetectLanguageTest(unittest.TestCase):
                            'n_words': 3}
 
         en_profile = {'name': 'en',
+                      прпрпрр
                       'freq': {'happy': 2, 'he': 1, 'man': 1},
                       'n_words': 3}
 
