@@ -4,6 +4,7 @@ Language detection
 """
 import string
 
+
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -14,8 +15,8 @@ def tokenize(text: str) -> list or None:
     text_new = ""
     if type(text) == str:
         for i in text:
-                if i not in string.punctuation:
-                    text_new += i
+            if i not in string.punctuation:
+                text_new += i
     else:
         return None
 
@@ -24,6 +25,7 @@ def tokenize(text: str) -> list or None:
 
     return text_new
 
+
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
@@ -31,16 +33,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    tokens_update = ""
+    tokens_update = []
 
     try:
-        for word in tokens:
-            if word not in stop_words:
-                tokens_update += word + " "
+        if type(tokens) == list and type(stop_words) == list:
+            for word in tokens:
+                if word not in stop_words:
+                    tokens_update.append(word)
 
-        tokens_update = tokens_update.split()
-
-        return tokens_update
+            return tokens_update
+        else:
+            return None
     except:
         return None
 
