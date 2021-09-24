@@ -6,6 +6,12 @@ Language detection
 
 
 def tokenize(text: str) -> list or None:
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words list
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
     if type(text) != str:
         return None
     text = text.lower()
@@ -15,16 +21,17 @@ def tokenize(text: str) -> list or None:
             text = text.replace(x,'')
     tokens = text.split()
     return tokens
-    """
-    Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words list
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
-    """
+
     pass
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
     tokens_1 = []
     if type(stop_words) != list:
         return None
@@ -36,17 +43,15 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     print(tokens_1)
     return tokens_1
 
-
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
     pass
 stop_words = ['the', 'a', 'is']
 
 def calculate_frequencies(tokens: list) -> dict or None:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
     freqs_dict = {}
     if type(tokens) != list:
         return None
@@ -58,15 +63,17 @@ def calculate_frequencies(tokens: list) -> dict or None:
         else:
             freqs_dict[token] += 1
     return (freqs_dict)
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
+
     pass
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
     if type(freq_dict) != dict:
         return None
     freq_dict = sorted(freq_dict.items(), key=lambda x:-x[1])
@@ -76,16 +83,18 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     for word in freq_dict:
         freq_2_dict.append(word[0])
     return list(freq_2_dict[:top_n])
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
+
     pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+    """
+    Creates a language profile
+    :param language: a language
+    :param text: a text
+    :param stop_words: a list of stop words
+    :return: a dictionary with three keys – name, freq, n_words
+    """
     if len(text) == 0:
         return None
     if type(stop_words) != list:
@@ -99,13 +108,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     profile['freq'] = calculate_frequencies(new_remove_stop_words)
     profile['n_words'] = len(profile['freq'])
     return profile
-    """
-    Creates a language profile
-    :param language: a language
-    :param text: a text
-    :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
-    """
+
     pass
 
 
