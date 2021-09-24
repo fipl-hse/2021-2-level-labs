@@ -91,6 +91,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
     return most_common
 
+
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
     Creates a language profile
@@ -117,6 +118,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
     return lan_profile
 
+
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
@@ -138,8 +140,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         return None
 
 
-
-
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
@@ -149,7 +149,20 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    try:
+        p1_cross = compare_profiles(unknown_profile, profile_1, top_n)
+        p2_cross = compare_profiles(unknown_profile, profile_2, top_n)
+
+        if p1_cross > p2_cross:
+            return profile_1["name"]
+        elif p2_cross > p1_cross:
+            return profile_2["name"]
+        else:
+            alphabetical = list[profile_1["name"], profile_2["name"]].sorted()
+            return alphabetical[0]
+
+    except:
+        return None
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
