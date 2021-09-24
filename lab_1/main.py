@@ -3,6 +3,7 @@ Lab 1
 Language detection
 """
 
+
 def tokenize(text: str) -> list or None:
 
     if type(text) != str:
@@ -81,9 +82,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     if type(stop_words) != list:
         return None
 
-    tokens = tokenize(text)
-    tokens = remove_stop_words(tokens, stop_words)
-    freq_dict = calculate_frequencies(tokens)
+    freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
 
     language_profile = dict(name=language, freq=freq_dict, n_words=len(freq_dict))
     return language_profile
@@ -111,16 +110,25 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     distance = round(count_common / len(top_n_words_unk), 2)
     return distance
 
+
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile
-    :param unknown_profile: a dictionary
-    :param profile_1: a dictionary
-    :param profile_2: a dictionary
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    pass
+
+    if type(unknown_profile)!= dict or type(profile_1) != dict or type(profile_2) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+
+    distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
+    distance_2 = compare_profiles(unknown_profile, profile_2, top_n)
+
+    if distance_1 > distance_2:
+        language = profile_1['name']
+    elif distance_1 == distance_2:
+        names = [profile_1['name'], profile_2['name']]
+        language = sorted(names)[0]
+    else:
+        language = profile_2['name']
+    return language
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
