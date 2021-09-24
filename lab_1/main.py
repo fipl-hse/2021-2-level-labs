@@ -49,14 +49,19 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    frequency_dictionary = {}
-    if type(tokens) == list:
-        for i in tokens:
-            if i in frequency_dictionary:
-                frequency_dictionary[i] += 1
-            else:
-                frequency_dictionary[i] = 1
-        return frequency_dictionary
+    freq_dict = {}
+    if type(tokens) != list:
+        return None
+    for i in tokens:
+        if type(i) != str:
+            return None
+
+    for i in tokens:
+        if i in freq_dict:
+            freq_dict[i] += 1
+        else:
+            freq_dict[i] = 1
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -66,7 +71,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+    top_n_words = []
+    if type(freq_dict) == dict and type(top_n) == int:
+        freq_dict = sorted(freq_dict.items())
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
