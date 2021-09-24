@@ -46,8 +46,14 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
-
+    if type(tokens) != list:
+        return None
+    freq_dict = {}
+    for i in tokens:
+        if type(i) == str:
+            some_dict = {i: tokens.count(i)}
+            freq_dict.update(some_dict)
+    return freq_dict or None
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
