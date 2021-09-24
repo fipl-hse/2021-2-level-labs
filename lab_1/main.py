@@ -174,8 +174,12 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
-
+    try:
+        top_unknown = get_top_n_words(unknown_profile, top_n)
+        top_compare = get_top_n_words(profile_to_compare, top_n)
+        cross =
+    except:
+        return None
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
