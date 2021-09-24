@@ -5,7 +5,6 @@ Language detection
 
 import re
 
-
 def tokenize(text: str) -> list or None:
     if isinstance(text, str):
         text = text.lower()
@@ -91,20 +90,19 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         return None
 
 
-
-pass
-
-
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile
-    :param unknown_profile: a dictionary
-    :param profile_1: a dictionary
-    :param profile_2: a dictionary
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int):
+        first_intersecting_words = compare_profiles(unknown_profile, profile_1, top_n)
+        second_intersecting_words = compare_profiles(unknown_profile,profile_2,top_n)
+        if first_intersecting_words > second_intersecting_words:
+            return profile_1['name']
+        if second_intersecting_words > first_intersecting_words:
+            return profile_2['name']
+        else:
+            sorted_profiles =[profile_1['name'], profile_2['name']].sort()
+            return sorted_profiles[0]
+    else:
+        return None
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
