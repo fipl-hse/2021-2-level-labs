@@ -26,23 +26,36 @@ def tokenize(text: str) -> list or None:
 
 
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
-    pass
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:git
+
+    #if type(tokens) == list and type(stop_words) == list:
+       # for n in stop_words:
+          #  if n in tokens:
+              #  tokens.remove(n)
+        #return tokens
+    #elif type(tokens) != list and type(stop_words) != list:
+       # return None
+    #elif type(stop_words) != list:
+       # return tokens
+    #return tokens
+
+    if type(tokens) == list and type(stop_words) == list:
+        chek_tokens = []
+        for token in stop_words:
+            if token in tokens:
+                chek_tokens.append(token)
+        return chek_tokens
+    elif stop_words != list or stop_words == []:
+        return tokens
+    elif  type(tokens) != list and type(stop_words) != list:
+        return None
+
+
+
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
