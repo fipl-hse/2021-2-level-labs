@@ -53,7 +53,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
                     frequency_dictionary[word] += 1
                 else:
                     frequency_dictionary[word] = 1
-            return None
+            else:
+                return None
         return frequency_dictionary
 
 
