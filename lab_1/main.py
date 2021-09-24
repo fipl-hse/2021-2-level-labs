@@ -4,7 +4,7 @@ Language detection
 """
 
 
-def tokenize(english_text: str, german_text: str, unknown_text:str) -> list or None:
+def tokenize(text: str):
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
@@ -15,26 +15,16 @@ def tokenize(english_text: str, german_text: str, unknown_text:str) -> list or N
 
     import re
 
-    english_text_lower = english_text.lower()
-    german_text_lower = german_text.lower()
-    unknown_text_lower = unknown_text.lower()
+    if type(text) != str:
+        return None
+        text = text.lower()
+        text = re.sub(r'[^a-zäöüß ]', '', str(text))
+        tokens = text.split()
 
-    english_text_lower = re.sub(r'[^a-z ]', '', str(english_text_lower))
-    english_text_tokens = english_text_lower.split()
-
-    german_text_lower = re.sub(r'[^a-zäöüß ]', '', str(german_text_lower))
-    german_text_tokens = german_text_lower.split()
-
-    unknown_text_lower = re.sub(r'[^a-zäöüß ]', '', str(unknown_text_lower))
-    unknown_text_tokens = unknown_text_lower.split()
-
-    print(english_text_tokens)
-    print(german_text_tokens)
-    print(unknown_text_tokens)
-tokenize(print(tokenize('A man walks into a bar and orders a glass of water. The bartender points a gun at him and the man thanks him and leaves. Why did the man thank the bartender?', 'Stell dir vor, du bist der Kapitän eines Frachtschiffes, das 30 Meter lang und 5 Meter breit ist. Voll beladen hat es einen Tiefgang von 2 Metern, nicht beladen nur von einem Meter. Seine Höchstgeschwindigkeit betägt 18 Knoten. Wie alt ist der Kapitän?', 'A man is lying in his bed, trying to sleep. He picks up the phone and makes a call. He waits for a while and hangs up before anyone could answer the phone.Then he sleeps peacefully.'))
+        return tokens
 
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+def remove_stop_words(tokens: list, stop_words: list):
     """
         Removes stop words
         :param tokens: a list of tokens
@@ -42,52 +32,18 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         :return: a list of tokens without stop words
         """
     pass
-    stop_words_eng = ['ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 'about', 'once', 'during',
-                      'out', 'very', 'having', 'with', 'they', 'own', 'an', 'be', 'some', 'for', 'do', 'its', 'yours',
-                      'such', 'into', 'of', 'most', 'itself', 'other', 'off', 'is', 's', 'am', 'or', 'who', 'as',
-                      'from', 'him', 'each', 'the', 'themselves', 'until', 'below', 'are', 'we', 'these', 'your', 'his',
-                      'through', 'don', 'nor', 'me', 'were', 'her', 'more', 'himself', 'this', 'down', 'should', 'our',
-                      'their', 'while', 'above', 'both', 'up', 'to', 'ours', 'had', 'she', 'all', 'no', 'when', 'at',
-                      'any', 'before', 'them', 'same', 'and', 'been', 'have', 'in', 'will', 'on', 'does', 'yourselves',
-                      'then', 'that', 'because', 'what', 'over', 'why', 'so', 'can', 'did', 'not', 'now', 'under', 'he',
-                      'you', 'herself', 'has', 'just', 'where', 'too', 'only', 'myself', 'which', 'those', 'i', 'after',
-                      'few', 'whom', 't', 'being', 'if', 'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how',
-                      'further', 'was', 'here', 'than']
-    clean_eng_text = english_text_tokens[:]
-    for word in clean_eng_text:
-        if word in stop_words_eng:
-            clean_eng_text.remove(word)
-    return clean_eng_text
 
-    stop_words_ge = ['aber', 'als', 'am', 'an', 'auch', 'auf', 'aus', 'bei', 'bin', 'bis', 'bist', 'da', 'dadurch',
-                     'daher', 'darum', 'das', 'daß', 'dass', 'dein', 'deine', 'dem', 'den', 'der', 'des', 'dessen',
-                     'deshalb', 'die', 'dies', 'dieser', 'dieses', 'doch', 'dort', 'du', 'durch', 'ein', 'eine',
-                     'einem', 'einen', 'einer', 'eines', 'er', 'es', 'euer', 'eure', 'für', 'hatte', 'hatten',
-                     'hattest', 'hattet', 'hier', 'hinter', 'ich', 'ihr', 'ihre', 'im', 'in', 'ist', 'ja', 'jede',
-                     'jedem', 'jeden', 'jeder', 'jedes', 'jener', 'jenes', 'jetzt', 'kann', 'kannst', 'können', 'könnt',
-                     'machen', 'mein', 'meine', 'mit', 'muß', 'mußt', 'musst', 'müssen', 'müßt', 'nach', 'nachdem',
-                     'nein', 'nicht', 'nun', 'oder', 'seid', 'sein', 'seine', 'sich', 'sie', 'sind', 'soll', 'sollen',
-                     'sollst', 'sollt', 'sonst', 'soweit', 'sowie', 'und', 'unser', 'unsere', 'unter', 'vom', 'von',
-                     'vor', 'wann', 'warum', 'was', 'weiter', 'weitere', 'wenn', 'wer', 'werde', 'werden', 'werdet',
-                     'weshalb', 'wie', 'wieder', 'wieso', 'wir', 'wird', 'wirst', 'wo', 'woher', 'wohin', 'zu', 'zum',
-                     'zur', 'über']
+    if type(tokens) != list:
+        return None
+    if type(stop_words) != list:
+        return None
+    for token in tokens:
+        if token in stop_words:
+            tokens.remove(token)
+            return tokens
 
-    clean_ge_text = german_text_tokens[:]
-    for word in clean_ge_text:
-        if word in stop_words_ge:
-            clean_ge_text.remove(word)
-    return clean_ge_text
 
-    clean_un_text = unknown_text_tokens[:]
-    for word in clean_un_text:
-        if word in stop_words_eng:
-            clean_un_text.remove(word)
-        elif word in stop_words_ge:
-            clean_un_text.remove(word)
-
-remove_stop_words()
-
-def calculate_frequencies(tokens: list) -> dict or None:
+def calculate_frequencies(tokens: list):
     """
         Calculates frequencies of given tokens
         :param tokens: a list of tokens
@@ -95,33 +51,22 @@ def calculate_frequencies(tokens: list) -> dict or None:
         """
     pass
 
-    freqs_eng = {}
-    for token in clean_eng_text:
-        if token not in freqs_eng:
-            freqs_eng[token] = 1
+    freq_dict = {}
+
+    if type(tokens) != list:
+        return None
+    for i in tokens:
+        if type(i) != str:
+            return None
+    for token in tokens:
+        if token not in freq_dict:
+            freq_dict[token] = 1
         else:
-            freqs_eng[token] += 1
-    return freqs_eng
+            freq_dict[token] += 1
+    print(freq_dict)
+    return freq_dict
 
-    freqs_ge = {}
-    for token in clean_ge_text:
-        if token not in freqs_ge:
-            freqs_ge[token] = 1
-        else:
-            freqs_ge[token] += 1
-    return freqs_ge
-
-    freqs_un = {}
-    for token in clean_un_text:
-        if token not in freqs_un:
-            freqs_un[token] = 1
-        else:
-            freqs_un[token] += 1
-    return freqs_un
-
-
-
-def get_top_n_words(): -> list or None:
+def get_top_n_words(freq_dict: str, top_n: int):
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
@@ -130,43 +75,24 @@ def get_top_n_words(): -> list or None:
     """
     pass
 
-    wordfreq_lst_eng = list(freqs_eng.items())
+    if type(freq_dict) != dict:
+        return None
+    if type(top_n) != int:
+        return None
 
-    wordfreq_lst_sorted_eng = sorted(wordfreq_lst_eng,
-                                 key=lambda x: (-x[1], x[0]))
-    print('English words sorted by frequency:', wordfreq_lst_sorted_eng)
+    freq_dict = list(freq_dict.items())
 
-    eng_top5 = wordfreq_lst_sorted_eng[:5]
+    freq_dict_sorted = sorted(freq_dict, key=lambda x: (-x[1], x[0]))
+    print('Words sorted by frequency:', freq_dict_sorted)
 
-    for w, f in eng_top5:
-        print('{}: {} time(s)'.format(w, f))
+    top_n = freq_dict_sorted[:5]
 
-    wordfreq_lst_ge = list(freqs_ge.items())
-
-    wordfreq_lst_sorted_ge = sorted(wordfreq_lst_ge,
-                                 key=lambda x: (-x[1], x[0]))
-    print('German words sorted by frequency:', wordfreq_lst_sorted_ge)
-
-    ge_top5 = wordfreq_lst_sorted_ge[:5]
-
-    for w, f in ge_top5:
-        print('{}: {} time(s)'.format(w, f))
-
-    wordfreq_lst_un = list(freqs_un.items())
-
-    wordfreq_lst_sorted_un = sorted(wordfreq_lst_un,
-                                 key=lambda x: (-x[1], x[0]))
-    print('Unknown language words sorted by frequency:', wordfreq_lst_sorted_un)
-
-    unk_top5 = wordfreq_lst_sorted_un[:5]
-
-    for w, f in un_top5:
-        print('{}: {} time(s)'.format(w, f))
-
-get_top_n_words()
+    for k, v in top_n:
+        print('{}: {} time(s)'.format(k, v))
+    return top_n
 
 
-def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+def create_language_profile(language: str, text: str, stop_words: list):
     """
     Creates a language profile
     :param language: a language
@@ -177,7 +103,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     pass
 
 
-def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int):
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
@@ -188,7 +114,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     pass
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int):
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -200,7 +126,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     pass
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -212,7 +138,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     pass
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -224,7 +150,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     pass
 
 
-def load_profile(path_to_file: str) -> dict or None:
+def load_profile(path_to_file: str):
     """
     Loads a language profile
     :param path_to_file: a path
@@ -233,7 +159,7 @@ def load_profile(path_to_file: str) -> dict or None:
     pass
 
 
-def save_profile(profile: dict) -> int:
+def save_profile(profile: dict):
     """
     Saves a language profile
     :param profile: a dictionary
