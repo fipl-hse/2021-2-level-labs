@@ -99,8 +99,23 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    try:
+        text_tmp = text
+        text_tmp = tokenize(text_tmp)
+        text_tmp = remove_stop_words(text_tmp, stop_words)
+        text_tmp = calculate_frequencies(text_tmp)
+        if text_tmp != None:
+            if language.isalpha():
+                lan_profile = {"name": language}
+                lan_profile["freq"] = text_tmp
+                lan_profile["n_words"] = len(lan_profile["freq"])
+                print(lan_profile)
+        else:
+            return None
+    except:
+        return None
 
+    return lan_profile
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
@@ -110,7 +125,19 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
+    try:
+        n_unknown = get_top_n_words(unknown_profile["freq"], top_n)
+        n_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+        cross = 0
+        for token in n_compare:
+            if token in n_unknown:
+                cross += 1
+
+        return round(cross / top_n, 2)
+    except:
+        return None
+
+
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
