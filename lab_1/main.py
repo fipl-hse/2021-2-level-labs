@@ -63,12 +63,17 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
-    #if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
-    tokens = tokenize(text)
-    tokens = remove_stop_words(tokens, stop_words)
+    first_step = tokenize(text)
+    second_step = remove_stop_words(first_step, stop_words)
+    freq_dict = calculate_frequencies(second_step)
+    if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
+        language_profile = {"name": language,
+                            "freq": freq_dict,
+                            "n_words": len(freq_dict)}
+        return language_profile
+    else:
+        return None
 
-
-    pass
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
