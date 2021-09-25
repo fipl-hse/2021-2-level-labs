@@ -21,9 +21,9 @@ if __name__ == '__main__':
 
         import main
 
-        en = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, """profiles\en.json"""))
-        de = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, """profiles\de.json"""))
-        la = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, """profiles\la.json"""))
+        en = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r"profiles\en.json"))
+        de = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r"profiles\de.json"))
+        la = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r"profiles\la.json"))
         new_profile = main.create_language_profile("unk", unknown_text, [])
         interesting = main.compare_profiles_advanced(new_profile, en, 5)
         print(interesting)
