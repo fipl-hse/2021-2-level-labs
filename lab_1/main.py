@@ -204,18 +204,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     except:
         return None
 
-en_profile = {'name': 'en',
-                'freq': {'happy': 3, 'he': 1, 'man': 2, 'a': 3},
-                'n_words': 3}
-
-unk_profile = {'name': 'unk',
-                'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
-                                'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 4, 'a': 5},
-                'n_words': 9}
-
-print(compare_profiles_advanced(unk_profile, en_profile, 4))
-
-
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
@@ -225,7 +213,25 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    try:
+        if languages == []:
+            languages = profiles
+        count = 0
+        score_best = 0
+        profile = profiles[count]
+        score_best_name = profile["name"]
+        for language in languages:
+            if language == profile["name"]:
+                score_current = compare_profiles_advanced(unknown_profile, profile, top_n)
+            if score_current > score_best:
+                score_best_name = profile["name"]
+            elif score_current == score_best:
+                score_best_name = sorted(list[score_best,score_current])[0]
+            count += 1
+            profile = profiles[count]
+        return score_best_name
+    except:
+        return None
 
 
 def load_profile(path_to_file: str) -> dict or None:
