@@ -75,7 +75,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param language: a language
     :param text: a text
     :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
+    :return: a dictionary with three keys – name, freq, n_words
     """
     l_profile = {}
     l_profile['name'] = language
@@ -85,13 +85,13 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     pass
 
 
-def calculate_distance(profile_1: dict, profile_2: dict, top_n: int) -> float or None:
+def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
-    Calculates the distance using top n words
-    :param profile_1: a dictionary
-    :param profile_2: a dictionary
+    Compares profiles and calculates the distance using top n words
+    :param unknown_profile: a dictionary
+    :param profile_to_compare: a dictionary
     :param top_n: a number of the most common words
-    :return: a proportion
+    :return: the distance
     """
     match = 0
     for word in get_top_n_words(profile_1['freq'], top_n):
@@ -107,6 +107,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param unknown_profile: a dictionary
     :param profile_1: a dictionary
     :param profile_2: a dictionary
+    :param top_n: a number of the most common words
     :return: a language
     """
     detect_dict = {}
@@ -116,24 +117,26 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     pass
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list) -> str or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+    """
+    Compares profiles and calculates some advanced parameters
+    :param unknown_profile: a dictionary
+    :param profile_to_compare: a dictionary
+    :param top_n: a number of the most common words
+    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
+    min_length_word, average_token_length
+    """
+    pass
+
+
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
     :param profiles: a list of dictionaries
     :param languages: a list of possible languages
+    :param top_n: a number of the most common words
     :return: a language
-    """
-    pass
-
-
-def create_report(unknown_profile: dict, profiles: list, languages: list) -> list or None:
-    """
-    Creates a report on language detection
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :return: a list of dictionaries with two keys – name, score
     """
     pass
 
@@ -142,7 +145,7 @@ def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
+    :return: a dictionary with three keys – name, freq, n_words
     """
     pass
 
