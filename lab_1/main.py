@@ -56,6 +56,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
             else:
                 return None
         return frequency_dictionary
+# return dict e.g. {'assessment': 5, 'karina': 90, 'hello': 1, 'ship': 3}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -72,6 +73,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
             top_n_words.append(tuple_element[0])
         top_n_words = top_n_words[:top_n]
         return top_n_words
+# return list e.g. ['karina', 'assessment']
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -98,9 +100,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if isinstance(unknown_profile, dict) \
-            and isinstance(profile_to_compare, dict) \
-            and isinstance(top_n, int):
+    if (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
         top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
         common_things = list(set(top_n_words_unknown) & set(top_n_words_compare))
@@ -119,10 +121,10 @@ def detect_language(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
-    if isinstance(unknown_profile, dict) \
-            and isinstance(profile_1, dict) \
-            and isinstance(profile_2, dict) \
-            and isinstance(top_n, int):
+    if (isinstance(unknown_profile, dict)
+            and isinstance(profile_1, dict)
+            and isinstance(profile_2, dict)
+            and isinstance(top_n, int)):
         share_the_first_language = compare_profiles(unknown_profile, profile_1, top_n)
         share_the_second_language = compare_profiles(unknown_profile, profile_2, top_n)
         if share_the_first_language == share_the_second_language:
@@ -137,7 +139,8 @@ def detect_language(unknown_profile: dict,
 
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
-                              top_n: int) -> list or None:
+                              top_n: int) -> dict or None:
+    # there was type list
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -146,7 +149,37 @@ def compare_profiles_advanced(unknown_profile: dict,
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
+    if (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
+        # get common and sorted_common
+        top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
+        top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+        common = []
+        for word in top_n_words_compare:
+            if word in top_n_words_unknown:
+                common.append(word)
+        # common = list(set(top_n_words_compare) & set(top_n_words_unknown)) I can't use this here:(
+        sorted_common = sorted(common)
+        # get score
+        score = round(len(common) / len(top_n_words_unknown), 2)
+        # get max and min length of words
+        max_length_word = max(profile_to_compare["freq"].keys(), key=len)
+        min_length_word = min(profile_to_compare["freq"].keys(), key=len)
+        # get average_token_length via list with length of tokens
+        length_of_tokens = []
+        for token in profile_to_compare["freq"].keys():
+            length_of_tokens.append(len(token))
+        average_token_length = sum(length_of_tokens)/len(profile_to_compare["freq"].keys())
+        # get a report
+        report = {'name': profile_to_compare["name"],
+                  'common': common,
+                  'score': score,
+                  'max_length_word': max_length_word,
+                  'min_length_word': min_length_word,
+                  'average_token_length': average_token_length,
+                  'sorted_common': sorted_common}
+        return report
 
 
 def detect_language_advanced(unknown_profile: dict,
