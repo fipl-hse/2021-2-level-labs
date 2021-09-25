@@ -112,8 +112,8 @@ def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
         top_words_unk = get_top_n_words(unknown_profile['freq'], top_n)
         top_words_comp = get_top_n_words(profile_to_compare['freq'], top_n)
         common_words = []
-        for word in top_words_unk:
-            if word in top_words_comp:
+        for word in top_words_comp:
+            if word in top_words_unk:
                 common_words.append(word)
         score = compare_profiles(unknown_profile, profile_to_compare, top_n)
         tokens = profile_to_compare['freq'].keys()
