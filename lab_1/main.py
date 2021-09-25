@@ -158,7 +158,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         elif p2_cross > p1_cross:
             return profile_2["name"]
         else:
-            alphabetical = list[profile_1["name"], profile_2["name"]].sorted()
+            alphabetical = sorted(list[profile_1["name"], profile_2["name"]])
             return alphabetical[0]
 
     except:
