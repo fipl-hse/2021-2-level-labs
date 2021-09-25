@@ -109,6 +109,14 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
+        return None
+    else:
+        unknown_top_words = get_top_n_words(unknown_profile.get('freq'), top_n)
+        compare_top_words = get_top_n_words(profile_to_compare.get('freq'), top_n)
+        shared_top_words = [word for word in unknown_top_words if word in compare_top_words]
+        intersections_proportions = round(len(shared_top_words) / len(unknown_top_words), 2)
+        return intersections_proportions
     pass
 
 
