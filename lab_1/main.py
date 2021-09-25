@@ -25,18 +25,19 @@ def tokenize(text: str) -> list or None:
             return tokens
 
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+def remove_stop_words(tokens: list, stop_words: list):
     """
     Removes stop words
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
+    :param stop_words.words(language): a list of stop words
     :return: a list of tokens without stop words
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
         if tokens:
-            for i in range(len(tokens)):
-                if tokens[i] in stop_words:
-                    tokens.pop(i)
+            for i in tokens:
+                if i in stop_words:
+                    tokens.remove(i)
             return tokens
         else:
             return None
