@@ -5,6 +5,12 @@ Language detection
 
 
 def tokenize(text: str) -> list or None:
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
     if not isinstance(text, str):
         return None
     tokens = ''
@@ -17,6 +23,12 @@ def tokenize(text: str) -> list or None:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
     if not (isinstance(stop_words, list) and isinstance(tokens, list)):
         return None
     tokens_new = []
@@ -27,6 +39,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
 
 def calculate_frequencies(tokens_new: list) -> dict or None:
+    """
+   Calculates frequencies of given tokens
+   :param tokens: a list of tokens
+   :return: a dictionary with frequencies
+   """
     if not (isinstance(tokens_new, list) and isinstance(tokens_new[0], str)):
         return None
     freq_dict = {}
@@ -40,6 +57,12 @@ def calculate_frequencies(tokens_new: list) -> dict or None:
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
     if not isinstance(freq_dict, dict):
         return None
     top_n_words = []
@@ -48,15 +71,22 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     freq_dict_copy = freq_dict.copy()
     for i in range(top_n):
         max_value = max(freq_dict_copy.values())
-        for k, v in freq_dict_copy.items():
-            if v == max_value:
-                max_key = k
+        for key, value in freq_dict_copy.items():
+            if value == max_value:
+                max_key = key
                 break
         top_n_words.append(max_key)
         del freq_dict_copy[max_key]
     return top_n_words
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+    """
+    Creates a language profile
+    :param language: a language
+    :param text: a text
+    :param stop_words: a list of stop words
+    :return: a dictionary with three keys – name, freq, n_words
+    """
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     if not (isinstance(language, str) and isinstance(freq_dict, dict)):
         return None
@@ -67,6 +97,13 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+    """
+    Compares profiles and calculates the distance using top n words
+    :param unknown_profile: a dictionary
+    :param profile_to_compare: a dictionary
+    :param top_n: a number of the most common words
+    :return: the distance
+    """
     if not (isinstance(unknown_profile, dict)
             and isinstance(profile_to_compare, dict)
             and isinstance(top_n, int)):
@@ -82,6 +119,14 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 def detect_language(unknown_profile: dict, profile_1: dict,
                     profile_2: dict, top_n: int) -> str or None:
+    """
+    Detects the language of an unknown profile
+    :param unknown_profile: a dictionary
+    :param profile_1: a dictionary
+    :param profile_2: a dictionary
+    :param top_n: a number of the most common words
+    :return: a language
+    """
     percentage_1 = compare_profiles(unknown_profile, profile_1, top_n)
     percentage_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if not (isinstance(percentage_1, float) and isinstance(percentage_2, float)):
@@ -95,6 +140,14 @@ def detect_language(unknown_profile: dict, profile_1: dict,
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
                               top_n: int) -> list or None:
+    """
+    Compares profiles and calculates some advanced parameters
+    :param unknown_profile: a dictionary
+    :param profile_to_compare: a dictionary
+    :param top_n: a number of the most common words
+    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
+    min_length_word, average_token_length
+    """
     if not (isinstance(unknown_profile, dict)
             and isinstance(profile_to_compare, dict)
             and isinstance(top_n, int)):
@@ -121,6 +174,14 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
 
 def detect_language_advanced(unknown_profile: dict, profiles: list,
                              languages: list, top_n: int) -> str or None:
+    """
+    Detects the language of an unknown profile within the list of possible languages
+    :param unknown_profile: a dictionary
+    :param profiles: a list of dictionaries
+    :param languages: a list of possible languages
+    :param top_n: a number of the most common words
+    :return: a language
+    """
     if not(isinstance(unknown_profile, dict) and isinstance(profiles, list)
            and isinstance(languages, list) and isinstance(top_n, int)):
         return None
@@ -145,19 +206,19 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     return language
 
 
-def load_profile(path_to_file: str) -> dict or None:
+#def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    #pass
 
 
-def save_profile(profile: dict) -> int:
+#def save_profile(profile: dict) -> int:
     """
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+    #pass
