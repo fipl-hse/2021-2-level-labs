@@ -11,13 +11,15 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
 
     else:
-        symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '–', '+', '=', '{', '[', '}',
+        symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&',
+                   '*', '(', ')', '_', '-', '–', '+', '=', '{', '[', '}',
                    '}',
-                   '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7',
+                   '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.',
+                   '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7',
                    '8', '9', '0']
         text = text.lower()
         for i in symbols:
@@ -113,7 +115,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     """
     pass
 
-
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
@@ -124,7 +125,6 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
     pass
-
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
@@ -137,7 +137,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     """
     pass
 
-
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
@@ -149,7 +148,6 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     """
     pass
 
-
 def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
@@ -157,7 +155,6 @@ def load_profile(path_to_file: str) -> dict or None:
     :return: a dictionary with three keys – name, freq, n_words
     """
     pass
-
 
 def save_profile(profile: dict) -> int:
     """
