@@ -3,7 +3,6 @@ Lab 1
 Language detection
 """
 
-
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -250,13 +249,25 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
 
 
 
+import json
+
 def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if type(path_to_file) != str:
+        return None
+    try:
+        file = open(path_to_file)
+        file.close()
+    except:
+        return None
+    with open(path_to_file, "r", encoding="utf-8") as json_file:
+        imported_profile = json.load(json_file)
+    return imported_profile
+
 
 
 def save_profile(profile: dict) -> int:
@@ -265,4 +276,17 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+    if type(profile) != dict:
+        return 1
+    if "name" in profile.keys() is False:
+        return 1
+    if "freq" in profile.keys() is False:
+        return 1
+    if "n_words" in profile.keys() is False:
+        return 1
+    path = "{}.json".format(profile["name"])
+    with open(path, "w", encoding="utf-8") as new_profile:
+        json.dump(profile, new_profile)
+    return 0
+
+
