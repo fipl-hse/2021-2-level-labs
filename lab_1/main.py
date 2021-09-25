@@ -63,11 +63,11 @@ def get_top_n_words(freq_dict, top_n):
         return None
     if not isinstance(top_n, int):
         return None
-    sorted_list = [word[0] for word in sorted(freq_dict.items(), key=lambda value: value[1], reverse=True)]
-    if top_n < len(sorted_list):
-        return sorted_list[:top_n]
-    elif top_n >= len(sorted_list):
-        return sorted_list
+    srtd_list = [wrd[0] for wrd in sorted(freq_dict.items(), key=lambda val: val[1], reverse=True)]
+    if top_n < len(srtd_list):
+        return srtd_list[:top_n]
+    elif top_n >= len(srtd_list):
+        return srtd_list
 
 
 def create_language_profile(language, text, stop_words):
@@ -80,7 +80,11 @@ def create_language_profile(language, text, stop_words):
 
 
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if ( 
+        isinstance(unknown_profile, dict) 
+        and isinstance(profile_to_compare, dict) 
+        and isinstance(top_n, int)
+    ):
         freq_list1 = unknown_profile['freq']
         top_n1 = get_top_n_words(freq_list1, top_n)
         freq_list2 = profile_to_compare['freq']
@@ -95,7 +99,12 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
 
 
 def detect_language(unknown_profile, profile_1, profile_2, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int):
+    if ( 
+        isinstance(unknown_profile, dict) 
+        and isinstance(profile_1, dict) 
+        and isinstance(profile_2, dict) 
+        and isinstance(top_n, int)
+    ):
         compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
         compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
         if compare_1 > compare_2:
@@ -107,7 +116,11 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
 
 
 def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if (
+        isinstance(unknown_profile, dict) 
+        and isinstance(profile_to_compare, dict) 
+        and isinstance(top_n, int)
+    ):
         report = {}
         top_words_unk = get_top_n_words(unknown_profile['freq'], top_n)
         top_words_comp = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -133,7 +146,12 @@ def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
 
 
 def detect_language_advanced(unknown_profile, profiles, languages, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profiles, list) and isinstance(languages, list) and isinstance(top_n, int):
+    if (
+        isinstance(unknown_profile, dict) 
+        and isinstance(profiles, list) 
+        and isinstance(languages, list) 
+        and isinstance(top_n, int)
+    ):
         dict_lang_score = {}
         for profile_to_compare in profiles:
             if languages == []:
@@ -162,13 +180,11 @@ def load_profile(path_to_file):
     """
     if isinstance(path_to_file, str):
         if exists(path_to_file):
-            with open(path_to_file, 'r', encoding='UTF-8') as file:
+            with open(path_to_file, mode='r', encoding='UTF-8') as file:
                 profile = json.load(file)
                 return profile
-        else:
-            return None
-    else:
         return None
+    return None
 
 
 def save_profile(profile):
@@ -179,9 +195,13 @@ def save_profile(profile):
     """
     if not isinstance(profile, dict):
         return 1
-    if not isinstance(profile['name'], str) or not isinstance(profile['freq'], dict) or not isinstance(profile['n_words'], int):
+    if not (
+        isinstance(profile['name'], str) 
+        or isinstance(profile['freq'], dict) 
+        or isinstance(profile['n_words'], int)
+    ):
         return 1
     profile_dict = '{}.json'.format(profile['name'])
-    with open(profile_dict, 'w', encoding='UTF-8') as file:
+    with open(profile_dict, mode='w', encoding='UTF-8') as file:
         json.dump(profile, file)
         return 0
