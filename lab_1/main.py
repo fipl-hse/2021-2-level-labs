@@ -133,15 +133,29 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile within the list of possible languages
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(profiles, list) and isinstance(languages, list) and isinstance(top_n, int):
+        def score_function():
+            score = {}
+            for i in profiles:
+                if i['name'] in languages:
+                    for x in i:
+                        full_profile = compare_profiles_advanced(unknown_profile, i, top_n)
+                        score.update({i['name']: full_profile['score']})
+            if not score:
+                return None
+            score_sorted = sorted(score.items(), key=lambda x: x[1], reverse=True)
+            max_score = [a[0] for a in score_sorted][0]
+            return max_score
+        if languages != []:
+            max_score = score_function()
+            return max_score
+        if languages == []:
+            for i in profiles:
+                languages.append(i['name'])
+            max_score = score_function()
+            return max_score
+    else:
+        None
 
 
 def load_profile(path_to_file: str) -> dict or None:
