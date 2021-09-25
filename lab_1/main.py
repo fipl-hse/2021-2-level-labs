@@ -140,7 +140,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
             for word_unknown_profile in top_n_words_unknown_profile:
                 if word_profile_to_compare == word_unknown_profile:
                     count += 1
-        share_of_common_frequency_words = round(float(count / len_top_n_words_unknown_profile),2)
+        share_of_common_frequency_words = round(count / len_top_n_words_unknown_profile,2)
         return share_of_common_frequency_words
 
 
@@ -154,6 +154,23 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
     pass
+    if type(unknown_profile) != dict:
+        return None
+    if type(profile_1) != dict:
+        return None
+    share_of_common_words_with_profile_1 = compare_profiles(unknown_profile,profile_1,top_n)
+    share_of_common_words_with_profile_2 = compare_profiles(unknown_profile,profile_2,top_n)
+    if share_of_common_words_with_profile_1 > share_of_common_words_with_profile_2:
+        return profile_1['name']
+    elif share_of_common_words_with_profile_1 < share_of_common_words_with_profile_2:
+        return profile_2 ['name']
+    else:
+        all_languages = [profile_1['name'], profile_2['name']]
+        all_languages_sorted = all_languages.sort()
+        return all_languages_sorted[0]
+
+
+
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
