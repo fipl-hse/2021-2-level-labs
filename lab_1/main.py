@@ -14,13 +14,13 @@ def tokenize(text: str) -> list or None:
             text = text.replace(i,'')
     tokens = text.split()
     return tokens
+
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     tokens_right = []
@@ -32,6 +32,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         if i not in stop_words:
             tokens_right.append(i)
     return tokens_right
+
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -87,6 +88,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+    if type(language) != str or type(text) != str or type(stop_words) != list:
+        return None
+    tokens = tokenize(text)
+    tokens = remove_stop_words(tokens, stop_words)
+    freq_dict = calculate_frequencies(tokens) #частотный словарь
+    language_profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
+    return language_profile
+
     """
     Creates a language profile
     :param language: a language
@@ -94,10 +103,21 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+    if type(unknown_profile) != dict or type(profile_to_compare) != dict or type(top_n) != int:
+        return None
+    unknown_profile_top_n = get_top_n_words(unknown_profile['freq'], top_n)
+    profile_to_compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
+    common_top_n = 0
+    for i in unknown_profile_top_n:
+        if i in profile_to_compare_top_n:
+            common_top_n = common_top_n + 1
+    proportion = common_top_n/len(profile_to_compare_top_n)
+    proportion = round(proportion, 2)
+    return proportion
+
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
@@ -105,10 +125,24 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+    if type(unknown_profile) != dict or type(profile_1) != dict or type(profile_2) != dict or type(top_n) != int:
+        return None
+    profile_1_tokens = compare_profiles(unknown_profile, profile_1, top_n)
+    profile_2_tokens = compare_profiles(unknown_profile, profile_2, top_n)
+    name_1 = profile_1['name']
+    name_2 = profile_2['name']
+    if profile_1_tokens > profile_2_tokens:
+        return name_1
+    elif profile_2_tokens > profile_1_tokens:
+        return name_2
+    elif profile_1_tokens == profile_2_tokens:
+        names = [name_1, name_2]
+        names = sorted(names)
+        return names
+
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -117,7 +151,6 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
