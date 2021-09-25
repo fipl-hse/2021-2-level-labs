@@ -174,36 +174,47 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    stats_unknown = {}
+    stats = {}
     try:
-        top_unknown = get_top_n_words(unknown_profile, top_n)
-        top_compare = get_top_n_words(profile_to_compare, top_n)
-        stats_unknown["name"] = profile_to_compare["name"]
+        top_unknown = get_top_n_words(unknown_profile["freq"], top_n)
+        top_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+        stats["name"] = profile_to_compare["name"]
 
         cross = 0
-        stats_unknown["common"] = []
+        stats["common"] = []
         for token in top_compare:
             if token in top_unknown:
                 cross += 1
-                stats_unknown["common"].append(token)
+                stats["common"].append(token)
 
-        cross = round(cross / top_n, 2)
-        stats_unknown["score"] = cross
-        stats_unknown["common_sored"] = stats_unknown["common"].sorted()
+        stats["score"] = round(cross / top_n, 2)
 
+        stats["sorted_common"] = sorted(stats["common"])
         tokens_length = 0
-        max = 0
-        min = len(stats_unknown["common"][0])
-        for word in stats_unknown["common"]:
-            if len(word) > max:
-                stats_unknown["max_length_word"] = word
-            if len(word) < min:
-                stats_unknown["min_length_word"] = word
+        max = len(list(profile_to_compare["freq"].keys())[0])
+        min = max
+        for word in profile_to_compare["freq"]:
+            if len(word) >= max:
+                stats["max_length_word"] = word
+            if len(word) <= min:
+                stats["min_length_word"] = word
             tokens_length += len(word)
-        stats_unknown["average_token_length"] = tokens_length / len(stats_unknown["common"])
-        return stats_unknown
+        stats["average_token_length"] = tokens_length / len(profile_to_compare["freq"])
+        return stats
     except:
         return None
+
+en_profile = {'name': 'en',
+                'freq': {'happy': 3, 'he': 1, 'man': 2, 'a': 3},
+                'n_words': 3}
+
+unk_profile = {'name': 'unk',
+                'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
+                                'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 4, 'a': 5},
+                'n_words': 9}
+
+print(compare_profiles_advanced(unk_profile, en_profile, 4))
+
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
