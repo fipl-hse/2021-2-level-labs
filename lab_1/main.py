@@ -2,7 +2,7 @@
 Lab 1
 Language detection
 """
-Artur it me
+
 
 def tokenize(text: str) -> list or None:
     """
@@ -11,8 +11,18 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    text = text.split()
-    return text
+
+    if isinstance(text, str):  # text является экземпляром классом str
+        text = text.lower()  # перевод строки в нижний регистр
+        for char in text:
+            if char != ' ' and not (char.isalpha()):  # проверка то,что символ не пробел и не является буквой
+                text = text.replace(char, "")  # удаление этого символа
+
+        tokens = text.split()
+        if not tokens:
+            return None
+        else:
+            return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
