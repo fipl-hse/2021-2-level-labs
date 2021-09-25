@@ -12,9 +12,9 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
     if isinstance(text, str):
-        for i in text:
-            if i != ' ' and not i.isalpha():
-                text = text.replace(i, '')
+        for words in text:
+            if words != ' ' and not words.isalpha():
+                text = text.replace(words, '')
         tokens = text.lower().split()
         return tokens
     else:
@@ -45,7 +45,18 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    if isinstance(tokens, list):
+        freq_dict = {}
+        for keys in tokens:
+            if not isinstance(keys, str):
+                return None
+            if keys not in freq_dict:
+                freq_dict.update({keys: 1})
+            else:
+                freq_dict.update({keys: tokens.count(keys)})
+        return freq_dict
+    else:
+        return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
