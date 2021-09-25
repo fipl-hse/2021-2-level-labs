@@ -17,9 +17,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     preprocessed = ''
-    for i,v in enumerate(text):
-        if v.isalnum() or v == ' ':
-            preprocessed += v
+    for index in enumerate(text):
+        if index[1].isalnum() or index[1] == ' ':
+            preprocessed += index[1]
     tokens = preprocessed.split()
     return tokens
 
@@ -162,7 +162,7 @@ def detect_language(unknown_profile:dict, profile_1:dict, profile_2:dict, top_n:
         return profile_1['name']
     elif share_of_common_words_with_profile_1 < share_of_common_words_with_profile_2:
         return profile_2 ['name']
-    else:
+    elif share_of_common_words_with_profile_1 == share_of_common_words_with_profile_2:
         all_languages = [profile_1['name'], profile_2['name']]
         all_languages_sorted = all_languages.sort()
         return all_languages_sorted[0]
@@ -242,7 +242,7 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
         for key_in_sorted_list in sorted_list:
             sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
         max_value = max(list_of_values)
-        for key_in_sorted_dict in sorted_dict.keys():
+        for key_in_sorted_dict in sorted_dict:
             if sorted_dict[key_in_sorted_dict] == max_value:
                 languages_with_max_value.append(key_in_sorted_dict)
                 language_with_max_value = languages_with_max_value[0]
@@ -260,7 +260,7 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
                     for key_in_sorted_list in sorted_list:
                         sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
                     max_value = max(list_of_values)
-                    for key_in_sorted_dict in sorted_dict.keys():
+                    for key_in_sorted_dict in sorted_dict:
                         if sorted_dict[key_in_sorted_dict] == max_value:
                             languages_with_max_value.append(key_in_sorted_dict)
                             language_with_max_value = languages_with_max_value[0]
