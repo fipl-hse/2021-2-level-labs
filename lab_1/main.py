@@ -60,6 +60,12 @@ def calculate_frequencies(tokens):
 
 
 def get_top_n_words(freq_dict, top_n):
+    """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
     if not isinstance(freq_dict, dict):
         return None
     if not all(isinstance(v, int) for v in freq_dict.values()):
@@ -73,6 +79,13 @@ def get_top_n_words(freq_dict, top_n):
 
 
 def create_language_profile(language, text, stop_words):
+    """
+    Creates a language profile
+    :param language: a language
+    :param text: a text
+    :param stop_words: a list of stop words
+    :return: a dictionary with three keys – name, freq, n_words
+    """
     if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
         tokens = tokenize(text)
         cleaned_tokens = remove_stop_words(tokens, stop_words)
@@ -83,6 +96,13 @@ def create_language_profile(language, text, stop_words):
 
 
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
+    """
+    Compares profiles and calculates the distance using top n words
+    :param unknown_profile: a dictionary
+    :param profile_to_compare: a dictionary
+    :param top_n: a number of the most common words
+    :return: the distance
+    """
     if (
         isinstance(unknown_profile, dict)
         and isinstance(profile_to_compare, dict)
@@ -96,12 +116,21 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
         profiles_in_common = []
         for wrd in top_n1:
             if wrd in top_n2:
-                profiles_in_common.append(w)
+                profiles_in_common.append(wrd)
         result = round(len(profiles_in_common) / len(top_n1), 2)
         return result
+    return None
 
 
 def detect_language(unknown_profile, profile_1, profile_2, top_n):
+    """
+    Detects the language of an unknown profile
+    :param unknown_profile: a dictionary
+    :param profile_1: a dictionary
+    :param profile_2: a dictionary
+    :param top_n: a number of the most common words
+    :return: a language
+    """
     if (
         isinstance(unknown_profile, dict)
         and isinstance(profile_1, dict)
@@ -115,9 +144,18 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
         if compare_2 > compare_1:
             return profile_2['name']
         return max(profile_1['name'], profile_2['name'])
+    return None
 
 
 def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
+    """
+    Compares profiles and calculates some advanced parameters
+    :param unknown_profile: a dictionary
+    :param profile_to_compare: a dictionary
+    :param top_n: a number of the most common words
+    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
+    min_length_word, average_token_length
+    """
     if (
         isinstance(unknown_profile, dict)
         and isinstance(profile_to_compare, dict)
@@ -149,6 +187,14 @@ def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
 
 
 def detect_language_advanced(unknown_profile, profiles, languages, top_n):
+    """
+    Detects the language of an unknown profile within the list of possible languages
+    :param unknown_profile: a dictionary
+    :param profiles: a list of dictionaries
+    :param languages: a list of possible languages
+    :param top_n: a number of the most common words
+    :return: a language
+    """
     if (
         isinstance(unknown_profile, dict)
         and isinstance(profiles, list)
