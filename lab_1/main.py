@@ -11,10 +11,10 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if text.isalpha() is False:
+    if type(text) != str:
         return None
     text_without_symbols = ""
-    for i in str(text):
+    for i in text:
         if i == " " or i.isalpha():
             text_without_symbols += i
     good_text = text_without_symbols.lower()
@@ -53,7 +53,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
         return None
     freq_dict = {}
     for i in tokens:
-        if i.isalpha():
+        if type(i) == str:
             some_dict = {i: tokens.count(i)}
             freq_dict.update(some_dict)
     return freq_dict or None
@@ -69,11 +69,20 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if type(freq_dict) != dict:
         return None
-    if top_n.isdigit():
+    if type(top_n) != int:
         return None
     val = list(freq_dict.values())
     val.sort(reverse=True)
-    popular_words = sorted([key for key in freq_dict if freq_dict[key] == val])
+    popular_words = []
+    for v in val:
+        for k in list(freq_dict.keys()):
+            if freq_dict[k] == v:
+                popular_words.append(k)
+                list(freq_dict.keys()).remove(k)
+    if len(popular_words) >= top_n:
+        return popular_words[:top_n]
+    elif len(popular_words) < top_n:
+        return popular_words
     return popular_words
 
 
