@@ -132,14 +132,13 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     count = 0
     top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'],top_n)
     top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
-    len_top_n_words_unknown_profile = len(unknown_profile['freq'])
+    len_top_n_words_unknown_profile = len(top_n_words_unknown_profile)
     if top_n_words_profile_to_compare == top_n_words_unknown_profile:
         return float(1)
     else:
         for word_profile_to_compare in top_n_words_profile_to_compare:
-            for word_unknown_profile in top_n_words_unknown_profile:
-                if word_profile_to_compare == word_unknown_profile:
-                    count += 1
+            if word_profile_to_compare in top_n_words_unknown_profile:
+               count += 1
         share_of_common_frequency_words = round(count / len_top_n_words_unknown_profile,2)
         return share_of_common_frequency_words
 
@@ -170,9 +169,6 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         return all_languages_sorted[0]
 
 
-
-
-
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
@@ -183,7 +179,38 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     min_length_word, average_token_length
     """
     pass
-
+    if type(unknown_profile) != dict:
+        return None
+    if type(profile_to_compare) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+    profile_advanced = {}
+    profile_advanced['name'] = profile_to_compare['name']
+    top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
+    top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
+    common_words = []
+    for word_profile_to_compare in top_n_words_profile_to_compare:
+        if word_profile_to_compare in top_n_words_unknown_profile:
+            common_words.append(word_profile_to_compare)
+    profile_advanced['common'] = common_words
+    profile_advanced['score'] = compare_profiles(unknown_profile,profile_to_compare,top_n)
+    freq_key_value = profile_to_compare['freq']
+    list_words = []
+    for word in freq_key_value.keys():
+        list_words.append(word)
+        max_length_word = max(list_words, key=len)
+    profile_advanced['max_length_word'] = max_length_word
+    profile_advanced['min_length_word'] = min(freq_key_value)
+    len_values = len(freq_key_value)
+    len_value = 0
+    for value in freq_key_value:
+        len_value += len(value)
+    average_token_length = len_value / len_values
+    profile_advanced['average_token_length'] = average_token_length
+    sorted_common = sorted(common_words)
+    profile_advanced['sorted_common'] = sorted_common
+    return profile_advanced
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
@@ -195,6 +222,49 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :return: a language
     """
     pass
+    if type(unknown_profile) != dict:
+        return None
+    if type(profiles) != list:
+        return None
+    if type(languages) != list:
+        return None
+    if type(top_n) != int:
+        return None
+    shares = {}
+    if languages == []:
+        for profile in profiles:
+            language_profiles = compare_profiles_advanced(unknown_profile, profile, top_n)
+            shares[language_profiles['name']] = language_profiles['score']
+        sorted_dict = {}
+        languages_with_max_value = []
+        list_of_keys = list(shares.keys())
+        list_of_values = list(shares.values())
+        sorted_list = sorted(list_of_keys, reverse=False)
+        for key_in_sorted_list in sorted_list:
+            sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
+        max_value = max(list_of_values)
+        for key_in_sorted_dict in sorted_dict.keys():
+            if sorted_dict[key_in_sorted_dict] == max_value:
+                languages_with_max_value.append(key_in_sorted_dict)
+        return languages_with_max_value[0]
+    elif languages != []:
+        for language in languages:
+            for profile in profiles:
+                if profile['name'] == language:
+                    language_profiles = compare_profiles_advanced(unknown_profile, profile, top_n)
+                    shares[language_profiles['name']] = language_profiles['score']
+                    sorted_dict = {}
+                    languages_with_max_value = []
+                    list_of_keys = list(shares.keys())
+                    list_of_values = list(shares.values())
+                    sorted_list = sorted(list_of_keys, reverse=False)
+                    for key_in_sorted_list in sorted_list:
+                        sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
+                    max_value = max(list_of_values)
+                    for key_in_sorted_dict in sorted_dict.keys():
+                        if sorted_dict[key_in_sorted_dict] == max_value:
+                            languages_with_max_value.append(key_in_sorted_dict)
+                    return languages_with_max_value[0]
 
 
 def load_profile(path_to_file: str) -> dict or None:
