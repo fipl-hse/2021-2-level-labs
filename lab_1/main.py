@@ -52,11 +52,23 @@ def remove_stop_words(tokens: list, stop_words: list):
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
+      Calculates frequencies of given tokens
+      :param tokens: a list of tokens
+      :return: a dictionary with frequencies
+      """
+    if isinstance(tokens, list):
+        dict_frequencies = {}
+        for token in tokens:
+            if token in dict_frequencies:
+                dict_frequencies[token] += 1
+            else:
+                dict_frequencies[token] = 1
+        if dict_frequencies:
+            return dict_frequencies
+        else:
+            return None
+    else:
+        return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
