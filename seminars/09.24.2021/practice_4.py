@@ -178,7 +178,8 @@ def string_splosion(input_string: str):
 # Task 2: advanced
 def string_match(first_string: str, second_string: str):
     """
-    Given two strings, find the number of times an arbitrary substring is found at the same position in both strings.
+    Given two strings, find the number of times an arbitrary substring (with length of 2)
+    is found at the same position in both strings.
     """
     # student realisation goes here
 
