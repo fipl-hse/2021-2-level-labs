@@ -10,9 +10,10 @@ def tokenize(text: str) -> list or None:
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
         :param text: a text
+        :return: a list of lower-cased tokens without punctuation
     """
     text_new = ""
-    if type(text) == str:
+    if isinstance(text, str):
         for i in text:
             if i not in string.punctuation:
                 text_new += i
@@ -35,7 +36,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     tokens_update = []
 
     try:
-        if type(tokens) == list and type(stop_words) == list:
+        if isinstance(tokens, list) and isinstance(stop_words, list):
             for word in tokens:
                 if word not in stop_words:
                     tokens_update.append(word)
@@ -54,9 +55,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     freq = {}
-    if type(tokens) == list:
+    if isinstance(tokens, list):
         for word in tokens:
-            if type(word) == str:
+            if isinstance(word, str):
                 if word in list(freq.keys()):
                     freq[word] += 1
                 else:
@@ -104,7 +105,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         text_tmp = tokenize(text_tmp)
         text_tmp = remove_stop_words(text_tmp, stop_words)
         text_tmp = calculate_frequencies(text_tmp)
-        if text_tmp != None:
+        if text_tmp is not None:
             if language.isalpha():
                 lan_profile = {"name": language}
                 lan_profile["freq"] = text_tmp
@@ -220,7 +221,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         profile = profiles[count]
         score_best_name = profile["name"]
         for language in languages:
-            if type(language) == dict:
+            if isinstance(language, dict):
                 language = language["name"]
             if language == profile["name"]:
                 score_current = compare_profiles_advanced(unknown_profile, profile, top_n)["score"]
