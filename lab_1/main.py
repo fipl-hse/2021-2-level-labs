@@ -154,8 +154,12 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     elif compare_with_1 < compare_with_2:
         lang += profile_2["name"]
     elif compare_with_1 == compare_with_2:
-        lang += ([profile_1["name"], profile_2["name"]].sort())[0]
-    return lang
+        lang += [profile_1["name"], profile_2["name"]].sort()
+    if type(lang) == list:
+        language = lang[0]
+    else:
+        language = lang
+    return language
 
 
 
@@ -197,7 +201,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     max_len_word = len_of_words_dict[max_len]
     min_len_word = len_of_words_dict[min_len]
 
-
     l_summary = 0
     number_of_words = 0
     for i in new_keys:
@@ -208,8 +211,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     top_common.sort()
     advanced = dict(name=name_of_profile, common=common_value_actual, score=score_value, max_length_word=max_len_word, min_length_word=min_len_word, average_token_length=average_token_length_value, sorted_common=top_common)
     return advanced
-
-
 
 
 
