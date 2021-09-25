@@ -139,20 +139,35 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
         else:
             return max(profile_1['name'], profile_2['name'])
     
-    
-def load_profile(path_to_file: str) -> dict or None:
+ 
+def load_profile(path_to_file):
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if isinstance(path_to_file, str):
+        if exists(path_to_file):
+            with open(path_to_file, 'r', encoding='UTF-8') as file:
+                profile = json.load(file)
+                return profile
+        else:
+            return None
+    else:
+        return None
+    
 
-
-def save_profile(profile: dict) -> int:
+def save_profile(profile):
     """
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+    if not isinstance(profile, dict):
+        return 1
+    if not isinstance(profile['name'], str) or not isinstance(profile['freq'], dict) or not isinstance(profile['n_words'], int):
+        return 1
+    profile_dict = '{}.json'.format(profile['name'])
+    with open(profile_dict, 'w', encoding='UTF-8') as file:
+        json.dump(profile, file)
+        return 0
