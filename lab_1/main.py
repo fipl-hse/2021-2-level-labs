@@ -69,6 +69,16 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
+        return None
+    elif not freq_dict.keys() or top_n <= 0:
+        return []
+    else:
+        top_words = []
+        freq_words = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
+        for element in freq_words[:top_n]:
+            top_words.append(element[0])
+        return top_words
     pass
 
 
