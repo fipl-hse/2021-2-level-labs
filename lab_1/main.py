@@ -6,7 +6,7 @@ Language detection
 
 def tokenize(text: str) -> list or None:
 
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
 
     low_text = text.lower()
@@ -23,21 +23,21 @@ def tokenize(text: str) -> list or None:
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
-    if type(tokens) != list or not tokens:
+    if not isinstance(tokens, list) or not tokens:
         return None
-    if type(stop_words) != list:
+    if not isinstance(stop_words, list):
         return tokens
 
     for i in stop_words:
         for n in tokens:
             if i == n:
-                tokens.remove(i)
+                tokens.remove(n)
     return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
 
-    if type(tokens) != list:
+    if not isinstance(tokens, list):
         return None
     for i in tokens:
         if not i:
@@ -49,9 +49,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
-    if type(freq_dict) != dict:
+    if not isinstance(freq_dict, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
     if not freq_dict or top_n <= 0:
         return []
@@ -64,7 +64,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         for k in dict_keys:
             if freq_dict[k] == i:  # вызывает значение из словаря по ключу и сравнивает его со значением из sort_values
                 sort_dict[k] = freq_dict[k]  # добавляет пару в новый отсортированный словарь
-                dict_keys.remove(k)  # удаляет использованный ключ из списка, чтобы чтобы ключ с повторяющимся значением не игнорировался
+                dict_keys.remove(k)
+                # удаляет использованный ключ из списка, чтобы чтобы ключ с повторяющимся значением не игнорировался
 
     freq_list = list(sort_dict.keys())
 
@@ -77,9 +78,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
 
-    if type(language) != str or type(text) != str:
+    if not isinstance(language, str) or not isinstance(text, str):
         return None
-    if type(stop_words) != list:
+    if not isinstance(stop_words, list):
         return None
 
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
@@ -90,9 +91,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
 
-    if type(unknown_profile) != dict or type(profile_to_compare) != dict:
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     freq_dict_unk = unknown_profile['freq']
@@ -113,9 +114,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
 
-    if type(unknown_profile) != dict or type(profile_1) != dict or type(profile_2) != dict:
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
@@ -133,9 +134,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
 
-    if type(unknown_profile) != dict or type(profile_to_compare) != dict:
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     top_n_words = get_top_n_words(profile_to_compare['freq'], top_n)
