@@ -54,11 +54,11 @@ def calculate_frequencies(tokens: list) -> dict or None:
     if isinstance(tokens, list):
         for i in tokens:
             if isinstance(i, str):
-                for e in tokens:
-                    if e in freq_dict:
-                        freq_dict[e] += 1
+                for el in tokens:
+                    if el in freq_dict:
+                        freq_dict[el] += 1
                     else:
-                        freq_dict[e] = 1
+                        freq_dict[el] = 1
                 return freq_dict
 
 
@@ -74,9 +74,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if isinstance(freq_dict, dict):
         if all(isinstance(e, str) for e in list(freq_dict.keys())):
             top_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
-            return top_words
-        else:
-            return top_words
+        return top_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -190,14 +188,14 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     if isinstance(unknown_profile, dict) and isinstance(profiles, list) \
             and isinstance(languages, list) and isinstance(top_n, int):
         exist_lang = False
-        for e in profiles:
+        for el in profiles:
             if languages:
                 for i in languages:
-                    if i == e.get('name'):
+                    if i == el.get('name'):
                         exist_lang = True
-                        score[i] = compare_profiles_advanced(unknown_profile, e, top_n).get('score')
+                        score[i] = compare_profiles_advanced(unknown_profile, el, top_n).get('score')
             else:
-                score[e.get('name')] = compare_profiles_advanced(unknown_profile, e, top_n).get('score')
+                score[el.get('name')] = compare_profiles_advanced(unknown_profile, el, top_n).get('score')
         if not exist_lang and languages:
             return None
         sorted_score = sorted(score.items(), key=lambda x: x[1], reverse=True)
