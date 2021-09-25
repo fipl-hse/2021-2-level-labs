@@ -1,11 +1,3 @@
-"""
-Lab 1
-Language detection
-"""
-
-
-
-
 def tokenize(text: str):
     if isinstance(text, str):
         text = text.lower()
