@@ -72,12 +72,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     inf = list(freq_dict.items())
     inf = sorted(inf, key=lambda x: x[1], reverse=True)
     popular_words = []
-    for val, key in inf:
-        popular_words.append(val)
+    for key, val in inf:
+        popular_words.append(key)
     if len(popular_words) >= top_n:
-        return popular_words[:top_n]
-    elif len(popular_words) < top_n:
-        return popular_words
+        popular_words = popular_words[:top_n]
     return popular_words
 
 
@@ -203,7 +201,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     average_token_length_value = l_summary / number_of_words
     common_value_actual = top_common
     top_common.sort()
-    advanced = dict(name=name_of_profile, common=common_value_actual, score=score_value, max_length_word=max_len_word,
+    advanced = dict(name=name_of_profile, common=common_value_actual,
+                    score=score_value, max_length_word=max_len_word,
                     min_length_word=min_len_word, average_token_length=average_token_length_value,
                     sorted_common=top_common)
 
@@ -254,7 +253,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if type(path_to_file) != str:
+    if not isinstance(path_to_file, str):
         return None
     try:
         file = open(path_to_file)
