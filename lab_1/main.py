@@ -63,13 +63,16 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if not isinstance(freq_dict, dict):
+    if not (isinstance(freq_dict, dict) and isinstance(top_n, int)):
         return None
+    if top_n <= 0:
+        return []
     top_n_words = []
     if top_n > len(freq_dict):
         top_n = len(freq_dict)
     freq_dict_copy = freq_dict.copy()
-    for i in range(top_n):
+    top_n_copy = top_n
+    while top_n_copy != 0:
         max_value = max(freq_dict_copy.values())
         for key, value in freq_dict_copy.items():
             if value == max_value:
@@ -77,6 +80,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
                 break
         top_n_words.append(max_key)
         del freq_dict_copy[max_key]
+        top_n_copy -= 1
     return top_n_words
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -204,21 +208,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     else:
         language = reports[0]['name']
     return language
-
-
-#def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    #pass
-
-
-#def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    #pass
