@@ -2,6 +2,8 @@
 Lab 1
 Language detection
 """
+import json
+
 
 def tokenize(text: str) -> list or None:
     """
@@ -10,7 +12,7 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
     text_without_symbols = ""
     for i in text:
@@ -21,7 +23,6 @@ def tokenize(text: str) -> list or None:
     return tokens
 
 
-
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
@@ -29,9 +30,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if type(tokens) != list:
+    if not isinstance(tokens, list):
         return None
-    if type(stop_words) != list:
+    if not isinstance(stop_words, list):
         return None
     blank_list = []
     for i in tokens:
@@ -41,22 +42,20 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     return tokens
 
 
-
 def calculate_frequencies(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if type(tokens) != list:
+    if not isinstance(tokens, list):
         return None
     freq_dict = {}
     for i in tokens:
-        if type(i) == str:
+        if isinstance(i, str):
             some_dict = {i: tokens.count(i)}
             freq_dict.update(some_dict)
     return freq_dict or None
-
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -66,9 +65,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if type(freq_dict) != dict:
+    if not isinstance(freq_dict, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
     inf = list(freq_dict.items())
     inf = sorted(inf, key=lambda x: x[1], reverse=True)
@@ -82,7 +81,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     return popular_words
 
 
-
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
     Creates a language profile
@@ -91,9 +89,11 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if type(language) != str or type(text) != str:
+    if not isinstance(language, str):
         return None
-    if type(stop_words) != list:
+    if not isinstance(text, str):
+        return None
+    if not isinstance(stop_words, list):
         return None
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     language_profile = dict(name=language, freq=freq_dict, n_words=len(freq_dict))
@@ -108,11 +108,11 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if type(unknown_profile) != dict:
+    if not isinstance(unknown_profile, dict):
         return None
-    if type(profile_to_compare) != dict:
+    if not isinstance(profile_to_compare, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
     top_unknown_profile = get_top_n_words(unknown_profile["freq"], top_n)
     top_profile_to_compare = get_top_n_words(profile_to_compare["freq"], top_n)
@@ -124,7 +124,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return frequence
 
 
-
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
@@ -134,13 +133,13 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if type(unknown_profile) != dict:
+    if not isinstance(unknown_profile, dict):
         return None
-    if type(profile_1) != dict:
+    if not isinstance(profile_1, dict):
         return None
-    if type(profile_2) != dict:
+    if not isinstance(profile_2, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
     compare_with_1 = compare_profiles(unknown_profile, profile_1, top_n)
     compare_with_2 = compare_profiles(unknown_profile, profile_2, top_n)
@@ -151,12 +150,11 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         lang += profile_2["name"]
     elif compare_with_1 == compare_with_2:
         lang += [profile_1["name"], profile_2["name"]].sort()
-    if type(lang) == list:
+    if isinstance(lang, list):
         language = lang[0]
     else:
         language = lang
     return language
-
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
@@ -168,11 +166,11 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    if type(unknown_profile) != dict:
+    if not isinstance(unknown_profile, dict):
         return None
-    if type(profile_to_compare) != dict:
+    if not isinstance(profile_to_compare, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     name_of_profile = profile_to_compare["name"]
@@ -205,9 +203,11 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     average_token_length_value = l_summary / number_of_words
     common_value_actual = top_common
     top_common.sort()
-    advanced = dict(name=name_of_profile, common=common_value_actual, score=score_value, max_length_word=max_len_word, min_length_word=min_len_word, average_token_length=average_token_length_value, sorted_common=top_common)
-    return advanced
+    advanced = dict(name=name_of_profile, common=common_value_actual, score=score_value, max_length_word=max_len_word,
+                    min_length_word=min_len_word, average_token_length=average_token_length_value,
+                    sorted_common=top_common)
 
+    return advanced
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
@@ -219,13 +219,13 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    if type(unknown_profile) != dict:
+    if not isinstance(unknown_profile, dict):
         return None
-    if type(profiles) != list:
+    if not isinstance(profiles, list):
         return None
-    if type(languages) != list:
+    if not isinstance(languages, list):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     actual_profiles = []
@@ -248,9 +248,6 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     return exact_language
 
 
-
-import json
-
 def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
@@ -269,14 +266,13 @@ def load_profile(path_to_file: str) -> dict or None:
     return imported_profile
 
 
-
 def save_profile(profile: dict) -> int:
     """
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    if type(profile) != dict:
+    if not isinstance(profile, dict):
         return 1
     if "name" in profile.keys() is False:
         return 1
@@ -288,5 +284,3 @@ def save_profile(profile: dict) -> int:
     with open(path, "w", encoding="utf-8") as new_profile:
         json.dump(profile, new_profile)
     return 0
-
-
