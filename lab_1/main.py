@@ -12,11 +12,11 @@ def tokenize(text: str) -> list or None:
     if not isinstance(text, str):
         return None
     else:
-        symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890\t"""
-        for i in text:
-            if i in symbols:
-                text = text.replace(i, '')
-            tokens = text.lower().split()
+        puncs = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890\t"""
+        for symbol in text:
+            if symbol in puncs:
+                text = text.replace(symbol, '')
+        tokens = text.lower().split()
         return tokens
     pass
 
@@ -90,6 +90,14 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
+    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
+        return None
+    else:
+        freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
+        lang_profile = {'name': language,
+                        'freq': freq_dict,
+                        'n_words': len(freq_dict.keys())}
+        return lang_profile
     pass
 
 
