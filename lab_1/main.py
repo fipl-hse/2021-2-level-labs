@@ -59,10 +59,11 @@ def calculate_frequencies(tokens: list) -> dict or None:
     if isinstance(tokens, list):
         dict_frequencies = {}
         for token in tokens:
-            if token in dict_frequencies:
-                dict_frequencies[token] += 1
-            else:
-                dict_frequencies[token] = 1
+            if isinstance(token, str):
+                if token in dict_frequencies:
+                    dict_frequencies[token] += 1
+                else:
+                    dict_frequencies[token] = 1
         if dict_frequencies:
             return dict_frequencies
         else:
