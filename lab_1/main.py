@@ -19,7 +19,8 @@ def tokenize(text):
                 text = text.replace(symbol, '')
         text = text.lower().split()
         return text
-    return None
+    else:
+        return None
 
 
 def remove_stop_words(tokens, stop_words):
@@ -29,17 +30,20 @@ def remove_stop_words(tokens, stop_words):
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if not all(isinstance(s, str) for s in tokens):
-        return None
+    if isinstance(tokens, list) and tokens != []:
+        if all(isinstance(s, str) for s in tokens):
+            if isinstance(stop_words, list):
+                cleaned_tokens = []
+                for token in tokens:
+                    if token not in stop_words:
+                        cleaned_tokens.append(token)
+                return cleaned_tokens
+            else:
+                return tokens
+        else:
+            return None
     else:
-        if isinstance(tokens, list) and isinstance(stop_words, list):
-            cleaned_tokens = []
-            for token in tokens:
-                if token not in stop_words:
-                    cleaned_tokens.append(token)
-            return cleaned_tokens
-        elif isinstance(tokens, list) and not isinstance(stop_words, list):
-            return tokens
+        return None
 
 
 def calculate_frequencies(tokens):
