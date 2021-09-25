@@ -72,8 +72,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     inf = list(freq_dict.items())
     inf = sorted(inf, key=lambda x: x[1], reverse=True)
     popular_words = []
+    vals = []
     for key, val in inf:
         popular_words.append(key)
+        vals.append(val)
     if len(popular_words) >= top_n:
         popular_words = popular_words[:top_n]
     return popular_words
@@ -122,7 +124,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return frequence
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) \
+        -> str or None:
+
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -149,13 +153,12 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     elif compare_with_1 == compare_with_2:
         lang += [profile_1["name"], profile_2["name"]].sort()
     if isinstance(lang, list):
-        language = lang[0]
-    else:
-        language = lang
-    return language
+        lang = lang[0]
+    return lang
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) \
+        -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -209,7 +212,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return advanced
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) \
+        -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -256,12 +260,10 @@ def load_profile(path_to_file: str) -> dict or None:
     if not isinstance(path_to_file, str):
         return None
     try:
-        file = open(path_to_file)
-        file.close()
-    except:
+        with open(path_to_file, "r", encoding="utf-8") as json_file:
+            imported_profile = json.load(json_file)
+    except FileNotFoundError:
         return None
-    with open(path_to_file, "r", encoding="utf-8") as json_file:
-        imported_profile = json.load(json_file)
     return imported_profile
 
 
