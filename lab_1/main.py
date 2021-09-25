@@ -79,10 +79,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     freq_dict_sort = sorted(freq_dict, key=lambda i: -i[1])
     if len(freq_dict_sort) == 0:
         return []
-    new_freq_dict = []
+    new_freq_list = []
     for t in freq_dict_sort:
-        new_freq_dict.append(t[0])
-        top_words = new_freq_dict[:top_n]
+        new_freq_list.append(t[0])
+        top_words = new_freq_list[:top_n]
     print (top_words)
     return top_words
 
@@ -104,14 +104,14 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         return None
     if type(stop_words) != list:
         return None
-    profil = {}
-    profil['name'] = language
+    profile = {}
+    profile['name'] = language
     freq = calculate_frequencies(remove_stop_words(tokenize(text),stop_words))
-    profil['freq'] = freq
+    profile['freq'] = freq
     n_words = len(freq)
-    profil['n_words'] = n_words
+    profile['n_words'] = n_words
 
-    return profil
+    return profile
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -123,6 +123,25 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
     pass
+    if type(unknown_profile) != dict:
+        return None
+    if type(profile_to_compare) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+    count = 0
+    top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'],top_n)
+    top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
+    len_top_n_words_unknown_profile = len(unknown_profile['freq'])
+    if top_n_words_profile_to_compare == top_n_words_unknown_profile:
+        return float(1)
+    else:
+        for word_profile_to_compare in top_n_words_profile_to_compare:
+            for word_unknown_profile in top_n_words_unknown_profile:
+                if word_profile_to_compare == word_unknown_profile:
+                    count += 1
+        share_of_common_frequency_words = round(float(count / len_top_n_words_unknown_profile),2)
+        return share_of_common_frequency_words
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
