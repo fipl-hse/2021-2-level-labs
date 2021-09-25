@@ -11,7 +11,8 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    pass
+    text = text.split()
+    return text
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
