@@ -80,9 +80,9 @@ def create_language_profile(language, text, stop_words):
 
 
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
-    if ( 
-        isinstance(unknown_profile, dict) 
-        and isinstance(profile_to_compare, dict) 
+    if (
+        isinstance(unknown_profile, dict)
+        and isinstance(profile_to_compare, dict)
         and isinstance(top_n, int)
     ):
         freq_list1 = unknown_profile['freq']
@@ -99,10 +99,10 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
 
 
 def detect_language(unknown_profile, profile_1, profile_2, top_n):
-    if ( 
-        isinstance(unknown_profile, dict) 
-        and isinstance(profile_1, dict) 
-        and isinstance(profile_2, dict) 
+    if (
+        isinstance(unknown_profile, dict)
+        and isinstance(profile_1, dict)
+        and isinstance(profile_2, dict)
         and isinstance(top_n, int)
     ):
         compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
@@ -117,8 +117,8 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
 
 def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
     if (
-        isinstance(unknown_profile, dict) 
-        and isinstance(profile_to_compare, dict) 
+        isinstance(unknown_profile, dict)
+        and isinstance(profile_to_compare, dict)
         and isinstance(top_n, int)
     ):
         report = {}
@@ -147,9 +147,9 @@ def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
 
 def detect_language_advanced(unknown_profile, profiles, languages, top_n):
     if (
-        isinstance(unknown_profile, dict) 
-        and isinstance(profiles, list) 
-        and isinstance(languages, list) 
+        isinstance(unknown_profile, dict)
+        and isinstance(profiles, list)
+        and isinstance(languages, list)
         and isinstance(top_n, int)
     ):
         dict_lang_score = {}
@@ -196,8 +196,8 @@ def save_profile(profile):
     if not isinstance(profile, dict):
         return 1
     if not (
-        isinstance(profile['name'], str) 
-        or isinstance(profile['freq'], dict) 
+        isinstance(profile['name'], str)
+        or isinstance(profile['freq'], dict)
         or isinstance(profile['n_words'], int)
     ):
         return 1
