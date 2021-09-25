@@ -138,7 +138,26 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if type(unknown_profile) != dict:
+        return None
+    if type(profile_1) != dict:
+        return None
+    if type(profile_2) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+    compare_with_1 = compare_profiles(unknown_profile, profile_1, top_n)
+    compare_with_2 = compare_profiles(unknown_profile, profile_2, top_n)
+    lang = ""
+    if compare_with_1 > compare_with_2:
+        lang += profile_1["name"]
+    elif compare_with_1 < compare_with_2:
+        lang += profile_2["name"]
+    elif compare_with_1 == compare_with_2:
+        names = [profile_1["name"], profile_2["name"]].sort()
+        lang += names[0]
+    return lang
+
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
