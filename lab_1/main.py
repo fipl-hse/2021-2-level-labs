@@ -174,10 +174,34 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
+    stats_unknown = {}
     try:
         top_unknown = get_top_n_words(unknown_profile, top_n)
         top_compare = get_top_n_words(profile_to_compare, top_n)
-        cross =
+        stats_unknown["name"] = profile_to_compare["name"]
+
+        cross = 0
+        stats_unknown["common"] = []
+        for token in top_compare:
+            if token in top_unknown:
+                cross += 1
+                stats_unknown["common"].append(token)
+
+        cross = round(cross / top_n, 2)
+        stats_unknown["score"] = cross
+        stats_unknown["common_sored"] = stats_unknown["common"].sorted()
+
+        tokens_length = 0
+        max = 0
+        min = len(stats_unknown["common"][0])
+        for word in stats_unknown["common"]:
+            if len(word) > max:
+                stats_unknown["max_length_word"] = word
+            if len(word) < min:
+                stats_unknown["min_length_word"] = word
+            tokens_length += len(word)
+        stats_unknown["average_token_length"] = tokens_length / len(stats_unknown["common"])
+        return stats_unknown
     except:
         return None
 
