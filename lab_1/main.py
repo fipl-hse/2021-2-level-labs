@@ -19,8 +19,6 @@ def tokenize(text):
                 text = text.replace(symbol, '')
         text = text.lower().split()
         return text
-    else:
-        return None
 
 
 def remove_stop_words(tokens, stop_words):
@@ -40,10 +38,6 @@ def remove_stop_words(tokens, stop_words):
                 return cleaned_tokens
             else:
                 return tokens
-        else:
-            return None
-    else:
-        return None
 
 
 def calculate_frequencies(tokens):
@@ -60,8 +54,6 @@ def calculate_frequencies(tokens):
             else:
                 freq_dict[token] = 1
         return freq_dict
-    else:
-        return None
 
 
 def get_top_n_words(freq_dict, top_n):
@@ -85,8 +77,6 @@ def create_language_profile(language, text, stop_words):
         freq_dict = calculate_frequencies(cleaned_tokens)
         language_profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
         return language_profile
-    else:
-        return None
 
 
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
@@ -102,8 +92,6 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
                 profiles_in_common.append(w)
         result = round(len(profiles_in_common) / len(top_n1), 2)
         return result
-    else:
-        return None
 
 
 def detect_language(unknown_profile, profile_1, profile_2, top_n):
@@ -142,8 +130,6 @@ def compare_profiles_advanced(unknown_profile, profile_to_compare, top_n):
         report['average_token_length'] = average_token_length
         report['sorted_common'] = sorted_common
         return report
-    else:
-        return None
 
 
 def detect_language_advanced(unknown_profile, profiles, languages, top_n):
@@ -157,7 +143,7 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n):
                 if profile_to_compare['name'] in languages:
                     compare = compare_profiles_advanced(unknown_profile, profile_to_compare, top_n)
                     dict_lang_score[compare['name']] = compare['score']
-        if not dict_lang_score == {}:
+        if dict_lang_score != {}:
             sorted_lang = []
             for lang, score in dict_lang_score.items():
                 if score == max(dict_lang_score.values()):
@@ -166,8 +152,6 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n):
         else:
             return None
         return sorted_lang[0]
-    else:
-        return None
 
 
 def load_profile(path_to_file):
