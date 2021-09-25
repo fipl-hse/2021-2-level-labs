@@ -11,14 +11,17 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    if type(text) != str:
+        return None
     text_without_symbols = ""
     for i in str(text):
         if i == " " or i.isalpha():
             text_without_symbols += i
     good_text = text_without_symbols.lower()
     tokens = good_text.split()
-    return tokens or None
-tokens = tokenize("The weather is sunny and the man is happy")
+    return tokens
+
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
@@ -55,6 +58,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freq_dict.update(some_dict)
     return freq_dict or None
 
+
+
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     Returns the most common words
@@ -62,7 +67,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+    if type(freq_dict) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+    val = list(freq_dict.values())
+    val.sort(reverse=True)
+    popular_words = sorted([key for key in freq_dict if freq_dict[key] == val])
+    return popular_words
+
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
