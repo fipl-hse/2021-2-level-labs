@@ -43,6 +43,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
             if isinstance(i, str):
                 tokens = [i for i in tokens if i not in stop_words]
                 return tokens
+            else:
+                return None
     else:
         return None
 
@@ -64,6 +66,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
                     else:
                         freq_dict[_] = 1
                 return freq_dict
+            else:
+                return None
     else:
         return None
 
