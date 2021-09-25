@@ -13,20 +13,17 @@ def tokenize(text: str) -> list or None:
     """
     if not isinstance(text, str):
         return None
-
-    else:
-        symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&',
+    symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&',
                    '*', '(', ')', '_', '-', '–', '+', '=', '{', '[', '}',
                    '}',
                    '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.',
                    '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7',
                    '8', '9', '0']
-        text = text.lower()
-        for i in symbols:
-            text = text.replace(i, '')
-        text = text.split()
-        return text
-
+    text = text.lower()
+    for i in symbols:
+        text = text.replace(i, '')
+    text = text.split()
+    return text
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
@@ -35,15 +32,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if type(tokens) == list:
-        for i in tokens:
-            if type(i) == str:
-                tokens = [i for i in tokens if i not in stop_words]
-                print(tokens)
-                return tokens
-    else:
+    if not isinstance(tokens, list):
         return None
-
+    for i in tokens:
+        if isinstance(i, str):
+            tokens = [i for i in tokens if i not in stop_words]
+            print(tokens)
+            return tokens
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
@@ -55,7 +50,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
     if type(tokens) != list:
         return None
     for i in tokens:
-        if type(i) != str:
+        if not isinstance(i, str):
             return None
 
     for i in tokens:
@@ -65,7 +60,6 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freq_dict[i] = 1
     return freq_dict
 
-
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     Returns the most common words
@@ -74,9 +68,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
     top_n_words = []
-    if type(freq_dict) != dict:
+    if not isinstance(freq_dict, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     freq_dict_sort = sorted(freq_dict.items(), key = lambda x: x[1], reverse=True)
@@ -85,13 +79,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         top_n_words.append(value)
     if len(top_n_words) >= top_n:
         return top_n_words[:top_n]
-    elif len(top_n_words) < top_n:
+    if len(top_n_words) < top_n:
         return top_n_words
     return top_n_words
-
-
-
-
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
@@ -101,7 +91,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if type(language) != str:
+    if not isinstance(language, str):
         return None
 
 
