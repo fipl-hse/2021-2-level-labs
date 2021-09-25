@@ -67,7 +67,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
     top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -78,21 +80,24 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return round(len(common) / len(top_n_words_unknown_profile), 2)
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     percentage_1 = compare_profiles(unknown_profile, profile_1, top_n)
     percentage_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if not (isinstance(percentage_1, float) and isinstance(percentage_2, float)):
         return None
     if percentage_1 > percentage_2:
         return profile_1['name']
-    elif percentage_1 < percentage_2:
+    if percentage_1 < percentage_2:
         return profile_2['name']
-    else:
-        return [profile_1['name'], profile_2['name']].sort()[0]
+    return [profile_1['name'], profile_2['name']].sort()[0]
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
+                              top_n: int) -> list or None:
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
     top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -114,7 +119,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
               'average_token_length': average_token_length, 'sorted_common': sorted_common}
     return report
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     if not(isinstance(unknown_profile, dict) and isinstance(profiles, list)
            and isinstance(languages, list) and isinstance(top_n, int)):
         return None
@@ -155,4 +161,3 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
-
