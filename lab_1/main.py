@@ -129,6 +129,19 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict) or not isinstance(top_n, int):
+        return None
+    else:
+        proportion_1 = compare_profiles(unknown_profile, profile_1, top_n)
+        proportion_2 = compare_profiles(unknown_profile, profile_2, top_n)
+        if proportion_1 > proportion_2:
+            result_language = profile_1.get('name')
+        elif proportion_1 < proportion_2:
+            result_language = profile_2.get('name')
+        else:
+            languages = sorted([profile_1.get('name'), profile_2.get('name')])
+            result_language = languages[0]
+        return result_language
     pass
 
 
