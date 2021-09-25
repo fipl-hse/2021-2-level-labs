@@ -35,14 +35,18 @@ def remove_stop_words(tokens: list, stop_words: list):
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
         if tokens:
-            for i in tokens:
-                if i in stop_words:
-                    tokens.remove(i)
+            for j in range(len(tokens)):
+                if tokens[j] in stop_words:
+                    tokens[j] = ''
+
+            while '' in tokens:
+                tokens.remove('')
             return tokens
         else:
             return None
     else:
         return None
+
     
 
 
