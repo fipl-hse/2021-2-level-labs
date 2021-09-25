@@ -74,8 +74,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     inf = list(freq_dict.items())
     inf = sorted(inf, key=lambda x: x[1], reverse=True)
     popular_words = []
-    for v, k in inf:
-        popular_words.append(v)
+    for val, key in inf:
+        popular_words.append(val)
     if len(popular_words) >= top_n:
         return popular_words[:top_n]
     elif len(popular_words) < top_n:
