@@ -28,13 +28,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if not isinstance(tokens, list) or not isinstance(stop_words, list):
+    if not isinstance(tokens, list) or not tokens:
         return None
     else:
         tokens_copy = list(tokens)
-        for i in tokens:
-            if i in stop_words:
-                tokens_copy.remove(i)
+        for token in tokens:
+            if token in stop_words:
+                tokens_copy.remove(token)
         return tokens_copy
     pass
 
@@ -45,6 +45,20 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+    frequencies = {}
+    if not isinstance(tokens, list):
+        return None
+    else:
+        for token in tokens:
+            if not isinstance(token, str):
+                return None
+            elif not token in frequencies.keys():
+                frequencies[token] = 1
+            else:
+                frequency = frequencies.get(token)
+                frequency += 1
+                frequencies.update({token: frequency})
+        return frequencies
     pass
 
 
