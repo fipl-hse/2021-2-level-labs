@@ -15,9 +15,10 @@ def tokenize(text: str):
     if type(text) != str:
         return None
     text = text.split()
-    for i in range (len(text)):
+    punctuation = '[`|~|!|§|№|@|#|$|%|^|&|*|(|)|_|\-|=|+|\[|\{|\]|\}|;|:|\'|"|,|<|.|>|/|?|1|2|3|4|5|6|7|8|9|0]'
+    for i in range(len(text)):
         text[i] = text[i].lower()
-        text[i] = re.sub('[`|~|!|§|№|@|#|$|%|^|&|*|(|)|_|\-|=|+|\[|\{|\]|\}|;|:|\'|"|,|<|.|>|/|?|1|2|3|4|5|6|7|8|9|0]', '', text[i])
+        text[i] = re.sub(punctuation, '', text[i])
     text = list(filter(None, text))
     return text
 
@@ -31,9 +32,9 @@ def remove_stop_words(text : list, stop_words: list):
     """
     if type(text) != list or type(stop_words) != list or None in text:
         return None
-    lenth = len(text)
+    lent = len(text)
     i=0
-    for count in range(lenth):
+    for count in range(lent):
         if text[i] in stop_words:
             text.remove(text[i])
         else:
@@ -81,7 +82,15 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if type(language) != str or type(text) != str or type(stop_words) != list:
+        return None
+    language_profile = {'name': language}
+    tokens = tokenize(text)
+    tokens = remove_stop_words(tokens, stop_words)
+    freq_dict = calculate_frequencies(tokens)
+    language_profile['freq'] = freq_dict
+    language_profile['n_words'] = len(freq_dict.keys())
+    return language_profile
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
