@@ -11,7 +11,7 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if type(text) != str:
+    if text.isalpha() is False:
         return None
     text_without_symbols = ""
     for i in str(text):
@@ -53,7 +53,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
         return None
     freq_dict = {}
     for i in tokens:
-        if type(i) == str:
+        if i.isalpha():
             some_dict = {i: tokens.count(i)}
             freq_dict.update(some_dict)
     return freq_dict or None
@@ -69,7 +69,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if type(freq_dict) != dict:
         return None
-    if type(top_n) != int:
+    if top_n.isdigit():
         return None
     val = list(freq_dict.values())
     val.sort(reverse=True)
