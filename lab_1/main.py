@@ -71,14 +71,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     if type(top_n) != int:
         return None
-    val = list(freq_dict.values())
-    val.sort(reverse=True)
+    inf = list(freq_dict.items())
+    inf = sorted(inf, key=lambda x: x[1], reverse=True)
     popular_words = []
-    for v in val:
-        for k in list(freq_dict.keys()):
-            if freq_dict[k] == v:
-                popular_words.append(k)
-                list(freq_dict.keys()).remove(k)
+    for v, k in inf:
+        popular_words.append(v)
     if len(popular_words) >= top_n:
         return popular_words[:top_n]
     elif len(popular_words) < top_n:
@@ -189,7 +186,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
         if i in popular_words_un:
             top_common.append(i)
 
-    score_value = len(popular_words) / len(popular_words_un)
+    score_value = len(top_common) / len(popular_words_un)
 
     new_keys = list((profile_to_compare["freq"]).keys())
     len_of_words_dict = {}
@@ -223,7 +220,34 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if type(unknown_profile) != dict:
+        return None
+    if type(profiles) != list:
+        return None
+    if type(languages) != list:
+        return None
+    if type(top_n) != int:
+        return None
+
+    actual_profiles = []
+    if len(languages) == 0:
+        actual_profiles = profiles
+    for i in profiles:
+        if i["name"] in languages:
+            actual_profiles.append(i)
+
+    results = []
+    for profile in actual_profiles:
+        results.append(compare_profiles_advanced(unknown_profile, profile, top_n))
+
+    results = sorted(results, key=lambda x: x["name"])
+    results = sorted(results, key=lambda x: x["score"], reverse=True)
+    if len(results) >= 1:
+        exact_language = (results[0])["name"]
+    else:
+        return None
+    return exact_language
+
 
 
 def load_profile(path_to_file: str) -> dict or None:
