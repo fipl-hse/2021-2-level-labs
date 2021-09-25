@@ -36,8 +36,7 @@ def remove_stop_words(tokens, stop_words):
                     if token not in stop_words:
                         cleaned_tokens.append(token)
                 return cleaned_tokens
-            else:
-                return tokens
+            return tokens
 
 
 def calculate_frequencies(tokens):
@@ -66,7 +65,7 @@ def get_top_n_words(freq_dict, top_n):
     srtd_list = [wrd[0] for wrd in sorted(freq_dict.items(), key=lambda val: val[1], reverse=True)]
     if top_n < len(srtd_list):
         return srtd_list[:top_n]
-    elif top_n >= len(srtd_list):
+    else:
         return srtd_list
 
 
