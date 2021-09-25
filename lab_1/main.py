@@ -214,42 +214,30 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :return: a language
     """
     try:
-        if not languages:
+        if languages == []:
             languages = profiles.copy()
         count = 0
         score_best = 0
         profile = profiles[count]
         score_best_name = profile["name"]
         for language in languages:
-            if language["name"] == profile["name"]:
+            if type(language) == dict:
+                language = language["name"]
+            if language == profile["name"]:
                 score_current = compare_profiles_advanced(unknown_profile, profile, top_n)["score"]
             if score_current > score_best:
-                score_best_name = language["name"]
+                score_best_name = language
+                score_best = score_current
             elif score_current == score_best:
-                compare = sorted([score_best_name, language["name"]])
+                compare = sorted([score_best_name, language])
                 score_best_name = compare[0]
             count += 1
-            profile = profiles[count]
+            try: profile = profiles[count]
+            except: pass
+
         return score_best_name
     except:
         return None
-
-unknown_profile = {'name': 'unk',
-                           'freq': {'happy': 5, 'she': 2, 'man': 1},
-                           'n_words': 3}
-
-en_profile = {'name': 'en',
-              'freq': {'happy': 2, 'he': 1, 'man': 1},
-              'n_words': 3}
-
-de_profile = {'name': 'de',
-              'freq': {'ich': 3, 'weiß': 1, 'nicht': 1, 'machen': 1,
-                       'möchte': 1, 'vielleicht': 1, 'überlegen': 1, 'man': 1},
-              'n_words': 8}
-
-profiles = [en_profile, de_profile]
-
-print(detect_language_advanced(unknown_profile, profiles, [], 2))
 
 
 def load_profile(path_to_file: str) -> dict or None:
