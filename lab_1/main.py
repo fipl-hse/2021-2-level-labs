@@ -224,6 +224,33 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance (profiles,list):
+        return None
+    if not isinstance (languages, list):
+        return None
+    if not isinstance(top_n, int):
+        return None
+    dict_languages_and_scores = {}
+    for profile in profiles:
+        if len(languages) == 0 or profile['name'] in languages:
+            profile_3 = compare_profiles_advanced (unknown_profile, profile, top_n)
+            score_1 = profile_3['score']
+            dict_languages_and_scores[profile['name']] = score_1
+    sorted_dict_languages_and_scores = sorted(dict_languages_and_scores.items(), key = lambda x: x[1])
+    if len(sorted_dict_languages_and_scores) == 0:
+        return None
+    common_profiles = list()
+    highest_score = sorted_dict_languages_and_scores[len(sorted_dict_languages_and_scores)-1][1]
+    for language in sorted_dict_languages_and_scores:
+        if language[1] >= highest_score:
+            common_profiles.append(language[0])
+
+
+    common_profiles.sort()
+    return common_profiles [0]
+
 
     pass
 
