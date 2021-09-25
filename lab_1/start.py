@@ -19,6 +19,10 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
+    with open(os.path.join(PATH_TO_TEXTS_FOLDER, "la.txt"), "r", encoding="utf-8") as file_to_read:
+        la_text = file_to_read.read()
+
+
     EXPECTED = 'en'
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
