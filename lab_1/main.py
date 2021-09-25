@@ -16,8 +16,8 @@ def tokenize(text: str) -> list or None:
         for i in text:
             if i in symbols:
                 text = text.replace(i, '')
-            text = text.lower().split()
-        return text
+            tokens = text.lower().split()
+        return tokens
     pass
 
 
