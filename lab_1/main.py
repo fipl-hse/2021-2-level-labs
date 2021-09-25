@@ -112,7 +112,21 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
+    if type(unknown_profile) != dict:
+        return None
+    if type(profile_to_compare) != dict:
+        return None
+    if type(top_n) != int:
+        return None
+    top_unknown_profile = get_top_n_words(unknown_profile["freq"], top_n)
+    top_profile_to_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+    top_common = []
+    for i in top_unknown_profile:
+        if i in top_profile_to_compare:
+            top_common.append(i)
+    frequence = round(len(top_common) / len(top_unknown_profile), 2)
+    return frequence
+
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
