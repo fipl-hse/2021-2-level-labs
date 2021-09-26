@@ -122,6 +122,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
                     common_words += 1
             proportion = round(common_words / top_n, 2)
             return proportion
+    return None
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -231,8 +232,7 @@ def load_profile(path_to_file: str) -> dict or None:
             with open(path_to_file, 'r', encoding='UTF-8') as file:
                 profile = json.load(file)
                 return profile
-    else:
-        return None
+    return None
 
 
 def save_profile(profile: dict) -> int:
