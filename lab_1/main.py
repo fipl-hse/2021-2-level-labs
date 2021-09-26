@@ -199,7 +199,8 @@ def compare_profiles_advanced(unknown_profile: dict,
                                  sorted_common=sorted_common)
     return full_language_profile
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -236,15 +237,14 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         return None
     return language
 
-
-
 def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-
+    if not isinstance(path_to_file, str):
+        return None
 
 def save_profile(profile: dict) -> int:
     """
@@ -252,4 +252,5 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-
+    if not isinstance(profile, dict):
+        return None
