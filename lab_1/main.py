@@ -2,6 +2,7 @@
 Lab 1
 Language detection
 """
+import json
 
 
 def tokenize(text: str) -> list or None:
@@ -73,7 +74,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return freq_list
     else:
         top_n_words = freq_list[:top_n]
-    return top_n_words
+        return top_n_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -213,13 +214,23 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if not isinstance(path_to_file, str):
+        return None
+    try:
+        with open(path_to_file, encoding='utf-8') as file:
+            language_profile = json.load(file)
+    except FileNotFoundError:
+        return None
+    return language_profile
 
 
 def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
+
+    if not isinstance(profile, dict):
+        return 1
+    if ('name' or 'freq' or 'n_words') not in profile.keys():
+        return 1
+    profile_file = '{} profile.json'.format(profile['name'])
+    with open(profile_file, 'w', encoding='utf-8') as file:
+        json.dump(profile, file)
+    return 0
