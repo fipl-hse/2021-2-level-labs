@@ -168,22 +168,21 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
             common.append(i)
     score = len(common)/top_n
     general = list(profile_to_compare['freq'].keys())
-    max_len = 0
-    min_len = 0
-    for i in range(len(general)):
-        if len(general[i]) > len(general[max_len]):
-            max_len = i
-        elif len(general[i]) < len(general[min_len]):
-            min_len = i
+    max_len = general[0]
+    min_len = general[0]
     average = 0
     for i in general:
         average += len(i)
+        if len(i) > len(max_len):
+            max_len = i
+        elif len(i) < len(min_len):
+            min_len = i
     average_token_length = average/len(general)
     compared_profile = {'name': profile_to_compare['name'],
                         'common': common,
                         'score': score,
-                        'max_length_word': general[max_len],
-                        'min_length_word': general[min_len],
+                        'max_length_word': max_len,
+                        'min_length_word': min_len,
                         'average_token_length': average_token_length,
                         'sorted_common': sorted(common)}
     return compared_profile
