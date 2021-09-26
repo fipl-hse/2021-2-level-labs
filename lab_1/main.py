@@ -63,9 +63,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if type(freq_dict) == dict and type(top_n) == int:
-        frequency_dct = {k: freq_dict[k] for k in sorted(freq_dict, key=freq_dict.get, reverse=True)}
-        return freq_dict
+    top_n_words = []
+    if type(freq_dict) == dict:
+        for i in list(freq_dict.keys()):
+            top_words = sorted(freq_dict, key=freq_dict.get, reverse=True) #по убыванию
+            top_words = top_words[:top_n] #первые топ_н
+        return top_words
+    else:
+        return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -76,7 +81,12 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
+    if type(language) == str and type(text) == str and type(stop_words) == list:
+        lang_profile = {'language name': language, 'frequency': freq_dict, 'n_words': len(freq_dict)}
+        return lang_profile
+    else:
+        return None
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -87,7 +97,16 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
+    if type(unknown_profile) == dict and type(profile_to_compare) == dict and type(top_n) == int:
+        top_of_unknown_profile = get_top_n_words(unknown_profile['frequency'], top_n)
+        top_of_profile_to_compare = get_top_n_words(profile_to_compare['frequency'], top_n)
+        shared_words = []
+        for word in top_of_unknown_profile:
+            if word in top_of_profile_to_compare:
+                shared_words.append(word)
+                distance = len(shared_words) / len(top_of_unknown_profile)
+    else:
+        return None
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
