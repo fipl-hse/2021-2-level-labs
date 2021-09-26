@@ -181,15 +181,13 @@ def compare_profiles_advanced(unknown_profile,profile_to_compare,top_n):
     list_words = []
     for word in profile_to_compare['freq'].keys():
         list_words.append(word)
-        max_length_word = max(list_words, key=len)
-    profile_advanced['max_length_word'] = max_length_word
+    profile_advanced['max_length_word'] = max(list_words, key=len)
     profile_advanced['min_length_word'] = min(profile_to_compare['freq'])
     len_value = 0
     for value in profile_to_compare['freq']:
         len_value += len(value)
     profile_advanced['average_token_length'] = len_value / len(profile_to_compare['freq'])
-    sorted_common = sorted(common_words)
-    profile_advanced['sorted_common'] = sorted_common
+    profile_advanced['sorted_common'] = sorted(common_words)
     return profile_advanced
 
 def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
