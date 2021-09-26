@@ -208,7 +208,7 @@ def compare_profiles_advanced(unknown_profile: dict,
     profile['average_token_length'] = average_token_length
     common_words.sort()
     profile['sorted_common'] = common_words
-    if proportion_of_frequency > 0:
+    if profile['score'] > 0:
         profile ['name'] = profile_to_compare ['name']
     else:
         profile['name'] = unknown_profile ['name']
