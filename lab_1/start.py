@@ -26,13 +26,18 @@ if __name__ == '__main__':
     la_profile = main.create_language_profile ('la', la_text, [])
     unknown_language_profile = main.create_language_profile ('unknown', unknown_text, [])
     EXPECTED = 'en'
-    la_and_deutsch_language = main.detect_language_advanced(unknown_language_profile, [de_profile, la_profile], [], 5)
+    la_and_deutsch_language = main.detect_language_advanced(unknown_language_profile,
+                                                            [de_profile, la_profile],
+                                                            [], 5)
     print (la_and_deutsch_language)
 
     profiles = [en_profile, la_profile, de_profile]
-    load_profiles = [main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER, 'en.json')), main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER, 'la.json')), main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER, 'de.json'))]
+    load_profiles = [main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER, 'en.json')),
+                     main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER, 'la.json')),
+                     main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER, 'de.json'))]
     profiles_result = main.detect_language_advanced(unknown_language_profile, profiles, [], 5)
-    load_profiles_result = main.detect_language_advanced(unknown_language_profile, load_profiles, [], 5)
+    load_profiles_result = main.detect_language_advanced(unknown_language_profile,
+                                                         load_profiles, [], 5)
     print(profiles_result)
     print(load_profiles_result)
 
