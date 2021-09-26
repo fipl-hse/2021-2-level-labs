@@ -93,7 +93,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if not (isinstance(language, str) or isinstance(text, str) or isinstance(stop_words, list)):
+    if not (isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list)):
         return None
     tokens = tokenize(text)
     tokens = remove_stop_words(tokens, stop_words)
@@ -113,8 +113,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     """
 
     common = []
-    if not (isinstance(unknown_profile, dict) or isinstance(profile_to_compare, dict)
-            or isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     unknown = get_top_n_words(unknown_profile.get('freq'), top_n)
     compare = get_top_n_words(profile_to_compare.get('freq'), top_n)
@@ -135,8 +135,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
 
-    if not (isinstance(unknown_profile, dict) or isinstance(profile_1, dict)
-            or isinstance(profile_2, dict) or isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_1, dict)
+            and isinstance(profile_2, dict) and isinstance(top_n, int)):
         return None
     first = compare_profiles(unknown_profile, profile_1, top_n)
     second = compare_profiles(unknown_profile, profile_2, top_n)
@@ -160,8 +160,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     """
 
     common = []
-    if not (isinstance(unknown_profile, dict) or isinstance(profile_to_compare, dict)
-            or isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     tokens = list(profile_to_compare.get('freq').keys())
     max_length_word = max(tokens, key=len)
@@ -198,8 +198,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     """
 
     score = {}
-    if not (isinstance(unknown_profile, dict) or isinstance(profiles, list)
-            or isinstance(languages, list) or isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profiles, list)
+            and isinstance(languages, list) and isinstance(top_n, int)):
         return None
     exist_lang = False
     for _ in profiles:
