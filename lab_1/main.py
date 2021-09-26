@@ -105,6 +105,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
             if word in top_of_profile_to_compare:
                 shared_words.append(word)
                 distance = len(shared_words) / len(top_of_unknown_profile)
+                return round(distance, 1)
     else:
         return None
 
