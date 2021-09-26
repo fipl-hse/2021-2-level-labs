@@ -28,7 +28,7 @@ if __name__ == '__main__':
     profiles = [de_profile, en_profile, la_profile]
 
     unknown_profile = main.create_language_profile('unk', unknown_text, [])
-    comparison = main.compare_profiles(unknown_profile, en_profile, 3)
+    comparison = main.compare_profiles_advanced(unknown_profile, en_profile, 3)
     detection = main.detect_language_advanced(unknown_profile, profiles, [], 3)
     print(detection)
 
