@@ -113,8 +113,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for i in unknown_profile_top:
         if i in profile_to_compare_top:
             count += 1
-        else:
-            count = count
     proportion = round(count/top_n, 2)
     return proportion
 
@@ -151,7 +149,35 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
+    if type(unknown_profile) != dict or type(profile_to_compare) != dict or type(top_n) != int:
+        return None
+    unknown_profile_top = get_top_n_words(unknown_profile['freq'], top_n)
+    profile_to_compare_top = get_top_n_words(profile_to_compare['freq'], top_n)
+    common = []
+    for i in profile_to_compare_top:
+        if i in unknown_profile_top:
+            common.append(i)
+    score = len(common)/top_n
+    general = list(profile_to_compare['freq'].keys())
+    max_len = 0
+    min_len = 0
+    for i in range(len(general)):
+        if len(general[i]) > len(general[max_len]):
+            max_len = i
+        elif len(general[i]) < len(general[min_len]):
+            min_len = i
+    av = 0
+    for i in general:
+        av += len(i)
+    average_token_length = av/len(general)
+    compared_profile = {'name': profile_to_compare['name'],
+                        'common': common,
+                        'score': score,
+                        'max_length_word': general[max_len],
+                        'min_length_word': general[min_len],
+                        'average_token_length': average_token_length,
+                        'sorted_common': sorted(common)}
+    return compared_profile
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
@@ -163,7 +189,29 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if isinstance(unknown_profile, dict) is False or isinstance(profiles, list) is False:
+        return None
+    if isinstance(languages, list) is False or isinstance(top_n, int) is False:
+        return None
+    langvaga = {}
+    if languages is []:
+        for i in profiles:
+            j = compare_profiles_advanced(unknown_profile, i, top_n)
+            langvaga[j['name']] = j['score']
+        maximum = max(langvaga, key=langvaga.get)
+        for i in langvaga.keys():
+            if langvaga[i] == maximum:
+                result = langvaga[i]
+    else:
+        for i in profiles:
+            if i['name'] in languages:
+                j = compare_profiles_advanced(unknown_profile, i, top_n)
+                langvaga[j['name']] = j['score']
+            maximum = max(langvaga, key=langvaga.get)
+            for i in langvaga.keys():
+                if langvaga[i] == maximum:
+                    result = i
+    return result
 
 
 def load_profile(path_to_file: str) -> dict or None:
