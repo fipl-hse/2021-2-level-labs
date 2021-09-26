@@ -197,6 +197,37 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(profiles, list):
+        return None
+    if not isinstance(languages, list):
+        return None
+    if not isinstance(top_n, int):
+        return None
+    dictionary_score = {}  # {'name': score}
+    for profile in profiles:
+        if not languages or profile['name'] in languages:
+            profile_compare = compare_profiles_advanced(unknown_profile, profile, top_n)
+            dictionary_score[profile['name']] = profile_compare['score']
+    scores = list(dictionary_score.values())
+    if len(scores) == 0:
+        return None
+    max_score = max(scores)
+    max_scores = [max_score]
+    for i in scores:
+        if i == max_score:
+            max_scores.append(i)
+    result_scores = {}
+    for i in max_scores:
+        for j in dictionary_score.keys():
+            if dictionary_score[j] == i:
+                result_scores[j] = i
+    result = list(result_scores.keys())
+    result = sorted(result)
+    if len(result) == 1:
+        result = result[0]
+    return result
 
 
 def load_profile(path_to_file: str) -> dict or None:
