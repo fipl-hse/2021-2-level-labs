@@ -178,19 +178,16 @@ def compare_profiles_advanced(unknown_profile,profile_to_compare,top_n):
             common_words.append(word_profile_to_compare)
     profile_advanced['common'] = common_words
     profile_advanced['score'] = compare_profiles(unknown_profile,profile_to_compare,top_n)
-    freq_key_value = profile_to_compare['freq']
     list_words = []
-    for word in freq_key_value.keys():
+    for word in profile_to_compare['freq'].keys():
         list_words.append(word)
         max_length_word = max(list_words, key=len)
     profile_advanced['max_length_word'] = max_length_word
-    profile_advanced['min_length_word'] = min(freq_key_value)
-    len_values = len(freq_key_value)
+    profile_advanced['min_length_word'] = min(profile_to_compare['freq'])
     len_value = 0
-    for value in freq_key_value:
+    for value in profile_to_compare['freq']:
         len_value += len(value)
-    average_token_length = len_value / len_values
-    profile_advanced['average_token_length'] = average_token_length
+    profile_advanced['average_token_length'] = len_value / len(profile_to_compare['freq'])
     sorted_common = sorted(common_words)
     profile_advanced['sorted_common'] = sorted_common
     return profile_advanced
