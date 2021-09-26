@@ -14,16 +14,23 @@ def tokenize(text: str) -> list or None:
     if type(text) != str:
         return None
     else:
-        symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_','=', '+', '[', '{', '}', ']', ';', '<', ',' , '>', '.', '?', '|', '\\' , ':', ';', '"', "'", '/', '\t', '1', '2', '3', '4', '5', '6', '7',
-                   '8', '9', '0']
+        symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[',
+                   '{', '}', ']', ';', '<', ',', '>', '.', '?', '|', '\\', ':', ';', '"', "'",
+                   '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '\t']
         for s in symbols:
             text = text.replace(s, '')
         text = text.lower()
         text = text.split()
-
         return text
 
+
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
     checking_tokens = []
     if type(tokens) != list and type(stop_words) != list:
         return None
@@ -33,14 +40,24 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                 checking_tokens.append(token)
         return checking_tokens
 
+
 def calculate_frequencies(tokens: list) -> dict or None:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
+    freq_dict = {}
     if type(tokens) != list:
         return None
-pass
-
-
-
-
+    for token in tokens:
+        if type(token) != str:
+            return None
+        elif token not in freq_dict:
+            freq_dict[token] += 1
+        else:
+            freq_dict[token] = 1
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
