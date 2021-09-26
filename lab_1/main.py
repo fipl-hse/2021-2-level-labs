@@ -22,9 +22,7 @@ def tokenize(text: str) -> list or None:
     text = ''.join([i for i in text if i.isalpha() or i.isspace()])
 
     # Convert to lowercase and split into tokens
-    text = text.lower()
-    text = text.split()
-    return text
+    return text.lower().split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -35,9 +33,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     # Check for bad input
-    if not isinstance(tokens, list):
-        return None
-    if not tokens:
+    if not isinstance(tokens, list) or not tokens:
         return None
     if not isinstance(stop_words, list):
         return tokens
@@ -81,12 +77,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if (not isinstance(freq_dict, dict)
             or not isinstance(top_n, int)):
         return None
-    # Convert frequency dictionary to list of tuples
-    tokens = freq_dict.items()
-    # Sort list by frequency
-    tokens = sorted(tokens, key=lambda x: x[1], reverse=True)
+    # Convert frequency dictionary to list of tuples,
+    # and sort list by frequency.
+    tokens = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
     # Drop frequency data
-    tokens = [token for token, freq in tokens]
+    tokens = [word for word, freq in tokens]
     # Only include the first N elements
     tokens = tokens[:top_n]
     return tokens
@@ -108,14 +103,12 @@ def create_language_profile(language: str,
             or not isinstance(stop_words, list)):
         return None
     # Get frequencies
-    tokens = tokenize(text)
-    tokens = remove_stop_words(tokens, stop_words)
+    tokens = remove_stop_words(tokenize(text), stop_words)
     frequencies = calculate_frequencies(tokens)
     # Get n_words
     n_words = len(frequencies.keys())
     # Assemble language profile
-    profile = {"name": language, "freq": frequencies, "n_words": n_words}
-    return profile
+    return {"name": language, "freq": frequencies, "n_words": n_words}
 
 
 def compare_profiles(unknown_profile: dict,
@@ -164,12 +157,12 @@ def detect_language(unknown_profile: dict,
     distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
     distance_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if distance_1 == distance_2:
-        name = min(profile_1["name"], profile_2["name"])
+        if profile_1["name"] < profile_2["name"]:
+            return profile_1["name"]
+        return profile_2["name"]
     elif distance_1 > distance_2:
-        name = profile_1["name"]
-    else:
-        name = profile_2["name"]
-    return name
+        return profile_1["name"]
+    return profile_2["name"]
 
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -191,20 +184,17 @@ def compare_profiles_advanced(unknown_profile: dict,
     # Find common words, while preserving the order
     unknown_top = get_top_n_words(unknown_profile["freq"], top_n)
     compare_top = get_top_n_words(profile_to_compare["freq"], top_n)
-    common = []
-    for token in compare_top:
-        if token in unknown_top:
-            common.append(token)
+    common = [token for token in compare_top if token in unknown_top]
     # Sort common words alphabetically
     sorted_common = sorted(common)
     # Find score
     score = len(common) / len(compare_top)
     # Token length
     tokens = [token for token, freq in profile_to_compare["freq"].items()]
-    tokens = sorted(tokens, key=len)
-    min_length_word = tokens[0]
-    max_length_word = tokens[-1]
-    average_token_length = sum(map(len, tokens)) / len(tokens)
+    token_lengths = map(len, tokens)
+    min_length_word = min(token_lengths)
+    max_length_word = max(token_lengths)
+    average_token_length = sum(token_lengths) / len(tokens)
     # Assemble report
     report = {"name": profile_to_compare["name"],
               "common": common,
@@ -245,11 +235,17 @@ def detect_language_advanced(unknown_profile: dict,
     # If no report is available, language input was bad
     if not reports:
         return None
-    # Secondarily sort by profile name.
-    # This is used as a fallback when scores are equal.
-    reports = sorted(reports, key=lambda x: x["name"])
-    # Primarily sort by score.
+    # Sort by score.
     reports = sorted(reports, key=lambda x: x["score"], reverse=True)
+    # If the highest score appears in the list more than once,
+    # The best-scoring reports need to be sorted alphabetically.
+    best_scores = [report["score"] for report in reports]
+    if best_scores.count(max(best_scores)) > 1:
+        # Drop non-best-scoring reports
+        reports = [report for report in reports
+                   if report["score"] == max(best_score)]
+        # Sort alphabetically
+        reports = sorted(reports, key=lambda x: x["name"])
     # Best fitting language
     language = reports[0]["name"]
     return language
@@ -262,9 +258,8 @@ def load_profile(path_to_file: str) -> dict or None:
     :return: a dictionary with three keys – name, freq, n_words
     """
     # Check for bad input
-    if not isinstance(path_to_file, str):
-        return None
-    if not exists(path_to_file):
+    if (not isinstance(path_to_file, str)
+            or not exists(path_to_file)):
         return None
     # Load profile from file
     with open(path_to_file, encoding="utf8") as file:
