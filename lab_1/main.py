@@ -16,7 +16,7 @@ def tokenize(text: str) -> list or None:
         return None
     isalpha_text = ''
     for i in text:
-        if i.isalpha() == True or i == ' ':
+        if i.isalpha() is True or i == ' ':
             isalpha_text += i
     isalpha_text = isalpha_text.lower()
     tokens = isalpha_text.split()
