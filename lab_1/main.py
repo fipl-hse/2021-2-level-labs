@@ -275,7 +275,7 @@ def save_profile(profile: dict) -> int:
         return 1
     if ('name' or 'freq' or 'n_words') not in profile.keys():
         return 1
-    profile_file = '{} profile.json'.format(profile['name'])
+    profile_file = '{}.json'.format(profile['name'])
     with open(profile_file, 'w', encoding='utf-8') as file:
         json.dump(profile, file)
     return 0
