@@ -57,7 +57,6 @@ example, a feeding dish 300 metres away was indicated by 15 complete runs
 through the pattern in 30 seconds. When the dish was moved to 60 metres away,
 the number dropped to eleven.'''
 
-import re
 def tokenize(text_str):
        if isinstance(text_str, str) == False:
            return None
@@ -68,21 +67,41 @@ def tokenize(text_str):
                    text_str = text_str.replace(i, "")
            text_update = ''.join([i for i in text_str if not i.isdigit()])
            return text_update.lower().split()
+
 text = tokenize(text_str)
 print(text)
 
+#def remove_stop_words(text_update, STOP_WORDS):
+    #if isinstance(STOP_WORDS, list) and isinstance(text_update, list):
+        #if text_update:
+           #for m in range(len(text_update)):
+                #if text_update[m] in STOP_WORDS:
+                    #text_update[m] = ''
+            #while '' in text_update:
+                #text_update.remove('')
+            #return text_update
+        #else:
+            #return None
+    #else:
+        #return None
+    #else:
+        #if text_update:
+            #filtered_text = []
+            #for m in text_update:
+                #if m not in STOP_WORDS:
+                    #filtered_text.append(m)
+            #return filtered_text
+        #else:
+             #return None
 
-def remove_stop_words(tokenized_text, ) -> list or None:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
-    pass
 
 
-def calculate_frequencies(tokens: list) -> dict or None:
+
+
+def calculate_frequencies(text_update):
+
+
+
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
