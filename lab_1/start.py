@@ -25,20 +25,18 @@ if __name__ == '__main__':
 
     EXPECTED = 'en'
     RESULT = ''
-    top_n = 7
-    # tokens = main.tokenize(la_text)
-    # new_token = main.remove_stop_words(tokens, [])
-    # frequency_dictionary = main.calculate_frequencies(tokens)
-    # top_n_words = main.get_top_n_words(frequency_dictionary, 7)
     unknown_profile = main.create_language_profile("unknown_text", unknown_text, [])
     profile_1 = main.create_language_profile("la", la_text, [])
     profile_2 = main.create_language_profile("de", de_text, [])
-    RESULT = main.detect_language(unknown_profile, profile_1, profile_2, top_n)
+    profile_3 = main.create_language_profile("en", en_text, [])
+    top_n = 7
+    profiles = [profile_1, profile_2, profile_3]
+    RESULT = main.detect_language_advanced(unknown_profile, profiles, [], top_n)
 
 
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    # assert RESULT, 'Detection not working'
-    # assert EXPECTED == RESULT, 'Detection not working'
-    print(RESULT)
-    print(EXPECTED)
+    #assert RESULT, 'Detection not working'
+    assert EXPECTED == RESULT, 'Detection not working'
+    #print(RESULT)
+    #print(EXPECTED)

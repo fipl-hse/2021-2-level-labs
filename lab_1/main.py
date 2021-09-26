@@ -2,6 +2,7 @@
 Lab 1
 Language detection
 """
+import json
 
 
 def tokenize(text: str) -> list or None:
@@ -215,13 +216,13 @@ def detect_language_advanced(unknown_profile: dict,
             share_common_words = compare_profiles_advanced(unknown_profile, profile, top_n)
             shares_common_words.append(share_common_words)
     shares_common_words = sorted(shares_common_words, key=lambda x: x["score"], reverse=True)
-    shares_common_words_with_max_score = []
     if len(shares_common_words) == 0:
         return None
     if len(shares_common_words) > 1:
         if shares_common_words[0]["score"] == shares_common_words[1]["score"]:
+            shares_common_words_with_max_score = []
             for element in shares_common_words:
-                if element == shares_common_words[0]["score"]: # best score
+                if element["score"] == shares_common_words[0]["score"]: # best score
                     shares_common_words_with_max_score.append(element)
             shares_common_words_with_max_score = sorted(shares_common_words_with_max_score,
                                                         key=lambda x: x["name"])
@@ -232,6 +233,7 @@ def detect_language_advanced(unknown_profile: dict,
     if len(shares_common_words) == 1:
         language = shares_common_words[0]["name"]
         return language
+    return None
     # if shares_common_words[0]["score"] == shares_common_words[1]["score"]:
     # shares_common_words = sorted(shares_common_words, key=lambda x: x["name"])
     # return shares_common_words
@@ -243,7 +245,8 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if not isinstance(path_to_file, str):
+        return None
 
 
 def save_profile(profile: dict) -> int:
