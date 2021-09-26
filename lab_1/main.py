@@ -125,7 +125,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return proportion
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int):
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -134,13 +134,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict):
         return None
-    if not isinstance(profile_1, dict):
-        return None
-    if not isinstance(profile_2, dict):
-        return None
-    if not isinstance(top_n, int):
+    if not isinstance(profile_2, dict) or not isinstance(top_n, int):
         return None
     profile_1_tokens = compare_profiles(unknown_profile, profile_1, top_n)
     profile_2_tokens = compare_profiles(unknown_profile, profile_2, top_n)
@@ -148,15 +144,15 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     name_2 = profile_2['name']
     if profile_1_tokens > profile_2_tokens:
         return name_1
-    elif profile_2_tokens > profile_1_tokens:
+    if profile_2_tokens > profile_1_tokens:
         return name_2
-    elif profile_1_tokens == profile_2_tokens:
+    if profile_1_tokens == profile_2_tokens:
         names = [name_1, name_2]
         names = sorted(names)
         return names
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -182,8 +178,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     max_length_word = max(all_words_compare, key=len)  # max
     min_length_word = min(all_words_compare, key=len)  # min
     sum_of_letters = 0
-    for x in range(len(all_words_compare)):
-        sum_of_letters += len(all_words_compare[x])
+    for j in all_words_compare:
+        sum_of_letters += len(j)
     average_token_length = sum_of_letters / len(all_words_compare)
     sorted_common = sorted(common_top_n)
     report = {'name': profile_to_compare['name'],
@@ -196,7 +192,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return report
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
