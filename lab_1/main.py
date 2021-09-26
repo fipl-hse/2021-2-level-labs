@@ -160,7 +160,7 @@ def detect_language(unknown_profile: dict,
         if profile_1["name"] < profile_2["name"]:
             return profile_1["name"]
         return profile_2["name"]
-    elif distance_1 > distance_2:
+    if distance_1 > distance_2:
         return profile_1["name"]
     return profile_2["name"]
 
@@ -191,10 +191,9 @@ def compare_profiles_advanced(unknown_profile: dict,
     score = len(common) / len(compare_top)
     # Token length
     tokens = [token for token, freq in profile_to_compare["freq"].items()]
-    token_lengths = map(len, tokens)
-    min_length_word = min(token_lengths)
-    max_length_word = max(token_lengths)
-    average_token_length = sum(token_lengths) / len(tokens)
+    min_length_word = min(tokens, key=len)
+    max_length_word = max(tokens, key=len)
+    average_token_length = sum(map(len, tokens)) / len(tokens)
     # Assemble report
     report = {"name": profile_to_compare["name"],
               "common": common,
@@ -243,7 +242,7 @@ def detect_language_advanced(unknown_profile: dict,
     if best_scores.count(max(best_scores)) > 1:
         # Drop non-best-scoring reports
         reports = [report for report in reports
-                   if report["score"] == max(best_score)]
+                   if report["score"] == max(best_scores)]
         # Sort alphabetically
         reports = sorted(reports, key=lambda x: x["name"])
     # Best fitting language
