@@ -94,8 +94,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
     match = 0
-    for word in get_top_n_words(profile_1['freq'], top_n):
-        if word in get_top_n_words(profile_2['freq'], top_n):
+    for word in get_top_n_words(unknown_profile['freq'], top_n):
+        if word in get_top_n_words(profile_to_compare['freq'], top_n):
             match += 1
     return round(match / top_n, 3)
     pass
@@ -111,8 +111,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
     detect_dict = {}
-    detect_dict[calculate_distance(profile_1, unknown_profile, top_n)] = profile_1['name']
-    detect_dict[calculate_distance(profile_2, unknown_profile, top_n)] = profile_2['name']
+    detect_dict[compare_profiles(profile_1, unknown_profile, top_n)] = profile_1['name']
+    detect_dict[compare_profiles(profile_2, unknown_profile, top_n)] = profile_2['name']
     return detect_dict[max(detect_dict.keys())]
     pass
 
