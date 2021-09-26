@@ -234,38 +234,25 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
         for profile in profiles:
             language_profiles = compare_profiles_advanced(unknown_profile, profile, top_n)
             shares[language_profiles['name']] = language_profiles['score']
-        sorted_dict = {}
-        languages_with_max_value = []
-        list_of_keys = list(shares.keys())
-        list_of_values = list(shares.values())
-        sorted_list = sorted(list_of_keys, reverse=False)
-        for key_in_sorted_list in sorted_list:
-            sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
-        max_value = max(list_of_values)
-        for key_in_sorted_dict in sorted_dict:
-            if sorted_dict[key_in_sorted_dict] == max_value:
-                languages_with_max_value.append(key_in_sorted_dict)
-                language_with_max_value = languages_with_max_value[0]
     elif languages != []:
         for language in languages:
             for profile in profiles:
                 if profile['name'] == language:
                     language_profiles = compare_profiles_advanced(unknown_profile, profile, top_n)
                     shares[language_profiles['name']] = language_profiles['score']
-                    sorted_dict = {}
-                    languages_with_max_value = []
-                    list_of_keys = list(shares.keys())
-                    list_of_values = list(shares.values())
-                    sorted_list = sorted(list_of_keys, reverse=False)
-                    for key_in_sorted_list in sorted_list:
-                        sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
-                    max_value = max(list_of_values)
-                    for key_in_sorted_dict in sorted_dict:
-                        if sorted_dict[key_in_sorted_dict] == max_value:
-                            languages_with_max_value.append(key_in_sorted_dict)
-                            language_with_max_value = languages_with_max_value[0]
-
-    return language_with_max_value
+    sorted_dict = {}
+    languages_with_max_value = []
+    list_of_keys = list(shares.keys())
+    list_of_values = list(shares.values())
+    sorted_list = sorted(list_of_keys, reverse=False)
+    for key_in_sorted_list in sorted_list:
+        sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
+        max_value = max(list_of_values)
+        for key_in_sorted_dict in sorted_dict:
+            if sorted_dict[key_in_sorted_dict] == max_value:
+                languages_with_max_value.append(key_in_sorted_dict)
+                language_with_max_value = languages_with_max_value[0]
+                return language_with_max_value
 
 
 def load_profile(path_to_file: str) -> dict or None:
