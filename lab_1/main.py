@@ -15,13 +15,12 @@ def tokenize(text: str):
 
     import re   # импортируем модуль re для последующей работы с регулярными выражениями
 
-    if type(text) != str:   # если тип переменной text не является строкой, то возвращаем None
-        return None
-    text = text.lower()   # приводу текст к нижнему регистру с помощью функции .lower()
-    text = re.sub(r'[^a-zäöüß ]', '', str(text))   # с помощью sub ищем все символы, кроме букв и заменяем на пробел
-    tokens = text.split()   # с помощью split разбиваем строку на части
+    if isinstance(text, str):
+        text = text.lower()
+        text = re.sub('[^a-zäöüß ]', '', text)   # заменяем символы (кроме букв) на пробел
+        text = text.split()   # с помощью split разбиваем строку на части
 
-    return tokens
+    return text
 
 
 def remove_stop_words(tokens: list, stop_words: list):
@@ -33,13 +32,12 @@ def remove_stop_words(tokens: list, stop_words: list):
         """
     pass
 
-    if type(tokens) != list:
+    if not isinstance(tokens, list):
         return None
-    if type(stop_words) != list:
+    if not isinstance(stop_words, list):
         return None
-    for token in tokens:   # проходим по токенам в tokens
-        if token in stop_words:
-            tokens.remove(token)   # если токен - стоп-слово, то удаляем его
+    tokens = [token for token in tokens if token not in stop_words]
+
     return tokens
 
 
@@ -51,19 +49,14 @@ def calculate_frequencies(tokens: list):
         """
     pass
 
-    freq_dict = {}   # создаем частотный словарь
-
-    if type(tokens) != list:
+    if not isinstance(tokens, list):
         return None
-    for i in tokens:
-        if type(i) != str:
-            return None
+    freq_dict = {}  # создаем частотный словарь
     for token in tokens:
         if token not in freq_dict:
             freq_dict[token] = 1
         else:
             freq_dict[token] += 1
-
     return freq_dict
 
 
@@ -77,21 +70,19 @@ def get_top_n_words(freq_dict: dict, top_n: int):
     """
     pass
 
-    if type(freq_dict) != dict:
+    if not isinstance(freq_dict, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, list):
         return None
-
     freq_dict = list(freq_dict.items())   # создаем список, с помощью items возвращаем k и v
-
-    freq_dict_sorted = sorted(freq_dict, key=lambda x: (-x[1], x[0]))   # key позволяет уточнить критерий,
+    # key позволяет уточнить критерий,
     # по которому происходит сортировка, x - это элемент нашего списка
     # x[0] - нулевой элемент списка, это токен i
     # x[1] - частота токена i
     # поскольку по умолчанию сортировка идет по возрастанию, необходимо поставить "-"
     # если же частоты равны, то используется x[0], который сортирует по алфавитному порядку
-
-    top_n = freq_dict_sorted[:top_n]   # с помощью срезу выбираем топ-n по популярности слов
+    freq_dict_sorted = sorted(freq_dict, key=lambda x: (-x[1], x[0]))
+    top_n = freq_dict_sorted[:top_n]  # с помощью срезу выбираем топ-n по популярности слов
 
     return top_n
 
@@ -106,22 +97,19 @@ def create_language_profile(language: str, text: str, stop_words: list):
     """
     pass
 
-    if type(language) != str:
+    if not isinstance(language, str):
         return None
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
-    if type(text) == 0:
+    if not isinstance(stop_words, list):
         return None
-    if type(stop_words) != list:
-        return None
-
-    language_profile = {}   # создаем словарь - профиль языка
-    frequencies = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))   # получаем частотный словарь
+    language_profile = {}  # создаем словарь - профиль языка
+    frequencies = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
+    # получаем частотный словарь
     n_words = len(frequencies)   # получаем количество токенов в словаре
     language_profile['freq'] = frequencies   # ключ - freq, значение - частотный словарь
     language_profile['name'] = language   # ключ - name, значение - конкретный язык
     language_profile['n_words'] = n_words   # ключ - n_words, значение - количество токенов
-
     return language_profile
 
 
@@ -135,16 +123,15 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     """
     pass
 
-    if type(unknown_profile) != dict:
+    if not isinstance(unknown_profile, dict):
         return None
-    if type(profile_to_compare) != dict:
+    if not isinstance(profile_to_compare, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
     compare_top = get_top_n_words(profile_to_compare['freq'], top_n)  # получаем топ-n слов известного языка
     unknown_top = get_top_n_words(unknown_profile['freq'], top_n)  # получаем топ-n слов на неизвестном языке
     unknown_top_len = len(unknown_top)   # получаем длину списка токенов на неизвестном языке
-
     count = 0
     if compare_top == unknown_top:
         top_common_words = float(1)   # если топ-n слов у этих языков совпадают, доля пересекающихся слов равна 1
@@ -167,13 +154,13 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
     pass
-    if type(unknown_profile) != dict:
+    if not isinstance(unknown_profile, dict):
         return None
-    if type(profile_1) != dict:
+    if not isinstance(profile_1, dict):
         return None
-    if type(profile_2) != dict:
+    if not isinstance(profile_2, dict):
         return None
-    if type(top_n) != int:
+    if not isinstance(top_n, int):
         return None
 
     compare_1 = compare_profiles(profile_1, unknown_profile, top_n)
