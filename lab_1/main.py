@@ -75,12 +75,12 @@ def get_top_n_words(freq_dict: dict, top_n: int):
 
     if not isinstance(freq_dict, dict):
         return None
-    if not isinstance(top_n, list):
+    if not isinstance(top_n, int):
         return None
     freq_dict = list(freq_dict.items())  # создаем список, с помощью items возвращаем k и v
     freq_dict_sorted = sorted(freq_dict, key=lambda x: (-x[1], x[0]))
     # key позволяет уточнить критерий,
-    # по которому происходит сортировка, x - это элемент нашего списка
+    # по которому происходит сортировка, x - это элемент списка
     # x[0] - нулевой элемент списка, это токен i
     # x[1] - частота токена i
     # поскольку по умолчанию сортировка идет по возрастанию, необходимо поставить "-"
