@@ -47,7 +47,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     freq_dict = {}
-    if type(tokens) != list:
+    if not isinstance(tokens, list):
         return None
     for i in tokens:
         if not isinstance(i, str):
@@ -166,7 +166,34 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(profile_to_compare, dict):
+        return None
+    if not isinstance(top_n, int):
+        return None
+
+    top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
+    top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+    tokens = list(profile_to_compare["freq"].keys())
+
+    top_n_words_common = []
+    for i in top_n_words_compare:
+        if i in top_n_words_unknown:
+            top_n_words_common.append(i)
+
+    score = len(top_n_words_common) / len(top_n_words_compare)
+    word_length = 0
+    for i in tokens:
+        word_length += len(i)
+    average_token_length = word_length / len(tokens)
+    sorted_common = sorted(top_n_words_common)
+    max_length_word = max(tokens, key=len)
+    min_length_word = min(tokens, key=len)
+    full_language_profile = dict(name=profile_to_compare["name"], common=top_n_words_common, score=score,
+                                 max_length_word=max_length_word, min_length_word=min_length_word,
+                                 average_token_length=average_token_length, sorted_common=sorted_common)
+    return full_language_profile
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
