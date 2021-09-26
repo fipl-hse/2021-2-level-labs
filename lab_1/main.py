@@ -220,7 +220,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         for k in bibs.keys():
             if bibs[k] == i:
                 result_bibs[k] = i
-    result = list(result_bibs.keys())
+    result = list(result_bibs)
     result = sorted(result)
     if len(result) == 1:
         result = result[0]
