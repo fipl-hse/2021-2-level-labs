@@ -42,6 +42,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
     return None
 
+
 def calculate_frequencies(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
@@ -81,7 +82,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
             freq_dict_temp.pop(word)
         return most_common
     return None
-
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -126,7 +126,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
                 cross += 1
 
         return round(cross / top_n, 2)
-    except:
+    except TypeError:
         return None
 
 
@@ -148,11 +148,10 @@ def detect_language(unknown_profile: dict, profile_1: dict,
             return profile_1["name"]
         if p2_cross > p1_cross:
             return profile_2["name"]
-        else:
-            alphabetical = sorted(list[profile_1["name"], profile_2["name"]])
-            return alphabetical[0]
+        alphabetical = sorted(list[profile_1["name"], profile_2["name"]])
+        return alphabetical[0]
 
-    except:
+    except TypeError:
         return None
 
 
@@ -183,22 +182,23 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
 
         stats["sorted_common"] = sorted(stats["common"])
         tokens_length = 0
-        max = len(list(profile_to_compare["freq"].keys())[0])
-        min = max
+        max_l = len(list(profile_to_compare["freq"].keys())[0])
+        min_l = max_l
         for word in profile_to_compare["freq"]:
-            if len(word) >= max:
+            if len(word) >= max_l:
                 stats["max_length_word"] = word
-            if len(word) <= min:
+            if len(word) <= min_l:
                 stats["min_length_word"] = word
             tokens_length += len(word)
         tokens_number = len(profile_to_compare["freq"])
         stats["average_token_length"] = tokens_length / tokens_number
         return stats
-    except:
+    except TypeError:
         return None
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -208,7 +208,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :return: a language
     """
     try:
-        if languages == []:
+        if not languages:
             languages = profiles.copy()
         count = 0
         score_best = 0
@@ -228,27 +228,24 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             count += 1
             try:
                 profile = profiles[count]
-            except:
+            except IndexError:
                 pass
-
         return score_best_name
-    except:
+    except (UnboundLocalError, TypeError):
         return None
 
-
+"""
 def load_profile(path_to_file: str) -> dict or None:
-    """
+    
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
 
-
+"""
 def save_profile(profile: dict) -> int:
-    """
+    
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
