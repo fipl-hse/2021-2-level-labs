@@ -203,24 +203,28 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         return None
     if isinstance(languages, list) is False or isinstance(top_n, int) is False:
         return None
-    langvaga = {}
-    if not languages:
-        for i in profiles:
-            j = compare_profiles_advanced(unknown_profile, i, top_n)
-            langvaga[j['name']] = j['score']
-        maximum = max(langvaga, key=langvaga.get)
-        for k in langvaga.items():
-            if langvaga[k] == maximum:
-                result = langvaga[k]
-    else:
-        for i in profiles:
-            if i['name'] in languages:
-                j = compare_profiles_advanced(unknown_profile, i, top_n)
-                langvaga[j['name']] = j['score']
-            maximum = max(langvaga, key=langvaga.get)
-            for k in langvaga.items():
-                if langvaga[k] == maximum:
-                    result = k
+    bibs = {}
+    for i in profiles:
+        if not languages or i['name'] in languages:
+            profile_comp = compare_profiles_advanced(unknown_profile, i, top_n)
+            bibs[i['name']] = profile_comp['score']
+    scores = list(bibs.values())
+    if len(scores) == 0:
+        return None
+    max_score = max(scores)
+    max_scores = [max_score]
+    for i in scores:
+        if i == max_score:
+            max_scores.append(i)
+    result_bibs = {}
+    for i in max_scores:
+        for k in bibs.keys():
+            if bibs[k] == i:
+                result_bibs[k] = i
+    result = list(result_bibs.keys())
+    result = sorted(result)
+    if len(result) == 1:
+        result = result[0]
     return result
 
 
