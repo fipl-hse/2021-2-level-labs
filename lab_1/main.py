@@ -201,13 +201,9 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict):
+    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list):
         return None
-    if not isinstance(profiles, list):
-        return None
-    if not isinstance(languages, list):
-        return None
-    if not isinstance(top_n, int):
+    if not isinstance(languages, list) or not isinstance(top_n, int):
         return None
     dictionary_score = {}  # {'name': score}
     for profile in profiles:
