@@ -11,14 +11,15 @@ def tokenize(text: str):
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    import re
     if isinstance(text, str) is False:
         return None
     text = text.split()
-    punctuation = '[`|~|!|§|№|@|#|$|%|^|&|*|(|)|_|\-|=|+|\[|\{|\]|\}|;|:|\'|"|,|<|.|>|/|?|1|2|3|4|5|6|7|8|9|0]'
+    punctuation = '''`~!§№@#$%^&|*()_-=+[{]};:'"\\,<.>/?1234567890'''
     for i in range(len(text)):
         text[i] = text[i].lower()
-        text[i] = re.sub(punctuation, '', text[i])
+        for j in text[i]:
+            if j in punctuation:
+                text[i] = text[i].replace(j, '')
     text = list(filter(None, text))
     return text
 
@@ -27,7 +28,7 @@ def remove_stop_words(text: list, stop_words: list):
     """
     Removes stop words
     :rtype: object
-    :param tokens: a list of tokens
+    :param text: a list of tokens
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
@@ -46,14 +47,14 @@ def remove_stop_words(text: list, stop_words: list):
 def calculate_frequencies(text: list) -> dict or None:
     """
     Calculates frequencies of given tokens
-    :param tokens: a list of tokens
+    :param text: a list of tokens
     :return: a dictionary with frequencies
     """
     if isinstance(text, list) is False or None in text:
         return None
     freq_dict = {}
     for char in text:
-        if type(char) != str:
+        if isinstance(char, str) is False:
             return None
         freq_dict[char] = text.count(char)
     return freq_dict
@@ -88,8 +89,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if isinstance(language, str) is False or isinstance(text, str) is False or isinstance(stop_words, list) is False:
+    if isinstance(language, str) is False or isinstance(text, str) is False:
         return None
+    if isinstance(stop_words, list) is False:
+        return
     tokens = tokenize(text)
     tokens = remove_stop_words(tokens, stop_words)
     freq_dict = calculate_frequencies(tokens)
@@ -131,7 +134,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     if isinstance(unknown_profile, dict) is False or isinstance(profile_1, dict) is False:
         return None
     if isinstance(profile_2, dict) is False or isinstance(top_n, int) is False:
-        return  None
+        return None
     proportion_1 = compare_profiles(unknown_profile, profile_1, top_n)
     proportion_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if proportion_2 > proportion_1:
