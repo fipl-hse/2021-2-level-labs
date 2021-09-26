@@ -15,11 +15,11 @@ def tokenize(text: str):
         return None
     text = text.split()
     punctuation = '''`~!§№@#$%^&|*()_-=+[{]};:'"\\,<.>/?1234567890'''
-    for i in range(len(text)):
-        text[i] = text[i].lower()
-        for j in text[i]:
+    for i in text:
+        i = i.lower()
+        for j in i:
             if j in punctuation:
-                text[i] = text[i].replace(j, '')
+                i = i.replace(j, '')
     text = list(filter(None, text))
     return text
 
@@ -122,7 +122,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return proportion
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int):
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -147,7 +147,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     return result
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -175,10 +175,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
             max_len = i
         elif len(general[i]) < len(general[min_len]):
             min_len = i
-    av = 0
+    average = 0
     for i in general:
-        av += len(i)
-    average_token_length = av/len(general)
+        average += len(i)
+    average_token_length = average/len(general)
     compared_profile = {'name': profile_to_compare['name'],
                         'common': common,
                         'score': score,
@@ -189,7 +189,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return compared_profile
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -203,23 +203,23 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     if isinstance(languages, list) is False or isinstance(top_n, int) is False:
         return None
     langvaga = {}
-    if languages is []:
+    if not languages:
         for i in profiles:
             j = compare_profiles_advanced(unknown_profile, i, top_n)
             langvaga[j['name']] = j['score']
         maximum = max(langvaga, key=langvaga.get)
-        for i in langvaga.keys():
-            if langvaga[i] == maximum:
-                result = langvaga[i]
+        for k in langvaga.items():
+            if langvaga[k] == maximum:
+                result = langvaga[k]
     else:
         for i in profiles:
             if i['name'] in languages:
                 j = compare_profiles_advanced(unknown_profile, i, top_n)
                 langvaga[j['name']] = j['score']
             maximum = max(langvaga, key=langvaga.get)
-            for i in langvaga.keys():
-                if langvaga[i] == maximum:
-                    result = i
+            for k in langvaga.items():
+                if langvaga[k] == maximum:
+                    result = k
     return result
 
 
