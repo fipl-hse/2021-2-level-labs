@@ -70,7 +70,9 @@ def create_language_profile(language: str, text: str, stop_words: list):
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int):
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_to_compare, dict) \
+            and isinstance(top_n, int):
         top_n_common_words = []
         top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
         top_n_words_known_profile = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -84,8 +86,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int):
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(
-            top_n, int):
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_1, dict) \
+            and isinstance(profile_2, dict) \
+            and isinstance(top_n, int):
         first_intersecting_words = compare_profiles(unknown_profile, profile_1, top_n)
         second_intersecting_words = compare_profiles(unknown_profile, profile_2, top_n)
         if first_intersecting_words > second_intersecting_words:
@@ -99,7 +103,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_to_compare, dict) \
+            and isinstance(top_n, int):
         common = []
         top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
         top_n_words_known_profile = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -126,8 +132,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
-    if isinstance(unknown_profile, dict) and isinstance(profiles, list) and isinstance(languages, list) and isinstance(
-            top_n, int):
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profiles, list) \
+            and isinstance(languages, list) \
+            and isinstance(top_n, int):
         def score_function():
             score = {}
             for language in profiles:
@@ -165,8 +173,9 @@ def load_profile(path_to_file: str):
 
 def save_profile(profile: dict):
     if isinstance(profile, dict):
-        if isinstance(profile['name'], str) and isinstance(profile['freq'], dict) and isinstance(profile['n_words'],
-                                                                                                 int):
+        if isinstance(profile['name'], str) \
+                and isinstance(profile['freq'], dict) \
+                and isinstance(profile['n_words'], int):
             with open("{}.json".format(profile['name']), "w", encoding="utf-8") as file:
                 json.dump(profile, file)
                 return 0
