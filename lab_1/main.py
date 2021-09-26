@@ -75,12 +75,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     freq_dict = sorted(freq_dict.items(), key=lambda x: -x[1])
     if len(freq_dict) == 0:
         return []
-    freq_n = list()
+    freq_n = []
     for word in freq_dict:
         freq_n.append(word[0])
     return list(freq_n[:top_n])
-
-    pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -111,6 +109,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
+
     if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict):
         if isinstance(top_n, int):
             freq_dict_2 = unknown_profile['freq']  # new
@@ -134,6 +133,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
+
     if isinstance(unknown_profile, dict) and isinstance(profile_1, dict):
         if isinstance(profile_2, dict) and isinstance(top_n, int):
             comparison = compare_profiles(unknown_profile, profile_1, top_n)  # proportion_2
@@ -143,6 +143,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
             if comparison_2 > comparison:
                 return profile_2['name']
             return max(profile_1['name'], profile_2['name'])
+    else:
         return None
 
 
@@ -155,6 +156,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
+
     if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict):
         return None
     if not isinstance(top_n, int):
@@ -207,7 +209,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     sorted_dict_scores = sorted(dict_scores.items(), key=lambda x: x[1])
     if len(sorted_dict_scores) == 0:
         return None
-    common_profiles = list()
+    common_profiles = []
     highest_score = sorted_dict_scores[len(sorted_dict_scores) - 1][1]
     for language in sorted_dict_scores:
         if language[1] >= highest_score:
@@ -223,11 +225,14 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
+
     if isinstance(path_to_file, str):
         if os.path.exists(path_to_file):
             with open(path_to_file, 'r', encoding='UTF-8') as file:
                 profile = json.load(file)
                 return profile
+    else:
+        return None
 
 
 def save_profile(profile: dict) -> int:
@@ -236,6 +241,7 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
+
     if not isinstance(profile, dict):
         return 1
     profile_dict = '{}.json'.format(profile['name'])
