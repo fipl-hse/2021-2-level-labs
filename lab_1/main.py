@@ -136,10 +136,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         top_words = sorted_freq
         return top_words
     if top_n < words:
-        s = list(sorted_freq.keys())[:(top_n)]
-        v = list(sorted_freq.values())
-        top_words = dict(zip(s, v))
+        top_words = list(sorted_freq.keys())[:(top_n)]
         return top_words
+
 
 freq_dict_en = calculate_frequencies(tokens_en)
 freq_dict_de = calculate_frequencies(tokens_de)
@@ -163,11 +162,39 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
+    for i in top_words_en:
+        for e in freq_dict_en:
+            if i == e:
+                v = list(reversed(sorted(freq_dict_en.values())))
+                en_top_n = dict(zip(top_words_en, v))
+    for i in top_words_de:
+        for d in freq_dict_de:
+            if i == d:
+                v = list(reversed(sorted(freq_dict_de.values())))
+                de_top_n = dict(zip(top_words_de, v))
+    for i in top_words_unknown:
+        for u in freq_dict_unknown:
+            if i == u:
+                v = list(reversed(sorted(freq_dict_unknown.values())))
+                unknown_top_n = dict(zip(top_words_unknown, v))
+
+    en = {"name": language_en,
+          "freq": en_top_n,
+          "n_words": len(en_top_n)}
+
+    de = {"name": language_de,
+          "freq": de_top_n,
+          "n_words": len(de_top_n)}
+
+    unknown = {"name": language_unknown,
+               "freq": unknown_top_n,
+               "n_words": len(unknown_top_n)}
+
     language_profile = {}
-    for i in text:
-        for l in stop_words:
-            if l in text:
-                language_profile = {"name": language}
+
+    for l in stop_words:
+        if l in text:
+            language_profile = {"name": language}
 
         s = list(language_profile.values())
         e = list(en.values())
@@ -192,29 +219,21 @@ en_text = str(tokenize(en_text))
 de_text = str(tokenize(de_text))
 unknown_text = str(tokenize(unknown_text))
 
-stop_words_en = remove_stop_words(tokens_en, stop_words_en)
-stop_words_de = remove_stop_words(tokens_de, stop_words_de)
-stop_words_unknown = remove_stop_words(tokens_unknown, stop_words_unknown)
+en_stop_words = remove_stop_words(tokens_en, stop_words_en)
+de_stop_words = remove_stop_words(tokens_de, stop_words_de)
+unknown_stop_words = remove_stop_words(tokens_unknown, stop_words_unknown)
 
 top_words_en = get_top_n_words(freq_dict_en, top_n_en)
 top_words_de = get_top_n_words(freq_dict_de, top_n_de)
 top_words_unknown = get_top_n_words(freq_dict_unknown, top_n_unknown)
 
-en = {"name": language_en,
-        "freq": top_words_en,
-        "n_words": len(top_words_en)}
-
-de = {"name": language_de,
-        "freq": top_words_de,
-        "n_words": len(top_words_de)}
-
-unknown = {"name": language_unknown,
-            "freq": top_words_unknown,
-            "n_words": len(top_words_unknown)}
-
 top_n_en = len(get_top_n_words(freq_dict_en, top_n_en))
 top_n_de = len(get_top_n_words(freq_dict_de, top_n_de))
 top_n_unknown = len(get_top_n_words(freq_dict_unknown, top_n_unknown))
+
+freq_dict_en = calculate_frequencies(tokens_en)
+freq_dict_de = calculate_frequencies(tokens_de)
+freq_dict_unknown = calculate_frequencies(tokens_unknown)
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -227,14 +246,11 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     """
 
     unk = unknown_profile['freq']
-    unk_w = unk.keys()
-
     lan = profile_to_compare['freq']
-    lan_w = lan.keys()
 
     comp = []
-    for i in unk_w:
-        for l in lan_w:
+    for i in unk:
+        for l in lan:
             if i == l:
                 comp.append(i)
 
@@ -245,9 +261,9 @@ top_n_en = len(get_top_n_words(freq_dict_en, top_n_en))
 top_n_de = len(get_top_n_words(freq_dict_de, top_n_de))
 top_n_unknown = len(get_top_n_words(freq_dict_unknown, top_n_unknown))
 
-en_profile = create_language_profile(language_en, en_text, stop_words_en)
-de_profile = create_language_profile(language_de, de_text, stop_words_de)
-unknown_profile = create_language_profile(language_unknown, unknown_text, stop_words_unknown)
+en_profile = create_language_profile(language_en, en_text, en_stop_words)
+de_profile = create_language_profile(language_de, de_text, de_stop_words)
+unknown_profile = create_language_profile(language_unknown, unknown_text, unknown_stop_words)
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -283,9 +299,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 score_en = compare_profiles(unknown_profile, en_profile, top_n_en)
 score_de = compare_profiles(unknown_profile, de_profile, top_n_de)
 
-en_profile = create_language_profile(language_en, en_text, stop_words_en)
-de_profile = create_language_profile(language_de, de_text, stop_words_de)
-unknown_profile = create_language_profile(language_unknown, unknown_text, stop_words_unknown)
+en_profile = create_language_profile(language_en, en_text, en_stop_words)
+de_profile = create_language_profile(language_de, de_text, de_stop_words)
+unknown_profile = create_language_profile(language_unknown, unknown_text, unknown_stop_words)
 
 top_n_unknown = len(get_top_n_words(freq_dict_unknown, top_n_unknown))
 
