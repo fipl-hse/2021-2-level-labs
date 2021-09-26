@@ -215,11 +215,13 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         profile = profiles[count]
         score_best_name = profile["name"]
         score_current = 0
+        check = True
         for language in languages:
             if isinstance(language, dict):
                 language = language["name"]
             if language == profile["name"]:
                 score_current = compare_profiles_advanced(unknown_profile, profile, top_n)["score"]
+                check = False
             if score_current > score_best:
                 score_best_name = language
                 score_best = score_current
@@ -231,6 +233,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
                 profile = profiles[count]
             except IndexError:
                 pass
+        if check:
+            return None
         return score_best_name
     except (UnboundLocalError, TypeError):
         return None
