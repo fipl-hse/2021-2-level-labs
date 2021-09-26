@@ -2,6 +2,7 @@
 Lab 1
 Language detection
 """
+import json
 
 
 def tokenize(text: str) -> list or None:
@@ -209,11 +210,11 @@ def detect_language_advanced(unknown_profile: dict,
             or not isinstance(languages, list)
             or not isinstance(top_n, int)):
         return None
-    reports = [] # shares_common_words
+    reports = []
     for profile in profiles:
         if profile["name"] in languages or not languages:
-            report = compare_profiles_advanced(unknown_profile, profile, top_n) # share_common_words
-            reports.append(report) # share_common_words.append(share_common_words)
+            report = compare_profiles_advanced(unknown_profile, profile, top_n)
+            reports.append(report)
     reports = sorted(reports, key=lambda x: x["score"], reverse=True)
     if len(reports) == 0:
         return None
@@ -234,7 +235,14 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    return path_to_file
+    if not isinstance(path_to_file, str):
+        return None
+    try:
+        with open(path_to_file, 'r', encoding='utf-8') as json_file:
+            imported_profile = json.load(json_file)
+    except FileNotFoundError:
+        return None
+    return imported_profile
 
 
 def save_profile(profile: dict) -> int:
