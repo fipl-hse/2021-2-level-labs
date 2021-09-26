@@ -35,8 +35,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
             if word not in stop_words:
                 new_token.append(word)
         return new_token
-    elif not isinstance(tokens, list) or not isinstance(stop_words, list):
-        return None
+    # elif not isinstance(tokens, list) or not isinstance(stop_words, list):
+        # return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -194,7 +194,39 @@ def detect_language_advanced(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if (isinstance(unknown_profile, dict)
+            and isinstance(profiles, list)
+            and isinstance(languages, list)
+            and isinstance(top_n, int)):
+        shares_common_words = []
+        for profile in profiles:
+            if profile["name"] in languages or not languages:
+                share_common_words = compare_profiles_advanced(unknown_profile, profile, top_n)
+                shares_common_words.append(share_common_words)
+        shares_common_words = sorted(shares_common_words, key=lambda x: x["score"], reverse=True)
+        shares_common_words_with_max_score = []
+        if len(shares_common_words) == 0:
+            return None
+        if len(shares_common_words) > 1:
+            if shares_common_words[0]["score"] == shares_common_words[1]["score"]:
+                for element in shares_common_words:
+                    if element == shares_common_words[0]["score"]: # best score
+                        shares_common_words_with_max_score.append(element)
+                shares_common_words_with_max_score = sorted(shares_common_words_with_max_score,
+                                                            key=lambda x: x["name"])
+                language = shares_common_words_with_max_score[0]["name"]
+                return language
+            language = shares_common_words[0]["name"]
+            return language
+        if len(shares_common_words) == 1:
+            language = shares_common_words[0]["name"]
+            return language
+        # if shares_common_words[0]["score"] == shares_common_words[1]["score"]:
+            # shares_common_words = sorted(shares_common_words, key=lambda x: x["name"])
+        # return shares_common_words
+
+
+
 
 
 def load_profile(path_to_file: str) -> dict or None:
