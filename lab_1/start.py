@@ -3,7 +3,6 @@ Language detection starter
 """
 
 import os
-import random
 from main import create_language_profile, detect_language, detect_language_advanced
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))

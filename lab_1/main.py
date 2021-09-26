@@ -214,6 +214,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         score_best = 0
         profile = profiles[count]
         score_best_name = profile["name"]
+        score_current = 0
         for language in languages:
             if isinstance(language, dict):
                 language = language["name"]
