@@ -49,7 +49,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
         for token in tokens:
             if not isinstance(token, str):
                 return None
-            elif not token in frequencies.keys():
+            elif token not in frequencies.keys():
                 frequencies[token] = 1
             else:
                 frequency = frequencies.get(token)
@@ -104,7 +104,7 @@ def compare_profiles(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int): #too long
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):  # TooLong
         unknown_top_words = get_top_n_words(unknown_profile.get('freq'), top_n)
         compare_top_words = get_top_n_words(profile_to_compare.get('freq'), top_n)
         shared_top_words = [word for word in unknown_top_words if word in compare_top_words]
