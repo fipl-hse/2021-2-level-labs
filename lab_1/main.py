@@ -69,9 +69,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if not isinstance(freq_dict, dict):
-        return None
-    if not isinstance(top_n, int):
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
     if not freq_dict or top_n <= 0:
         return []
@@ -154,9 +152,7 @@ def detect_language(unknown_profile: dict, profile_1: dict,
     """
     if not isinstance(profile_1, dict) or not isinstance(profile_2, dict):
         return None
-    if not isinstance(unknown_profile, dict):
-        return None
-    if not isinstance(top_n, int):
+    if not isinstance(unknown_profile, dict) or not isinstance(top_n, int):
         return None
 
     distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
@@ -221,11 +217,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict):
-        return None
-    if not isinstance(profiles, list) or not isinstance(languages, list):
-        return None
-    if not isinstance(top_n, int):
+    if not isinstance(unknown_profile, dict) or not isinstance(top_n, int) or \
+            not isinstance(profiles, list) or not isinstance(languages, list):
         return None
 
     all_languages = [i['name'] for i in profiles]
