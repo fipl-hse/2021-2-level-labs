@@ -100,8 +100,19 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
-
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+        cross = []
+        for i in get_top_n_words(unknown_profile.get('freq'), top_n):
+            for a in get_top_n_words(profile_to_compare.get('freq'), top_n):
+                if i == a:
+                    cross.append(i)
+                else:
+                    continue
+        cross = float(len(cross) / len(get_top_n_words(unknown_profile.get('freq'), top_n)))
+        cross = round(cross, 2)
+        return cross
+    else:
+        return None
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
@@ -112,7 +123,22 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict)\
+            and isinstance(profile_2, dict) and isinstance(top_n, int):
+        if compare_profiles(unknown_profile, profile_1, top_n) >\
+                compare_profiles(unknown_profile, profile_2, top_n):
+            return profile_1['name']
+        elif compare_profiles(unknown_profile, profile_1, top_n) <\
+                compare_profiles(unknown_profile, profile_2, top_n):
+            return profile_2['name']
+        else:
+            fin_lang = [profile_1['name'], profile_2['name']]
+            fin_lang = sorted(fin_lang)
+            return fin_lang[0]
+    else:
+        return None
+
+
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
