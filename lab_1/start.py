@@ -27,24 +27,27 @@ if __name__ == '__main__':
     EXPECTED = 'en'
     RESULT = ''
     TOP_N = 7
-    profile_en = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'en.json'))
-    profile_de = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'de.json'))
-    profile_la = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'la.json'))
-    profiles = [profile_en, profile_de, profile_la]
     unknown_profile = main.create_language_profile('unknown_text', unknown_text, [])
-    RESULT_10 = main.detect_language_advanced(unknown_profile, profiles, [], TOP_N)
 
+    # compare language detective results
+    profile_en_10 = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'en.json'))
+    profile_de_10 = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'de.json'))
+    profile_la_10 = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'la.json'))
+    profiles_10 = [profile_en_10, profile_de_10, profile_la_10]
+    RESULT_10 = main.detect_language_advanced(unknown_profile, profiles_10, [], TOP_N)
     main.save_profile(unknown_profile)
 
-    profile_en = main.create_language_profile("en", en_text, [])
-    profile_de = main.create_language_profile("de", de_text, [])
-    profile_la = main.create_language_profile("la", la_text, [])
-    RESULT_8 = main.detect_language_advanced(unknown_profile, profiles, [], TOP_N)
+    profile_en_8 = main.create_language_profile("en", en_text, [])
+    profile_de_8 = main.create_language_profile("de", de_text, [])
+    profile_la_8 = main.create_language_profile("la", la_text, [])
+    profiles_8 = [profile_en_8, profile_de_8, profile_la_8]
+    RESULT_8 = main.detect_language_advanced(unknown_profile, profiles_8, [], TOP_N)
+
+    # check
     if RESULT_10 == RESULT_8:
-        print("Great")
-        print(RESULT_10, RESULT_8)
+        print("Great", RESULT_10, "==", RESULT_8)
     else:
-        print("Wrong")
+        print("Something is wrong")
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
     # assert EXPECTED == RESULT, 'Detection not working'
