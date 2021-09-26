@@ -68,6 +68,7 @@ def get_top_n_words(freq_dict: dict, top_n: int):
             count = 1
             top_list = []
             first, snd = zip(*new_dict)
+            del snd
             for i in first:
                 if count <= top_n:
                     top_list.append(i)
