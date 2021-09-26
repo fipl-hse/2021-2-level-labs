@@ -114,8 +114,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         return None
     if not isinstance(top_n, int):
         return None
-    if type(unknown_profile) != dict or type(profile_to_compare) != dict or type(top_n) != int:
-        return None
     unknown_profile_top_n = get_top_n_words(unknown_profile['freq'], top_n)
     profile_to_compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
     common_top_n = 0
@@ -136,7 +134,13 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if type(unknown_profile) != dict or type(profile_1) != dict or type(profile_2) != dict or type(top_n) != int:
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(profile_1, dict):
+        return None
+    if not isinstance(profile_2, dict):
+        return None
+    if not isinstance(top_n, int):
         return None
     profile_1_tokens = compare_profiles(unknown_profile, profile_1, top_n)
     profile_2_tokens = compare_profiles(unknown_profile, profile_2, top_n)
@@ -161,7 +165,11 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    if type(unknown_profile) != dict or type(profile_to_compare) != dict or type(top_n) != int:
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(profile_to_compare, dict):
+        return None
+    if not isinstance(top_n, int):
         return None
     unknown_top_n = get_top_n_words(unknown_profile['freq'], top_n)
     compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
