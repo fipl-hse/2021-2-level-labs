@@ -157,11 +157,12 @@ def detect_language(unknown_profile: dict,
     list = [profile_1['name'], profile_2 ['name']]
     list_1 = list.sort()
     if proportion_of_frequency_1 > proportion_of_frequency_2:
-        return profile_1 ['name']
-    if proportion_of_frequency_2 > proportion_of_frequency_1:
-        return profile_2 ['name']
+        language = profile_1 ['name']
+    elif proportion_of_frequency_2 > proportion_of_frequency_1:
+        language = profile_2 ['name']
     else:
-        return list_1[0]
+        language = list_1[0]
+    return language
 
 
 def compare_profiles_advanced(unknown_profile: dict,
