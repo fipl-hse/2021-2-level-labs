@@ -164,15 +164,47 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile within the list of possible languages
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    pass
+
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(profiles, list) or not isinstance(languages, list):
+        return None
+    if not isinstance(top_n, int):
+        return None
+    all_languages = [i['name'] for i in profiles]
+    for i in languages:
+        if i not in all_languages:
+            return None
+
+    scores = []
+    possible_profiles = []
+    possible_languages = []
+
+    if not languages:
+        for i in profiles:
+            report = compare_profiles_advanced(unknown_profile, i, top_n)
+            scores.append(report['score'])
+        for i in profiles:
+            report = compare_profiles_advanced(unknown_profile, i, top_n)
+            if report['score'] == max(scores):
+                possible_languages.append(report['name'])
+    else:
+        for i in profiles:
+            if i['name'] in languages:
+                possible_profiles.append(i)
+        for i in possible_profiles:
+            report = compare_profiles_advanced(unknown_profile, i, top_n)
+            scores.append(report['score'])
+        for i in possible_profiles:
+            report = compare_profiles_advanced(unknown_profile, i, top_n)
+            if report['score'] == max(scores):
+                possible_languages.append(report['name'])
+
+    if len(possible_languages) > 1:
+        language = sorted(possible_languages)[0]
+    else:
+        language = possible_languages[0]
+    return language
 
 
 def load_profile(path_to_file: str) -> dict or None:
