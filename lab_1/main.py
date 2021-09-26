@@ -54,6 +54,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
             else:
                 freq_dict.update({keys: tokens.count(keys)})
         return freq_dict
+    return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -68,6 +69,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         freq_dict = list(freq_dict)
         freq_dict = freq_dict[:top_n]
         return freq_dict
+    return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -85,6 +87,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
                         'n_words': len(calculate_frequencies(remove_stop_words(tokenize(text),
                                                                                stop_words)))}
         return profile_lang
+    return None
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -104,6 +107,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         cross = float(len(cross) / top_n)
         cross = round(cross, 2)
         return cross
+    return None
 
 
 def detect_language(unknown_profile: dict, profile_1: dict,
@@ -128,6 +132,7 @@ def detect_language(unknown_profile: dict, profile_1: dict,
             fin_lang = [profile_1['name'], profile_2['name']]
             fin_lang = sorted(fin_lang)
             return fin_lang[0]
+    return None
 
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -170,6 +175,7 @@ def compare_profiles_advanced(unknown_profile: dict,
         score = round(score, 2)
         lang_adv['score'] = score
         return lang_adv
+    return None
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list,
