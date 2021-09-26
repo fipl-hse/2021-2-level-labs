@@ -7,11 +7,11 @@ Language detection
 
 def tokenize(text: str) -> list or None:
     """
-        Splits a text into tokens, converts the tokens into lowercase,
-        removes punctuation and other symbols from words
-        :param text: a text
-        :return: a list of lower-cased tokens without punctuation
-        """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
     if not isinstance(text, str):
         return None
     text = text.lower()
@@ -26,11 +26,11 @@ def tokenize(text: str) -> list or None:
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
-        Removes stop words
-        :param tokens: a list of tokens
-        :param stop_words: a list of stop words
-        :return: a list of tokens without stop words
-        """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
     if not isinstance(tokens, list):
         return None
     if not isinstance(stop_words, list):
@@ -41,10 +41,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
-        Calculates frequencies of given tokens
-        :param tokens: a list of tokens
-        :return: a dictionary with frequencies
-        """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
     if not isinstance(tokens, list):
         return None
     for word in tokens:
@@ -62,11 +62,11 @@ def calculate_frequencies(tokens: list) -> dict or None:
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
-        Returns the most common words
-        :param freq_dict: a dictionary with frequencies
-        :param top_n: a number of the most common words
-        :return: a list of the most common words
-        """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
     if not isinstance(freq_dict, dict):
         return None
     if not isinstance(top_n, int):
@@ -84,12 +84,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
-        Creates a language profile
-        :param language: a language
-        :param text: a text
-        :param stop_words: a list of stop words
-        :return: a dictionary with three keys – name, freq, n_words
-        """
+    Creates a language profile
+    :param language: a language
+    :param text: a text
+    :param stop_words: a list of stop words
+    :return: a dictionary with three keys – name, freq, n_words
+    """
     if not isinstance(language, str):
         return None
     if not isinstance(text, str):
@@ -104,7 +104,6 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     profile['freq'] = freq
     n_words = len(freq)
     profile['n_words'] = n_words
-
     return profile
     pass
 

@@ -1,3 +1,4 @@
+#coding=utf-8
 # pylint: skip-file
 """
 Checks the first lab get top words function
