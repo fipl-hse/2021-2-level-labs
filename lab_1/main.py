@@ -12,11 +12,15 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
 
+    if not isinstance(text, str):
+        return None
+
     text = re.split(r"[^\w\s]", text)
     text = "".join(text)
     text = text.lower()
     tokens = re.findall(r"\w+", text)
     return tokens
+
 
 unknown_text = open('unknown.txt', encoding='utf-8').read()
 en_text = open('en.txt', encoding='utf-8').read()
@@ -30,6 +34,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
+        return None
 
     filt_tokens = []
     for token in tokens:
@@ -53,6 +60,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
 
+    if not isinstance(tokens, list):
+        return None
+
     freq_dict = {}
     for word in tokens:
         if word not in freq_dict:
@@ -74,6 +84,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
 
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
+        return None
+
     words = len(freq_dict)
     freq_val = reversed(sorted(freq_dict.values()))
     sorted_freq = {}
@@ -89,6 +102,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if top_n < words:
         top_words = list(sorted_freq.keys())[:(top_n)]
         return top_words
+
 
 
 freq_dict_en = calculate_frequencies(tokens_en)
@@ -113,21 +127,24 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
+    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
+        return None
+
     for i in top_words_en:
-        for e in freq_dict_en:
-            if i == e:
-                v = list(reversed(sorted(freq_dict_en.values())))
-                en_top_n = dict(zip(top_words_en, v))
+        for en_word in freq_dict_en:
+            if i == en_word:
+                val_list = list(reversed(sorted(freq_dict_en.values())))
+                en_top_n = dict(zip(top_words_en, val_list))
     for i in top_words_de:
-        for d in freq_dict_de:
-            if i == d:
-                v = list(reversed(sorted(freq_dict_de.values())))
-                de_top_n = dict(zip(top_words_de, v))
+        for de_word in freq_dict_de:
+            if i == de_word:
+                val_list = list(reversed(sorted(freq_dict_de.values())))
+                de_top_n = dict(zip(top_words_de, val_list))
     for i in top_words_unknown:
-        for u in freq_dict_unknown:
-            if i == u:
-                v = list(reversed(sorted(freq_dict_unknown.values())))
-                unknown_top_n = dict(zip(top_words_unknown, v))
+        for unknown_word in freq_dict_unknown:
+            if i == unknown_word:
+                val_list = list(reversed(sorted(freq_dict_unknown.values())))
+                unknown_top_n = dict(zip(top_words_unknown, val_list))
 
     en = {"name": language_en,
           "freq": en_top_n,
@@ -143,19 +160,19 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
     language_profile = {}
 
-    for l in stop_words:
-        if l in text:
+    for word in stop_words:
+        if word in text:
             language_profile = {"name": language}
 
-        s = list(language_profile.values())
-        e = list(en.values())
-        d = list(de.values())
+        language_val = list(language_profile.values())
+        en_val = list(en.values())
+        de_val = list(de.values())
 
-        for l in s:
-            if l in e:
+        for value in language_val:
+            if value in en_val:
                 en_profile = en
                 return en_profile
-            if l in d:
+            if value in de_val:
                 de_profile = de
                 return de_profile
             else:
@@ -196,13 +213,16 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
 
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
+        return None
+
     unk = unknown_profile['freq']
     lan = profile_to_compare['freq']
 
     comp = []
     for i in unk:
-        for l in lan:
-            if i == l:
+        for word in lan:
+            if i == word:
                 comp.append(i)
 
     score = round(len(comp)/top_n, 1)
@@ -227,25 +247,26 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
 
-    for i in unknown_profile:
-        for l in profile_1:
-            for m in profile_2:
-                if score_en > score_de:
-                    unknown_profile['name'] = profile_1['name']
-                    language_unknown = language_en
-                    return language_unknown
-                if score_en < score_de:
-                    unknown_profile['name'] = profile_2['name']
-                    language_unknown = language_de
-                    return language_unknown
-                else:
-                    lang = [language_en, language_de]
-                    prof = {profile_1: language_en, profile_2: language_de}
-                    lang.sort()
-                    for v in prof:
-                        if v == lang[0]:
-                            language_unknown = v
-                            return language_unknown
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) \
+            or not isinstance(profile_2, dict) or not isinstance(top_n, int):
+        return None
+
+    if score_en > score_de:
+        unknown_profile['name'] = profile_1['name']
+        language_unknown = language_en
+        return language_unknown
+    if score_en < score_de:
+        unknown_profile['name'] = profile_2['name']
+        language_unknown = language_de
+        return language_unknown
+    else:
+        lang = [language_en, language_de]
+        prof = {profile_1: language_en, profile_2: language_de}
+        lang.sort()
+        for i in prof:
+            if i == lang[0]:
+                language_unknown = i
+                return language_unknown
 
 score_en = compare_profiles(unknown_profile, en_profile, top_n_en)
 score_de = compare_profiles(unknown_profile, de_profile, top_n_de)
