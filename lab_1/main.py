@@ -237,10 +237,10 @@ def load_profile(path_to_file: str) -> dict or None:
         return None
     try:
         with open(path_to_file, 'r', encoding='utf-8') as json_file:
-            profile = json.load(json_file)
+            lang_profile = json.load(json_file)
     except FileNotFoundError:
         return None
-    return profile
+    return lang_profile
 
 
 def save_profile(profile: dict) -> int:
@@ -250,9 +250,11 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
 
-    if (not isinstance(profile, dict)) or (('name' or 'freq' or 'n_words') not in profile.keys()):
+    if not isinstance(profile, dict):
+        return 1
+    if ('name' or 'freq' or 'n_words') not in profile.keys():
         return 1
     lang_file = profile.get('name') + '.json'
     with open(lang_file, 'w', encoding='utf-8') as lang_profile:
-        json.dump(lang_file, lang_profile)
+        json.dump(profile, lang_profile)
     return 0
