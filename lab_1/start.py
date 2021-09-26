@@ -23,22 +23,22 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    '#create  language profiles'
     unk = main.create_language_profile('unk', unknown_text, [])
     de = main.create_language_profile("de", de_text, [])
     en = main.create_language_profile("en", en_text, [])
     la = main.create_language_profile("la", la_text, [])
     main.save_profile(unk)
 
-    '#load profiles'
     de_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\de.json'))
     en_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\en.json'))
     la_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\la.json'))
     unk_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\unk.json'))
-    '#detect language'
-    RESULT = main.detect_language_advanced(unk_profile, [en_profile, de_profile, la_profile], ['en', 'de', 'la'], 5)
+
+    languages = ['en', 'de', 'la']
+    profiles = [en_profile, de_profile, la_profile]
+    RESULT = main.detect_language_advanced(unk_profile,profiles ,languages , 5)
     print(RESULT)
-    RESULT1 = main.detect_language_advanced(unk, [en, de, la], ['en', 'de', 'la'], 5)
+    RESULT1 = main.detect_language_advanced(unk, [en, de, la], languages, 5)
     '''Compare the results of language detection based on your and external(loaded) language profiles'''
     if RESULT1 == RESULT:
         EXPECTED = 'en'
