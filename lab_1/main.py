@@ -40,7 +40,7 @@ def remove_stop_words(tokens: list, stop_words: list):
     for token in tokens:   # проходим по токенам в tokens
         if token in stop_words:
             tokens.remove(token)   # если токен - стоп-слово, то удаляем его
-            return tokens
+    return tokens
 
 
 def calculate_frequencies(tokens: list):
