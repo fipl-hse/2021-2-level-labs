@@ -25,13 +25,18 @@ if __name__ == '__main__':
 
     EXPECTED = 'en'
     RESULT = ''
-    unknown_profile = main.create_language_profile("unknown_text", unknown_text, [])
-    profile_1 = main.create_language_profile("la", la_text, [])
-    profile_2 = main.create_language_profile("de", de_text, [])
-    profile_3 = main.create_language_profile("en", en_text, [])
+    profile_en = main.load_profile(os.path.join("profiles", "en.json"))
+    profile_de = main.load_profile(os.path.join("profiles", "de.json"))
+    profile_la = main.load_profile(os.path.join("profiles", "la.json"))
+    profiles = [profile_en, profile_de, profile_la]
     TOP_N = 7
-    profiles = [profile_1, profile_2, profile_3]
+    unknown_profile = main.create_language_profile("unknown_text", unknown_text, [])
     RESULT = main.detect_language_advanced(unknown_profile, profiles, [], TOP_N)
+    main.save_profile(unknown_profile)
+
+    # profile_en = main.create_language_profile("en", en_text, [])
+    # profile_de = main.create_language_profile("de", de_text, [])
+    # profile_la = main.create_language_profile("la", la_text, [])
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'

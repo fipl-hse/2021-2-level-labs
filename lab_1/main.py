@@ -20,8 +20,8 @@ def tokenize(text: str) -> list or None:
     text = text.lower()
     for symbols in invaluable_trash:
         text = text.replace(symbols, '')
-    text = text.split()
-    return text
+    tokens = text.split()
+    return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -33,13 +33,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
-    new_token = []
+    new_tokens = []
     for word in tokens:
         if word not in stop_words:
-            new_token.append(word)
-    return new_token
-    # elif not isinstance(tokens, list) or not isinstance(stop_words, list):
-    # return None
+            new_tokens.append(word)
+    return new_tokens
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -74,8 +72,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     freq_list = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
     top_n_words = []
+    # take the zero element of the tuples (it is sorted tokens) and add to the new list
     for tuple_element in freq_list:
         top_n_words.append(tuple_element[0])
+    # take the top_n token from the list of sorted tokens
     top_n_words = top_n_words[:top_n]
     return top_n_words
 # return list e.g. ['karina', 'assessment']
@@ -238,11 +238,11 @@ def load_profile(path_to_file: str) -> dict or None:
     if not isinstance(path_to_file, str):
         return None
     try:
-        with open(path_to_file, 'r', encoding='utf-8') as json_file:
-            imported_profile = json.load(json_file)
+        with open(path_to_file, "r", encoding="utf-8") as json_file:
+            profile = json.load(json_file)
     except FileNotFoundError:
         return None
-    return imported_profile
+    return profile
 
 
 def save_profile(profile: dict) -> int:
@@ -251,4 +251,13 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    return profile
+    if not isinstance(profile, dict):
+        return 1
+    if (not isinstance(profile["name"], str)
+            or not isinstance(profile["freq"], dict)
+            or not isinstance(profile["n_words"], int)):
+        return 1
+    path_to_file = "{}.json".format(profile["name"])
+    with open(path_to_file, "w", encoding="utf-8") as file:
+        json.dump(profile, file)
+    return 0
