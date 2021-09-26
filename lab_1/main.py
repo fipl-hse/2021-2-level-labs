@@ -12,16 +12,15 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if type(text) != str:
+    if not isinstance(text,str):
         return None
     text = text.lower()
     marks = '''!()-[]{};?@#$%:'"/,.\\^&*_<>'''
-    for x in text:
-        if x in marks:
-            text = text.replace(x,'')
+    for token in text:
+        if token in marks:
+            text = text.replace(token,'')
     tokens = text.split()
     return tokens
-
     pass
 
 
@@ -33,9 +32,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     tokens_1 = []
-    if type(stop_words) != list:
+    if not isinstance(stop_words, list):
         return None
-    if type(tokens) != list:
+    if not isinstance(tokens,list):
         return None
     for token in tokens:
         if token not in stop_words:
@@ -53,10 +52,10 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     freqs_dict = {}
-    if type(tokens) != list:
+    if not isinstance(tokens,list):
         return None
     for token in tokens:
-        if type(token) != str:
+        if not isinstance(token,str):
             return None
         if token not in freqs_dict:
             freqs_dict[token] = 1
@@ -74,7 +73,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if type(freq_dict) != dict:
+    if not isinstance(freq_dict,dict):
         return None
     freq_dict = sorted(freq_dict.items(), key=lambda x:-x[1])
     if len(freq_dict) == 0:
@@ -97,9 +96,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     """
     if len(text) == 0:
         return None
-    if type(stop_words) != list:
+    if not isinstance(stop_words,list):
         return None
-    if type(language) != str:
+    if not isinstance (language,str):
         return None
     profile = {}
     profile ['name'] = language
