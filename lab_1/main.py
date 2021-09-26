@@ -85,8 +85,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     """
     if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
         profile_lang = {"name": language,
-                        "freq": calculate_frequencies(remove_stop_words(tokenize(text), stop_words)),
-                        "n_words": len(calculate_frequencies(remove_stop_words(tokenize(text), stop_words)))}
+                        "freq": calculate_frequencies(remove_stop_words(tokenize(text),
+                                                                        stop_words)),
+                        "n_words": len(calculate_frequencies(remove_stop_words(tokenize(text),
+                                                                               stop_words)))}
         return profile_lang
     else:
         return None
@@ -100,7 +102,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict)\
+            and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
         cross = []
         for i in get_top_n_words(unknown_profile.get('freq'), top_n):
             for a in get_top_n_words(profile_to_compare.get('freq'), top_n):
