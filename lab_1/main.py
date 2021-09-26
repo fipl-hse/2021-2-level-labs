@@ -2,6 +2,8 @@
 Language detection
 """
 
+import json
+
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -134,7 +136,9 @@ def detect_language(unknown_profile: dict,
         return result_language
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict,
+                              profile_to_compare: dict,
+                              top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -171,7 +175,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return report
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict,
+                             profiles: list,
+                             languages: list,
+                             top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -183,24 +190,39 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or not isinstance(languages, list) or not isinstance(top_n, int):
         return None
     proportions = []
+    languages_with_same_proportions = []
     if len(languages) > 0:
         check = False
         for language_name in languages:
             for language_profile in profiles:
                 if language_name in language_profile.get('name'):
                     check = True
-        if check == False:
+        if not check:
             return None
         for language_profile in profiles:
             if language_profile.get('name') in languages:
                 proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
                 proportions.append([language_profile.get('name'), proportion.get('score')])
+        for res in proportions[:-1]:
+            if proportions[0][1] == proportions[proportions.index(res) + 1][1]:
+                languages_with_same_proportions.append(proportions[proportions.index(res)][0])
+        languages_with_same_proportions.sort()
+        if len(languages_with_same_proportions) > 0:
+            result = languages_with_same_proportions[0]
+            return result
         proportions.sort(key=lambda x: x[1], reverse=True)
         result = proportions[0][0]
         return result
     for language_profile in profiles:
         proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
         proportions.append([language_profile.get('name'), proportion.get('score')])
+    for res in proportions[:-1]:
+        if proportions[0][1] == proportions[proportions.index(res) + 1][1]:
+            languages_with_same_proportions.append(proportions[proportions.index(res)][0])
+    languages_with_same_proportions.sort()
+    if len(languages_with_same_proportions) > 0:
+        result = languages_with_same_proportions[0]
+        return result
     proportions.sort(key=lambda x: x[1], reverse=True)
     result = proportions[0][0]
     return result
@@ -212,7 +234,14 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if not isinstance(path_to_file, str):
+        return None
+    try:
+        with open(path_to_file, 'r', encoding='utf-8') as file_to_read:
+            language_profile = json.load(file_to_read)
+    except FileNotFoundError:
+        return None
+    return language_profile
 
 
 def save_profile(profile: dict) -> int:
