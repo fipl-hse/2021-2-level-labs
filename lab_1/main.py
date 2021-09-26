@@ -227,37 +227,30 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         return None
     if not isinstance(top_n, int):
         return None
+
     all_languages = [i['name'] for i in profiles]
     for i in languages:
         if i not in all_languages:
             return None
 
-    scores = []
-    possible_profiles = []
-    possible_languages = []
-
-    if not languages:
-        for i in profiles:
-            report = compare_profiles_advanced(unknown_profile, i, top_n)
-            scores.append(report['score'])
-        for i in profiles:
-            report = compare_profiles_advanced(unknown_profile, i, top_n)
-            if report['score'] == max(scores):
-                possible_languages.append(report['name'])
-    else:
-        for i in profiles:
+    reports = []
+    for i in profiles:
+        if languages:
             if i['name'] in languages:
-                possible_profiles.append(i)
-        for i in possible_profiles:
-            report = compare_profiles_advanced(unknown_profile, i, top_n)
-            scores.append(report['score'])
-        for i in possible_profiles:
-            report = compare_profiles_advanced(unknown_profile, i, top_n)
-            if report['score'] == max(scores):
-                possible_languages.append(report['name'])
+                reports.append(compare_profiles_advanced(unknown_profile, i, top_n))
+        else:
+            reports.append(compare_profiles_advanced(unknown_profile, i, top_n))
+
+    scores = []
+    possible_languages = []
+    for i in reports:
+        scores.append(i['score'])
+    for i in reports:
+        if i['score'] == max(scores):
+            possible_languages.append(i['name'])
 
     if len(possible_languages) > 1:
-        language = sorted(possible_languages)[0]
+        language = sorted(possible_languages)
     else:
         language = possible_languages[0]
     return language
