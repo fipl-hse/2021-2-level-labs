@@ -51,12 +51,13 @@ def calculate_frequencies(tokens: list) -> dict or None:
     if type(tokens) != list:
         return None
     for token in tokens:
-        if type(token) != str:
-            return None
-        elif token not in freq_dict:
-            freq_dict[token] += 1
+        if type(token) == str:
+            if token in freq_dict:
+                freq_dict[token] += 1
+            else:
+                freq_dict[token] = 1
         else:
-            freq_dict[token] = 1
+            return None
     return freq_dict
 
 
