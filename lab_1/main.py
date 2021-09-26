@@ -78,16 +78,14 @@ def get_top_n_words(freq_dict: dict, top_n: int):
     if not isinstance(top_n, int):
         return None
     freq_dict = list(freq_dict.items())  # создаем список, с помощью items возвращаем k и v
-    freq_dict_sorted = sorted(freq_dict, key=lambda x: (-x[1], x[0]))
+    freq_dict_sorted = sorted(freq_dict, key=lambda x: -x[1])
     # key позволяет уточнить критерий,
     # по которому происходит сортировка, x - это элемент списка
-    # x[0] - нулевой элемент списка, это токен i
     # x[1] - частота токена i
     # поскольку по умолчанию сортировка идет по возрастанию, необходимо поставить "-"
-    # если же частоты равны, то используется x[0], который сортирует по алфавитному порядку
     freq_list = []  # создаем новый список
-    for x in freq_dict_sorted:
-        freq_list.append(x[0])  # добавляем в новый список все элементы сортированного списка
+    for i in freq_dict_sorted:
+        freq_list.append(i[0])  # добавляем в новый список все элементы сортированного списка
         top_n_words = freq_dict_sorted[:top_n]  # с помощью среза выбираем топ-n по популярности слов
         return top_n_words
 
