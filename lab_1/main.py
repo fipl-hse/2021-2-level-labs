@@ -180,7 +180,30 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or not isinstance(languages, list) or not isinstance(top_n, int):
+        return None
+    proportions = []
+    if len(languages) > 0:
+        check = False
+        for language_name in languages:
+            for language_profile in profiles:
+                if language_name in language_profile.get('name'):
+                    check = True
+        if check == False:
+            return None
+        for language_profile in profiles:
+            if language_profile.get('name') in languages:
+                proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
+                proportions.append([language_profile.get('name'), proportion.get('score')])
+        proportions.sort(key=lambda x: x[1], reverse=True)
+        result = proportions[0][0]
+        return result
+    for language_profile in profiles:
+        proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
+        proportions.append([language_profile.get('name'), proportion.get('score')])
+    proportions.sort(key=lambda x: x[1], reverse=True)
+    result = proportions[0][0]
+    return result
 
 
 def load_profile(path_to_file: str) -> dict or None:
