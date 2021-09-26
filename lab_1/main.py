@@ -63,20 +63,17 @@ def calculate_frequencies(tokens: list) -> dict or None:
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if type(freq_dict) != dict:
         return None
-    sorted_freq_list = sorted(freq_dict.values()) #СПИСОК отсортированных от меньшего к большему значений словаря
-    #который был принят на вход
-    sorted_dict_N = {} #создала словарь
-    sorted_freq_list = sorted_freq_list [::-1] #СПИСОК отсортированных от БОЛЬШЕГО к МЕНЬШЕМУ значений словаря
-    #который был принят на вход
-    for i in sorted_freq_list: #прохожусь по каждому элементу отсортированного списка
-        for k in freq_dict.keys(): #для каждого ключа в списке ключей принятого на вход словаря:
-            if freq_dict[k] == i: #если значение конкр. ключа k из принятого на вход словаря
-                # совпадает с элементом из отсортированного списка
-                sorted_dict_N[k] = freq_dict[k] # то в новом словаре создаётся та же пара ключ-значение
-    TOP_N_list = sorted_dict_N.keys() #в этой переменной записаны ключи нового словаря
-    TOP_N_list = list(TOP_N_list) #преобразование переменной в список
-    TOP_N_list = TOP_N_list [:top_n] #вывод первых N по популярности слов
-    return TOP_N_list
+    sorted_freq_list = sorted(freq_dict.values())
+    sorted_dict_n = {}
+    sorted_freq_list = sorted_freq_list[::-1]
+    for i in sorted_freq_list:
+        for k in freq_dict.keys():
+            if freq_dict[k] == i:
+                sorted_dict_n[k] = freq_dict[k]
+    top_n_list = sorted_dict_n.keys()
+    top_n_list = list(top_n_list)
+    top_n_list = top_n_list[:top_n]
+    return top_n_list
 
 
     """
@@ -154,6 +151,33 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+    if type(unknown_profile) != dict or type(profile_to_compare) != dict or type(top_n) != int:
+        return None
+    unknown_top_n = get_top_n_words(unknown_profile['freq'], top_n)
+    compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
+    common_top_n = []
+    for i in compare_top_n:
+        if i in unknown_top_n:
+            common_top_n.append(i) #common
+    score = len(common_top_n)/top_n #score
+    all_words_compare = list(profile_to_compare['freq'].keys())
+    all_words_unknown = list(unknown_profile['freq'].keys())
+    max_length_word = max(all_words_compare, key=len) #max
+    min_length_word = min(all_words_compare, key=len) #min
+    sum_of_letters = 0
+    for x in range(len(all_words_compare)):
+        sum_of_letters += len(all_words_compare[x])
+    average_token_length = sum_of_letters / len(all_words_compare)
+    sorted_common = sorted(common_top_n)
+    report = {'name': profile_to_compare['name'],
+              'common': common_top_n,
+              'score': score,
+              'max_length_word': max_length_word,
+              'min_length_word': min_length_word,
+              'average_token_length': average_token_length,
+              'sorted_common': sorted_common}
+    return report
+
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -162,8 +186,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
-
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
