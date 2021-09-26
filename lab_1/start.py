@@ -7,6 +7,7 @@ import main
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
+PATH_TO_PROFILES = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 
 if __name__ == '__main__':
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'en.txt'), 'r', encoding='utf-8') as file_to_read:
@@ -22,9 +23,9 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    de_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\de.json'))
-    en_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\en.json'))
-    la_profile = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r'profiles\la.json'))
+    de_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'de.json'))
+    en_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'en.json'))
+    la_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'la.json'))
     profiles = [de_profile, en_profile, la_profile]
 
     unknown_profile = main.create_language_profile('unk', unknown_text, [])
