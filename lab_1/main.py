@@ -4,7 +4,7 @@ Lab 1
 Language detection
 """
 
-
+import json
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -78,7 +78,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     freq_dict = sorted(freq_dict.items(), key=lambda x:-x[1])
     if len(freq_dict) == 0:
         return []
-    freq_2_dict = list()
+    freq_2_dict = []
     for word in freq_dict:
         freq_2_dict.append(word[0])
     return list(freq_2_dict[:top_n])
@@ -244,7 +244,7 @@ def detect_language_advanced(unknown_profile: dict,
                                               key = lambda x: x[1])
     if len(sorted_dict_languages_and_scores) == 0:
         return None
-    common_profiles = list()
+    common_profiles = []
     highest_score = sorted_dict_languages_and_scores[len(sorted_dict_languages_and_scores)-1][1]
     for language in sorted_dict_languages_and_scores:
         if language[1] >= highest_score:
@@ -263,7 +263,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    import json
+
     if not isinstance(path_to_file, str):
         return None
     try:
@@ -282,7 +282,6 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    import json
     if not isinstance(profile, dict):
         return 1
     name = profile['name']
@@ -290,4 +289,3 @@ def save_profile(profile: dict) -> int:
     with open ("../lab_1/profiles/"+ name + ".json", "w") as new_file:
         json.dump(profile, new_file)
     return 0
-
