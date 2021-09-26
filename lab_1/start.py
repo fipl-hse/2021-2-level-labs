@@ -31,9 +31,8 @@ if __name__ == '__main__':
     profile_3 = main.create_language_profile("en", en_text, [])
     TOP_N = 7
     profiles = [profile_1, profile_2, profile_3]
-    RESULT = main.detect_language_advanced(unknown_profile, profiles, [], top_n)
+    RESULT = main.detect_language_advanced(unknown_profile, profiles, [], TOP_N)
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
     assert EXPECTED == RESULT, 'Detection not working'
-
