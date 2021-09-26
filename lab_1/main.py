@@ -17,8 +17,7 @@ def tokenize(text: str) -> list or None:
                 text = text.replace(words, '')
         tokens = text.lower().split()
         return tokens
-    else:
-        return None
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
