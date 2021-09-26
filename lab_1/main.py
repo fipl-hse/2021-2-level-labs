@@ -54,6 +54,8 @@ def calculate_frequencies(tokens: list):
         return None
     freq_dict = {}  # создаем частотный словарь
     for token in tokens:
+        if not isinstance(token, str):
+            return None
         if token not in freq_dict:
             freq_dict[token] = 1
         else:
