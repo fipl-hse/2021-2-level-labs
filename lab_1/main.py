@@ -284,7 +284,8 @@ def save_profile(profile: dict) -> int:
     if not isinstance(profile, dict):
         return 1
     name = profile['name']
-    with open ("name.json", "w") as new_file:
+
+    with open ("../lab_1/profiles/"+ name + ".json", "w") as new_file:
         json.dump(profile, new_file)
     return 0
     pass
