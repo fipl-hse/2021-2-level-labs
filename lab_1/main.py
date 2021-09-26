@@ -4,6 +4,7 @@ Language detection
 
 import json
 
+
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -250,4 +251,12 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+    if not isinstance(profile, dict) or not ('name' or 'freq' or 'n_words') in profile.keys():
+        return 1
+    if (not isinstance(profile.get('name'), str)
+            or not isinstance(profile.get('freq'), dict)
+            or not isinstance(profile.get('n_words'), int)):
+        return 1
+    with open(profile.get('name') + '.json', 'w', encoding='utf-8') as file_to_save:
+        json.dump(profile, file_to_save)
+    return 0
