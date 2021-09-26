@@ -40,9 +40,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         return tokens
 
     for i in stop_words:
-        for n in tokens:
-            if i == n:
-                tokens.remove(n)
+        for index in tokens:
+            if i == index:
+                tokens.remove(index)
     return tokens
 
 
@@ -91,9 +91,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
     if top_n > len(freq_list):
         return freq_list
-    else:
-        top_n_words = freq_list[:top_n]
-        return top_n_words
+    top_n_words = freq_list[:top_n]
+    return top_n_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
