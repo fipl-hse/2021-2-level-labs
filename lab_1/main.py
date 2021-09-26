@@ -233,3 +233,4 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         return score_best_name
     except (UnboundLocalError, TypeError):
         return None
+
