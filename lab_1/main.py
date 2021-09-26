@@ -261,6 +261,16 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
+    import json
+    if not isinstance(path_to_file, str):
+        return None
+    try:
+        with open (path_to_file, 'r') as f:
+            data = json.loads(f.read())
+    except FileNotFoundError:
+        return None
+    new_profile = data
+    return new_profile
     pass
 
 
@@ -270,4 +280,11 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
+    import json
+    if not isinstance(profile, dict):
+        return 1
+    name = profile['name']
+    with open ("name.json", "w") as new_file:
+        json.dump(profile, new_file)
+    return 0
     pass
