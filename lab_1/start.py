@@ -39,11 +39,7 @@ if __name__ == '__main__':
     RESULT = main.detect_language_advanced(unk_profile,profiles ,languages , 5)
     print(RESULT)
     RESULT1 = main.detect_language_advanced(unk, [en, de, la], languages, 5)
-    """Compare the results 
-    of language detection 
-    based on your and 
-    external(loaded) language profiles
-    """
+    """Compare the results"""
     if RESULT1 == RESULT:
         EXPECTED = 'en'
         # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
