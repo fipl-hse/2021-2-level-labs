@@ -34,19 +34,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     tokens_update = []
+    if isinstance(tokens, list) and isinstance(stop_words, list):
+        for word in tokens:
+            if word not in stop_words:
+                tokens_update.append(word)
 
-    try:
-        if isinstance(tokens, list) and isinstance(stop_words, list):
-            for word in tokens:
-                if word not in stop_words:
-                    tokens_update.append(word)
-
-            return tokens_update
-        else:
-            return None
-    except:
+        return tokens_update
+    else:
         return None
-
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
@@ -204,6 +199,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     except:
         return None
 
+
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
@@ -232,8 +228,10 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
                 compare = sorted([score_best_name, language])
                 score_best_name = compare[0]
             count += 1
-            try: profile = profiles[count]
-            except: pass
+            try:
+                profile = profiles[count]
+            except:
+                pass
 
         return score_best_name
     except:
