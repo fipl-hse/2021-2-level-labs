@@ -45,7 +45,7 @@ if __name__ == '__main__':
     # main.save_profile(la_profile)
 
     profiles = [en_profile, de_profile, la_profile]
-    
+
     RESULT = main.detect_language_advanced(unknown_profile, profiles, [], 5)
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
