@@ -20,6 +20,8 @@ def tokenize(text: str) -> list or None:
             text = text.replace(symbols, '')
         text = text.split()
         return text
+    else:
+        return None
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -37,6 +39,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         return new_token
     # elif not isinstance(tokens, list) or not isinstance(stop_words, list):
         # return None
+    else:
+        return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -57,6 +61,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
                 return None
         return frequency_dictionary
 # return dict e.g. {'assessment': 5, 'karina': 90, 'hello': 1, 'ship': 3}
+    else:
+        return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -74,6 +80,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         top_n_words = top_n_words[:top_n]
         return top_n_words
 # return list e.g. ['karina', 'assessment']
+    else:
+        return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -90,6 +98,8 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         n_words = len(frequency_dictionary.keys())
         profile = {"name": language, "freq": frequency_dictionary, "n_words": n_words}
         return profile
+    else:
+        return None
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -108,6 +118,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         common_things = list(set(top_n_words_unknown) & set(top_n_words_compare))
         share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
         return share_of_common_things
+    else:
+        return None
 
 
 def detect_language(unknown_profile: dict,
@@ -135,6 +147,8 @@ def detect_language(unknown_profile: dict,
         else:
             language_name = profile_2["name"]
         return language_name
+    else:
+        return None
 
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -180,6 +194,8 @@ def compare_profiles_advanced(unknown_profile: dict,
                   'average_token_length': average_token_length,
                   'sorted_common': sorted_common}
         return report
+    else:
+        return None
 
 
 def detect_language_advanced(unknown_profile: dict,
@@ -224,9 +240,8 @@ def detect_language_advanced(unknown_profile: dict,
         # if shares_common_words[0]["score"] == shares_common_words[1]["score"]:
             # shares_common_words = sorted(shares_common_words, key=lambda x: x["name"])
         # return shares_common_words
-
-
-
+    else:
+        return None
 
 
 def load_profile(path_to_file: str) -> dict or None:
