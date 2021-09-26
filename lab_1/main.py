@@ -68,7 +68,18 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+
+    if type(freq_dict) != dict or type(top_n) != int:
+        return None
+    top_n_words = []
+    freq_dict_keys = [key for key in freq_dict]
+    for i in freq_dict_keys:
+        top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
+    return top_n_words
+
+
+
+
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
