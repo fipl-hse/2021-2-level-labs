@@ -15,10 +15,11 @@ def tokenize(text: str):
 
     import re   # импортируем модуль re для последующей работы с регулярными выражениями
 
-    if isinstance(text, str):
-        text = text.lower()
-        text = re.sub('[^a-zäöüß ]', '', text)   # заменяем символы (кроме букв) на пробел
-        text = text.split()   # с помощью split разбиваем строку на части
+    if not isinstance(text, str):
+        return None
+    text = text.lower()
+    text = re.sub('[^a-zäöüß ]', '', str(text))   # заменяем символы (кроме букв) на пробел
+    text = text.split()   # с помощью split разбиваем строку на части
 
     return text
 
