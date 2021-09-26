@@ -75,7 +75,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     # take the zero element of the tuples (it is sorted tokens) and add to the new list
     for tuple_element in freq_list:
         top_n_words.append(tuple_element[0])
-    # take the top_n token from the list of sorted tokens
+    # take the top_n tokens from the list of sorted tokens
     top_n_words = top_n_words[:top_n]
     return top_n_words
 # return list e.g. ['karina', 'assessment']
@@ -251,7 +251,7 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    if not isinstance(profile, dict):
+    if not isinstance(profile, dict) or ("name" or "freq" or "n_words") not in profile.keys():
         return 1
     if (not isinstance(profile["name"], str)
             or not isinstance(profile["freq"], dict)
