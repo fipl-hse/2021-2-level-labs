@@ -233,19 +233,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         return score_best_name
     except (UnboundLocalError, TypeError):
         return None
-
-"""
-def load_profile(path_to_file: str) -> dict or None:
-    
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-
-"""
-def save_profile(profile: dict) -> int:
-    
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
