@@ -4,14 +4,12 @@ Language detection starter
 
 import os
 import random
-from main import *
+from main import create_language_profile, detect_language, detect_language_advanced
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
 
 if __name__ == '__main__':
-
-
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'en.txt'), 'r', encoding='utf-8') as file_to_read:
         en_text = file_to_read.read()
 
