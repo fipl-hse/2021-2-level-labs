@@ -182,7 +182,7 @@ def compare_profiles_advanced(unknown_profile: dict,
         return None
     profile = {}
     new_get_top_n_words_1 = get_top_n_words(unknown_profile['freq'], top_n)
-    new_get_top_n_words_2 = get_top_n_words (profile_to_compare['freq'], top_n)
+    new_get_top_n_words_2 = get_top_n_words(profile_to_compare['freq'], top_n)
     common_words = []
     for word in new_get_top_n_words_1:
         if word in new_get_top_n_words_2:
@@ -192,20 +192,20 @@ def compare_profiles_advanced(unknown_profile: dict,
     for word_1 in new_get_top_n_words_1:
         if word_1 in new_get_top_n_words_2:
             score +=1
-    proportion_of_frequency = round (score/top_n, 2)
-    profile ['score'] = proportion_of_frequency
+    # proportion_of_frequency = round (score/top_n, 2)
+    profile ['score'] = round (score/top_n, 2)
     tokens = list(profile_to_compare['freq'].keys())
-    max_length_word = max(tokens, key=len)
-    min_length_word = min (tokens, key = len)
-    profile['max_length_word'] = max_length_word
-    profile ['min_length_word'] = min_length_word
+    # max_length_word = max(tokens, key=len)
+    # min_length_word = min (tokens, key = len)
+    profile['max_length_word'] = max(tokens, key=len)
+    profile ['min_length_word'] = min (tokens, key = len)
     number_of_letters = 0
 
     for word_2 in tokens:
         number_of_letters += len(word_2)
     number_of_words = len(tokens)
     average_token_length = number_of_letters/number_of_words
-    profile ['average_token_length'] = average_token_length
+    profile['average_token_length'] = average_token_length
     common_words.sort()
     profile['sorted_common'] = common_words
     if proportion_of_frequency > 0:
