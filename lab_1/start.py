@@ -17,6 +17,9 @@ if __name__ == '__main__':
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'de.txt'), 'r', encoding='utf-8') as file_to_read:
         de_text = file_to_read.read()
 
+    with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'la.txt'), 'r', encoding='utf-8') as file_to_read:
+        la_text = file_to_read.read()
+
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as \
             file_to_read:
         unknown_text = file_to_read.read()
@@ -28,17 +31,17 @@ if __name__ == '__main__':
 
     EXPECTED = 'en'
 
-    result_for_de_and_la = main.detect_language_advanced(unknown_profile,[de_profile,la_profile],[],4)
-    print(result_for_de_and_la)
+    de_and_la_result = main.detect_language_advanced(unknown_profile,[de_profile,la_profile],[],4)
+    print(de_and_la_result)
 
     all_profiles = [de_profile,en_profile,la_profile]
     new_all_profiles = [main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER,'de.json')),
                 main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER,'en.json')),
                 main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER,'la.json'))]
-    result_of_all_profiles = main.detect_language_advanced(unknown_profile,all_profiles,[],4)
-    result_of_new_all_profiles = main.detect_language_advanced(unknown_profile,new_all_profiles,[],4)
-    print(result_of_all_profiles)
-    print(result_of_new_all_profiles)
+    all_profiles_result = main.detect_language_advanced(unknown_profile,all_profiles,[],4)
+    new_all_profiles_result = main.detect_language_advanced(unknown_profile,new_all_profiles,[],4)
+    print(all_profiles_result)
+    print(new_all_profiles_result)
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
