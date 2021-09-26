@@ -3,9 +3,14 @@ Lab 1
 Language detection
 """
 import re
-import nltk
 
 def tokenize(text: str) -> list or None:
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
 
     text = re.split(r"[^\w\s]", text)
     text = "".join(text)
@@ -14,40 +19,88 @@ def tokenize(text: str) -> list or None:
     return tokens
 
 
-unknown_text = open('unknown.txt', encoding='utf-8').read()
-en_text = open('en.txt', encoding='utf-8').read()
-de_text = open('de.txt', encoding='utf-8').read()
+unknown_text = '''At first, von Frisch thought the bees were responding only to the scent of the food.
+But what did the third dance mean? And if bees were responding only to the scent,
+how could they also ‘sniff down’ food hundreds of metres away from the hive*, food
+which was sometimes downwind? On a hunch, he started gradually moving the
+feeding dish further and further away and noticed as he did so that the dances of the
+returning scout bees also started changing. If he placed the feeding dish over nine
+metres away, the second type of dance, the sickle version, came into play.
+But once he moved it past 36 metres, the scouts would then start dancing the third,
+quite different, waggle dance.
+The measurement of the actual distance too, he concluded, was precise. For
+example, a feeding dish 300 metres away was indicated by 15 complete runs
+through the pattern in 30 seconds. When the dish was moved to 60 metres away,
+the number dropped to eleven.'''
+
+en_text = '''Von Frisch noted something further. When the scout bees came home to tell their
+sisters about the food source, sometimes they would dance outside on the horizontal
+entrance platform of the hive, and sometimes on the vertical wall inside. And,
+depending on where they danced, the straight portion of the waggle dance would
+point in different directions. The outside dance was fairly easy to decode: the straight
+portion of the dance pointed directly to the food source, so the bees would merely
+have to decode the distance message and fly off in that direction to find their food.
+But by studying the dance on the inner wall of the hive, von Frisch discovered a
+remarkable method which the dancer used to tell her sisters the direction of the food
+in relation to the sun. When inside the hive, the dancer cannot use the sun, so she
+uses gravity instead. The direction of the sun is represented by the top of the hive
+wall. If she runs straight up, this means that the feeding place is in the same
+direction as the sun. However, if, for example, the feeding place is 40º to the left of
+the sun, then the dancer would run 40º to the left of the vertical line. This was to be
+the first of von Frisch’s remarkable discoveries. Soon he would also discover a
+number of other remarkable facts about how bees communicate and, in doing so,
+revolutionise the study of animal behaviour generally. '''
+
+de_text = '''Studentenleben
+
+Ich bin Student, ich studiere Germanistik an der Uni. Mein Tag fängt ziemlich früh an: Normalerweise stehe ich um halb 7 auf, aber während der Prüfungsperiode muss ich noch früher aufstehen, um für die Prüfungen zu pauken.
+
+Ich wohne nicht im Wohnheim, sondern zu Hause bei den Eltern. Das ist gut und praktisch, weil ich keine Miete brauche. Aber leider liegt mein Haus weit von der Uni, deshalb muss ich mit der U-Bahn fahren und noch 10 Minuten zu Fuß gehen.
+
+Die Vorlesungen beginnen um 9 Uhr. An der Uni gibt es Studenten aus den verschiedenen Ländern. Mein Lieblinsfach ist Deutsch, denn ich liebe die Grammatik und die deutsche Sprachmelodie.
+
+Um 13 Uhr ist eine Mittagspause, und alle gehen in die Kantine. Dort esse ich zu Mittag und plaudere mit den anderen Kommilitonen.
+
+Nach den Vorlesungen gehe ich in die Bibliothek, um Zeitungen und Zeitschriften auf Deutsch zu lesen. Das brauche ich für die Seminare. Häufig machen ich und meine Freunde kleine Videoabende und schauen verschiedene Filme auf Deutsch an, um das Hörverstehen zu trainieren. Natürlich können wir diese Filme ohne Untertitel gucken, weil wir Deutsch schon ganz gut können.
+
+Im Sommer werde ich ein Praktikum im Auslande machen, und ich hoffe, nach Deutschland zu fahren. Aber dafür muss ich nur gute Noten in meinem Studienbuch haben.'''
 
 
-# print(tokenize(en_text))
-# print(tokenize(de_text))
-# print(tokenize(unknown_text))
+
+# unknown_text = open('unknown.txt', encoding='utf-8').read()
+# en_text = open('en.txt', encoding='utf-8').read()
+# de_text = open('de.txt', encoding='utf-8').read()
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
 
     filt_tokens = []
     for token in tokens:
         if token not in stop_words:
             filt_tokens.append(token)
-            tokens = filt_tokens
-    return tokens
-
+    return filt_tokens
 
 tokens_en = tokenize(en_text)
 tokens_de = tokenize(de_text)
 tokens_unknown = tokenize(unknown_text)
 
-stop_words_en = nltk.corpus.stopwords.words('english')
-stop_words_de = nltk.corpus.stopwords.words('german')
+stop_words_en = ['a', 'an', 'the', 'and']
+stop_words_de = ['der', 'das', 'die', 'ein', 'eine']
 stop_words_unknown = []
 
 
-# print(remove_stop_words(tokens_en, stop_words_en))
-# print(remove_stop_words(tokens_de, stop_words_de))
-# print(remove_stop_words(tokens_unknown, stop_words_unknown))
-
-
 def calculate_frequencies(tokens: list) -> dict or None:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
 
     freq_dict = {}
     for word in tokens:
@@ -57,17 +110,18 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freq_dict[word] += 1
     return freq_dict
 
-
 tokens_en = remove_stop_words(tokens_en, stop_words_en)
 tokens_de = remove_stop_words(tokens_de, stop_words_de)
 tokens_unknown = remove_stop_words(tokens_unknown, stop_words_unknown)
 
 
-# print(calculate_frequencies(tokens_en))
-# print(calculate_frequencies(tokens_de))
-# print(calculate_frequencies(tokens_unknown))
-
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+    """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words
+    :return: a list of the most common words
+    """
 
     words = len(freq_dict)
     freq_val = reversed(sorted(freq_dict.values()))
@@ -78,8 +132,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
             if freq_dict[k] == i:
                 sorted_freq[k] = freq_dict[k]
 
-    sf_val = [sorted_freq.values()]
-
     if top_n > words:
         top_words = sorted_freq
         return top_words
@@ -88,7 +140,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         v = list(sorted_freq.values())
         top_words = dict(zip(s, v))
         return top_words
-
 
 freq_dict_en = calculate_frequencies(tokens_en)
 freq_dict_de = calculate_frequencies(tokens_de)
@@ -103,11 +154,6 @@ top_n_de = len(new_dicts_de)
 top_n_unknown = len(new_dicts_unknown)
 
 
-# print(get_top_n_words(freq_dict_en, top_n_en))
-# print(get_top_n_words(freq_dict_de, top_n_de))
-# print(get_top_n_words(freq_dict_unknown, top_n_unknown))
-
-
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
     Creates a language profile
@@ -116,7 +162,59 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+
+    language_profile = {}
+    for i in text:
+        for l in stop_words:
+            if l in text:
+                language_profile = {"name": language}
+
+        s = list(language_profile.values())
+        e = list(en.values())
+        d = list(de.values())
+
+        for l in s:
+            if l in e:
+                en_profile = en
+                return en_profile
+            if l in d:
+                de_profile = de
+                return de_profile
+            else:
+                unknown_profile = unknown
+                return unknown_profile
+
+language_en = 'en'
+language_de = 'de'
+language_unknown = 'unknown'
+
+en_text = str(tokenize(en_text))
+de_text = str(tokenize(de_text))
+unknown_text = str(tokenize(unknown_text))
+
+stop_words_en = remove_stop_words(tokens_en, stop_words_en)
+stop_words_de = remove_stop_words(tokens_de, stop_words_de)
+stop_words_unknown = remove_stop_words(tokens_unknown, stop_words_unknown)
+
+top_words_en = get_top_n_words(freq_dict_en, top_n_en)
+top_words_de = get_top_n_words(freq_dict_de, top_n_de)
+top_words_unknown = get_top_n_words(freq_dict_unknown, top_n_unknown)
+
+en = {"name": language_en,
+        "freq": top_words_en,
+        "n_words": len(top_words_en)}
+
+de = {"name": language_de,
+        "freq": top_words_de,
+        "n_words": len(top_words_de)}
+
+unknown = {"name": language_unknown,
+            "freq": top_words_unknown,
+            "n_words": len(top_words_unknown)}
+
+top_n_en = len(get_top_n_words(freq_dict_en, top_n_en))
+top_n_de = len(get_top_n_words(freq_dict_de, top_n_de))
+top_n_unknown = len(get_top_n_words(freq_dict_unknown, top_n_unknown))
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -127,7 +225,29 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
+
+    unk = unknown_profile['freq']
+    unk_w = unk.keys()
+
+    lan = profile_to_compare['freq']
+    lan_w = lan.keys()
+
+    comp = []
+    for i in unk_w:
+        for l in lan_w:
+            if i == l:
+                comp.append(i)
+
+    score = round(len(comp)/top_n, 1)
+    return score
+
+top_n_en = len(get_top_n_words(freq_dict_en, top_n_en))
+top_n_de = len(get_top_n_words(freq_dict_de, top_n_de))
+top_n_unknown = len(get_top_n_words(freq_dict_unknown, top_n_unknown))
+
+en_profile = create_language_profile(language_en, en_text, stop_words_en)
+de_profile = create_language_profile(language_de, de_text, stop_words_de)
+unknown_profile = create_language_profile(language_unknown, unknown_text, stop_words_unknown)
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -139,7 +259,35 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+
+    for i in unknown_profile:
+        for l in profile_1:
+            for m in profile_2:
+                if score_en > score_de:
+                    unknown_profile['name'] = profile_1['name']
+                    language_unknown = language_en
+                    return language_unknown
+                if score_en < score_de:
+                    unknown_profile['name'] = profile_2['name']
+                    language_unknown = language_de
+                    return language_unknown
+                else:
+                    lang = [language_en, language_de]
+                    prof = {profile_1: language_en, profile_2: language_de}
+                    lang.sort()
+                    for v in prof:
+                        if v == lang[0]:
+                            language_unknown = v
+                            return language_unknown
+
+score_en = compare_profiles(unknown_profile, en_profile, top_n_en)
+score_de = compare_profiles(unknown_profile, de_profile, top_n_de)
+
+en_profile = create_language_profile(language_en, en_text, stop_words_en)
+de_profile = create_language_profile(language_de, de_text, stop_words_de)
+unknown_profile = create_language_profile(language_unknown, unknown_text, stop_words_unknown)
+
+top_n_unknown = len(get_top_n_words(freq_dict_unknown, top_n_unknown))
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
