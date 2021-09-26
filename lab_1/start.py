@@ -32,12 +32,12 @@ if __name__ == '__main__':
 
     all_languages = [english, german, latin]
 
-    top_n = 5
+    TOP_N = 5
 
-    RESULT = detect_language(unknown, english, german, top_n)
+    RESULT = detect_language(unknown, english, german, TOP_N)
     print("Between English and German, unknown language is closer to profile called", RESULT)
 
-    RESULT_ADV = detect_language_advanced(unknown, all_languages, [german, latin], top_n)
+    RESULT_ADV = detect_language_advanced(unknown, all_languages, [german, latin], TOP_N)
     print("Between Latin and German, unknown language is closer to", RESULT_ADV)
 
     EXPECTED = 'en'
