@@ -45,17 +45,18 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     frequencies = {}
-    if isinstance(tokens, list):
-        for token in tokens:
-            if not isinstance(token, str):
-                return None
-            elif token not in frequencies.keys():
-                frequencies[token] = 1
-            else:
-                frequency = frequencies.get(token)
-                frequency += 1
-                frequencies.update({token: frequency})
-        return frequencies
+    if not isinstance(tokens, list):
+        return None
+    for token in tokens:
+        if not isinstance(token, str):
+            return None
+        if token not in frequencies.keys():
+            frequencies[token] = 1
+        else:
+            frequency = frequencies.get(token)
+            frequency += 1
+            frequencies.update({token: frequency})
+    return frequencies
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -65,15 +66,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if isinstance(freq_dict, dict) and isinstance(top_n, int):
-        if not freq_dict.keys() or top_n <= 0:
-            return []
-        else:
-            top_words = []
-            freq_words = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
-            for element in freq_words[:top_n]:
-                top_words.append(element[0])
-            return top_words
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
+        return None
+    if freq_dict.keys() and top_n > 0:
+        top_words = []
+        freq_words = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
+        for element in freq_words[:top_n]:
+            top_words.append(element[0])
+        return top_words
+    return []
 
 
 def create_language_profile(language: str,
@@ -86,12 +87,15 @@ def create_language_profile(language: str,
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
-        freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
-        lang_profile = {'name': language,
-                        'freq': freq_dict,
-                        'n_words': len(freq_dict.keys())}
-        return lang_profile
+    if (not isinstance(language, str)
+            or not isinstance(text, str)
+            or not isinstance(stop_words, list)):
+        return None
+    freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
+    lang_profile = {'name': language,
+                    'freq': freq_dict,
+                    'n_words': len(freq_dict.keys())}
+    return lang_profile
 
 
 def compare_profiles(unknown_profile: dict,
@@ -104,12 +108,15 @@ def compare_profiles(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):  # TooLong
-        unknown_top_words = get_top_n_words(unknown_profile.get('freq'), top_n)
-        compare_top_words = get_top_n_words(profile_to_compare.get('freq'), top_n)
-        shared_top_words = [word for word in unknown_top_words if word in compare_top_words]
-        shared_proportions = round(len(shared_top_words) / len(unknown_top_words), 2)
-        return shared_proportions
+    if (not isinstance(unknown_profile, dict)
+            or not isinstance(profile_to_compare, dict)
+            or not isinstance(top_n, int)):
+        return None
+    unknown_top_words = get_top_n_words(unknown_profile.get('freq'), top_n)
+    compare_top_words = get_top_n_words(profile_to_compare.get('freq'), top_n)
+    shared_top_words = [word for word in unknown_top_words if word in compare_top_words]
+    shared_proportions = round(len(shared_top_words) / len(unknown_top_words), 2)
+    return shared_proportions
 
 
 def detect_language(unknown_profile: dict,
@@ -124,17 +131,21 @@ def detect_language(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int): #too long
-        proportion_1 = compare_profiles(unknown_profile, profile_1, top_n)
-        proportion_2 = compare_profiles(unknown_profile, profile_2, top_n)
-        if proportion_1 > proportion_2:
-            result_language = profile_1.get('name')
-        elif proportion_1 < proportion_2:
-            result_language = profile_2.get('name')
-        else:
-            languages = sorted([profile_1.get('name'), profile_2.get('name')])
-            result_language = languages[0]
-        return result_language
+    if (not isinstance(unknown_profile, dict)
+            or not isinstance(profile_1, dict)
+            or not isinstance(profile_2, dict)
+            or not isinstance(top_n, int)):
+        return None
+    proportion_1 = compare_profiles(unknown_profile, profile_1, top_n)
+    proportion_2 = compare_profiles(unknown_profile, profile_2, top_n)
+    if proportion_1 > proportion_2:
+        result_language = profile_1.get('name')
+    elif proportion_1 < proportion_2:
+        result_language = profile_2.get('name')
+    else:
+        languages = sorted([profile_1.get('name'), profile_2.get('name')])
+        result_language = languages[0]
+    return result_language
 
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -148,7 +159,9 @@ def compare_profiles_advanced(unknown_profile: dict,
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
+    if (not isinstance(unknown_profile, dict)
+            or not isinstance(profile_to_compare, dict)
+            or not isinstance(top_n, int)):
         return None
     unknown_top_words = get_top_n_words(unknown_profile.get('freq'), top_n)
     compare_top_words = get_top_n_words(profile_to_compare.get('freq'), top_n)
@@ -188,35 +201,27 @@ def detect_language_advanced(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or not isinstance(languages, list) or not isinstance(top_n, int):
+    if (not isinstance(unknown_profile, dict)
+            or not isinstance(profiles, list)
+            or not isinstance(languages, list)
+            or not isinstance(top_n, int)):
         return None
     proportions = []
     languages_with_same_proportions = []
-    if len(languages) > 0:
-        check = False
-        for language_name in languages:
-            for language_profile in profiles:
-                if language_name in language_profile.get('name'):
-                    check = True
-        if not check:
-            return None
+    if len(languages) == 0:
         for language_profile in profiles:
-            if language_profile.get('name') in languages:
-                proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
-                proportions.append([language_profile.get('name'), proportion.get('score')])
-        for res in proportions[:-1]:
-            if proportions[0][1] == proportions[proportions.index(res) + 1][1]:
-                languages_with_same_proportions.append(proportions[proportions.index(res)][0])
-        languages_with_same_proportions.sort()
-        if len(languages_with_same_proportions) > 0:
-            result = languages_with_same_proportions[0]
-            return result
-        proportions.sort(key=lambda x: x[1], reverse=True)
-        result = proportions[0][0]
-        return result
+            languages.append(language_profile.get('name'))
+    check = False
+    for language_name in languages:
+        for language_profile in profiles:
+            if language_name in language_profile.get('name'):
+                check = True
+    if not check:
+        return None
     for language_profile in profiles:
-        proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
-        proportions.append([language_profile.get('name'), proportion.get('score')])
+        if language_profile.get('name') in languages:
+            proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
+            proportions.append([language_profile.get('name'), proportion.get('score')])
     for res in proportions[:-1]:
         if proportions[0][1] == proportions[proportions.index(res) + 1][1]:
             languages_with_same_proportions.append(proportions[proportions.index(res)][0])

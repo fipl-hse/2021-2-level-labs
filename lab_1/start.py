@@ -35,14 +35,20 @@ if __name__ == '__main__':
     la_profile_external = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'la.json'))
     de_profile_external = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'de.json'))
     compare_profiles_external = [en_profile_external, la_profile_external, de_profile_external]
-    RESULT_EXTERNAL = main.detect_language_advanced(unknown_profile, compare_profiles_external, [], TOP_N)
+    RESULT_EXTERNAL = main.detect_language_advanced(unknown_profile,
+                                                    compare_profiles_external,
+                                                    [],
+                                                    TOP_N)
 
     # detect_language_internal_profiles
     en_profile_internal = main.create_language_profile('en', en_text, [])
     la_profile_internal = main.create_language_profile('la', la_text, [])
     de_profile_internal = main.create_language_profile('de', de_text, [])
     compare_profiles_internal = [en_profile_internal, la_profile_internal, de_profile_internal]
-    RESULT_INTERNAL = main.detect_language_advanced(unknown_profile, compare_profiles_internal, [], TOP_N)
+    RESULT_INTERNAL = main.detect_language_advanced(unknown_profile,
+                                                    compare_profiles_internal,
+                                                    [],
+                                                    TOP_N)
 
     # verification
     if RESULT_EXTERNAL == RESULT_INTERNAL:
