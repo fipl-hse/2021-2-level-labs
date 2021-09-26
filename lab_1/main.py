@@ -76,16 +76,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not freq_dict or top_n <= 0:
         return []
 
-    sort_values = sorted(freq_dict.values(), reverse=True)  # составляет список значений и сортирует его
-    dict_keys = list(freq_dict.keys())  # составляет список ключей
+    sort_values = sorted(freq_dict.values(), reverse=True)
+    dict_keys = list(freq_dict.keys())
     sort_dict = {}
 
     for i in sort_values:
         for k in dict_keys:
-            if freq_dict[k] == i:  # вызывает значение из словаря по ключу и сравнивает его со значением из sort_values
-                sort_dict[k] = freq_dict[k]  # добавляет пару в новый отсортированный словарь
+            if freq_dict[k] == i:
+                sort_dict[k] = freq_dict[k]
                 dict_keys.remove(k)
-                # удаляет использованный ключ из списка, чтобы чтобы ключ с повторяющимся значением не игнорировался
 
     freq_list = list(sort_dict.keys())
 
@@ -152,7 +151,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict):
+    if not isinstance(profile_1, dict) or not isinstance(profile_2, dict):
+        return None
+    if not isinstance(unknown_profile, dict):
         return None
     if not isinstance(top_n, int):
         return None
@@ -208,7 +209,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return report
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
