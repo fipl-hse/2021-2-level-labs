@@ -29,11 +29,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    for word in tokens:
-        if word in stop_words:
-            tokens.remove(word)
-    return tokens
-    pass
+    if type(tokens) == list:
+        for word in tokens:
+            if word in stop_words:
+                tokens.remove(word)
+        return tokens
+
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -42,14 +43,15 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    t_dict = {}
-    for word in tokens:
-        if word in t_dict.keys():
-            t_dict[word] += 1
-        else:
-            t_dict[word] = 1
-    return t_dict
-    pass
+    if type(tokens) == list:
+        t_dict = {}
+        for word in tokens:
+            if word in t_dict.keys():
+                t_dict[word] += 1
+            else:
+                t_dict[word] = 1
+        return t_dict
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -59,14 +61,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    top = []
-    if top_n > len(freq_dict):
-        top_n = len(freq_dict)
-    freq_dict = sorted(freq_dict.items(), key=lambda x: (-x[1], x[0]))
-    for i in range(top_n):
-        top.append(freq_dict[i][0])
-    return top
-    pass
+    if type(freq_dict) == dict and type(top_n) == int:
+        top = []
+        if top_n > len(freq_dict):
+            top_n = len(freq_dict)
+        freq_dict = sorted(freq_dict.items(), key=lambda x: (-x[1], x[0]))
+        for i in range(top_n):
+            top.append(freq_dict[i][0])
+        return top
+
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -77,12 +80,13 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    l_profile = {}
-    l_profile['name'] = language
-    l_profile['freq'] = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
-    l_profile['n_words'] = len(l_profile['freq'])
-    return l_profile
-    pass
+    if type(language) == str and type(text) == str:
+        l_profile = {}
+        l_profile['name'] = language
+        l_profile['freq'] = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
+        l_profile['n_words'] = len(l_profile['freq'])
+        return l_profile
+
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -93,12 +97,15 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    match = 0
-    for word in get_top_n_words(unknown_profile['freq'], top_n):
-        if word in get_top_n_words(profile_to_compare['freq'], top_n):
-            match += 1
-    return round(match / top_n, 3)
-    pass
+    if type(unknown_profile) == dict and type(profile_to_compare) == dict:
+        match = 0
+        top_1 = get_top_n_words(unknown_profile['freq'], top_n)
+        top_2 = get_top_n_words(profile_to_compare['freq'], top_n)
+        for word in top_1:
+            if word in top_2:
+                match += 1
+        return round(match / top_n, 3)
+
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -110,11 +117,12 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    detect_dict = {}
-    detect_dict[compare_profiles(profile_1, unknown_profile, top_n)] = profile_1['name']
-    detect_dict[compare_profiles(profile_2, unknown_profile, top_n)] = profile_2['name']
-    return detect_dict[max(detect_dict.keys())]
-    pass
+    if type(unknown_profile) == dict and type(profile_1) == dict and type(profile_2) == dict:
+        detect_dict = {}
+        detect_dict[compare_profiles(profile_1, unknown_profile, top_n)] = profile_1['name']
+        detect_dict[compare_profiles(profile_2, unknown_profile, top_n)] = profile_2['name']
+        return detect_dict[max(detect_dict.keys())]
+
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
