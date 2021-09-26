@@ -267,7 +267,7 @@ def load_profile(path_to_file: str) -> dict or None:
     if not isinstance(path_to_file, str):
         return None
     try:
-        with open (path_to_file, 'r') as path:
+        with open (path_to_file, 'r', encoding = "utf-8") as path:
             data = json.loads(path.read())
     except FileNotFoundError:
         return None
@@ -286,6 +286,6 @@ def save_profile(profile: dict) -> int:
         return 1
     name = profile['name']
 
-    with open ("../lab_1/profiles/"+ name + ".json", "w") as new_file:
+    with open ("../lab_1/profiles/"+ name + ".json", "w", encoding = "utf-8") as new_file:
         json.dump(profile, new_file)
     return 0
