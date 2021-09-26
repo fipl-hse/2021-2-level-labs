@@ -36,7 +36,9 @@ def remove_stop_words(text: list, stop_words: list):
         return None
     lent = len(text)
     i = 0
-    for count in range(lent):
+    count = 0
+    while count < lent:
+        count += 1
         if text[i] in stop_words:
             text.remove(text[i])
         else:
@@ -92,7 +94,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     if isinstance(language, str) is False or isinstance(text, str) is False:
         return None
     if isinstance(stop_words, list) is False:
-        return
+        return None
     tokens = tokenize(text)
     tokens = remove_stop_words(tokens, stop_words)
     freq_dict = calculate_frequencies(tokens)
