@@ -1,3 +1,6 @@
+import json
+
+
 def tokenize(text: str):
     if isinstance(text, str):
         text = text.lower()
@@ -14,11 +17,11 @@ def tokenize(text: str):
 def remove_stop_words(tokens: list, stop_words: list):
     try:
         for i in tokens:
-                if isinstance(i, str):
-                    tokens = [i for i in tokens if i not in stop_words]
-                    return tokens
-                else:
-                    return None
+            if isinstance(i, str):
+                tokens = [i for i in tokens if i not in stop_words]
+                return tokens
+            else:
+                return None
     except TypeError:
         return None
 
@@ -90,8 +93,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         if second_intersecting_words > first_intersecting_words:
             return profile_2['name']
         else:
-            sorted_profiles = [profile_1['name'], profile_2['name']].sort()
-            return sorted_profiles[0]
+            return [[profile_1['name'], profile_2['name']].sort()][0]
     else:
         return None
 
@@ -128,23 +130,47 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             top_n, int):
         def score_function():
             score = {}
-            for i in profiles:
-                if i['name'] in languages:
-                    full_profile = compare_profiles_advanced(unknown_profile, i, top_n)
-                    score.update({i['name']: full_profile['score']})
+            for language in profiles:
+                if language['name'] in languages:
+                    full_profile = compare_profiles_advanced(unknown_profile, language, top_n)
+                    score.update({language['name']: full_profile['score']})
             if not score:
                 return None
             score_sorted = sorted(score.items(), key=lambda x: x[1], reverse=True)
-            max_score = [a[0] for a in score_sorted][0]
-            return max_score
+            return [a[0] for a in score_sorted][0]
 
-        if languages != []:
+        if languages:
             max_score = score_function()
             return max_score
-        if languages == []:
+        if not languages:
             for i in profiles:
                 languages.append(i['name'])
             max_score = score_function()
             return max_score
     else:
-        None
+        return None
+
+
+def load_profile(path_to_file: str):
+    if isinstance(path_to_file, str):
+        try:
+            with open(path_to_file, 'r', encoding='utf-8') as file:
+                opened_file = json.load(file)
+            return opened_file
+        except FileNotFoundError:
+            return None
+    else:
+        return None
+
+
+def save_profile(profile: dict):
+    if isinstance(profile, dict):
+        if isinstance(profile['name'], str) and isinstance(profile['freq'], dict) and isinstance(profile['n_words'],
+                                                                                                 int):
+            with open("{}.json".format(profile['name']), "w", encoding="utf-8") as file:
+                json.dump(profile, file)
+                return 0
+        else:
+            return 1
+    else:
+        return 1
