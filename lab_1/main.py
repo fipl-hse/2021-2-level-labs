@@ -181,8 +181,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     average_len = sum(tokens_len) / len(tokens)
 
     report = {'name': profile_to_compare['name'], 'common': top_n_common, 'score': score,
-              'max_length_word': max_len, 'min_length_word': min_len, 'average_token_length': average_len,
-              'sorted_common': sorted_common}
+              'max_length_word': max_len, 'min_length_word': min_len,
+              'average_token_length': average_len, 'sorted_common': sorted_common}
     return report
 
 
