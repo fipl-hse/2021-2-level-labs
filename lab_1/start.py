@@ -25,10 +25,11 @@ if __name__ == '__main__':
     RESULT = ''
 
     from main import tokenize, remove_stop_words, calculate_frequencies, get_top_n_words, \
-    create_language_profile, compare_profiles, detect_language, tokens_en, stop_words_en, tokens_de, stop_words_de, \
-    tokens_unknown, stop_words_unknown, freq_dict_en, top_n_en, freq_dict_de, top_n_de, freq_dict_unknown, \
-    top_n_unknown, language_en, language_de, language_unknown, unknown_profile, en_profile, de_profile, \
-    en_stop_words, de_stop_words, unknown_stop_words
+    create_language_profile, compare_profiles, detect_language, tokens_en, stop_words_en, \
+    tokens_de, stop_words_de, tokens_unknown, stop_words_unknown, freq_dict_en, top_n_en, \
+    freq_dict_de, top_n_de, freq_dict_unknown, top_n_unknown, language_en, language_de, \
+    language_unknown, unknown_profile, en_profile, de_profile, en_stop_words, de_stop_words, \
+    unknown_stop_words
 
 
 
