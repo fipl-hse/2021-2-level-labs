@@ -105,13 +105,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     if isinstance(unknown_profile, dict)\
             and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
         cross = []
-        for i in get_top_n_words(unknown_profile.get('freq'), top_n):
-            for a in get_top_n_words(profile_to_compare.get('freq'), top_n):
-                if i == a:
+        for i in get_top_n_words(profile_to_compare['freq'], top_n):
+            if i in get_top_n_words(unknown_profile['freq'], top_n):
                     cross.append(i)
-                else:
-                    continue
-        cross = float(len(cross) / len(get_top_n_words(unknown_profile.get('freq'), top_n)))
+        cross = float(len(cross) / top_n)
         cross = round(cross, 2)
         return cross
     else:
@@ -153,7 +150,38 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)\
+        and isinstance(top_n, int):
+        lang_adv = {}
+        cross = []
+        lang_adv['name'] = profile_to_compare['name']
+        for i in get_top_n_words(profile_to_compare['freq'], top_n):
+            if i in get_top_n_words(unknown_profile['freq'], top_n):
+                cross.append(i)
+            else:
+                continue
+        length = 0
+        for words in profile_to_compare['freq']:
+            length += len(words)
+        max_word = 0
+        min_word = 0
+        for max_length in profile_to_compare['freq']:
+            if len(max_length) == max(map(len, profile_to_compare['freq'])):
+                max_word = max_length
+        for min_length in profile_to_compare['freq']:
+            if len(min_length) == min(map(len, profile_to_compare['freq'])):
+                min_word = min_length
+        lang_adv['common'] = cross
+        lang_adv['max_length_word'] = max_word
+        lang_adv['min_length_word'] = min_word
+        lang_adv['average_token_length'] = length / len(profile_to_compare['freq'])
+        lang_adv['sorted_common'] = sorted(cross)
+        score = float(len(cross) / top_n)
+        score = round(score, 2)
+        lang_adv['score'] = score
+        return lang_adv
+    else:
+        return None
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
@@ -165,22 +193,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
-
-
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
-
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
