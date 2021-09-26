@@ -145,13 +145,13 @@ def detect_language(unknown_profile:dict, profile_1:dict, profile_2:dict, top_n:
     share_of_common_words_with_profile_1 = compare_profiles(unknown_profile,profile_1,top_n)
     share_of_common_words_with_profile_2 = compare_profiles(unknown_profile,profile_2,top_n)
     if share_of_common_words_with_profile_1 > share_of_common_words_with_profile_2:
-        return profile_1['name']
+        language = profile_1['name']
     elif share_of_common_words_with_profile_1 < share_of_common_words_with_profile_2:
-        return profile_2 ['name']
-    elif share_of_common_words_with_profile_1 == share_of_common_words_with_profile_2:
+        language = profile_2 ['name']
+    else:
         all_languages = [profile_1['name'], profile_2['name']]
-        all_languages_sorted = all_languages.sort()
-        return all_languages_sorted[0]
+        language = all_languages.sort()[0]
+    return language
 
 def compare_profiles_advanced(unknown_profile,profile_to_compare,top_n):
     """
@@ -231,8 +231,8 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
     for key_in_sorted_list in sorted_list:
         sorted_dict[key_in_sorted_list] = shares[key_in_sorted_list]
         max_value = max(list_of_values)
-        for key_in_sorted_dict in sorted_dict:
-            if sorted_dict[key_in_sorted_dict] == max_value:
+        for key_in_sorted_dict, value_in_sorted_dict in sorted_dict.items():
+            if value_in_sorted_dict == max_value:
                 languages_with_max_value.append(key_in_sorted_dict)
                 language_with_max_value = languages_with_max_value[0]
                 return language_with_max_value
