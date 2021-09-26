@@ -129,7 +129,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return distance
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -156,7 +157,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         language = sorted([profile_1["name"], profile_2["name"]])
     return language
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict,
+                              profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -189,9 +191,12 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     sorted_common = sorted(top_n_words_common)
     max_length_word = max(tokens, key=len)
     min_length_word = min(tokens, key=len)
-    full_language_profile = dict(name=profile_to_compare["name"], common=top_n_words_common, score=score,
-                                 max_length_word=max_length_word, min_length_word=min_length_word,
-                                 average_token_length=average_token_length, sorted_common=sorted_common)
+    full_language_profile = dict(name=profile_to_compare["name"],
+                                 common=top_n_words_common, score=score,
+                                 max_length_word=max_length_word,
+                                 min_length_word=min_length_word,
+                                 average_token_length=average_token_length,
+                                 sorted_common=sorted_common)
     return full_language_profile
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
@@ -239,7 +244,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+
 
 def save_profile(profile: dict) -> int:
     """
@@ -247,4 +252,4 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+
