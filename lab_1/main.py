@@ -38,10 +38,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         for word in tokens:
             if word not in stop_words:
                 tokens_update.append(word)
-
         return tokens_update
-    else:
-        return None
+
+    return None
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
@@ -60,8 +59,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
             else:
                 return None
         return freq
-    else:
-        return None
+    return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -72,7 +70,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
 
-    try:
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
         most_common = []
         chart = sorted(list(freq_dict.values()), reverse=True)
         chart = chart[:top_n]
@@ -81,10 +79,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
             word = list(freq_dict_temp.keys())[list(freq_dict_temp.values()).index(i)]
             most_common.append(word)
             freq_dict_temp.pop(word)
-    except:
-        return None
+        return most_common
+    return None
 
-    return most_common
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -106,12 +103,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
                 lan_profile["freq"] = text_tmp
                 lan_profile["n_words"] = len(lan_profile["freq"])
                 print(lan_profile)
-        else:
-            return None
-    except:
+            return lan_profile
         return None
-
-    return lan_profile
+    except AttributeError:
+        return None
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -135,7 +130,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         return None
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -160,7 +156,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         return None
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
+                              top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -194,7 +191,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
             if len(word) <= min:
                 stats["min_length_word"] = word
             tokens_length += len(word)
-        stats["average_token_length"] = tokens_length / len(profile_to_compare["freq"])
+        tokens_number = len(profile_to_compare["freq"])
+        stats["average_token_length"] = tokens_length / tokens_number
         return stats
     except:
         return None
