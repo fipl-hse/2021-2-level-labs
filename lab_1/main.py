@@ -150,12 +150,11 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if compare_1 > compare_2:
         language = profile_1["name"]
-    if compare_2 > compare_1:
+    elif compare_2 > compare_1:
         language = profile_2["name"]
     if compare_1 == compare_2:
-        language = [profile_1["name"], profile_2["name"]].sort()
+        language = sorted([profile_1["name"], profile_2["name"]])
     return language
-
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
@@ -204,7 +203,35 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(profiles, list):
+        return None
+    if not isinstance(languages, list):
+        return None
+    if not isinstance(top_n, int):
+        return None
+
+    available_profiles = []
+    if len(languages) == 0:
+        available_profiles = profiles
+    for profile in profiles:
+        if profile["name"] in languages:
+            available_profiles.append(profile)
+
+    lang_list = []
+    for profile in available_profiles:
+        lang_list.append(compare_profiles_advanced(unknown_profile, profile, top_n))
+
+    lang_list = sorted(lang_list, key=lambda x: x["name"])
+    lang_list = sorted(lang_list, key=lambda x: x["score"], reverse=True)
+    if len(lang_list) >= 1:
+        language = (lang_list[0])["name"]
+    else:
+        return None
+    return language
+
+
 
 def load_profile(path_to_file: str) -> dict or None:
     """
