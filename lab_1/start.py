@@ -23,7 +23,7 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    top_n = 9
+    TOP_N = 9
     unknown_profile = main.create_language_profile('unk', unknown_text, [])
 
     de_profile_1 = main.load_profile(os.path.join(PATH_TO_PROFILES, 'de.json'))
@@ -31,18 +31,18 @@ if __name__ == '__main__':
     la_profile_1 = main.load_profile(os.path.join(PATH_TO_PROFILES, 'la.json'))
     profiles_1 = [de_profile_1, en_profile_1, la_profile_1]
 
-    detection_1 = main.detect_language_advanced(unknown_profile, profiles_1, [], top_n)
-    print('External detection result:', detection_1)
+    RESULT_1 = main.detect_language_advanced(unknown_profile, profiles_1, [], TOP_N)
+    print('External detection result:', RESULT_1)
 
     de_profile_2 = main.create_language_profile('de', de_text, [])
     en_profile_2 = main.create_language_profile('en', en_text, [])
     la_profile_2 = main.create_language_profile('la', la_text, [])
     profiles_2 = [de_profile_2, en_profile_2, la_profile_2]
 
-    detection_2 = main.detect_language_advanced(unknown_profile, profiles_2, [], top_n)
-    print('Internal detection result:', detection_2)
+    RESULT_2 = main.detect_language_advanced(unknown_profile, profiles_2, [], TOP_N)
+    print('Internal detection result:', RESULT_2)
 
-    if detection_1 == detection_2:
+    if RESULT_1 == RESULT_2:
         print('External result = internal result')
     else:
         print('Different results')
