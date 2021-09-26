@@ -2,26 +2,54 @@
 Lab 1
 Language detection
 """
+import re
 
-
-def token(text: str) -> list or None:
+def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    pass
+    if not text or text == '':
+        return None
+    else:
+        words = text.replace("\n", " ").split(' ')
+        clearedWordsList = ["".join(list(filter(str.isalpha, line))).lower() for line in words]
+        listWithoutEmptyStrings = list(filter(None, clearedWordsList))
+        print(listWithoutEmptyStrings)
+        return listWithoutEmptyStrings
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
+     Removes stop words
+     :param tokens: a list of tokens
+     :param stop_words: a list of stop words
+     :param stop_words.words(language): a list of stop words
+     :return: a list of tokens without stop words
+     """
+    if not all(isinstance(s, str) for s in stop_words):
+        return tokens
+
+    if checkIfTokensAreValid(tokens):
+        filteredTokens = [x for x in tokens if x not in stop_words]
+        print(filteredTokens)
+        return filteredTokens        
+    else:
+        return None
+
+def checkIfTokensAreValid(tokens: list) -> bool:
     """
-    pass
+    Checks if list contains letter-only strings without any numbers or special characters. 
+    :param tokens: a list of strngs (tokens)
+    :return: boolean value indicating whether list contains letter-only strings without any special characters
+    """
+    if all(isinstance(s, str) for s in tokens):
+        for token in tokens:
+            if not token.isalpha():
+                return False
+    return True
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
