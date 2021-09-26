@@ -107,14 +107,15 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         cross = []
         for i in get_top_n_words(profile_to_compare['freq'], top_n):
             if i in get_top_n_words(unknown_profile['freq'], top_n):
-                    cross.append(i)
+                cross.append(i)
         cross = float(len(cross) / top_n)
         cross = round(cross, 2)
         return cross
     else:
         return None
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -141,7 +142,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict,
+                              profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -184,7 +186,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
         return None
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -212,7 +215,4 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         final = sorted(score, key=lambda cross_score: cross_score['score'], reverse=True)
     else:
         return None
-
-
-
     return (final[0])['name']
