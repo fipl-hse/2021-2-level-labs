@@ -13,13 +13,12 @@ def tokenize(text: str):
     """
     if isinstance(text, str) is False:
         return None
-    text = text.split()
+    text = text.lower()
     punctuation = '''`~!§№@#$%^&|*()_-=+[{]};:'"\\,<.>/?1234567890'''
     for i in text:
-        i = i.lower()
-        for j in i:
-            if j in punctuation:
-                i = i.replace(j, '')
+        if i in punctuation:
+            text = text.replace(i, '')
+    text = text.split()
     text = list(filter(None, text))
     return text
 
