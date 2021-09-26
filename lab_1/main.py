@@ -10,10 +10,17 @@ def tokenize(text: str) -> list or None:
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
-    """
-    return
-
-
+    """ 
+    if not isinstance(text, str):
+        return None
+    text = text.lower()
+    punktmarks = '''1234567890?!.,'"/\\<>{}[]():;-+=_@#№^|$%*'''
+    for b in text:
+        if b in punktmarks:
+            text = text.replace(b, '')
+    tokens = text.split()
+    return tokens
+    
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
