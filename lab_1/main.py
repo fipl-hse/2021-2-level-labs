@@ -21,7 +21,7 @@ def tokenize(text: str) -> list or None:
             text = text.replace(token,'')
     tokens = text.split()
     return tokens
-    pass
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -42,8 +42,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     print(tokens_1)
     return tokens_1
 
-    pass
-stop_words = ['the', 'a', 'is']
+
+
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
@@ -63,7 +63,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freqs_dict[token] += 1
     return freqs_dict
 
-    pass
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -83,7 +83,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         freq_2_dict.append(word[0])
     return list(freq_2_dict[:top_n])
 
-    pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -108,7 +107,6 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     profile['n_words'] = len(profile['freq'])
     return profile
 
-    pass
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -134,7 +132,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     proportion_of_frequency = round(common_words/top_n, 2)
     return proportion_of_frequency
 
-    pass
 
 
 def detect_language(unknown_profile: dict,
@@ -165,8 +162,6 @@ def detect_language(unknown_profile: dict,
         return profile_2 ['name']
     else:
         return list_1[0]
-
-    pass
 
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -217,7 +212,7 @@ def compare_profiles_advanced(unknown_profile: dict,
     else:
         profile['name'] = unknown_profile ['name']
     return profile
-    pass
+
 
 
 def detect_language_advanced(unknown_profile: dict,
@@ -260,7 +255,6 @@ def detect_language_advanced(unknown_profile: dict,
     return common_profiles [0]
 
 
-    pass
 
 
 def load_profile(path_to_file: str) -> dict or None:
@@ -279,7 +273,7 @@ def load_profile(path_to_file: str) -> dict or None:
         return None
     new_profile = data
     return new_profile
-    pass
+
 
 
 def save_profile(profile: dict) -> int:
@@ -296,4 +290,4 @@ def save_profile(profile: dict) -> int:
     with open ("../lab_1/profiles/"+ name + ".json", "w") as new_file:
         json.dump(profile, new_file)
     return 0
-    pass
+
