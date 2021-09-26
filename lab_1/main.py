@@ -3,6 +3,8 @@ Lab 1
 Language detection
 """
 
+import json
+from os.path import exists
 
 def tokenize(text: str) -> list or None:
     """
@@ -208,3 +210,38 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     else:
         language = reports[0]['name']
     return language
+
+def load_profile(path_to_file: str) -> dict or None:
+    """
+    Loads a language profile
+    :param path_to_file: a path
+    :return: a dictionary with three keys – name, freq, n_words
+    """
+    if not isinstance(path_to_file, str) or not exists(path_to_file):
+        return None
+    with open(path_to_file, encoding='utf-8') as file:
+        profile = json.load(file)
+    if profile:
+        return profile
+    return None
+
+
+
+def save_profile(profile: dict) -> int:
+    """
+    Saves a language profile
+    :param profile: a dictionary
+    :return: 0 if everything is ok, 1 if not
+    """
+    if not isinstance(profile, dict) or ('name' or 'freq' or 'n_words') not in profile.keys():
+        return 1
+    if not (isinstance(profile['name'], str) and isinstance(profile['freq'], dict)
+            and isinstance(profile['n_words'], int)):
+        return 1
+    new_file = "{}.json".format(profile['name'])
+    with open(new_file, 'w', encoding='utf-8') as file:
+        json.dump(profile, file)
+    return 0
+
+
+
