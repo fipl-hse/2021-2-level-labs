@@ -40,7 +40,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         if isinstance(i, str):
             tokens = [i for i in tokens if i not in stop_words]
             print(tokens)
-            return tokens
+    return tokens
 
 def calculate_frequencies(tokens: list) -> dict or None:
     """
@@ -248,6 +248,7 @@ def load_profile(path_to_file: str) -> dict or None:
     """
     if not isinstance(path_to_file, str):
         return None
+    return path_to_file
 
 def save_profile(profile: dict) -> int:
     """
@@ -257,3 +258,4 @@ def save_profile(profile: dict) -> int:
     """
     if not isinstance(profile, dict):
         return None
+    return profile
