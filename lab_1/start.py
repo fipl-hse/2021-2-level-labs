@@ -29,6 +29,7 @@ if __name__ == '__main__':
         print(interesting)
         result = main.detect_language_advanced(new_profile, [en, de, la], [], 5)
         print(result)
+        main.save_profile(new_profile)
 
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, "la.txt"), "r", encoding="utf-8") as file_to_read:
         la_text = file_to_read.read()
