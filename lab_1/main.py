@@ -228,19 +228,35 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
     return language_with_max_shares
 
 
-#def load_profile(path_to_file: str) -> dict or None:
-#    """
-#    Loads a language profile
-#    :param path_to_file: a path
-#    :return: a dictionary with three keys – name, freq, n_words
-#    """
-    #pass
+def load_profile(path_to_file: str) -> dict or None:
+    """
+    Loads a language profile
+    :param path_to_file: a path
+    :return: a dictionary with three keys – name, freq, n_words
+    """
+    import json
+    if not isinstance(path_to_file, str):
+        return None
+    try:
+        with open (path_to_file,'r') as f1:
+            file = json.loads(f1.read())
+    except FileNotFoundError:
+        return None
+
+    profile = file
+    return profile
 
 
-#def save_profile(profile: dict) -> int:
-#    """
-#    Saves a language profile
-#    :param profile: a dictionary
-#    :return: 0 if everything is ok, 1 if not
-#    """
-    #pass
+def save_profile(profile: dict) -> int:
+    """
+    Saves a language profile
+    :param profile: a dictionary
+    :return: 0 if everything is ok, 1 if not
+    """
+    import json
+    if not isinstance(profile,dict):
+        return None
+    name_of_file = profile['name']
+    with open ('name_of_file.json','w') as f2:
+        json.dump(profile,f2)
+    return 0
