@@ -139,8 +139,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
             return profile_1['name']
         if second_intersecting_words > first_intersecting_words:
             return profile_2['name']
-        else:
-            return [[profile_1['name'], profile_2['name']].sort()][0]
+        return [[profile_1['name'], profile_2['name']].sort()][0]
     return None
 
 
