@@ -209,30 +209,23 @@ def detect_language_advanced(unknown_profile: dict,
             or not isinstance(languages, list)
             or not isinstance(top_n, int)):
         return None
-    shares_common_words = []
+    reports = [] # shares_common_words
     for profile in profiles:
         if profile["name"] in languages or not languages:
-            share_common_words = compare_profiles_advanced(unknown_profile, profile, top_n)
-            shares_common_words.append(share_common_words)
-    shares_common_words = sorted(shares_common_words, key=lambda x: x["score"], reverse=True)
-    if len(shares_common_words) == 0:
+            report = compare_profiles_advanced(unknown_profile, profile, top_n) # share_common_words
+            reports.append(report) # share_common_words.append(share_common_words)
+    reports = sorted(reports, key=lambda x: x["score"], reverse=True)
+    if len(reports) == 0:
         return None
-    if len(shares_common_words) > 1:
-        if shares_common_words[0]["score"] == shares_common_words[1]["score"]:
-            shares_common_words_with_max_score = []
-            for element in shares_common_words:
-                if element["score"] == shares_common_words[0]["score"]: # best score
-                    shares_common_words_with_max_score.append(element)
-            shares_common_words_with_max_score = sorted(shares_common_words_with_max_score,
-                                                        key=lambda x: x["name"])
-            language = shares_common_words_with_max_score[0]["name"]
-            return language
-        language = shares_common_words[0]["name"]
-        return language
-    if len(shares_common_words) == 1:
-        language = shares_common_words[0]["name"]
-        return language
-    return None
+    if len(reports) > 1:
+        if reports[0]["score"] == reports[1]["score"]:
+            reports_with_max_score = []
+            for element in reports:
+                if element["score"] == reports[0]["score"]: # best score
+                    reports_with_max_score.append(element)
+            reports = sorted(reports_with_max_score, key=lambda x: x["name"])
+    language = reports[0]["name"]
+    return language
 
 
 def load_profile(path_to_file: str) -> dict or None:
