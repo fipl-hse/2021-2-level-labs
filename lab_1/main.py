@@ -34,6 +34,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     if not isinstance(tokens, list):
         return None
+    if not isinstance(stop_words, list):
+        return None
     for i in tokens:
         if isinstance(i, str):
             tokens = [i for i in tokens if i not in stop_words]
@@ -67,20 +69,21 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    top_n_words = []
+
     if not isinstance(freq_dict, dict):
         return None
     if not isinstance(top_n, int):
         return None
 
     freq_dict_sort = sorted(freq_dict.items(), key = lambda x: x[1], reverse=True)
+    top_n_words = []
+    values = []
 
-    for value, key in freq_dict_sort:
-        top_n_words.append(value)
+    for key, value in freq_dict_sort:
+        top_n_words.append(key)
+        values.append(value)
     if len(top_n_words) >= top_n:
-        return top_n_words[:top_n]
-    if len(top_n_words) < top_n:
-        return top_n_words
+        top_n_words = top_n_words[:top_n]
     return top_n_words
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
