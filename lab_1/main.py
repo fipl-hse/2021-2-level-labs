@@ -250,6 +250,6 @@ def save_profile(profile: dict) -> int:
     if (not isinstance(profile, dict)) or (('name' or 'freq' or 'n_words') not in profile.keys()):
         return 1
     lang_file = profile.get('name') + '.json'
-    with open(lang_file, 'w') as lang_profile:
+    with open(lang_file, 'w', encoding='utf-8') as lang_profile:
         json.dump(lang_file, lang_profile)
     return 0
