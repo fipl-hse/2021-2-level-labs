@@ -72,7 +72,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     freq_list = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
     top_n_words = []
-    # take the zero element of the tuples (it is sorted tokens) and add to the new list
+    # take the zero element of the tuples (it is the sorted tokens) and add to the new list
     for tuple_element in freq_list:
         top_n_words.append(tuple_element[0])
     # take the top_n tokens from the list of sorted tokens
@@ -93,9 +93,13 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
             or not isinstance(text, str)
             or not isinstance(stop_words, list)):
         return None
+    # use function remove_stop_words
     tokens = remove_stop_words(tokenize(text), stop_words)
+    # use function calculate_frequencies
     frequency_dictionary = calculate_frequencies(tokens)
+    # find the number of tokens in the dictionary
     n_words = len(frequency_dictionary.keys())
+    # create language profile
     profile = {"name": language, "freq": frequency_dictionary, "n_words": n_words}
     return profile
 
@@ -112,9 +116,12 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
         return None
+    # use function get_top_n_words
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
+    # find common tokens
     common_things = list(set(top_n_words_unknown) & set(top_n_words_compare))
+    # find share of common tokens
     share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
     return share_of_common_things
 
@@ -135,8 +142,10 @@ def detect_language(unknown_profile: dict,
             or not isinstance(profile_2, dict)
             or not isinstance(top_n, int)):
         return None
+    # use function compare_profiles
     share_the_first_language = compare_profiles(unknown_profile, profile_1, top_n)
     share_the_second_language = compare_profiles(unknown_profile, profile_2, top_n)
+    # detect the language via share of common tokens
     if share_the_first_language == share_the_second_language:
         if_two_language = sorted([profile_1["name"], profile_2["name"]])
         language_name = if_two_language[0]
@@ -150,7 +159,6 @@ def detect_language(unknown_profile: dict,
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
                               top_n: int) -> dict or None:
-    # there was type list
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -163,7 +171,7 @@ def compare_profiles_advanced(unknown_profile: dict,
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
         return None
-    # get common and sorted_common
+    # use function get_top_n_words to get common and sorted_common
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
     common = []
@@ -210,19 +218,21 @@ def detect_language_advanced(unknown_profile: dict,
             or not isinstance(languages, list)
             or not isinstance(top_n, int)):
         return None
+    # sort the reports by score
     reports = []
     for profile in profiles:
         if profile["name"] in languages or not languages:
             report = compare_profiles_advanced(unknown_profile, profile, top_n)
             reports.append(report)
     reports = sorted(reports, key=lambda x: x["score"], reverse=True)
+    # sort in alphabetically order if some languages have the same max scores
     if len(reports) == 0:
         return None
     if len(reports) > 1:
         if reports[0]["score"] == reports[1]["score"]:
             reports_with_max_score = []
             for element in reports:
-                if element["score"] == reports[0]["score"]: # best score
+                if element["score"] == reports[0]["score"]:
                     reports_with_max_score.append(element)
             reports = sorted(reports_with_max_score, key=lambda x: x["name"])
     language = reports[0]["name"]
@@ -237,6 +247,7 @@ def load_profile(path_to_file: str) -> dict or None:
     """
     if not isinstance(path_to_file, str):
         return None
+    # load profile from file
     try:
         with open(path_to_file, "r", encoding="utf-8") as json_file:
             profile = json.load(json_file)
@@ -257,7 +268,9 @@ def save_profile(profile: dict) -> int:
             or not isinstance(profile["freq"], dict)
             or not isinstance(profile["n_words"], int)):
         return 1
+    # generate file name from profile name
     path_to_file = "{}.json".format(profile["name"])
+    # save profile in json file
     with open(path_to_file, "w", encoding="utf-8") as file:
         json.dump(profile, file)
     return 0

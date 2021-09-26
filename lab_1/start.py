@@ -45,9 +45,9 @@ if __name__ == '__main__':
 
     # check
     if RESULT_10 == RESULT_8:
-        print("Great", RESULT_10, "==", RESULT_8)
+        print("Great!", RESULT_10, "==", RESULT_8)
     else:
-        print("Something is wrong")
+        print("Something is wrong!")
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
     # assert EXPECTED == RESULT, 'Detection not working'
