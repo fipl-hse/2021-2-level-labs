@@ -84,10 +84,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
     if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
-        profile_lang = {"name": language,
-                        "freq": calculate_frequencies(remove_stop_words(tokenize(text),
+        profile_lang = {'name': language,
+                        'freq': calculate_frequencies(remove_stop_words(tokenize(text),
                                                                         stop_words)),
-                        "n_words": len(calculate_frequencies(remove_stop_words(tokenize(text),
+                        'n_words': len(calculate_frequencies(remove_stop_words(tokenize(text),
                                                                                stop_words)))}
         return profile_lang
     else:
@@ -193,3 +193,26 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profiles, list)
+        and isinstance(languages, list)
+            and isinstance(top_n, int)):
+        return None
+    lang_profile = []
+    if languages == []:
+        lang_profile = profiles
+    for profile in profiles:
+        if profile['name'] in languages:
+            lang_profile.append(profile)
+    score = []
+    for cross in lang_profile:
+        score.append(compare_profiles_advanced(unknown_profile, cross, top_n))
+    final = sorted(score, key=lambda lang_name: lang_name['name'])
+    if len(score) >= 1:
+        final = sorted(score, key=lambda cross_score: cross_score['score'], reverse=True)
+    else:
+        return None
+
+
+
+    return (final[0])['name']
