@@ -62,7 +62,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
             freqs_dict[token] = 1
         else:
             freqs_dict[token] += 1
-    return (freqs_dict)
+    return freqs_dict
 
     pass
 
@@ -138,7 +138,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     pass
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict,
+                    profile_1: dict, profile_2: dict,
+                    top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -148,7 +150,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
 
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance (profile_2, dict) :
+    if not isinstance(unknown_profile, dict) \
+            or not isinstance(profile_1, dict)\
+            or not isinstance (profile_2, dict) :
         return None
     if not isinstance (top_n,int) :
         return None
@@ -166,7 +170,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     pass
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict,
+                              profile_to_compare: dict,
+                              top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -215,7 +221,9 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     pass
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict,
+                             profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -238,7 +246,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             profile_3 = compare_profiles_advanced (unknown_profile, profile, top_n)
             score_1 = profile_3['score']
             dict_languages_and_scores[profile['name']] = score_1
-    sorted_dict_languages_and_scores = sorted(dict_languages_and_scores.items(), key = lambda x: x[1])
+    sorted_dict_languages_and_scores = sorted(dict_languages_and_scores.items(),
+                                              key = lambda x: x[1])
     if len(sorted_dict_languages_and_scores) == 0:
         return None
     common_profiles = list()
