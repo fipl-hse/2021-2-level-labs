@@ -210,8 +210,6 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
         return None
     if not isinstance(languages, list):
         return None
-    if not isinstance(top_n, int):
-        return None
     shares = {}
     if languages == []:
         for profile in profiles:
@@ -237,19 +235,19 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
                 language_with_max_value = languages_with_max_value[0]
                 return language_with_max_value
 
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
+#def load_profile(path_to_file: str) -> dict or None:
+#    """
+#    Loads a language profile
+#    :param path_to_file: a path
+#    :return: a dictionary with three keys – name, freq, n_words
+#    """
+    #pass
 
 
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
+#def save_profile(profile: dict) -> int:
+#    """
+#    Saves a language profile
+#    :param profile: a dictionary
+#    :return: 0 if everything is ok, 1 if not
+#    """
+    #pass
