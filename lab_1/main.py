@@ -217,7 +217,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             max_scores.append(i)
     result_bibs = {}
     for i in max_scores:
-        for k in bibs.items():
+        for k in bibs.keys():
             if bibs[k] == i:
                 result_bibs[k] = i
     result = list(result_bibs.keys())
