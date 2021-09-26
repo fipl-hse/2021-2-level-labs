@@ -158,7 +158,7 @@ def detect_language(unknown_profile: dict,
     list_1 = list.sort()
     if proportion_of_frequency_1 > proportion_of_frequency_2:
         return profile_1 ['name']
-    elif proportion_of_frequency_2 > proportion_of_frequency_1:
+    if proportion_of_frequency_2 > proportion_of_frequency_1:
         return profile_2 ['name']
     else:
         return list_1[0]
@@ -267,8 +267,8 @@ def load_profile(path_to_file: str) -> dict or None:
     if not isinstance(path_to_file, str):
         return None
     try:
-        with open (path_to_file, 'r') as f:
-            data = json.loads(f.read())
+        with open (path_to_file, 'r') as path:
+            data = json.loads(path.read())
     except FileNotFoundError:
         return None
     new_profile = data
