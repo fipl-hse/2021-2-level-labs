@@ -207,23 +207,17 @@ def detect_language_advanced(unknown_profile, profiles, languages, top_n ):
     if not isinstance(languages, list):
         return None
     shares = {}
+    languages_with_max_shares = []
     for profile in profiles:
-        if len(languages) == 0 or profile['name'] in languages:
+        if languages == [] or profile['name'] in languages:
             language_profiles = compare_profiles_advanced(unknown_profile, profile, top_n)
             shares[language_profiles['name']] = language_profiles['score']
     shares_sorted = sorted(list(shares.items()), key=lambda x: x[1])
-    print(shares_sorted)
     if len(shares_sorted) == 0:
         return None
-    languages_with_max_shares = []
-    strange_len = len(shares_sorted) - 1
-    print(strange_len)
-    max_share = shares_sorted[-1][1]
-    print(max_share)
-    for tup_language_with_share in shares_sorted:
-        print(tup_language_with_share)
-        if tup_language_with_share[1] == max_share:
-            languages_with_max_shares.append(tup_language_with_share[0])
+    for tup_languages_with_shares in shares_sorted:
+        if tup_languages_with_shares[1] == shares_sorted[-1][1]:
+            languages_with_max_shares.append(tup_languages_with_shares[0])
             languages_with_max_shares.sort()
             language_with_max_shares = languages_with_max_shares[0]
     return language_with_max_shares
