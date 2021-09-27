@@ -19,6 +19,7 @@ def tokenize(text: str) -> list or None:
         for symbol in token:
             if symbol.isalpha() == False:
                 token = token.replace(symbol, '')
+    for token in tokens:
         if token == '':
             tokens.remove(token)
     return tokens
