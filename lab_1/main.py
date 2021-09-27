@@ -142,9 +142,10 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict):
-        return None
-    if not isinstance(profile_2, dict) or not isinstance(top_n, int):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_1, dict)
+            and isinstance(profile_2, dict)
+            and isinstance(top_n, int)):
         return None
 
     compare_1 = compare_profiles(profile_1, unknown_profile, top_n)
@@ -163,39 +164,24 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     return language
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
-    """
-    Compares profiles and calculates some advanced parameters
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-    min_length_word, average_token_length
-    """
+#   def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
+#    """
+#    Compares profiles and calculates some advanced parameters
+#    :param unknown_profile: a dictionary
+#    :param profile_to_compare: a dictionary
+#   :param top_n: a number of the most common words
+#   :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
+#    min_length_word, average_token_length
+#   """
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
-    """
-    Detects the language of an unknown profile within the list of possible languages
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :param top_n: a number of the most common words
-    :return: a language
-    """
+#   def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
+#    """
+#    Detects the language of an unknown profile within the list of possible languages
+#    :param unknown_profile: a dictionary
+#    :param profiles: a list of dictionaries
+#    :param languages: a list of possible languages
+#    :param top_n: a number of the most common words
+#    :return: a language
+#    """
 
-
-def load_profile(path_to_file: str):
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-
-
-def save_profile(profile: dict):
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
