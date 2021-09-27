@@ -4,7 +4,7 @@ Language detection
 """
 
 
-def tokenize(text: str):
+def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
@@ -23,41 +23,40 @@ def tokenize(text: str):
     return text
 
 
-def remove_stop_words(text: list, stop_words: list):
+def remove_stop_words(tokens: list, stop_words: list):
     """
     Removes stop words
     :rtype: object
-    :param text: a list of tokens
+    :param tokens: a list of tokens
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if isinstance(text, list) is False or isinstance(stop_words, list) is False or None in text:
+    if isinstance(tokens, list) is False or isinstance(stop_words, list) is False or None in tokens:
         return None
-    lent = len(text)
     i = 0
     count = 0
-    while count < lent:
+    while count < len(tokens):
         count += 1
-        if text[i] in stop_words:
-            text.remove(text[i])
+        if tokens[i] in stop_words:
+            tokens.remove(tokens[i])
         else:
             i += 1
-    return text
+    return tokens
 
 
-def calculate_frequencies(text: list) -> dict or None:
+def calculate_frequencies(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
-    :param text: a list of tokens
+    :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if isinstance(text, list) is False or None in text:
+    if isinstance(tokens, list) is False or None in tokens:
         return None
     freq_dict = {}
-    for char in text:
+    for char in tokens:
         if isinstance(char, str) is False:
             return None
-        freq_dict[char] = text.count(char)
+        freq_dict[char] = tokens.count(char)
     return freq_dict
 
 
@@ -123,7 +122,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return proportion
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int):
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -148,7 +147,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     return result
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -189,7 +188,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return compared_profile
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -222,24 +221,5 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
                 result_bibs[k] = i
     result = list(result_bibs)
     result = sorted(result)
-    if len(result) == 1:
-        result = result[0]
+    result = result[0]
     return result
-
-
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
-
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
