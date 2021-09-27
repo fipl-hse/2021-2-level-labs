@@ -85,31 +85,19 @@ def remove_stop_words(text_update, STOP_WORDS):
     else:
         return None
 
-    #else:
-        #if text_update:
-            #filtered_text = []
-            #for m in text_update:
-                #if m not in STOP_WORDS:
-                    #filtered_text.append(m)
-            #return filtered_text
-        #else:
-             #return None
-
-
-
-
-
 def calculate_frequencies(text_update):
-
-
-
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
-
+   if isinstance(text_update, list):
+       for j in text_update:
+           if isinstance(j, str):
+               frequency_dict = {}
+               for token in text_update:
+                   if token not in frequency_dict:
+                       frequency_dict[token] = 1
+                   else:
+                       frequency_dict[token] += 1
+               return frequency_dict
+           return None
+   return None
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
