@@ -17,8 +17,7 @@ def tokenize(text: str) -> list or None:
         return None
     word = []
     tokens = []
-    text = text.lower()
-    for i in text:
+    for i in text.lower():
         if i.isalpha():
             word.append(i)
         elif i.isspace():
