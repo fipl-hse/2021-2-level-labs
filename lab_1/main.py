@@ -11,17 +11,17 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
-    else:
-        symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[',
-                   '{', '}', ']', ';', '<', ',', '>', '.', '?', '|', '\\', ':', ';', '"', "'",
-                   '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '\t']
-        for s in symbols:
-            text = text.replace(s, '')
-        text = text.lower()
-        text = text.split()
-        return text
+
+    symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', '}',
+               ']', ';', '<', ',', '>', '.', '?', '|', '\\', ':', ';', '"', "'",
+               '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '\t']
+    for s in symbols:
+        text = text.replace(s, '')
+    text = text.lower()
+    text = text.split()
+    return text
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -32,13 +32,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     checking_tokens = []
-    if type(tokens) != list and type(stop_words) != list:
-        return None
-    elif type(tokens) == list and type(stop_words) == list:
+    if isinstance(tokens, list) and isinstance(stop_words, list):
         for token in tokens:
             if token not in stop_words:
                 checking_tokens.append(token)
         return checking_tokens
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
+        return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -48,7 +48,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     freq_dict = {}
-    if type(tokens) != list:
+    if isinstance(tokens, list):
         return None
     for token in tokens:
         if type(token) == str:
@@ -69,7 +69,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
 
-    if type(freq_dict) != dict or type(top_n) != int:
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, list):
         return None
     top_n_words = []
     freq_dict_keys = [key for key in freq_dict]
@@ -91,16 +91,16 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if type(language) != str:
+    if not isinstance(language, str):
         return None
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
-    if type(stop_words) != list:
+    if not isinstance(stop_words, list):
         return None
     tokens = tokenize(text)
     tokens_without_stop_words = remove_stop_words(tokens, stop_words)
     frequencies = calculate_frequencies(tokens_without_stop_words)
-    language_profile = {'name': language, 'freq': frequencies, 'n_words': len(frequencies) }
+    language_profile = {'name': language, 'freq': frequencies, 'n_words': len(frequencies)}
     return language_profile
 
 
@@ -112,8 +112,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if type(unknown_profile) != dict or type(profile_to_compare) != dict or \
-            type(top_n) != int:
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or \
+            not isinstance(top_n, int):
         return None
     top_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
     top_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -121,7 +121,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for profile_word in top_profile_to_compare:
         if profile_word in top_unknown_profile:
             common_words.append(profile_word)
-    distance = round(len(common_words) / len(top_unknown_profile),2)
+    distance = round(len(common_words) / len(top_unknown_profile), 2)
     return distance
 
 
@@ -134,8 +134,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if type(unknown_profile) != dict or type(profile_1) != dict or type(
-            profile_2) != dict or type(top_n) != int:
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(
+            profile_2, dict) or not isinstance(top_n, int):
         return None
     compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
     compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
