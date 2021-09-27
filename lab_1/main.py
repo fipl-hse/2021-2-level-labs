@@ -71,19 +71,20 @@ def tokenize(text_str):
 text = tokenize(text_str)
 print(text)
 
-#def remove_stop_words(text_update, STOP_WORDS):
-    #if isinstance(STOP_WORDS, list) and isinstance(text_update, list):
-        #if text_update:
-           #for m in range(len(text_update)):
-                #if text_update[m] in STOP_WORDS:
-                    #text_update[m] = ''
-            #while '' in text_update:
-                #text_update.remove('')
-            #return text_update
-        #else:
-            #return None
-    #else:
-        #return None
+def remove_stop_words(text_update, STOP_WORDS):
+    if isinstance(STOP_WORDS, list) and isinstance(text_update, list):
+        if text_update:
+           for m in enumerate(text_update):
+               if m[1] in STOP_WORDS:
+                  text_update[m[0]] = ''
+           while '' in text_update:
+                text_update.remove('')
+           return text_update
+        else:
+            return None
+    else:
+        return None
+
     #else:
         #if text_update:
             #filtered_text = []
