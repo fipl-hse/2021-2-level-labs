@@ -128,7 +128,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for wrd in first_top_n:
         if wrd in second_top_n:
             profiles_in_common.append(wrd)
-    result = round(len(profiles_in_common) / len(top_n1), 2)
+    result = round(len(profiles_in_common) / len(first_top_n), 2)
     return result
 
 
