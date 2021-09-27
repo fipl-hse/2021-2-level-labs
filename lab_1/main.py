@@ -131,23 +131,23 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict) \
-            or not isinstance(profile_1, dict) \
-            or not isinstance(profile_2, dict) \
-            or not isinstance(top_n, int):
-        return None
-    profile_1_tokens = compare_profiles(unknown_profile, profile_1, top_n)
-    profile_2_tokens = compare_profiles(unknown_profile, profile_2, top_n)
-    name_1 = profile_1['name']
-    name_2 = profile_2['name']
-    if profile_1_tokens > profile_2_tokens:
-        return name_1
-    if profile_2_tokens > profile_1_tokens:
-        return name_2
-    if profile_1_tokens == profile_2_tokens:
-        names = [name_1, name_2]
-        names.sort()
-        return names[0]
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_1, dict) \
+            and isinstance(profile_2, dict) \
+            and isinstance(top_n, int):
+        profile_1_tokens = compare_profiles(unknown_profile, profile_1, top_n)
+        profile_2_tokens = compare_profiles(unknown_profile, profile_2, top_n)
+        name_1 = profile_1['name']
+        name_2 = profile_2['name']
+        if profile_1_tokens > profile_2_tokens:
+            return name_1
+        if profile_2_tokens > profile_1_tokens:
+            return name_2
+        if profile_1_tokens == profile_2_tokens:
+            names = [name_1, name_2]
+            names.sort()
+            return names[0]
+    return None
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
