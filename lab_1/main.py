@@ -30,9 +30,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     if not (
-        isinstance(tokens, list) 
-        or tokens == []
-        or all(isinstance(s, str) for s in tokens)
+        isinstance(tokens, list)
+        and tokens != []
+        and all(isinstance(s, str) for s in tokens)
     ):
         return None
     if isinstance(stop_words, list):
@@ -73,8 +73,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if not (
         isinstance(freq_dict, dict)
-        or all(isinstance(v, int) for v in freq_dict.values())
-        or isinstance(top_n, int)
+        and all(isinstance(v, int) for v in freq_dict.values())
+        and isinstance(top_n, int)
     ):
         return None
     srtd_list = sorted(freq_dict, key=freq_dict.get, reverse=True)
