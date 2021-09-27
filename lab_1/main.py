@@ -103,7 +103,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
 
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     common_words = []
     top_unknown = get_top_n_words(unknown_profile["freq"], top_n)
@@ -125,7 +127,10 @@ def detect_language(unknown_profile: dict, profile_1: dict,
     :return: a language
     """
 
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_1, dict)
+            and isinstance(profile_2, dict)
+            and isinstance(top_n, int)):
         return None
     compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
     compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
@@ -149,7 +154,9 @@ def compare_profiles_advanced(unknown_profile: dict,
     min_length_word, average_token_length
     """
 
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
 
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
@@ -188,7 +195,10 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     :return: a language
     """
 
-    if not (isinstance(unknown_profile, dict) and isinstance(profiles, list) and isinstance(languages, list) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profiles, list)
+            and isinstance(languages, list)
+            and isinstance(top_n, int)):
         return None
 
     available_profiles = []
