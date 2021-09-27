@@ -83,9 +83,20 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
-
-
+ 
+    if not isinstance(text, str):
+        return None
+    if not isinstance(stop_words, list):
+        return None
+    if not isinstance(language, str): 
+        return None
+    tokens = tokenize(text)
+    tokens = remove_stop_words(tokens, stop_words)
+    freq_dict = calculate_frequencies(tokens)
+    language_profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
+    return language_profile
+        
+    
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
@@ -94,8 +105,21 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
-
+    if not isinstance(unknown_profile, dict):
+        return None
+    if not isinstance(top_n, int):
+        return None
+    if not isinstance(profile_to_compare, dict):
+        return None
+    
+    unknown_profile_tokens = get_top_n_words(unknown_profile['freq'], top_n)
+    profile_to_compare_tokens = get_top_n_words(profile_to_compare['freq'], top_n)
+    common_top_n = 0
+    for i in unknown_profile_tokens:
+        if i in profile_to_compare_tokens:
+            common_top_n = common_top_n + 1
+    distance = round(common_top_n/len(profile_to_compare_tokens))
+    return distance
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
