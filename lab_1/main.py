@@ -37,9 +37,9 @@ def remove_stop_words(tokens: list, stop_words: list):
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
         if tokens:
-            for j in enumerate(tokens):
-                if tokens[j] in stop_words:
-                    tokens[j] = ''
+            for token in enumerate(tokens):
+                if token[1] in stop_words:
+                    tokens[token[0]] = ''
             while '' in tokens:
                 tokens.remove('')
             return tokens
@@ -164,22 +164,22 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
         unk_top_words = get_top_n_words(unknown_profile['freq'], top_n)
         comp_top_words = get_top_n_words(profile_to_compare['freq'], top_n)
         shared_tokens = []
-        for i in enumerate(comp_top_words):
-            if comp_top_words[i] in unk_top_words:
-                shared_tokens.append(comp_top_words[i])
+        for comp_top_word in enumerate(comp_top_words):
+            if comp_top_word[1] in unk_top_words:
+                shared_tokens.append(comp_top_word[1])
         score = compare_profiles(unknown_profile, profile_to_compare, top_n)
         words = list(profile_to_compare['freq'].keys())
         max_length_word = 'a'
-        for i in enumerate(words):
-            if len(words[i]) > len(max_length_word):
-                max_length_word = words[i]
+        for word in enumerate(words):
+            if len(word[1]) > len(max_length_word):
+                max_length_word = word[1]
         min_length_word = 100 * 'a'
-        for i in enumerate(words):
-            if len(words[i]) < len(min_length_word):
-                min_length_word = words[i]
+        for word1 in enumerate(words):
+            if len(word1[1]) < len(min_length_word):
+                min_length_word = word1[1]
         sum_letters = 0
-        for i in enumerate(words):
-            sum_letters += len(words[i])
+        for word2 in enumerate(words):
+            sum_letters += len(word2[1])
         average_token_length = sum_letters / len(words)
         sorted_common = shared_tokens.copy()
         sorted_common.sort()
