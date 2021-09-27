@@ -247,9 +247,10 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance(path_to_file, str):
-        return None
-    if not exists(path_to_file):
+    if not (
+        isinstance(path_to_file, str)
+        and exists(path_to_file)
+    ):
         return None
     with open(path_to_file, mode='r', encoding='UTF-8') as file:
         profile = json.load(file)
