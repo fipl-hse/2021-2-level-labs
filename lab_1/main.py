@@ -15,9 +15,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     for symbol in text:
-        if symbol.isdigit() or symbol in '''!@#$%^&*()_-+={}[]|\'";:/?>.<,№%`~''':
-            text = text.replace(symbol, '')
-    tokens = text.split()
+        if symbol.isdigit() or symbol in '''!@#$%^&*()_-+={}[]|\'";:/?>.<,№%`~''':   # А как работать с символами, которых у нас нет на клавиатуре?
+            text = text.replace(symbol, '') #Например, с математическими знаками?
+    tokens = text.split()                   #Почему проверка через ifalpha не может использоваться?
     for token in tokens:
         token.strip()
     return tokens
