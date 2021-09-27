@@ -47,8 +47,6 @@ if __name__ == '__main__':
     else:
         print('Different results')
 
-    main.save_profile(unknown_profile)
-
     EXPECTED = 'en'
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
