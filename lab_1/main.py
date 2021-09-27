@@ -12,7 +12,7 @@ def tokenize(text: str) -> list or None:
     """
     if isinstance(text, str):
         text = text.lower()
-        text = re.sub('[^a-züöäß \n]', '', text)   # ищем слова(все то, что не цифры и не прочие знаки)
+        text = re.sub('[^a-züöäß \n]', '', text)
         text = text.split()
         return text
     return None
@@ -168,8 +168,8 @@ def compare_profiles_advanced(unknown_profile: dict,
         max_length = max(words, key=len)
         min_length = min(words, key=len)
         length_word = 0
-        for word in range(len(words)):
-            length_word += len(words[word])
+        for i in range(len(words)):
+            length_word += len(words[i])
         average_length = length_word / len(words)
         comp_prof_adv = {'name': profile_to_compare['name'],
                          'score': common_score,
