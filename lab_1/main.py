@@ -208,12 +208,11 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     if not exist_lang and languages:
         return None
     sorted_score = sorted(score.items(), key=lambda x: x[1], reverse=True)
-    i = 0
     first_score = sorted_score[0][1]
     name_list = []
-    while i < len(sorted_score) and first_score == sorted_score[i][1]:
-        name_list.append(sorted_score[i][0])
-        i += 1
+    for i in sorted_score:
+        if first_score == i[1]:
+            name_list.append(i[0])
     name_list_sorted = sorted(name_list)
     return name_list_sorted[0]
 
