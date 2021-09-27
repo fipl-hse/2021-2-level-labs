@@ -34,7 +34,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     if isinstance(tokens, list) != True:
         return None
     for word in tokens:
-        if word in stop_words:
+        if word in stop_words and word != None:
             tokens = tokens.remove(word)
     return tokens
 
