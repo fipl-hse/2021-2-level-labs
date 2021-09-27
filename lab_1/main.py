@@ -12,7 +12,7 @@ def tokenize(text: str) -> list or None:
     """
     if isinstance(text, str):
         text = text.lower()
-        text = re.sub('[^a-züöäß \n]','', text) #ищем слова(все то, что не цифры и не прочие знаки)
+        text = re.sub('[^a-züöäß \n]', '', text)   # ищем слова(все то, что не цифры и не прочие знаки)
         text = text.split()
         return text
     return None
@@ -66,8 +66,6 @@ def get_top_n_words(freq_dict: dict,
         common_words = common_words[:top_n]
         return common_words
     return None
-
-
 
 def create_language_profile(language: str,
                             text: str,
@@ -126,7 +124,7 @@ def detect_language(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
-    if (isinstance (unknown_profile, dict)
+    if (isinstance(unknown_profile, dict)
             and isinstance(profile_1, dict)
             and isinstance(profile_2, dict)
             and isinstance(top_n, int)):
@@ -138,11 +136,10 @@ def detect_language(unknown_profile: dict,
         prof_comp_2 = get_top_n_words(profile_compare_2, top_n)
         for i in unknown_needed:
             if i in prof_comp_1:
-                language1 = profile_1['name']
-                return language1
+                i = profile_1['name']
             elif i in prof_comp_2:
-                language2 = profile_2['name']
-                return language2
+                i = profile_2['name']
+            return i
     return None
 
 def compare_profiles_advanced(unknown_profile: dict,
