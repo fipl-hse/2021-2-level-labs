@@ -138,9 +138,11 @@ def detect_language(unknown_profile: dict,
         prof_comp_2 = get_top_n_words(profile_compare_2, top_n)
         for i in unknown_needed:
             if i in prof_comp_1:
-                return profile_1['name']
+                language1 = profile_1['name']
+                return language1
             elif i in prof_comp_2:
-                return profile_2['name']
+                language2 = profile_2['name']
+                return language2
     return None
 
 def compare_profiles_advanced(unknown_profile: dict,
@@ -172,9 +174,13 @@ def compare_profiles_advanced(unknown_profile: dict,
         for word in range(len(words)):
             length_word += len(words[word])
         average_length = length_word / len(words)
-        comp_prof_adv = {'name': profile_to_compare['name'], 'score': common_score, 'common': most_common_words1,
-                         'sorted_common': most_common_words_sorted, 'max_length_word': max_length,
-                         'min_length_word': min_length, 'average_token_length': average_length}
+        comp_prof_adv = {'name': profile_to_compare['name'],
+                         'score': common_score,
+                         'common': most_common_words1,
+                         'sorted_common': most_common_words_sorted,
+                         'max_length_word': max_length,
+                         'min_length_word': min_length,
+                         'average_token_length': average_length}
         return comp_prof_adv
     return None
 
