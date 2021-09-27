@@ -158,7 +158,7 @@ def detect_language(unknown_profile: dict,
             return profile_1['name']
         else:
             return profile_2['name']
-    if profile_1_match > profile_2_match:
+    elif profile_1_match > profile_2_match:
         return profile_1['name']
     else:
         return profile_2['name']
