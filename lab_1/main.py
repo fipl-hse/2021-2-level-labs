@@ -15,9 +15,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     punctuation = '''`~!§№@#$%^&|*()_-=+[{]};:'"\\,<.>/?1234567890'''
-    for i in text:
-        if i in punctuation:
-            text = text.replace(i, '')
+    for char in text:
+        if char in punctuation:
+            text = text.replace(char, '')
     text = text.split()
     text = list(filter(None, text))
     return text
@@ -33,14 +33,15 @@ def remove_stop_words(tokens: list, stop_words: list):
     """
     if isinstance(tokens, list) is False or isinstance(stop_words, list) is False or None in tokens:
         return None
-    i = 0
+    length = len(tokens)
+    index = 0
     count = 0
-    while count < len(tokens):
+    while count < length:
         count += 1
-        if tokens[i] in stop_words:
-            tokens.remove(tokens[i])
+        if tokens[index] in stop_words:
+            tokens.remove(tokens[index])
         else:
-            i += 1
+            index += 1
     return tokens
 
 
@@ -72,10 +73,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     top_dict = {}
     freq_list = sorted(freq_dict.values())
     freq_list = freq_list[::-1]
-    for i in freq_list:
-        for j in freq_dict.keys():
-            if freq_dict[j] == i:
-                top_dict[j] = freq_dict[j]
+    for value in freq_list:
+        for key in freq_dict.keys():
+            if freq_dict[key] == value:
+                top_dict[key] = freq_dict[key]
     top_list = list(top_dict.keys())
     top_list = top_list[:top_n]
     return top_list
@@ -115,8 +116,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     unknown_profile_top = get_top_n_words(unknown_profile['freq'], top_n)
     profile_to_compare_top = get_top_n_words(profile_to_compare['freq'], top_n)
     count = 0
-    for i in unknown_profile_top:
-        if i in profile_to_compare_top:
+    for item in unknown_profile_top:
+        if item in profile_to_compare_top:
             count += 1
     proportion = round(count/top_n, 2)
     return proportion
@@ -163,9 +164,9 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     unknown_profile_top = get_top_n_words(unknown_profile['freq'], top_n)
     profile_to_compare_top = get_top_n_words(profile_to_compare['freq'], top_n)
     common = []
-    for i in profile_to_compare_top:
-        if i in unknown_profile_top:
-            common.append(i)
+    for item in profile_to_compare_top:
+        if item in unknown_profile_top:
+            common.append(item)
     score = len(common)/top_n
     general = list(profile_to_compare['freq'].keys())
     max_len = general[0]
@@ -211,14 +212,14 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         return None
     max_score = max(scores)
     max_scores = [max_score]
-    for i in scores:
-        if i == max_score:
-            max_scores.append(i)
+    for item in scores:
+        if item == max_score:
+            max_scores.append(item)
     result_bibs = {}
-    for i in max_scores:
-        for k in bibs.keys():
-            if bibs[k] == i:
-                result_bibs[k] = i
+    for item in max_scores:
+        for key in bibs.keys():
+            if bibs[key] == item:
+                result_bibs[key] = item
     result = list(result_bibs)
     result = sorted(result)
     result = result[0]
