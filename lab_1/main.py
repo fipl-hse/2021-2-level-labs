@@ -29,12 +29,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     if not isinstance(tokens, list) or not tokens:
         return None
-    elif not isinstance(stop_words, list) or not stop_words:
+    if not isinstance(stop_words, list) or not stop_words:
         return tokens
     for symbol in tokens:
-        for symbol in stop_words:
-            if symbol in stop_words and symbol in tokens:
-                tokens.remove(symbol)
+        for symbol_stop in stop_words:
+            if symbol in stop_words and symbol_stop in tokens:
+                    tokens.remove(symbol_stop)
     return tokens
 
 
@@ -125,7 +125,7 @@ def detect_language(unknown_profile: dict, profile_1: dict,
         if compare_profiles(unknown_profile, profile_1, top_n) >\
                 compare_profiles(unknown_profile, profile_2, top_n):
             return profile_1['name']
-        elif compare_profiles(unknown_profile, profile_1, top_n) <\
+        if compare_profiles(unknown_profile, profile_1, top_n) <\
                 compare_profiles(unknown_profile, profile_2, top_n):
             return profile_2['name']
         else:
