@@ -162,7 +162,6 @@ def compare_profiles_advanced(unknown_profile: dict,
         for i in profile_compared_top1:
             if i in unknown_profile_top:
                 most_common_words1.append(i)
-        most_common_words_sorted = sorted(most_common_words1)
         common_score = len(most_common_words1)/len(unknown_profile_top)
         words = list(profile_to_compare['freq'].keys())
         max_length = max(words, key=len)
@@ -175,7 +174,7 @@ def compare_profiles_advanced(unknown_profile: dict,
         comp_prof_adv = {'name': profile_to_compare['name'],
                          'score': common_score,
                          'common': most_common_words1,
-                         'sorted_common': most_common_words_sorted,
+                         'sorted_common': sorted(most_common_words1),
                          'max_length_word': max_length,
                          'min_length_word': min_length,
                          'average_token_length': average_length}
