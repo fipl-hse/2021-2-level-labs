@@ -4,33 +4,43 @@ Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
-    """
-    Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
-    """
-    return True
+import re
+text = str(input('Enter your text: '))
+def tokenize():
+    if re.search(r'[^a-zA-Z\0-9üÜäÄöÖß]+[^\w\s]', text):
+        None
+        print('Вы ввели текст на кириллице')
+    else:
+        text2=text.lower()
+        token = re.sub(r'[^\w\s]','',text2)
+        token2 = re.split(r'\b\W\b', token)
+        print(token2)
+    
+    def remove_stop_words():
+        stopwords = ['am','is','are','a','an']
+        stoplist =[]
+        t = input('stopwords:')
+        if t not in stopwords:
+            None
+        else:
+            stoplist.append(t)
+            clear_text = []
+            for word in token2:
+                if word not in stoplist:
+                    clear_text.append(word)
+                    print(clear_text)
+        
+        def calculate_frequencies():
+            freqdict = {}
+            for word in clear_text:
+                if len(word) >= 0 and not freqdict.get(word):
+                    freqdict[word] = clear_text.count(word)
+                    print(freqdict)
 
+        calculate_frequencies()
+    remove_stop_words()
+tokenize()
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    """
-    pass
-
-
-def calculate_frequencies(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
