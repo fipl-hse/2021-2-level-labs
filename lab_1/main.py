@@ -56,6 +56,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
             t_dict[word] += 1
         elif isinstance(word,str) and word not in t_dict.keys():
             t_dict[word] = 1
+    if t_dict == {}:
+        return None
     return t_dict
 
 
