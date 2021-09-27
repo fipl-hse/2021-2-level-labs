@@ -16,17 +16,16 @@ def tokenize(text: str) -> list or None:
     if isinstance(text, str):
         text = text.lower()
         skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
-        for g in text:
-            if g in skip_signs:
-                text = text.replace(g, "")
+        for element in text:
+            if element in skip_signs:
+                text = text.replace(element, "")
         text = re.sub(r"\d+", "", text)  # delete numbers
         tokens = re.split(r"\s", text)
         for q in tokens:
             if q == '':
                 tokens.remove(q)
         return tokens
-    else:
-        return None
+    return None
 
 
 def remove_stop_words(tokens: list, stop_words: list):
@@ -44,10 +43,8 @@ def remove_stop_words(tokens: list, stop_words: list):
             while '' in tokens:
                 tokens.remove('')
             return tokens
-        else:
-            return None
-    else:
         return None
+    return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -66,10 +63,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
                     else:
                         freq_dict[i] = 1
                 return freq_dict
-            else:
-                return None
-    else:
-        return None
+            return None
+    return None
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -84,8 +79,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         most_comm_words = list(sorted_dict)
         most_comm_words = most_comm_words[:top_n]
         return most_comm_words
-    else:
-        return None
+    return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -102,10 +96,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         freq_dic = calculate_frequencies(tokens)
         ling_dict = {'name': language, 'freq': freq_dic, 'n_words': len(freq_dic)}
         return ling_dict
-    else:
-        return None
-
-    pass
+    return None
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -126,8 +117,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         common_freq_words = shared_tokens / len(profile_to_compare_tokens)
         common_freq_words = round(common_freq_words, 2)
         return common_freq_words
-    else:
-        return None
+    return None
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -153,8 +143,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
             names = [name1, name2]
             names.sort()
             return names[0]
-    else:
-        return None
+    return None
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
@@ -189,8 +178,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
                   'average_token_length': average_token_length,
                   'sorted_common': sorted_common}
         return report
-    else:
-        return None
+    return None
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -220,8 +208,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
                         equal_scores.append(i)
                 list_of_languages = sorted(equal_scores, reverse=True, key=lambda x: x['score'])
         return list_of_languages[0]['name']
-    else:
-        return None
+    return None
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -241,8 +228,7 @@ def load_profile(path_to_file: str) -> dict or None:
             return text
         except FileNotFoundError:
             return None
-    else:
-        return None
+    return None
     """
     Loads a language profile
     :param path_to_file: a path
@@ -255,11 +241,9 @@ def save_profile(profile: dict) -> int:
         with open("{}.json".format(profile["name"]), 'w', encoding='utf-8') as file:
             json.dump(profile, file)
         return 0
-    else:
-        return 1
+    return 1
     """
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
