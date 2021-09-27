@@ -52,10 +52,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
         return None
     t_dict = {}
     for word in tokens:
-        t_dict[word] = 0
         if isinstance(word,str) and word in t_dict.keys():
             t_dict[word] += 1
-        else:
+        elif isinstance(word,str) and word not in t_dict.keys():
             t_dict[word] = 1
     return t_dict
 
