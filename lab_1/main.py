@@ -29,9 +29,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if not isinstance(tokens, list) or tokens == []:
-        return None
-    if not all(isinstance(s, str) for s in tokens):
+    if not (
+        isinstance(tokens, list) 
+        or tokens == []
+        or all(isinstance(s, str) for s in tokens)
+    ):
         return None
     if isinstance(stop_words, list):
         cleaned_tokens = []
@@ -69,11 +71,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if not isinstance(freq_dict, dict):
-        return None
-    if not all(isinstance(v, int) for v in freq_dict.values()):
-        return None
-    if not isinstance(top_n, int):
+    if not (
+        isinstance(freq_dict, dict)
+        or all(isinstance(v, int) for v in freq_dict.values())
+        or isinstance(top_n, int)
+    ):
         return None
     srtd_list = sorted(freq_dict, key=freq_dict.get, reverse=True)
     if top_n < len(srtd_list):
@@ -260,10 +262,9 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    if not isinstance(profile, dict):
-        return 1
     if not (
-        isinstance(profile['name'], str)
+        isinstance(profile, dict)
+        or isinstance(profile['name'], str)
         or isinstance(profile['freq'], dict)
         or isinstance(profile['n_words'], int)
     ):
