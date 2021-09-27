@@ -220,4 +220,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             list_score = sorted(max_scores, reverse=True, key=lambda x: x['score'])
     result = list_score[0]['name']
     return result
-
