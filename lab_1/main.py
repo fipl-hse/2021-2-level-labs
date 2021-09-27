@@ -161,11 +161,9 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     """
     if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) \
             and isinstance(top_n, int):
-        unk_top_words = get_top_n_words(unknown_profile['freq'], top_n)
-        comp_top_words = get_top_n_words(profile_to_compare['freq'], top_n)
         shared_tokens = []
-        for comp_top_word in enumerate(comp_top_words):
-            if comp_top_word[1] in unk_top_words:
+        for comp_top_word in enumerate(get_top_n_words(profile_to_compare['freq'], top_n)):
+            if comp_top_word[1] in get_top_n_words(unknown_profile['freq'], top_n):
                 shared_tokens.append(comp_top_word[1])
         score = compare_profiles(unknown_profile, profile_to_compare, top_n)
         words = list(profile_to_compare['freq'].keys())
@@ -180,7 +178,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
         sum_letters = 0
         for word_for_sum in enumerate(words):
             sum_letters += len(word_for_sum[1])
-        average_token_length = sum_letters / len(words)
         sorted_common = shared_tokens.copy()
         sorted_common.sort()
         report = {'name': profile_to_compare['name'],
@@ -188,7 +185,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
                   'score': score,
                   'max_length_word': max_length_word,
                   'min_length_word': min_length_word,
-                  'average_token_length': average_token_length,
+                  'average_token_length': sum_letters / len(words),
                   'sorted_common': sorted_common}
         return report
     return None
