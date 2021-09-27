@@ -115,7 +115,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return None
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict,
+                    profile_1: dict,
+                    profile_2: dict,
+                    top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -138,7 +141,9 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     return [[profile_1['name'], profile_2['name']].sort()][0]
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> dict or None:
+def compare_profiles_advanced(unknown_profile: dict,
+                              profile_to_compare: dict,
+                              top_n: int) -> dict or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -174,7 +179,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return full_profile
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict,
+                             profiles: list,
+                             languages: list,
+                             top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -199,8 +207,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
                 score.update({language['name']: full_profile['score']})
         if not score:
             return None
-        score_sorted = sorted(score, key=score.get, reverse=True)
-        return score_sorted[0]
+        score_sorted = (sorted(score, key=score.get, reverse=True))[0]
+        return score_sorted
 
 
 def load_profile(path_to_file: str) -> dict or None:
@@ -230,7 +238,8 @@ def save_profile(profile: dict) -> int:
                 and isinstance(profile['freq'], dict) \
                 and isinstance(profile['n_words'], int):
             path = 'D:\\projects\\2021-2-level-labs\\lab_1\\profiles'
-            with open(os.path.join(path, "{}.json".format(profile['name'])), "w", encoding="utf-8") as file:
+            with open(os.path.join(path, "{}.json".format(profile['name'])),
+                      "w", encoding="utf-8") as file:
                 json.dump(profile, file)
                 return 0
         else:
