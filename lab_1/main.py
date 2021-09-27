@@ -209,7 +209,7 @@ def detect_language_advanced(unknown_profile: dict,
             return None
         score_sorted = (sorted(score, key=score.get, reverse=True))[0]
         return score_sorted
-
+    return None
 
 def load_profile(path_to_file: str) -> dict or None:
     """
