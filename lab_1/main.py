@@ -5,14 +5,20 @@ Language detection
 
 
 def tokenize(text: str) -> list or None:
-    """
-    Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words
-    :param text: a text
-    :return: a list of lower-cased tokens without punctuation
-    """
-   text = text.split()
-   return text
+    text = text.lower()
+    text = text.replace("'", ' ')
+    n_text = ''
+    for i in range(len(text)):
+        if text[i].isalpha() or text[i] == ' ' or text[i] == '\n':
+            n_text += text[i]
+        else:
+            text.replace(text[i], ' ')
+    t_tokens = n_text.split()
+    return t_tokens
+
+
+
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
