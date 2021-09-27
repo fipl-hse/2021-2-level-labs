@@ -12,18 +12,15 @@ def tokenize(text: str) -> list or None:
         :param text: a text
         :return: a list of lower-cased tokens without punctuation
     """
-    text_new = ""
-    if isinstance(text, str):
+    if not isinstance(text, str):
+        return None
+    else:
+        text_new = ""
         for i in text:
             if i not in string.punctuation:
                 text_new += i
-    else:
-        return None
 
-    text_new = text_new.lower()
-    text_new = text_new.split()
-
-    return text_new
+    return text_new.lower().split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -33,14 +30,15 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    tokens_update = []
-    if isinstance(tokens, list) and isinstance(stop_words, list):
+    if not (isinstance(tokens, list) and isinstance(stop_words, list)):
+        return None
+    else:
+        tokens_update = []
         for word in tokens:
             if word not in stop_words:
                 tokens_update.append(word)
         return tokens_update
 
-    return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -50,17 +48,18 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     freq = {}
-    if isinstance(tokens, list):
+    if not isinstance(tokens, list):
+        return None
+    else:
         for word in tokens:
-            if isinstance(word, str):
+            if not isinstance(word, str):
+                return None
+            else:
                 if word in list(freq.keys()):
                     freq[word] += 1
                 else:
                     freq[word] = 1
-            else:
-                return None
-        return freq
-    return None
+    return freq
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -71,7 +70,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
 
-    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+    if not isinstance(freq_dict, dict) and isinstance(top_n, int):
+        return None
+    else:
         most_common = []
         chart = sorted(list(freq_dict.values()), reverse=True)
         chart = chart[:top_n]
@@ -81,7 +82,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
             most_common.append(word)
             freq_dict_temp.pop(word)
         return most_common
-    return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -97,14 +97,13 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         text_tmp = tokenize(text_tmp)
         text_tmp = remove_stop_words(text_tmp, stop_words)
         text_tmp = calculate_frequencies(text_tmp)
-        if text_tmp is not None:
+        if text_tmp is None:
+            return None
+        else:
             if language.isalpha():
-                lan_profile = {"name": language}
-                lan_profile["freq"] = text_tmp
+                lan_profile = {"name": language, "freq": text_tmp}
                 lan_profile["n_words"] = len(lan_profile["freq"])
-                print(lan_profile)
             return lan_profile
-        return None
     except AttributeError:
         return None
 
