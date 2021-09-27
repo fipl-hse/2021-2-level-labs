@@ -106,7 +106,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
                               top_n: int) -> list or None:
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) \
+            and isinstance(top_n, int):
         unk_top_words = get_top_n_words(unknown_profile['freq'], top_n)
         comp_top_words = get_top_n_words(profile_to_compare['freq'], top_n)
         shared_tokens = []
@@ -153,7 +154,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         list_of_languages = sorted(list_of_languages, reverse=True, key=lambda x: x['score'])
         if not list_of_languages:
             return None
-        elif len(list_of_languages) > 1:
+        if len(list_of_languages) > 1:
             if list_of_languages[0]['score'] == list_of_languages[1]['score']:
                 equal_scores = []
                 for i in list_of_languages:
@@ -167,8 +168,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
 def load_profile(path_to_file: str) -> dict or None:
     if isinstance(path_to_file, str):
         try:
-            with open(path_to_file, 'r', encoding='utf-8') as f:
-                text = json.load(f)
+            with open(path_to_file, 'r', encoding='utf-8') as file:
+                text = json.load(file)
             return text
         except FileNotFoundError:
             return None
