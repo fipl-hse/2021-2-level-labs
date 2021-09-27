@@ -189,7 +189,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     return None
 
 
-
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list,
                              top_n: int) -> str or None:
     """
