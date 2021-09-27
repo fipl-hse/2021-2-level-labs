@@ -14,17 +14,12 @@ def tokenize(text: str) -> list or None:
     if isinstance(text,str) != True:
         return None
     text = text.lower()
-    almost_tokens = text.split()
-    tokens = []
-    for token in almost_tokens:
-        word = []
-        for symbol in token:
-            if symbol.isalpha():
-                word.append(symbol)
-        tokens.append(''.join(word))
+    for symbol in text:
+        if symbol.isdigit() or symbol in '''!@#$%^&*()_-+={}[]|\'";:/?>.<,№%`~''':
+            text.replace(symbol, '')
+    tokens = text.split()
     for token in tokens:
-        if token == '':
-            tokens.remove(token)
+        token.strip()
     return tokens
 
 
