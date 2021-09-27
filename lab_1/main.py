@@ -13,10 +13,10 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
 
-    word = []
-    tokens = []
     if not isinstance(text, str):
         return None
+    word = []
+    tokens = []
     text = text.lower()
     for i in text:
         if i.isalpha():
@@ -54,9 +54,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
 
-    freq_dict = {}
     if not isinstance(tokens, list):
         return None
+    freq_dict = {}
     for i in tokens:
         if not isinstance(i, str):
             return None
@@ -76,9 +76,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
 
-    top_words = []
     if not isinstance(freq_dict, dict):
         return None
+    top_words = []
     if all(isinstance(e, str) for e in list(freq_dict.keys())):
         top_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
     return top_words
@@ -112,10 +112,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
 
-    common = []
     if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)
             and isinstance(top_n, int)):
         return None
+    common = []
     unknown = get_top_n_words(unknown_profile.get('freq'), top_n)
     compare = get_top_n_words(profile_to_compare.get('freq'), top_n)
     for i in unknown:
@@ -161,10 +161,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     min_length_word, average_token_length
     """
 
-    common = []
     if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)
             and isinstance(top_n, int)):
         return None
+    common = []
     tokens = list(profile_to_compare.get('freq').keys())
     max_length_word = max(tokens, key=len)
     min_length_word = min(tokens, key=len)
@@ -200,10 +200,10 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :return: a language
     """
 
-    score = {}
     if not (isinstance(unknown_profile, dict) and isinstance(profiles, list)
             and isinstance(languages, list) and isinstance(top_n, int)):
         return None
+    score = {}
     exist_lang = False
     for _ in profiles:
         if languages:
