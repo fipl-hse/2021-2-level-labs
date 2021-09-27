@@ -128,8 +128,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         for word in compare_top:
             if word in unknown_top:
                 count += 1   # если слово присутствует в топ-n словах двух языков, то прибавляем 1
-        top_common_words = round(count / unknown_top_len)    # делим общие слова на длину списка токенов
-        #  на неизвестном языке
+        top_common_words = round(count / unknown_top_len, 2)
+        # делим общие слова на длину списка токенов на неизвестном и округляем
     return top_common_words
 
 
