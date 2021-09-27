@@ -174,17 +174,16 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
         max_length_word = max(all_words_compare, key=len)  # max
         min_length_word = min(all_words_compare, key=len)  # min
         sum_of_letters = 0
-        for j in all_words_compare:
-            sum_of_letters += len(j)
+        for i in all_words_compare:
+            sum_of_letters += len(i)
         average_token_length = sum_of_letters / len(all_words_compare)
-        sorted_common = sorted(common_top_n)
         report = {'name': profile_to_compare['name'],
                   'common': common_top_n,
                   'score': score,
                   'max_length_word': max_length_word,
                   'min_length_word': min_length_word,
                   'average_token_length': average_token_length,
-                  'sorted_common': sorted_common}
+                  'sorted_common': sorted(common_top_n)}
         return report
     return None
 
