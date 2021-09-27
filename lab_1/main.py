@@ -170,16 +170,16 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
         score = compare_profiles(unknown_profile, profile_to_compare, top_n)
         words = list(profile_to_compare['freq'].keys())
         max_length_word = 'a'
-        for word in enumerate(words):
-            if len(word[1]) > len(max_length_word):
-                max_length_word = word[1]
+        for word_for_max in enumerate(words):
+            if len(word_for_max[1]) > len(max_length_word):
+                max_length_word = word_for_max[1]
         min_length_word = 100 * 'a'
-        for word1 in enumerate(words):
-            if len(word1[1]) < len(min_length_word):
-                min_length_word = word1[1]
+        for word_for_min in enumerate(words):
+            if len(word_for_min[1]) < len(min_length_word):
+                min_length_word = word_for_min[1]
         sum_letters = 0
-        for word2 in enumerate(words):
-            sum_letters += len(word2[1])
+        for word_for_sum in enumerate(words):
+            sum_letters += len(word_for_sum[1])
         average_token_length = sum_letters / len(words)
         sorted_common = shared_tokens.copy()
         sorted_common.sort()
