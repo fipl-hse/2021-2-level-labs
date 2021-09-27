@@ -197,22 +197,14 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, \
     if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or\
             not isinstance(languages, list):
         return None
-    shares = {}
-    languages_with_max_shares = []
-    for profile in profiles:
-        if languages == [] or profile['name'] in languages:
-            language_profiles = compare_profiles_advanced(unknown_profile, profile, top_n)
-            shares[language_profiles['name']] = language_profiles['score']
-    shares_sorted = sorted(list(shares.items()), key=lambda x: x[1])
-    if len(shares_sorted) == 0:
+    language_profiles = [compare_profiles_advanced(unknown_profile, profile, top_n) for profile in profiles
+                         if len(languages) == 0 or profile['name'] in languages]
+    shares_sorted_name = sorted(language_profiles, key=lambda profile: profile['name'])
+    shares_sorted_name_and_score = sorted(shares_sorted_name, key=lambda profile: profile['score'])
+    if len(shares_sorted_name_and_score) == 0:
         return None
-    for tup_languages_with_shares in shares_sorted:
-        if tup_languages_with_shares[1] == shares_sorted[-1][1]:
-            languages_with_max_shares.append(tup_languages_with_shares[0])
-            languages_with_max_shares.sort()
-            language_with_max_shares = languages_with_max_shares[0]
+    language_with_max_shares = shares_sorted_name_and_score[-1]['name']
     return language_with_max_shares
-
 
 def load_profile(path_to_file: str) -> dict or None:
     """
