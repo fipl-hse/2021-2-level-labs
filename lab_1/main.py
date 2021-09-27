@@ -146,7 +146,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     if profile_1_tokens == profile_2_tokens:
         names = [name_1, name_2]
         names = sorted(names)
-        return names
+        return names[0]
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
