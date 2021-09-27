@@ -63,9 +63,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
-    freq_dict = list(freq_dict.items())
-    freq_dict_sort = sorted(freq_dict, key=lambda i: -i[1])
-    if len(freq_dict_sort) == 0:
+    freq_dict_sort = sorted(freq_dict.items(), key=lambda i: i[1], reverse=True)
+    if freq_dict_sort == []:
         return []
     new_freq_list = []
     for element in freq_dict_sort:
@@ -111,8 +110,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'],top_n)
     top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
     len_top_n_words_unknown_profile = len(top_n_words_unknown_profile)
-    if top_n_words_profile_to_compare == top_n_words_unknown_profile:
-        share_of_common_frequency_words = float(1)
+    for word in top_n_words_profile_to_compare:
+        if len(top_n_words_profile_to_compare) == len(top_n_words_unknown_profile) \
+                and (word in top_n_words_unknown_profile):
+            share_of_common_frequency_words = float(1)
     else:
         for word_profile_to_compare in top_n_words_profile_to_compare:
             if word_profile_to_compare in top_n_words_unknown_profile:
