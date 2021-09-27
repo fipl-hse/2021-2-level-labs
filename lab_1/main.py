@@ -1,4 +1,4 @@
-#coding=utf-8
+
 """
 Lab 1
 Language detection
@@ -32,14 +32,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     tokens_1 = []
-    if not isinstance(stop_words, list):
-        return None
-    if not isinstance(tokens,list):
+    if not isinstance(stop_words, list) or not isinstance(tokens,list):
         return None
     for token in tokens:
         if token not in stop_words:
             tokens_1.append(token)
-    print(tokens_1)
     return tokens_1
 
 
@@ -76,7 +73,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not isinstance(freq_dict,dict):
         return None
     freq_dict = sorted(freq_dict.items(), key=lambda x:-x[1])
-    if len(freq_dict) == 0:
+    if not freq_dict:
         return []
     freq_2_dict = []
     for word in freq_dict:
@@ -95,9 +92,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     """
     if len(text) == 0:
         return None
-    if not isinstance(stop_words,list):
-        return None
-    if not isinstance (language,str):
+    if not isinstance(stop_words,list) or not isinstance (language,str):
         return None
     profile = {}
     profile ['name'] = language
@@ -237,13 +232,13 @@ def detect_language_advanced(unknown_profile: dict,
         return None
     dict_languages_and_scores = {}
     for profile in profiles:
-        if len(languages) == 0 or profile['name'] in languages:
+        if not languages or profile['name'] in languages:
             profile_3 = compare_profiles_advanced (unknown_profile, profile, top_n)
             score_1 = profile_3['score']
             dict_languages_and_scores[profile['name']] = score_1
     sorted_dict_languages_and_scores = sorted(dict_languages_and_scores.items(),
                                               key = lambda x: x[1])
-    if len(sorted_dict_languages_and_scores) == 0:
+    if not sorted_dict_languages_and_scores:
         return None
     common_profiles = []
     highest_score = sorted_dict_languages_and_scores[len(sorted_dict_languages_and_scores)-1][1]
@@ -269,10 +264,9 @@ def load_profile(path_to_file: str) -> dict or None:
         return None
     try:
         with open (path_to_file, 'r', encoding = "utf-8") as path:
-            data = json.loads(path.read())
+            new_profile = json.loads(path.read())
     except FileNotFoundError:
         return None
-    new_profile = data
     return new_profile
 
 
