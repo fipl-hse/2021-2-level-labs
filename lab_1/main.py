@@ -16,8 +16,8 @@ def tokenize(text: str) -> list or None:
     text = text.lower()
     for symbol in text:
         if symbol in '''1234567890!@#$%^&*()_-+={}[]|\\'";://?>.<,№%`~''':   # А как работать с символами, которых у нас нет на клавиатуре?
-            text = text.replace(symbol, '') #Например, с математическими знаками?
-    tokens = text.split()                   #Почему проверка через ifalpha не может использоваться?
+            text = text.replace(symbol, '')                                  #Например, с математическими знаками?
+    tokens = text.split()                                                    #Почему проверка через ifalpha не может использоваться?
     for token in tokens:
         token.strip()
     return tokens
@@ -38,7 +38,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         if token not in stop_words:
             without_sw.append(token)
     return without_sw
-    return tokens
 
 
 
