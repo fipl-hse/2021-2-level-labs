@@ -30,7 +30,9 @@ if __name__ == '__main__':
     unknown_profile = main.create_language_profile('unk', unknown_text, [])
 
     EXPECTED = 'en'
-    only_de_and_la_result = main.detect_language_advanced(unknown_profile, [de_profile, la_profile], [], 3)
+    only_de_and_la_result = main.detect_language_advanced(unknown_profile,
+                                                          [de_profile, la_profile],
+                                                          [], 3)
     print(only_de_and_la_result)
 
     # task 10
@@ -41,7 +43,9 @@ if __name__ == '__main__':
                            main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'la.json'))]
 
     all_profiles_result = main.detect_language_advanced(unknown_profile, all_profiles, [], 3)
-    all_loaded_profiles_result = main.detect_language_advanced(unknown_profile, all_loaded_profiles, [], 3)
+    all_loaded_profiles_result = main.detect_language_advanced(unknown_profile,
+                                                               all_loaded_profiles,
+                                                               [], 3)
 
     print(all_profiles_result + ' ' + all_loaded_profiles_result)
 
