@@ -163,25 +163,3 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         # сортируем языки в алфавитном порядке и с помощью срезов возьмем первый язык
     return language
 
-
-#   def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int):
-#    """
-#    Compares profiles and calculates some advanced parameters
-#    :param unknown_profile: a dictionary
-#    :param profile_to_compare: a dictionary
-#   :param top_n: a number of the most common words
-#   :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-#    min_length_word, average_token_length
-#   """
-
-
-#   def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int):
-#    """
-#    Detects the language of an unknown profile within the list of possible languages
-#    :param unknown_profile: a dictionary
-#    :param profiles: a list of dictionaries
-#    :param languages: a list of possible languages
-#    :param top_n: a number of the most common words
-#    :return: a language
-#    """
-
