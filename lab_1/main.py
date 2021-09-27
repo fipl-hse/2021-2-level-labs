@@ -33,16 +33,11 @@ def remove_stop_words(tokens: list, stop_words: list):
     """
     if isinstance(tokens, list) is False or isinstance(stop_words, list) is False or None in tokens:
         return None
-    length = len(tokens)
-    index = 0
-    count = 0
-    while count < length:
-        count += 1
-        if tokens[index] in stop_words:
-            tokens.remove(tokens[index])
-        else:
-            index += 1
-    return tokens
+    tokens_normalno = []
+    for item in tokens:
+        if item not in stop_words:
+            tokens_normalno.append(item)
+    return tokens_normalno
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -176,12 +171,12 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     max_len = general[0]
     min_len = general[0]
     average = 0
-    for i in general:
-        average += len(i)
-        if len(i) > len(max_len):
-            max_len = i
-        elif len(i) < len(min_len):
-            min_len = i
+    for item in general:
+        average += len(item)
+        if len(item) > len(max_len):
+            max_len = item
+        elif len(item) < len(min_len):
+            min_len = item
     average_token_length = average/len(general)
     compared_profile = {'name': profile_to_compare['name'],
                         'common': common,
@@ -207,25 +202,20 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         return None
     if isinstance(languages, list) is False or isinstance(top_n, int) is False:
         return None
-    bibs = {}
-    for i in profiles:
-        if not languages or i['name'] in languages:
-            profile_comp = compare_profiles_advanced(unknown_profile, i, top_n)
-            bibs[i['name']] = profile_comp['score']
-    scores = list(bibs.values())
-    if len(scores) == 0:
+    bibs = []
+    for item in profiles:
+        if not languages or item['name'] in languages:
+            profile_comp = compare_profiles_advanced(unknown_profile, item, top_n)
+            bibs.append(profile_comp)
+    bibs = sorted(bibs, reverse=True, key=lambda x: x['score'])
+    if len(bibs) == 0:
         return None
-    max_score = max(scores)
-    max_scores = [max_score]
-    for item in scores:
-        if item == max_score:
-            max_scores.append(item)
-    result_bibs = {}
-    for item in max_scores:
-        for key in bibs:
-            if bibs[key] == item:
-                result_bibs[key] = item
-    result = list(result_bibs)
-    result = sorted(result)
-    result = result[0]
+    if len(bibs) > 1:
+        if bibs[0]['score'] == bibs[1]['score']:
+            max_scores = []
+            for item in bibs:
+                if item['score'] == bibs[0]['score']:
+                    max_scores.append(item)
+            bibs = sorted(max_scores, reverse=True, key=lambda x: x['score'])
+    result = bibs[0]['name']
     return result
