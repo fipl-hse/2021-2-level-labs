@@ -36,7 +36,11 @@ def tokenize():
                 if len(word) >= 0 and not freqdict.get(word):
                     freqdict[word] = clear_text.count(word)
                     print(freqdict)
-
+            
+            def get_top_n_words():
+                t = sorted(freqdict.items(), key=lambda kv: kv[1], reverse=True)
+                print(t)
+            get_top_n_words()
         calculate_frequencies()
     remove_stop_words()
 tokenize()
