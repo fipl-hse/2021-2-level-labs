@@ -207,7 +207,8 @@ def detect_language_advanced(unknown_profile: dict,
             return None
         max_score = [max(score)]
         result_score = {}
-        for k in dict_score.keys():
+        keys = dict_score.keys()
+        for k in keys:
             for i in max_score:
                 if dict_score[k] == i:
                     result_score[k] = i
