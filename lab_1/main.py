@@ -81,13 +81,11 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance(language, str):
-        return None
-    if not isinstance(text, str):
+    if not isinstance(language, str) or \
+            not isinstance(text, str) or \
+            not isinstance(stop_words,list):
         return None
     if len(text) == 0:
-        return None
-    if not isinstance(stop_words,list):
         return None
     profile = {}
     profile['name'] = language
@@ -105,11 +103,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if not isinstance(unknown_profile, dict):
-        return None
-    if not isinstance(profile_to_compare, dict):
-        return None
-    if not isinstance(top_n, int):
+    if not isinstance(unknown_profile, dict) or \
+            not isinstance(profile_to_compare, dict) or \
+            not isinstance(top_n, int):
         return None
     count = 0
     top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'],top_n)
@@ -134,9 +130,7 @@ def detect_language(unknown_profile:dict, profile_1:dict, profile_2:dict, \
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict):
-        return None
-    if not isinstance(profile_1,dict):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1,dict):
         return None
     share_of_common_words_with_profile_1 = compare_profiles(unknown_profile,profile_1,top_n)
     share_of_common_words_with_profile_2 = compare_profiles(unknown_profile,profile_2,top_n)
@@ -197,8 +191,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, \
     if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or\
             not isinstance(languages, list):
         return None
-    language_profiles = [compare_profiles_advanced(unknown_profile, profile, top_n) for profile in profiles
-                         if len(languages) == 0 or profile['name'] in languages]
+    language_profiles = [compare_profiles_advanced(unknown_profile, profile, top_n)
+            for profile in profiles if len(languages) == 0 or profile['name'] in languages]
     shares_sorted_name = sorted(language_profiles, key=lambda profile: profile['name'])
     shares_sorted_name_and_score = sorted(shares_sorted_name, key=lambda profile: profile['score'])
     if len(shares_sorted_name_and_score) == 0:
