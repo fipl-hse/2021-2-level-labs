@@ -168,8 +168,9 @@ def compare_profiles_advanced(unknown_profile: dict,
         max_length = max(words, key=len)
         min_length = min(words, key=len)
         length_word = 0
-        for i in range(len(words)):
-            length_word += len(words[i])
+        for i, word in enumerate(words):
+            if word in words:
+                length_word += len(words[i])
         average_length = length_word / len(words)
         comp_prof_adv = {'name': profile_to_compare['name'],
                          'score': common_score,
@@ -208,9 +209,9 @@ def detect_language_advanced(unknown_profile: dict,
         max_score = [max(score)]
         result_score = {}
         for i in max_score:
-            for n in dict_score.keys():
-                if dict_score[n] == i:
-                    result_score[n] = i
+            for k in dict_score.keys():
+                if dict_score[k] == i:
+                    result_score[k] = i
         result = list(sorted(result_score.keys()))
         return result[0]
     return None
