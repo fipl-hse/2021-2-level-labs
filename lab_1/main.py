@@ -31,10 +31,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if isinstance(tokens, list) != True:
+    if not (isinstance(tokens, list) and isinstance(stop_words, list)):
         return None
     for word in tokens:
-        if word in stop_words and word != None:
+        if word in stop_words:
             tokens = tokens.remove(word)
     return tokens
 
