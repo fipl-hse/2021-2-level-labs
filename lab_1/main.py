@@ -198,30 +198,26 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list):
+    if not isinstance(unknown_profile, dict) \
+            or not isinstance(profiles, list) \
+            or not isinstance(languages, list)\
+            or not isinstance(top_n, int):
         return None
-    if not isinstance(languages, list) or not isinstance(top_n, int):
-        return None
-    dictionary_score = {}  # {'name': score}
+    list_score = []
     for profile in profiles:
         if not languages or profile['name'] in languages:
             profile_compare = compare_profiles_advanced(unknown_profile, profile, top_n)
-            dictionary_score[profile['name']] = profile_compare['score']
-    scores = list(dictionary_score.values())
-    if len(scores) == 0:
+            list_score.append(profile_compare)
+    list_score = sorted(list_score, reverse=True, key=lambda x: x['score'])
+    if len(list_score) == 0:
         return None
-    max_score = max(scores)
-    max_scores = [max_score]
-    for i in scores:
-        if i == max_score:
-            max_scores.append(i)
-    result_scores = {}
-    for i in max_scores:
-        for j in dictionary_score.keys():
-            if dictionary_score[j] == i:
-                result_scores[j] = i
-    result = list(result_scores.keys())
-    result = sorted(result)
-    if len(result) == 1:
-        result = result[0]
+    if len(list_score) > 1:
+        if list_score[0]['score'] == list_score[1]['score']:
+            max_scores = []
+            for item in list_score:
+                if item['score'] == list_score[0]['score']:
+                    max_scores.append(item)
+            list_score = sorted(max_scores, reverse=True, key=lambda x: x['score'])
+    result = list_score[0]['name']
     return result
+
