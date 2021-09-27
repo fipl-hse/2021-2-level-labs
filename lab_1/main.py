@@ -3,6 +3,7 @@ Lab 1
 Language detection
 """
 import json
+from os.path import exists
 
 
 def tokenize(text: str) -> list or None:
@@ -224,13 +225,10 @@ def load_profile(path_to_file: str) -> dict or None:
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if not isinstance(path_to_file, str):
+    if not isinstance(path_to_file, str) or not exists(path_to_file):
         return None
-    try:
-        with open(path_to_file, 'r', encoding='utf-8') as json_file:
-            lang_profile = json.load(json_file)
-    except FileNotFoundError:
-        return None
+    with open(path_to_file, 'r', encoding='utf-8') as json_file:
+        lang_profile = json.load(json_file)
     return lang_profile
 
 
