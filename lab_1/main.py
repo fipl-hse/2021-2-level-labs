@@ -135,8 +135,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance(unknown_profile, dict) or type(profile_1) != dict or type(
-            profile_2) != dict or type(top_n) != int:
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(
+            profile_2, dict) or not isinstance(top_n, int):
         return None
     compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
     compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
