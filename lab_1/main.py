@@ -77,14 +77,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if (not isinstance(freq_dict, dict)
             or not isinstance(top_n, int)):
         return None
-    # Convert frequency dictionary to list of tuples,
-    # and sort list by frequency.
-    tokens = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
-    # Drop frequency data
-    tokens = [word for word, freq in tokens]
-    # Only include the first N elements
-    tokens = tokens[:top_n]
-    return tokens
+    # Sort the frequency dictionary keys by their values
+    # Return the top n keys
+    return sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
 
 
 def create_language_profile(language: str,
