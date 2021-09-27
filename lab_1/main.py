@@ -75,7 +75,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     if not isinstance(top_n, int):
         return None
-    srtd_list = [freq_dict, key=freq_dict.get, reverse=True)]
+    srtd_list = sorted(freq_dict, key=freq_dict.get, reverse=True)
     if top_n < len(srtd_list):
         return srtd_list[:top_n]
     return srtd_list
