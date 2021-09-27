@@ -11,16 +11,18 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if isinstance(text, str) != True:
+    if isinstance(text,str) != True:
         return None
     text = text.lower()
-    for symbol in text:
-        if symbol.isalpha() == False:
-            text = text.replace(symbol, ' ')
     tokens = text.split()
-    for word in tokens:
-        word = word.strip()
+    for token in tokens:
+        for symbol in token:
+            if symbol.isalpha() == False:
+                token = token.replace(symbol, '')
+        if token == '':
+            tokens.remove(token)
     return tokens
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -110,7 +112,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for word in top_1:
         if word in top_2:
             match += 1
-    return round(match / top_n, 3)
+    return round(match / top_n, 2)
 
 
 
