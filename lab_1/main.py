@@ -21,9 +21,9 @@ def tokenize(text: str) -> list or None:
                 text = text.replace(element, "")
         text = re.sub(r"\d+", "", text)  # delete numbers
         tokens = re.split(r"\s", text)
-        for element in tokens:
-            if element == '':
-                tokens.remove(q)
+        for token in tokens:
+            if token == '':
+                tokens.remove(token)
         return tokens
     return None
 
