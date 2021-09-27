@@ -160,33 +160,34 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    if not isinstance(unknown_profile, dict) \
-            or not isinstance(profile_to_compare, dict) \
-            or not isinstance(top_n, int):
-        return None
-    unknown_top_n = get_top_n_words(unknown_profile['freq'], top_n)
-    compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
-    common_top_n = []
-    for i in compare_top_n:
-        if i in unknown_top_n:
-            common_top_n.append(i)  # common
-    score = len(common_top_n)/top_n  # score
-    all_words_compare = list(profile_to_compare['freq'].keys())
-    max_length_word = max(all_words_compare, key=len)  # max
-    min_length_word = min(all_words_compare, key=len)  # min
-    sum_of_letters = 0
-    for j in all_words_compare:
-        sum_of_letters += len(j)
-    average_token_length = sum_of_letters / len(all_words_compare)
-    sorted_common = sorted(common_top_n)
-    report = {'name': profile_to_compare['name'],
-              'common': common_top_n,
-              'score': score,
-              'max_length_word': max_length_word,
-              'min_length_word': min_length_word,
-              'average_token_length': average_token_length,
-              'sorted_common': sorted_common}
-    return report
+    if isinstance(unknown_profile, dict) \
+            and isinstance(profile_to_compare, dict) \
+            and isinstance(top_n, int):
+        unknown_top_n = get_top_n_words(unknown_profile['freq'], top_n)
+        compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
+        common_top_n = []
+        for i in compare_top_n:
+            if i in unknown_top_n:
+                common_top_n.append(i)  # common
+        score = len(common_top_n)/top_n  # score
+        all_words_compare = list(profile_to_compare['freq'].keys())
+        max_length_word = max(all_words_compare, key=len)  # max
+        min_length_word = min(all_words_compare, key=len)  # min
+        sum_of_letters = 0
+        for j in all_words_compare:
+            sum_of_letters += len(j)
+        average_token_length = sum_of_letters / len(all_words_compare)
+        sorted_common = sorted(common_top_n)
+        report = {'name': profile_to_compare['name'],
+                  'common': common_top_n,
+                  'score': score,
+                  'max_length_word': max_length_word,
+                  'min_length_word': min_length_word,
+                  'average_token_length': average_token_length,
+                  'sorted_common': sorted_common}
+        return report
+    return None
+
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list,
