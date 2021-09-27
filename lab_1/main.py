@@ -112,7 +112,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
 
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
 
     compare_top = get_top_n_words(profile_to_compare['freq'], top_n)  # получаем топ-n слов известного языка
