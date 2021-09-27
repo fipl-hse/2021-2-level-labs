@@ -197,14 +197,14 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         return None
     score = {}
     exist_lang = False
-    for _ in profiles:
+    for lang in profiles:
         if languages:
             for i in languages:
-                if i == _.get('name'):
+                if i == lang.get('name'):
                     exist_lang = True
-                    score[i] = compare_profiles_advanced(unknown_profile, _, top_n).get('score')
+                    score[i] = compare_profiles_advanced(unknown_profile, lang, top_n).get('score')
         else:
-            score[_.get('name')] = compare_profiles_advanced(unknown_profile, _, top_n).get('score')
+            score[lang.get('name')] = compare_profiles_advanced(unknown_profile, lang, top_n).get('score')
     if not exist_lang and languages:
         return None
     sorted_score = sorted(score.items(), key=lambda x: x[1], reverse=True)
