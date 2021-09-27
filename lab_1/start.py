@@ -23,6 +23,9 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
+    EXPECTED = 'en'
+    RESULT = ''
+
     TOP_N = 9
     unknown_profile = main.create_language_profile('unk', unknown_text, [])
 
@@ -32,7 +35,6 @@ if __name__ == '__main__':
     profiles_1 = [de_profile_1, en_profile_1, la_profile_1]
 
     RESULT_1 = main.detect_language_advanced(unknown_profile, profiles_1, [], TOP_N)
-    print('External detection result:', RESULT_1)
 
     de_profile_2 = main.create_language_profile('de', de_text, [])
     en_profile_2 = main.create_language_profile('en', en_text, [])
@@ -40,14 +42,9 @@ if __name__ == '__main__':
     profiles_2 = [de_profile_2, en_profile_2, la_profile_2]
 
     RESULT_2 = main.detect_language_advanced(unknown_profile, profiles_2, [], TOP_N)
-    print('Internal detection result:', RESULT_2)
 
     if RESULT_1 == RESULT_2:
-        print('External result = internal result')
-    else:
-        print('Different results')
+        RESULT = RESULT_1
 
-    EXPECTED = 'en'
-    RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
