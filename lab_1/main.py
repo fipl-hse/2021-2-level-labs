@@ -37,7 +37,7 @@ def remove_stop_words(tokens: list, stop_words: list):
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
         if tokens:
-            for j in range(len(tokens)):
+            for j in enumerate(tokens):
                 if tokens[j] in stop_words:
                     tokens[j] = ''
             while '' in tokens:
@@ -164,21 +164,21 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
         unk_top_words = get_top_n_words(unknown_profile['freq'], top_n)
         comp_top_words = get_top_n_words(profile_to_compare['freq'], top_n)
         shared_tokens = []
-        for i in range(len(comp_top_words)):
+        for i in enumerate(comp_top_words):
             if comp_top_words[i] in unk_top_words:
                 shared_tokens.append(comp_top_words[i])
         score = compare_profiles(unknown_profile, profile_to_compare, top_n)
         words = list(profile_to_compare['freq'].keys())
         max_length_word = 'a'
-        for i in range(len(words)):
+        for i in enumerate(words):
             if len(words[i]) > len(max_length_word):
                 max_length_word = words[i]
         min_length_word = 100 * 'a'
-        for i in range(len(words)):
+        for i in enumerate(words):
             if len(words[i]) < len(min_length_word):
                 min_length_word = words[i]
         sum_letters = 0
-        for i in range(len(words)):
+        for i in enumerate(words):
             sum_letters += len(words[i])
         average_token_length = sum_letters / len(words)
         sorted_common = shared_tokens.copy()
