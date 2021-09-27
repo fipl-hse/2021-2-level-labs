@@ -34,7 +34,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     for symbol in tokens:
         for symbol_stop in stop_words:
             if symbol in stop_words and symbol_stop in tokens:
-                    tokens.remove(symbol_stop)
+                tokens.remove(symbol_stop)
     return tokens
 
 
@@ -128,7 +128,8 @@ def detect_language(unknown_profile: dict, profile_1: dict,
         if compare_profiles(unknown_profile, profile_1, top_n) <\
                 compare_profiles(unknown_profile, profile_2, top_n):
             return profile_2['name']
-        else:
+        if compare_profiles(unknown_profile, profile_1, top_n) ==\
+                compare_profiles(unknown_profile, profile_2, top_n):
             fin_lang = [profile_1['name'], profile_2['name']]
             fin_lang = sorted(fin_lang)
             return fin_lang[0]
