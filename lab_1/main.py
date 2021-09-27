@@ -220,8 +220,6 @@ def detect_language_advanced(unknown_profile: dict,
         return None
     dict_lang_score = {}
     for profile_to_compare in profiles:
-        compare = compare_profiles_advanced(unknown_profile, profile_to_compare, top_n)
-        dict_lang_score[compare['name']] = compare['score']
         if profile_to_compare["name"] in languages or not languages:
             compare = compare_profiles_advanced(unknown_profile, profile_to_compare, top_n)
             dict_lang_score[compare['name']] = compare['score']
