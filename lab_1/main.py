@@ -29,7 +29,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if not isinstance(tokens, list) and tokens == []:
+    if not isinstance(tokens, list) and not tokens == []:
         return None
     if not all(isinstance(s, str) for s in tokens):
         return None
@@ -99,10 +99,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     cleaned_tokens = remove_stop_words(tokens, stop_words)
     freq_dict_chaos = calculate_frequencies(cleaned_tokens)
     freq_list = sorted(freq_dict_chaos, key=freq_dict_chaos.get, reverse=True)
-    freq_dict_sorted = {}
+    freq_dict_srtd = {}
     for i in freq_list:
-        freq_dict_sorted[i] = freq_dict_chaos[i]
-    language_profile = {'name': language, 'freq': freq_dict_sorted, 'n_words': len(freq_dict_sorted)}
+        freq_dict_srtd[i] = freq_dict_chaos[i]
+    language_profile = {'name': language, 'freq': freq_dict_srtd, 'n_words': len(freq_dict_srtd)}
     return language_profile
 
 
