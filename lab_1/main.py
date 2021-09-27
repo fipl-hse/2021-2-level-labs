@@ -122,13 +122,11 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         and isinstance(top_n, int)
     ):
         return None
-    freq_list1 = unknown_profile['freq']
-    top_n1 = get_top_n_words(freq_list1, top_n)
-    freq_list2 = profile_to_compare['freq']
-    top_n2 = get_top_n_words(freq_list2, top_n)
+    first_top_n = get_top_n_words(unknown_profile['freq'], top_n)
+    second_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
     profiles_in_common = []
-    for wrd in top_n1:
-        if wrd in top_n2:
+    for wrd in first_top_n:
+        if wrd in second_top_n:
             profiles_in_common.append(wrd)
     result = round(len(profiles_in_common) / len(top_n1), 2)
     return result
@@ -178,7 +176,6 @@ def compare_profiles_advanced(unknown_profile: dict,
         and isinstance(top_n, int)
     ):
         return None
-    report = {}
     top_words_unk = get_top_n_words(unknown_profile['freq'], top_n)
     top_words_comp = get_top_n_words(profile_to_compare['freq'], top_n)
     common_words = []
@@ -192,13 +189,13 @@ def compare_profiles_advanced(unknown_profile: dict,
     all_tokens_len = len(''.join(tokens))
     average_token_length = all_tokens_len / len(tokens)
     sorted_common = sorted(common_words)
-    report['name'] = profile_to_compare['name']
-    report['common'] = common_words
-    report['score'] = score
-    report['max_length_word'] = max_length_word
-    report['min_length_word'] = min_length_word
-    report['average_token_length'] = average_token_length
-    report['sorted_common'] = sorted_common
+    report = {'name': profile_to_compare["name"],
+              'common': common_words,
+              'score': score,
+              'max_length_word': max_length_word,
+              'min_length_word': min_length_word,
+              'average_token_length': average_token_length,
+              'sorted_common': sorted_common}
     return report
 
 
@@ -223,14 +220,14 @@ def detect_language_advanced(unknown_profile: dict,
         return None
     dict_lang_score = {}
     for profile_to_compare in profiles:
-        if languages == []:
+        if not languages:
             compare = compare_profiles_advanced(unknown_profile, profile_to_compare, top_n)
             dict_lang_score[compare['name']] = compare['score']
         else:
             if profile_to_compare['name'] in languages:
                 compare = compare_profiles_advanced(unknown_profile, profile_to_compare, top_n)
                 dict_lang_score[compare['name']] = compare['score']
-    if dict_lang_score != {}:
+    if dict_lang_score:
         sorted_lang = []
         for lang, score in dict_lang_score.items():
             if score == max(dict_lang_score.values()):
