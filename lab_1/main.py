@@ -75,7 +75,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     # x[1] - частота токена
     # поскольку по умолчанию сортировка идет по возрастанию, необходимо поставить "-"
     most_common_words = list(freq_dict_sorted)
-    most_common_words = most_common_words[:top_n]  # с помощью среза выбираем топ-n по популярности слов
+    most_common_words = most_common_words[:top_n]
+    # с помощью среза выбираем топ-n по популярности слов
     return most_common_words
 
 
@@ -88,7 +89,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
+    if not (isinstance(language, str)
+            and isinstance(text, str)
+            and isinstance(stop_words, list)):
         return None
     language_profile = {}  # создаем словарь - профиль языка
     frequencies = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
@@ -112,11 +115,11 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
 
-    count = 0
     compare_top = get_top_n_words(profile_to_compare['freq'], top_n)  # получаем топ-n слов известного языка
     unknown_top = get_top_n_words(unknown_profile['freq'], top_n)  # получаем топ-n слов на неизвестном языке
     unknown_top_len = len(unknown_top)   # получаем длину списка токенов на неизвестном языке
 
+    count = 0
     if compare_top == unknown_top:
         top_common_words = float(1)   # если топ-n слов у этих языков совпадают, доля пересекающихся слов равна 1
     else:
