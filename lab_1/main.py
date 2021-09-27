@@ -16,9 +16,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     signs = '''1234567890-=!@#$%^&*()[]{}'"|\\/?<>.,;:`~'''
-    for i in text:
-        if i in signs:
-            text = text.replace(i, '')
+    for symbol in text:
+        if symbol in signs:
+            text = text.replace(symbol, '')
     tokenized_text = text.split()
     return tokenized_text
 
@@ -33,9 +33,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     list_of_words = []
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
-    for i in tokens:
-        if i not in stop_words:
-            list_of_words.append(i)
+    for word in tokens:
+        if word not in stop_words:
+            list_of_words.append(word)
     return list_of_words
 
 
@@ -48,13 +48,13 @@ def calculate_frequencies(tokens: list) -> dict or None:
     dictionary = {}
     if not isinstance(tokens, list):
         return None
-    for i in tokens:
-        if not isinstance(i, str):
+    for word in tokens:
+        if not isinstance(word, str):
             return None
-        if i not in dictionary:
-            dictionary[i] = 1
+        if word not in dictionary:
+            dictionary[word] = 1
         else:
-            dictionary[i] += 1
+            dictionary[word] += 1
     return dictionary
 
 
@@ -70,10 +70,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     no_stop_words_list = sorted(freq_dict.values())
     n_word_dictionary = {}
     no_stop_words_list = no_stop_words_list[::-1]
-    for i in no_stop_words_list:
-        for j in freq_dict.keys():
-            if freq_dict[j] == i:
-                n_word_dictionary[j] = freq_dict[j]
+    for word in no_stop_words_list:
+        for key in freq_dict.keys():
+            if freq_dict[key] == word:
+                n_word_dictionary[key] = freq_dict[key]
     top_n_words_list = list(n_word_dictionary.keys())
     top_n_words_list = top_n_words_list[:top_n]
     return top_n_words_list
