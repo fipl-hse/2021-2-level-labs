@@ -15,13 +15,12 @@ def tokenize(text: str) -> list or None:
     """
     if isinstance(text, str):
         text = text.lower()
-        skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*"]
+        skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
         for g in text:
             if g in skip_signs:
                 text = text.replace(g, "")
-        text = re.sub(r'[^\w\s]', '', text)  # delete punctuation
         text = re.sub(r"\d+", "", text)  # delete numbers
-        tokens = re.split("\s", text)
+        tokens = re.split(r"\s", text)
         for q in tokens:
             if q == '':
                 tokens.remove(q)
@@ -42,7 +41,6 @@ def remove_stop_words(tokens: list, stop_words: list):
             for j in range(len(tokens)):
                 if tokens[j] in stop_words:
                     tokens[j] = ''
-
             while '' in tokens:
                 tokens.remove('')
             return tokens
@@ -155,8 +153,6 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
             names = [name1, name2]
             names.sort()
             return names[0]
-
-
     else:
         return None
 
@@ -169,9 +165,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
         for i in range(len(comp_top_words)):
             if comp_top_words[i] in unk_top_words:
                 shared_tokens.append(comp_top_words[i])
-        score = compare_profiles(unknown_profile,profile_to_compare, top_n)
+        score = compare_profiles(unknown_profile, profile_to_compare, top_n)
         words = list(profile_to_compare['freq'].keys())
-        print(words)
         max_length_word = 'a'
         for i in range(len(words)):
             if len(words[i]) > len(max_length_word):
@@ -207,53 +202,24 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
-    if isinstance(unknown_profile,dict) and isinstance(profiles, list) and isinstance(languages, list) and isinstance(top_n, int):
-        if not languages:
-            profiles_words = {}
-            for i in range(len(profiles)):
-                number = compare_profiles(unknown_profile, profiles[i], top_n)
-                name = profiles[i]['name']
-                profiles_words[name] = number
-            list_of_keys = list(profiles_words.keys())
-            if len(profiles) == 1:
-                name_for_1 = profiles[0]['name']
-                return name_for_1
-            if profiles_words[list_of_keys[0]] > profiles_words[list_of_keys[1]]:
-                return list_of_keys[0]
-            elif profiles_words[list_of_keys[0]] < profiles_words[list_of_keys[1]]:
-                return list_of_keys[1]
-            elif profiles_words[list_of_keys[0]] == profiles_words[list_of_keys[1]]:
-                names = [list_of_keys[0], list_of_keys[1]]
-                names.sort()
-                return names[0]
-        else:
-            true_profiles = []
-            for i in range(len(profiles)):
-                if profiles[i]['name'] in languages:
-                    true_profiles.append(profiles[i])
-            if true_profiles == []:
-                return None
-            if len(true_profiles) == 1:
-                name_for_1 = profiles[0]['name']
-                return name_for_1
-            profiles_words = {}
-            for i in range(len(true_profiles)):
-                number = compare_profiles(unknown_profile, true_profiles[i], top_n)
-                name = true_profiles[i]['name']
-                profiles_words[name] = number
-            list_of_keys = list(profiles_words.keys())
-            if len(true_profiles) == 1:
-                return true_profiles[0]
-            if profiles_words[list_of_keys[0]] > profiles_words[list_of_keys[1]]:
-                return list_of_keys[0]
-            elif profiles_words[list_of_keys[0]] < profiles_words[list_of_keys[1]]:
-                return list_of_keys[1]
-            elif profiles_words[list_of_keys[0]] == profiles_words[list_of_keys[1]]:
-                names = [list_of_keys[0], list_of_keys[1]]
-                names.sort()
-                return names[0]
-
-
+    if isinstance(unknown_profile, dict) and isinstance(profiles, list) and isinstance(languages, list) and \
+            isinstance(top_n, int):
+        list_of_languages = []
+        for profile in profiles:
+            if profile['name'] in languages or languages == []:
+                compared_profile = compare_profiles_advanced(unknown_profile, profile, top_n)
+                list_of_languages.append(compared_profile)
+        list_of_languages = sorted(list_of_languages, reverse=True, key=lambda x: x['score'])
+        if not list_of_languages:
+            return None
+        elif len(list_of_languages) > 1:
+            if list_of_languages[0]['score'] == list_of_languages[1]['score']:
+                equal_scores = []
+                for i in list_of_languages:
+                    if i['score'] == list_of_languages[0]:
+                        equal_scores.append(i)
+                list_of_languages = sorted(equal_scores, reverse=True, key=lambda x: x['score'])
+        return list_of_languages[0]['name']
     else:
         return None
     """
@@ -268,7 +234,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
 
 
 def load_profile(path_to_file: str) -> dict or None:
-    if isinstance(path_to_file,str):
+    if isinstance(path_to_file, str):
         try:
             with open(path_to_file, 'r', encoding='utf-8') as f:
                 text = json.load(f)
@@ -285,8 +251,9 @@ def load_profile(path_to_file: str) -> dict or None:
 
 
 def save_profile(profile: dict) -> int:
-    if isinstance(profile,dict):
-        json.dumps(profile,profile['name'])
+    if isinstance(profile, dict):
+        with open("{}.json".format(profile["name"]), 'w', encoding='utf-8') as file:
+            json.dump(profile, file)
         return 0
     else:
         return 1
