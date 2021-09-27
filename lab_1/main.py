@@ -16,7 +16,7 @@ def tokenize(text: str) -> list or None:
     text = text.lower()
     for symbol in text:
         if symbol.isdigit() or symbol in '''!@#$%^&*()_-+={}[]|\'";:/?>.<,№%`~''':
-            text.replace(symbol, '')
+            text = text.replace(symbol, '')
     tokens = text.split()
     for token in tokens:
         token.strip()
