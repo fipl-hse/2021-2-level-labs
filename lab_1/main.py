@@ -72,11 +72,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     # с помощью items возвращаем k и v
     # key позволяет уточнить критерий,
     # по которому происходит сортировка, x - это элемент списка
-    # x[1] - частота токена i
+    # x[1] - частота токена
     # поскольку по умолчанию сортировка идет по возрастанию, необходимо поставить "-"
-    top_n_words = list(freq_dict_sorted)  # создаем список
-    top_n_words = top_n_words[:top_n]  # с помощью среза выбираем топ-n по популярности слов
-    return top_n_words
+    most_common_words = list(freq_dict_sorted)  # создаем список
+    most_common_words = most_common_words[:top_n]  # с помощью среза выбираем топ-n по популярности слов
+    return most_common_words
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
