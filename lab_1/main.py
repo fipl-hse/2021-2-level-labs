@@ -9,11 +9,11 @@ def tokenize(text: str):
         text = text.lower()
         text = text.replace("'", ' ')
         n_text = ''
-        for i in range(len(text)):
-            if text[i].isalpha() or text[i] == ' ' or text[i] == '\n':
-                n_text += text[i]
+        for i in text:
+            if i.isalpha() or i == ' ' or i == '\n':
+                n_text += i
             else:
-                text.replace(text[i], ' ')
+                text.replace(i, ' ')
         t_tokens = n_text.split()
         return t_tokens
     return None
@@ -68,7 +68,8 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) \
+            and isinstance(top_n, int):
         for k in unknown_profile.keys():
             if k == 'freq':
                 d_1 = unknown_profile['freq']
@@ -88,9 +89,10 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     pass
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(
-            top_n, int):
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
+                    top_n: int) -> str or None:
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) \
+            and isinstance(top_n, int):
         eq_per_1 = compare_profiles(unknown_profile, profile_1, top_n)
         eq_per_2 = compare_profiles(unknown_profile, profile_2, top_n)
         if eq_per_1 > eq_per_2:
@@ -100,7 +102,6 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         return detected_language
     return None
     pass
-
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
@@ -112,8 +113,6 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     min_length_word, average_token_length
     """
     pass
-
-
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
