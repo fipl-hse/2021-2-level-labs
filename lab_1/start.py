@@ -28,13 +28,13 @@ if __name__ == '__main__':
     lang_de = main.create_language_profile('de', de_text, [])
     lang_la = main.create_language_profile('la', la_text, [])
 
-    top_n = 4
+    TOP_N = 4
 
     langs = [lang_en, lang_de, lang_la]
 
-    det = main.detect_language(lang_unk, lang_en, lang_de, top_n)
+    det = main.detect_language(lang_unk, lang_en, lang_de, TOP_N)
 
-    det_adv = main.detect_language_advanced(lang_unk, langs, [lang_la, lang_de], top_n)
+    det_adv = main.detect_language_advanced(lang_unk, langs, [lang_la, lang_de], TOP_N)
 
     EXPECTED = 'en'
     RESULT = det
