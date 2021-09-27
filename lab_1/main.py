@@ -114,12 +114,12 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         if len(top_n_words_profile_to_compare) == len(top_n_words_unknown_profile) and \
                 (word in top_n_words_unknown_profile):
             share_of_common_frequency_words = float(1)
-    else:
-        for word_profile_to_compare in top_n_words_profile_to_compare:
-            if word_profile_to_compare in top_n_words_unknown_profile:
-                count += 1
+        else:
+            for word_profile_to_compare in top_n_words_profile_to_compare:
+                if word_profile_to_compare in top_n_words_unknown_profile:
+                    count += 1
             share_of_common_frequency_words = round(count / len_top_n_words_unknown_profile,2)
-    return share_of_common_frequency_words
+        return share_of_common_frequency_words
 
 def detect_language(unknown_profile:dict, profile_1:dict, profile_2:dict, \
                     top_n:int) -> str or None:
