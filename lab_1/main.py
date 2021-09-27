@@ -18,7 +18,7 @@ def tokenize(text):
                 tokens.remove(token)
         return tokens
     return None
-    pass
+
 
 def remove_stop_words(tokens, stop_words):
     if isinstance(tokens,list) and isinstance(stop_words,list):
@@ -28,7 +28,7 @@ def remove_stop_words(tokens, stop_words):
                 meaningful_tokens.append(token)
         return meaningful_tokens
     return None
-    pass
+
 
 def calculate_frequencies(tokens):
     if isinstance(tokens,list):
@@ -42,7 +42,7 @@ def calculate_frequencies(tokens):
                 freq_dict[token] += 1
         return freq_dict
     return None
-    pass
+
 
 def get_top_n_words(freq_dict, top_n):
     if isinstance(freq_dict,dict) and isinstance(top_n,int):
@@ -51,7 +51,7 @@ def get_top_n_words(freq_dict, top_n):
         top = top_lst[:top_n]
         return top
     return None
-    pass
+
 
 
 def create_language_profile(language, text, stop_words):
@@ -63,10 +63,11 @@ def create_language_profile(language, text, stop_words):
         lng_profile = {'name': language, 'freq': f_dict, 'n_words': len(f_dict)}
         return lng_profile
     return None
-    pass
+
 
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)\
+            and isinstance(top_n, int):
         for k in unknown_profile.keys():
             if k == 'freq':
                 d_unknown = unknown_profile.get['freq']
@@ -83,10 +84,11 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
         eq_per = round((equal / len(top_unknown)), 2)
         return eq_per
     return None
-    pass
+
 
 def detect_language(unknown_profile, profile_1, profile_2, top_n):
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict)\
+            and isinstance(profile_2, dict) and isinstance(top_n, int):
         eq_per_1 = compare_profiles(unknown_profile, profile_1, top_n)
         eq_per_2 = compare_profiles(unknown_profile, profile_2, top_n)
         if eq_per_1 > eq_per_2:
@@ -95,9 +97,9 @@ def detect_language(unknown_profile, profile_1, profile_2, top_n):
             detected_language = profile_2.get('name')
         return detected_language
     return None
-    pass
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+
+#def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -106,10 +108,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+
+#def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -118,22 +120,20 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
 
 
-def load_profile(path_to_file: str) -> dict or None:
+
+#def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
 
 
-def save_profile(profile: dict) -> int:
+#def save_profile(profile: dict) -> int:
     """
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
