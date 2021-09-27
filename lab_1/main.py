@@ -153,15 +153,19 @@ def detect_language(unknown_profile: dict,
     profile_1_match = compare_profiles(unknown_profile, profile_1, top_n)
     profile_2_match = compare_profiles(unknown_profile, profile_2, top_n)
 
+    result_name = ''
+
     if profile_1_match == profile_2_match:
         if profile_1['name'] < profile_2['name']:
-            return profile_1['name']
+            result_name = profile_1['name']
         else:
-            return profile_2['name']
+            result_name = profile_2['name']
     elif profile_1_match > profile_2_match:
-        return profile_1['name']
+        result_name = profile_1['name']
     else:
-        return profile_2['name']
+        result_name = profile_2['name']
+
+    return result_name
 
 
 def compare_profiles_advanced(unknown_profile: dict,
