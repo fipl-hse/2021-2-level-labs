@@ -17,7 +17,7 @@ def tokenize(text: str):
         t_tokens = n_text.split()
         return t_tokens
     return None
-    pass
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     if isinstance(tokens, list) and isinstance(stop_words, list):
@@ -27,7 +27,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                 no_stop_words.append(token)
         return no_stop_words
     return None
-    pass
+
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -42,7 +42,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
                 f_dict[token] += 1
         return f_dict
     return None
-    pass
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -52,7 +52,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         top = top_lst[:top_n]
         return top
     return None
-    pass
+
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -64,7 +64,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
         l_profile = {'name': language, 'freq': f_dict, 'n_words': len(f_dict)}
         return l_profile
     return None
-    pass
+
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -86,13 +86,13 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         eq_per = round((equal / len(top_unk)), 2)
         return eq_per
     return None
-    pass
+
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
                     top_n: int) -> str or None:
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) \
-            and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) \
+            and isinstance(profile_2, dict) and isinstance(top_n, int):
         eq_per_1 = compare_profiles(unknown_profile, profile_1, top_n)
         eq_per_2 = compare_profiles(unknown_profile, profile_2, top_n)
         if eq_per_1 > eq_per_2:
@@ -101,9 +101,10 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
             detected_language = profile_2.get('name')
         return detected_language
     return None
-    pass
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+
+#def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
+                              #top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -112,8 +113,9 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+   # pass
+#def detect_language_advanced(unknown_profile: dict, profiles: list,
+                          #   languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -122,22 +124,22 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    #pass
 
 
-def load_profile(path_to_file: str) -> dict or None:
+#def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+  #  pass
 
 
-def save_profile(profile: dict) -> int:
+#def save_profile(profile: dict) -> int:
     """
     Saves a language profile
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
-    pass
+    #pass
