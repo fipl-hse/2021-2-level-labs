@@ -30,7 +30,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     if not (isinstance(tokens, list) and isinstance(stop_words, list)):
-        tokens_update = []
+        return None
+
+    tokens_update = []
     for word in tokens:
         if word not in stop_words:
             tokens_update.append(word)
@@ -90,7 +92,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
     # line too long so split in two
-    if not isinstance(language, str) or not isinstance(text, str)
+    if not isinstance(language, str) or not isinstance(text, str):
         return None
     if not isinstance(stop_words, list):
         return None
@@ -158,15 +160,14 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     :param unknown_profile: a dictionary
     :param profile_to_compare: a dictionary
     :param top_n: a number of the most common words
-    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-    min_length_word, average_token_length
+    :return: a dictionary with 7 keys – name, score, common, sorted_common,
+    max_length_word, min_length_word, average_token_length
     """
     if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict):
         return None
     if not isinstance(top_n, int):
         return None
 
-    stats = {}
     top_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_compare = get_top_n_words(profile_to_compare["freq"], top_n)
 
