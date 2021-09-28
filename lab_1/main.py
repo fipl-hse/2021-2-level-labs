@@ -72,13 +72,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
     if not isinstance(freq_dict, dict):
         return None
-    freq_dict = sorted(freq_dict.items(), key=lambda x: -x[1])
-    if len(freq_dict) == 0:
-        return []
-    freq_n = []
-    for word in freq_dict:
-        freq_n.append(word[0])
-    return list(freq_n[:top_n])
+    sorted_common = dict(sorted(freq_dict.items(), key=lambda x: -x[1]))
+    most_common = list(sorted_common)
+    most_common = most_common[:top_n]
+    return most_common
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -110,19 +107,20 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
 
-    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict):
-        if isinstance(top_n, int):
-            freq_dict_2 = unknown_profile['freq']  # new
-            get_top_n_words_2 = get_top_n_words(freq_dict_2, top_n)  # new
-            new_freq_dict_3 = profile_to_compare['freq']  # new
-            new_get_top_n_words_3 = get_top_n_words(new_freq_dict_3, top_n)  # new
-            common_words = 0
-            for word in get_top_n_words_2:
-                if word in new_get_top_n_words_3:
-                    common_words += 1
-            proportion = round(common_words / top_n, 2)
-            return proportion
-    return None
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict):
+        return None
+    if not isinstance(top_n, int):
+        return None
+    freq_dict_2 = unknown_profile['freq']  # new
+    get_top_n_words_2 = get_top_n_words(freq_dict_2, top_n)  # new
+    new_freq_dict_3 = profile_to_compare['freq']  # new
+    new_get_top_n_words_3 = get_top_n_words(new_freq_dict_3, top_n)  # new
+    common_words = 0
+    for word in get_top_n_words_2:
+        if word in new_get_top_n_words_3:
+            common_words += 1
+    proportion = round(common_words / top_n, 2)
+    return proportion
 
 
 def detect_language(unknown_profile: dict, profile_1: dict,
@@ -203,6 +201,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         return None
     if not isinstance(languages, list) or not isinstance(top_n, int):
         return None
+
     dict_scores = {}
     for profile in profiles:
         if len(languages) == 0 or profile['name'] in languages:
@@ -229,12 +228,12 @@ def load_profile(path_to_file: str) -> dict or None:
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if isinstance(path_to_file, str):
-        if os.path.exists(path_to_file):
-            with open(path_to_file, 'r', encoding='UTF-8') as file:
-                profile = json.load(file)
-                return profile
-    return None
+    if not isinstance(path_to_file, str):
+        return None
+    if os.path.exists(path_to_file):
+        with open(path_to_file, 'r', encoding='UTF-8') as file:
+            profile = json.load(file)
+            return profile
 
 
 def save_profile(profile: dict) -> int:
