@@ -107,7 +107,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     match = 0
     top_1 = get_top_n_words(unknown_profile['freq'], top_n)
@@ -119,7 +120,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> \
+        str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -128,7 +130,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and
+            isinstance(profile_2, dict) and isinstance(top_n, int)):
         return None
     detect_dict = {}
     detect_dict[compare_profiles(profile_1, unknown_profile, top_n)] = profile_1['name']
@@ -146,7 +149,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict)
+            and isinstance(top_n, int)):
         return None
     full_profile_to_compare = {}
     match = 0
@@ -175,7 +179,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     return full_profile_to_compare
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) \
+        -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -199,19 +204,19 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     return scores_of_lang[0][0]
 
 
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
-
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
+# def load_profile(path_to_file: str) -> dict or None:
+#     """
+#     Loads a language profile
+#     :param path_to_file: a path
+#     :return: a dictionary with three keys – name, freq, n_words
+#     """
+#     pass
+#
+#
+# def save_profile(profile: dict) -> int:
+#     """
+#     Saves a language profile
+#     :param profile: a dictionary
+#     :return: 0 if everything is ok, 1 if not
+#     """
+#     pass
