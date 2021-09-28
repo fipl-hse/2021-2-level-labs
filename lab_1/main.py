@@ -152,7 +152,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     match = 0
     common = []
     len_of_all_tokens = 0
-    comparable_lang_tokens = profile_to_compare['freq'].keys()
+    comparable_lang_tokens = list(profile_to_compare['freq'].keys())
     max_len_word = comparable_lang_tokens[0]
     min_len_word = comparable_lang_tokens[0]
     full_profile_to_compare['name'] = profile_to_compare['name']
