@@ -24,6 +24,7 @@ if __name__ == '__main__':
 
     import main
 
+
     print(main.tokenize(en_text))
     print(main.tokenize(de_text))
     print(main.tokenize(unknown_text))
@@ -72,24 +73,25 @@ if __name__ == '__main__':
     print()
 
 
-    language_en = 'en'
-    language_de = 'de'
-    language_unknown = 'unknown'
-
     en_stop_words = main.remove_stop_words(tokens_en, stop_words_en)
     de_stop_words = main.remove_stop_words(tokens_de, stop_words_de)
     unknown_stop_words = main.remove_stop_words(tokens_unknown, stop_words_unknown)
 
-    print(main.create_language_profile(language_en, en_text, en_stop_words))
-    print(main.create_language_profile(language_de, de_text, de_stop_words))
-    print(main.create_language_profile(language_unknown, unknown_text, unknown_stop_words))
+    freq_dict_en = main.calculate_frequencies(main.remove_stop_words(main.tokenize(en_text), en_stop_words))
+    freq_dict_de = main.calculate_frequencies(main.remove_stop_words(main.tokenize(de_text), de_stop_words))
+    freq_dict_unknown = main.calculate_frequencies(main.remove_stop_words(main.tokenize(unknown_text), unknown_stop_words))
+
+
+    print(main.create_language_profile('en', en_text, en_stop_words))
+    print(main.create_language_profile('de', de_text, de_stop_words))
+    print(main.create_language_profile('unknown', unknown_text, unknown_stop_words))
 
     print()
 
 
-    en_profile = main.create_language_profile(language_en, en_text, en_stop_words)
-    de_profile = main.create_language_profile(language_de, de_text, de_stop_words)
-    unknown_profile = main.create_language_profile(language_unknown, unknown_text, unknown_stop_words)
+    en_profile = main.create_language_profile('en', en_text, en_stop_words)
+    de_profile = main.create_language_profile('de', de_text, de_stop_words)
+    unknown_profile = main.create_language_profile('unknown', unknown_text, unknown_stop_words)
 
     print(main.compare_profiles(unknown_profile, en_profile, top_n_en))
     print(main.compare_profiles(unknown_profile, de_profile, top_n_de))
