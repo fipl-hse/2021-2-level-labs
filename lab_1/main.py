@@ -4,20 +4,23 @@ Language detection
 """
 
 
-def token(text: str) -> list or None:
+import re
+
+
+def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if not isinstance (text, str): 
-       return None
+    if not isinstance(text, str):
+        return None
     else:
-       text = text.lower()
-       text = re.sub(r'[^\w\s]', '', text)
-       text = text.split()
-       return text
+        text = text.lower()
+        text = re.sub(r'[^\w\s]', '', text)
+        text = text.split()
+        return text
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -27,11 +30,27 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-  if not isinstance(stop_words, list) or not isinstance(tokens, list):
-      return None
-  if tokens:
-      tokens = [x for x in tokens if x not in stop_words]
-      return tokens             
+    if not all(isinstance(s, str) for s in stop_words):
+        return tokens
+
+    if check_if_tokens_are_valid(tokens):
+        filtered_tokens = [x for x in tokens if x not in stop_words]
+        return filtered_tokens
+    else:
+        return None
+
+
+def check_if_tokens_are_valid(tokens: list) -> bool:
+    """
+    Checks if list contains letter-only strings without any numbers or special characters.
+    :param tokens: a list of strngs (tokens)
+    :return: boolean value indicating whether list contains letter-only strings without any special characters
+    """
+    if all(isinstance(s, str) for s in tokens):
+        for token in tokens:
+            if not token.isalpha():
+                return False
+    return True
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -41,18 +60,17 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     if not isinstance(tokens, list):
-        return None 
+        return None
     freq_dict = {}
-    
+
     for token in tokens:
         if not isinstance(token, str):
-             return None
+            return None
         if token not in freq_dict:
-             freq_dict[token] = 1
+            freq_dict[token] = 1
         else:
-             freq_dict[token] += 1
-     return freq_dict
-
+            freq_dict[token] += 1
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -62,13 +80,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if not isinstance (freq_dict, dict):
+    if not isinstance(freq_dict, dict):
         return None
     freq_dict = sorted(freq_dict.items(), key=lambda x: -x[1])
     most_common_words = list(freq_dict)
-    most_common_words =  most_common_words [:top_n]
+    most_common_words = most_common_words[:top_n]
     return most_common_words
-
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -79,15 +96,14 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
+
     if not isinstance(language, str) or not text or not isinstance(stop_words, list):
-         return None
+        return None
     new_tokens = tokenize(text)
     new_tokens = remove_stop_words(new_tokens, stop_words)
     freq_dict = calculate_frequencies(new_tokens)
     profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
     return profile
-
-
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
