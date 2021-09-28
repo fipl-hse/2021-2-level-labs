@@ -134,7 +134,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :return: a language
     """
     pass
-     if not isinstance(profile_1, dict):
+    if not isinstance(profile_1, dict):
         return None
     if not isinstance(profile_2, dict):
         return None
