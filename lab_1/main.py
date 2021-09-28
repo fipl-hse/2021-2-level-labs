@@ -28,10 +28,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
   if not isinstance(stop_words, list) or not isinstance(tokens, list):
-        return None
-      if tokens:
-          tokens = [x for x in tokens if x not in stop_words]
-          return tokens             
+      return None
+  if tokens:
+      tokens = [x for x in tokens if x not in stop_words]
+      return tokens             
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -51,7 +51,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
              freq_dict[token] = 1
         else:
              freq_dict[token] += 1
-    return freq_dict
+     return freq_dict
 
 
 
