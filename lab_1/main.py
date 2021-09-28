@@ -161,7 +161,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
             match += 1
             common.append(word)
     full_profile_to_compare['score'] = match / top_n
-    full_profile_to_compare['common'] = common
+    full_profile_to_compare['common'] = sorted(common)
     for word in comparable_lang_tokens:
         if len(word) > len(max_len_word):
             max_len_word = word
