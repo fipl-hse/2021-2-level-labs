@@ -99,9 +99,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     if not (isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list)):
         return None
 
-    tokens = tokenize(text)
-    tokens = remove_stop_words(tokens, stop_words)
-    freq_dict = calculate_frequencies(tokens)
+    freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     language_profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
     return language_profile
 
