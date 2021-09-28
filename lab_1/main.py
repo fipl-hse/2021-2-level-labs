@@ -9,7 +9,6 @@ text = str(input('Enter your text: '))
 def tokenize():
     if re.search(r'[^a-zA-Z\0-9üÜäÄöÖß]+[^\w\s]', text):
         None
-        print('Вы ввели текст на кириллице')
     else:
         text2=text.lower()
         token = re.sub(r'[^\w\s]','',text2)
@@ -18,15 +17,12 @@ def tokenize():
     
     def remove_stop_words():
         stopwords = ['am','is','are','a','an']
-        stoplist =[]
-        t = input('stopwords:')
-        if t not in stopwords:
-            None
-        else:
-            stoplist.append(t)
-            clear_text = []
-            for word in token2:
-                if word not in stoplist:
+        clear_text = []
+        for word in token2:
+            if word not in token2:
+                None
+            else:
+                if word not in stopwords:
                     clear_text.append(word)
                     return clear_text
                     
