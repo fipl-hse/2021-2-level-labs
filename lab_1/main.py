@@ -51,11 +51,10 @@ def calculate_frequencies(tokens: list) -> dict or None:
     for word in tokens:
         if not isinstance(word, str):
             return None
+        if word in list(freq.keys()):
+            freq[word] += 1
         else:
-            if word in list(freq.keys()):
-                freq[word] += 1
-            else:
-                freq[word] = 1
+            freq[word] = 1
 
     return freq
 
@@ -113,7 +112,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     """
     if not isinstance(profile_to_compare, dict) or not isinstance(unknown_profile, dict):
         return None
-    elif not isinstance(top_n, int):
+    if not isinstance(top_n, int):
         return None
 
     n_unknown = get_top_n_words(unknown_profile["freq"], top_n)
