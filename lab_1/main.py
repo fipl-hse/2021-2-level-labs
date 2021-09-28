@@ -89,7 +89,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not (top_n, int):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
     shared_tokens = 0
     top_unknown = get_top_n_words(unknown_profile['freq'], top_n)
@@ -120,7 +120,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         language = profile_1['name']
     elif distance_1 < distance_2:
         language = profile_2['name']
-    return language
+        return language
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
