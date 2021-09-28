@@ -55,9 +55,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
             return None
     for token in tokens:
         if token in freq_dict:
-                freq_dict[token] = freq_dict[token]+1
-                else:
-                freq_dict[token] = 1
+            freq_dict[token] = freq_dict[token]+1
+        else:
+            freq_dict[token] = 1
      return freq_dict
    
 
