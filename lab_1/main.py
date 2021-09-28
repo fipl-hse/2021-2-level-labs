@@ -50,15 +50,16 @@ def calculate_frequencies(tokens: list) -> dict or None:
     freq_dict = {}
     if not isinstance(tokens, list):
         return None
-    for i in tokens:
-        if not isinstance(i, str):
+
+    for token in tokens:
+        if not isinstance(token, str):
             return None
 
-    for i in tokens:
-        if i in freq_dict:
-            freq_dict[i] += 1
+    for token in tokens:
+        if token in freq_dict:
+            freq_dict[token] += 1
         else:
-            freq_dict[i] = 1
+            freq_dict[token] = 1
     return freq_dict
 
 
@@ -72,6 +73,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
     if not isinstance(freq_dict, dict):
         return None
+
     sorted_common = dict(sorted(freq_dict.items(), key=lambda x: -x[1]))
     most_common = list(sorted_common)
     most_common = most_common[:top_n]
@@ -166,9 +168,9 @@ def compare_profiles_advanced(unknown_profile: dict,
     top_n_words_2 = get_top_n_words(unknown_profile['freq'], top_n)  # unknown text
 
     top_n_common = []
-    for i in top_n_words:
-        if i in top_n_words_2:
-            top_n_common.append(i)
+    for word in top_n_words:
+        if word in top_n_words_2:
+            top_n_common.append(word)
     score = len(top_n_common) / len(top_n_words_2)
     sorted_common = sorted(top_n_common)
 
@@ -176,8 +178,8 @@ def compare_profiles_advanced(unknown_profile: dict,
     max_len = max(tokens, key=len)
     min_len = min(tokens, key=len)
     tokens_len = []
-    for i in tokens:
-        tokens_len.append(len(i))
+    for token in tokens:
+        tokens_len.append(len(token))
     average_len = sum(tokens_len) / len(tokens)
 
     report = {'name': profile_to_compare['name'], 'common': top_n_common, 'score': score,
@@ -231,10 +233,13 @@ def load_profile(path_to_file: str) -> dict or None:
     if not isinstance(path_to_file, str):
         return None
 
-    if os.path.exists(path_to_file):
+    try:
         with open(path_to_file, 'r', encoding='UTF-8') as file:
             profile = json.load(file)
-            return profile
+    except FileNotFoundError:
+        return None
+
+    return profile
 
 
 def save_profile(profile: dict) -> int:
