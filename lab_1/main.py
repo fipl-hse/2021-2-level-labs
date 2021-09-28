@@ -15,15 +15,15 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     for symbol in text:
-        if symbol in '''1234567890!@#$%^&*()_-+={}[]|\\'";://?>.<,№%`~''':   # А как работать с символами, которых у нас нет на клавиатуре?
-            text = text.replace(symbol, '')                                  #Например, с математическими знаками?
-    tokens = text.split()                                                    #Почему проверка через ifalpha не может использоваться?
+        if symbol in '''1234567890!@#$%^&*()_-+={}[]|\\'";://?>.<,№%`~''':
+            text = text.replace(symbol, '')
+    tokens = text.split()
     for token in tokens:
         token.strip()
     return tokens
-
-
-
+# А как работать с символами, которых у нас нет на клавиатуре?
+#Например, с математическими знаками?
+#Почему проверка через ifalpha не может использоваться?
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
