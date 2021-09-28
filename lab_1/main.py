@@ -14,7 +14,7 @@ def tokenize():
         text2=text.lower()
         token = re.sub(r'[^\w\s]','',text2)
         token2 = re.split(r'\b\W\b', token)
-        print(token2)
+        return token2
     
     def remove_stop_words():
         stopwords = ['am','is','are','a','an']
@@ -28,33 +28,26 @@ def tokenize():
             for word in token2:
                 if word not in stoplist:
                     clear_text.append(word)
-                    print(clear_text)
-        
+                    return clear_text
+                    
         def calculate_frequencies():
             freqdict = {}
-            for word in clear_text:
-                if len(word) >= 0 and not freqdict.get(word):
-                    freqdict[word] = clear_text.count(word)
-                    print(freqdict)
+            if word in clear_text:
+                for word in clear_text:
+                    if len(word) >= 0 and not freqdict.get(word):
+                        freqdict[word] = clear_text.count(word)
+                        return freqdict
+            else:
+                None
             
             def get_top_n_words():
                 t = sorted(freqdict.items(), key=lambda kv: kv[1], reverse=True)
-                print(t)
+                return t
             get_top_n_words()
         calculate_frequencies()
     remove_stop_words()
 tokenize()
 
-
-
-def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
