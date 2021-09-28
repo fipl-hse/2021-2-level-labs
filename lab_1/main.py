@@ -70,10 +70,10 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
             and isinstance(top_n, int):
         for k in unknown_profile.keys():
             if k == 'freq':
-                d_unknown = unknown_profile.get['freq']
+                d_unknown = unknown_profile['freq']
         for k in profile_to_compare.keys():
             if k == 'freq':
-                d_compare = profile_to_compare.get['freq']
+                d_compare = profile_to_compare['freq']
         top_unknown = get_top_n_words(d_unknown, top_n)
         top_compare = get_top_n_words(d_compare, top_n)
         equal = 0
