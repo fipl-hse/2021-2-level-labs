@@ -230,6 +230,7 @@ def load_profile(path_to_file: str) -> dict or None:
 
     if not isinstance(path_to_file, str):
         return None
+
     if os.path.exists(path_to_file):
         with open(path_to_file, 'r', encoding='UTF-8') as file:
             profile = json.load(file)

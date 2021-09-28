@@ -2,8 +2,8 @@
 Language detection starter
 """
 
-import main
 import os
+import main
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
