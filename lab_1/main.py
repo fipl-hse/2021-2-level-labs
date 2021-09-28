@@ -2,8 +2,6 @@
 Lab 1
 Language detection
 """
-
-
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -38,8 +36,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
             tokenlist.append(i)
     return tokenlist
         
-
-
 def calculate_frequencies(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
@@ -75,7 +71,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     else:
         return None
 
-
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
     Creates a language profile
@@ -85,7 +80,6 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
     pass
- 
     if not isinstance(text, str):
         return None
     if not isinstance(stop_words, list):
@@ -98,7 +92,6 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     language_profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
     return language_profile
         
-    
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
@@ -114,7 +107,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         return None
     if not isinstance(profile_to_compare, dict):
         return None
-    
     unknown_profile_tokens = get_top_n_words(unknown_profile['freq'], top_n)
     profile_to_compare_tokens = get_top_n_words(profile_to_compare['freq'], top_n)
     common_top_n = 0
@@ -143,12 +135,10 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         return None
     if not isinstance(unknown_profile, dict):
         return None
-    
     compare_1 = compare_profiles(profile_1, unknown_profile, top_n)
     compare_2 = compare_profiles(profile_2, unknown_profile, top_n)
     name_1 = profile_1['name']
-    name_2 = profile_2['name']
-    
+    name_2 = profile_2['name']    
     if compare_1 > compare_2:
         return name_1
     if compare_2 > compare_1:
@@ -157,4 +147,4 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         names = [name_1, name_2]
         names = sorted(names)
         return names
-   
+  
