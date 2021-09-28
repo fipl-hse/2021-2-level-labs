@@ -18,11 +18,9 @@ def tokenize(text: str) -> list or None:
     low_text = text.lower()
     clean_text = ''
     for i in low_text:
-        if i.isalpha():
+        if i.isalpha() or i.isspace():
             clean_text += i
-        elif i.isspace():
-            clean_text += i
-    clean_text = clean_text.replace('\n', ' ')
+
     tokens = clean_text.split()
     return tokens
 
@@ -40,9 +38,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         return tokens
 
     for i in stop_words:
-        for index in tokens:
-            if i == index:
-                tokens.remove(index)
+        for k in tokens:
+            if i == k:
+                tokens.remove(k)
     return tokens
 
 
@@ -86,8 +84,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
     freq_list = list(sort_dict.keys())
 
-    if top_n > len(freq_list):
-        return freq_list
     top_n_words = freq_list[:top_n]
     return top_n_words
 
@@ -124,11 +120,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     if not isinstance(top_n, int):
         return None
 
-    freq_dict_unk = unknown_profile['freq']
-    freq_dict = profile_to_compare['freq']
-
-    top_n_words_unk = get_top_n_words(freq_dict_unk, top_n)
-    top_n_words = get_top_n_words(freq_dict, top_n)
+    top_n_words_unk = get_top_n_words(unknown_profile['freq'], top_n)
+    top_n_words = get_top_n_words(profile_to_compare['freq'], top_n)
 
     count_common = 0
     for i in top_n_words_unk:
@@ -243,7 +236,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
             possible_languages.append(i['name'])
 
     if len(possible_languages) > 1:
-        language = sorted(possible_languages)
+        language = sorted(possible_languages)[0]
     else:
         language = possible_languages[0]
     return language
@@ -275,7 +268,7 @@ def save_profile(profile: dict) -> int:
         return 1
     if ('name' or 'freq' or 'n_words') not in profile.keys():
         return 1
-    profile_file = '{}.json'.format(profile['name'])
-    with open(profile_file, 'w', encoding='utf-8') as file:
+    file_name = '{}.json'.format(profile['name'])
+    with open(file_name, 'w', encoding='utf-8') as file:
         json.dump(profile, file)
     return 0
