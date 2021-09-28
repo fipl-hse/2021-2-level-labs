@@ -14,7 +14,7 @@ def tokenize(text: str) -> list or None:
     if not isinstance(text, str):
         return None
     text = text.lower()
-    marks = '''1234567890!()-§[]{};?@#$%:'"/\\.,^&*_<>№'''
+    marks = '''1234567890º!()-§[]{};?@#$%:'"/\\.,^&*_<>№'''
     for element in text:
         if element in marks:
             text = text.replace(element, '')
