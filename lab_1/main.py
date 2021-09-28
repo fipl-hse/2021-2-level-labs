@@ -99,28 +99,22 @@ def calculate_frequencies(text_update):
            return None
    return None
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
+def get_top_n_words(frequency_dict, top_n):
+    if isinstance(frequency_dict, dict) and isinstance(top_n, int):
+        freq_sort_dict = dict(sorted(frequency_dict.items(), key=lambda item: item[1], reverse=True)[:top_n])
+        freq_sort_list = list((freq_sort_dict).keys())
+        return freq_sort_list
+    else:
+        return None
 
 
-def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
-    """
-    Creates a language profile
-    :param language: a language
-    :param text: a text
-    :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
+def create_language_profile(language: str, text_update: str, STOP_WORDS: list) -> dict or None:
 
 
-def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+
+
+
+ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
