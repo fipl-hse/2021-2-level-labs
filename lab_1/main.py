@@ -3,44 +3,119 @@ Lab 1
 Language detection
 """
 
+en_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+               'u', 'v', 'w', 'x', 'y', 'z']
+de_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+               'u', 'v', 'w', 'x', 'y', 'z', 'ß', 'ö', 'ü', 'ä']
+stop_words = ['the', 'a', 'is']
 
-def tokenize(text: str) -> list or None:
+def tokenize(text):
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    return
+
+    result = []
+    word = ''
+    for char in text.lower():
+        if char in de_alphabet:
+            word = word + char
+        elif char == ' ':
+            if len(word) > 0:
+                result.append(word)
+                word = ''
+
+    if len(word) > 0:
+        result.append(word)
+
+    if len(result) > 0:
+        return result
+    else:
+        return None
 
 
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+def remove_stop_words(tokens, st_words):
     """
     Removes stop words
     :param tokens: a list of tokens
-    :param stop_words: a list of stop words
+    :param st_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+
+    # Check stop words
+    st_word_valid = []
+    if type(st_words) == list:
+        for stop_word in st_words:
+            if type(stop_word) == str:
+                if stop_word in stop_words:
+                    st_word_valid.append(stop_word)
+
+    # Check tokens
+    tokens_valid = []
+    for word in tokens:
+        if type(word) == str:
+            for char in word:
+                if char not in de_alphabet:
+                    return None
+        else:
+            return None
+
+        if word not in st_word_valid:
+            tokens_valid.append(word)
+
+    return tokens_valid
 
 
-def calculate_frequencies(tokens: list) -> dict or None:
+def calculate_frequencies(tokens):
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+
+    # Check tokens validity
+    for word in tokens:
+        if type(word) == str:
+            for char in word:
+                if char not in de_alphabet:
+                    return None
+        else:
+            return None
+
+    # Creation of dictionary [token, freq]
+    token_dict = {}
+    for key in tokens:
+        key = key.lower()
+        if key in token_dict:
+            value = token_dict[key]
+            token_dict[key] = value + 1
+        else:
+            token_dict[key] = 1
+
+    return token_dict
 
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+def get_top_n_words(freq_dict, top_n):
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+
+    if top_n > 0 and len(freq_dict) > 0:
+        ind = 0
+        top_list = []
+        for i in sorted(freq_dict.items(), reverse = True, key=lambda pair: pair[1]):
+            top_list.append(i[0])
+            ind = ind + 1
+            if ind == top_n:
+                return top_list
+        return top_list
+    else:
+        return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
