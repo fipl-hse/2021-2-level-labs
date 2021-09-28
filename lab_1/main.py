@@ -14,7 +14,7 @@ def tokenize(text: str) -> list or None:
     if isinstance(text, str) is False:
         return None
     text = text.lower()
-    punctuation = '''`~!§№@#$%^&|*()_-=+[{]};:'"\\,<.>/?1234567890'''
+    punctuation = '''`~!§№@º#$%^&|*()_-=+[{]};:'"\\,<.>/?1234567890'''
     for char in text:
         if char in punctuation:
             text = text.replace(char, '')
@@ -23,7 +23,7 @@ def tokenize(text: str) -> list or None:
     return text
 
 
-def remove_stop_words(tokens: list, stop_words: list):
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
     :rtype: object
