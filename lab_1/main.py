@@ -3,7 +3,6 @@ Lab 1
 Language detection
 """
 import json
-import os
 from os.path import exists
 
 
