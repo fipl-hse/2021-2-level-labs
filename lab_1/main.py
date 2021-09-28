@@ -115,10 +115,10 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     """
     if not isinstance((unknown_profile, profile_1, profile_2), dict) or not isinstance(top_n, int):
         return None
-    first_compare = compare_profiles(profile_1, unknown_profile, top_n) # -> int
-    second_compare = compare_profiles(profile_2, unknown_profile, top_n) # -> int
-    if first_compare > second_compare:
+    first_distance = compare_profiles(profile_1, unknown_profile, top_n) # -> int
+    second_distance = compare_profiles(profile_2, unknown_profile, top_n) # -> int
+    if first_distance > second_distance:
         language = profile_1['language name']
-    elif second_compare > first_compare:
+    elif second_distance > first_distance:
         language = profile_2['language name']
     return language
