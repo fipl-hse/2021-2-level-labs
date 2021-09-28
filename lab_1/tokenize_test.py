@@ -2,7 +2,6 @@
 """
 Checks the first lab text preprocessing functions
 """
-
 import unittest
 from main import tokenize
 
@@ -19,6 +18,7 @@ class TokenizeTest(unittest.TestCase):
         expected = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
         actual = tokenize('The weather is sunny, the man is happy.')
         self.assertEqual(expected, actual)
+
 
     def test_tokenize_several_sentences(self):
         """
