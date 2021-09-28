@@ -4,44 +4,70 @@ Language detection
 """
 
 
-def tokenize(text: str) -> list or None:
+def tokenize(text: str):
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    text = text.split()
-    return text
+    if isinstance(text, str) == False:
+        return None
+    else:
+        symbols = ["'", ',', '.', '!', '?', '@', '#', '$', '%', '&', '*', '<', '>', ';', ':', '-','=','+','_']
+        for i in text:
+            if i in symbols:
+                text = text.replace(i, "")
+        text1 = ''.join([i for i in text if not i.isdigit()])
+        tokens = text1.lower().split()
+        return text1.lower().split()
 
-
-def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+def remove_stop_words(tokens, stop_words):
     """
     Removes stop words
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+    if type(tokens) == list and type(stop_words) == list:
+        clean_text = [x for x in tokens if x not in stop_words]
+        return clean_text
+    else:
+        return None
 
 
-def calculate_frequencies(tokens: list) -> dict or None:
+def calculate_frequencies(clean_text) -> dict or None:
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    if isinstance(clean_text,list) and all(i for i in clean_text):
+        freq = []
+        for i in clean_text:
+            word_count = clean_text.count(i)
+            freq.append((i, word_count))
+        freq_dict = dict(freq)
+        return freq_dict
+    else:
+        return None
 
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
+def get_top_n_words(freq_dict, top_n):
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
+    if type(freq_dict) == dict and type(top_n) == int:
+        freq_sort1 = dict (sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)[:top_n])
+        freq_sort = list((freq_sort1).keys())
+        return freq_sort
+    else:
+        return None
+
+
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
