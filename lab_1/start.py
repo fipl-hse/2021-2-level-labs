@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     #detection from external profiles
     en_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "en.json"))
-    de_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "en.json"))
+    de_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "de.json"))
     la_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "la.json"))
     profiles_extrnl = [en_profile, de_profile, la_profile]
     det_from_extrnl_profiles = main.detect_language_advanced(unk_profile, profiles_extrnl, [], 5)
