@@ -164,7 +164,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     for i in top_n_words_profile_to_compare:
         if i in top_n_words_unknown_profile:
             common.append(i)
-    score = float(len(common) / len(top_n_words_unknown_profile))
+    score = len(common) / len(top_n_words_unknown_profile)
     sorted_common = sorted(common)
     sorted_tokens = sorted(list(profile_to_compare['freq'].keys()), key=len)
     min_length_word = sorted_tokens[0]
