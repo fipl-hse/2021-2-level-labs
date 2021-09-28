@@ -4,45 +4,48 @@ Language detection
 """
 
 
+
 import re
-text = str(input('Enter your text: '))
-def tokenize():
-    if re.search(r'[^a-zA-Z\0-9üÜäÄöÖß]+[^\w\s]', text):
-        None
-    else:
+def tokenize(text: str) -> list or None:
+    if isinstance(text,str):
         text2=text.lower()
         token = re.sub(r'[^\w\s]','',text2)
-        token2 = re.split(r'\b\W\b', token)
+        token2 = re.split(r'\s', token)
+        for token in token2:
+            if token == '':
+                token2.remove(token)
         return token2
-    
-    def remove_stop_words():
-        stopwords = ['am','is','are','a','an']
-        clear_text = []
-        for word in token2:
-            if word not in token2:
-                None
-            else:
-                if word not in stopwords:
-                    clear_text.append(word)
-                    return clear_text
+    return None
+
+def remove_stop_words(token2: list, stop_words: list)-> list or None:
+    if isinstance(token2, list) and isinstance(stop_words, list):
+        for token in token2:
+            if token in stop_words:
+                token2.remove(token)
+        return token2
+    return None
                     
-        def calculate_frequencies():
-            freqdict = {}
-            if word in clear_text:
-                for word in clear_text:
-                    if len(word) >= 0 and not freqdict.get(word):
-                        freqdict[word] = clear_text.count(word)
-                        return freqdict
-            else:
-                None
+def calculate_frequencies(token2: list)-> dict or None:
+    if isinstance(token2, list):
+        for token in token2:
+            if isinstance(token,str):
+                freqdict = {}
+                for x in token2:
+                    if x in freqdict:
+                        freqdict[x]+=1
+                    else:
+                        freqdict[x]=1
+                return freqdict
+            return None
+    return None
+
             
-            def get_top_n_words():
-                t = dict(sorted(freqdict.items(), key=lambda kv: kv[0], reverse=True))
-                return t
-            get_top_n_words()
-        calculate_frequencies()
-    remove_stop_words()
-tokenize()
+def get_top_n_words(freqdict: dict, top_n:int)-> list or None:
+    if isinstance(freqdict, dict) and isinstance(top_n, int):
+        top_dict = dict(sorted(freqdict.items(), key=lambda kv: kv[1], reverse=True))
+        freqdict = list(top_dict)
+        return freqdict[:top_n]
+    return None
 
 
 
