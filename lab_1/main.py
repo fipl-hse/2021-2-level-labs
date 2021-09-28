@@ -4,7 +4,6 @@ Language detection
 """
 import re
 import json
-import os.path
 
 
 def tokenize(text: str) -> list or None:
@@ -178,8 +177,8 @@ def compare_profiles_advanced(unknown_profile: dict,
     max_len = max(tokens, key=len)
     min_len = min(tokens, key=len)
     tokens_len = []
-    for token in tokens:
-        tokens_len.append(len(token))
+    for word in tokens:
+        tokens_len.append(len(word))
     average_len = sum(tokens_len) / len(tokens)
 
     report = {'name': profile_to_compare['name'], 'common': top_n_common, 'score': score,
