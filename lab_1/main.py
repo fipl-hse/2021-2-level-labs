@@ -47,21 +47,18 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :return: a dictionary with frequencies
     """
     pass
-    freq_dict = {}
-    if not isinstance(tokens, list):
-        return None
-    for b in tokens:
-        if type(b) != str:
-            return None
-    for token in tokens:
-        if token in freq_dict:
-            freq_dict[token] = freq_dict[token]+1
-        else:
-            freq_dict[token] = 1
-     return freq_dict
-   
-
-
+    if isinstance(tokens,list):
+        freq_dict = {}
+        for token in tokens:
+            if type(token) != str:
+                return None
+            if token not in freq_dict:
+                freq_dict[token] = 1
+            else:
+                freq_dict[token] += 1
+        return freq_dict
+    return None
+    
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     Returns the most common words
