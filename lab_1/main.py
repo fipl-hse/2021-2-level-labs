@@ -14,11 +14,11 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
     if isinstance(text, str):
-        text = text.lower
+        text = text.lower()
         list_of_punctuation = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
-        for sign in text:
-            if sign in list_of_punctuation:
-                text = text.replace(sign, '')
+        for punct in text:
+            if punct in list_of_punctuation:
+                text = text.replace(punct, '')
         text = re.sub(r"\d+", "", text)
         tokens = re.split(r"\s", text)
         for token in tokens:
@@ -39,7 +39,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         if tokens:
             for token in enumerate(tokens):
                 if token[1] in stop_words:
-                    tokens[token[1]] = ' '
+                    tokens[token[0]] = ' '
             while ' ' in tokens:
                 tokens.remove(' ')
             return tokens
