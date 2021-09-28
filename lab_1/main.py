@@ -16,7 +16,7 @@ def tokenize(text: str) -> list or None:
     if not isinstance(text, str):
         return None
     text = text.lower()
-    text = re.sub('[^a-zäöüß ]', '', str(text))   # заменяем символы (кроме букв) на пробел
+    text = re.sub('[^a-zäöüß ]', '', text)   # заменяем символы (кроме букв) на пробел
     text = text.split()   # с помощью split разбиваем строку на части
 
     return text
