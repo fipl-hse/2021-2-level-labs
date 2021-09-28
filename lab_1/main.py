@@ -145,18 +145,18 @@ def detect_language(unknown_profile: dict,
     """
     if not (
         isinstance(unknown_profile, dict)
-        and isinstance(profile_1, dict)
-        and isinstance(profile_2, dict)
+        and isinstance(first_profile, dict)
+        and isinstance(second_profile, dict)
         and isinstance(top_n, int)
     ):
         return None
-    compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
-    compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
-    if compare_1 > compare_2:
-        return profile_1['name']
-    if compare_2 > compare_1:
-        return profile_2['name']
-    return sorted(profile_1['name'], profile_2['name'])
+    first_compare = compare_profiles(unknown_profile, first_profile, top_n)
+    second_compare = compare_profiles(unknown_profile, second_profile, top_n)
+    if first_compare > second_compare:
+        return first_profile['name']
+    if second_compare > first_compare:
+        return second_profile['name']
+    return sorted(first_profile['name'], second_profile['name'])
 
 
 def compare_profiles_advanced(unknown_profile: dict,
