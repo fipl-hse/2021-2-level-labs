@@ -30,7 +30,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
     if not (isinstance(tokens, list) and isinstance(stop_words, list)):
-    tokens_update = []
+        tokens_update = []
     for word in tokens:
         if word not in stop_words:
             tokens_update.append(word)
@@ -89,7 +89,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    #line too long so split in two
+    # line too long so split in two
     if not isinstance(language, str) or not isinstance(text, str)
         return None
     if not isinstance(stop_words, list):
