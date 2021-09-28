@@ -95,7 +95,8 @@ def create_language_profile(language, text, stop_words):
     return None
 
 
-def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+def compare_profiles(unknown_profile: dict, profile_to_compare: dict,
+                     top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
@@ -123,7 +124,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     return None
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
