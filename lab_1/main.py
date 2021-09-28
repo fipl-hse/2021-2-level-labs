@@ -15,9 +15,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     marks = '''1234567890!()-§[]{};?@#$%:'"/\\.,^&*_<>№'''
-    for i in text:
-        if i in marks:
-            text = text.replace(i, '')
+    for element in text:
+        if element in marks:
+            text = text.replace(element, '')
     tokens = text.split()
     return tokens
 
@@ -32,9 +32,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     tokens_right = []
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
-    for i in tokens:
-        if i not in stop_words:
-            tokens_right.append(i)
+    for token in tokens:
+        if token not in stop_words:
+            tokens_right.append(token)
     return tokens_right
 
 
@@ -47,13 +47,13 @@ def calculate_frequencies(tokens: list) -> dict or None:
     dictionary = {}
     if not isinstance(tokens, list):
         return None
-    for i in tokens:
-        if not isinstance(i, str):
+    for token in tokens:
+        if not isinstance(token, str):
             return None
-        if i not in dictionary:
-            dictionary[i] = 1
+        if token not in dictionary:
+            dictionary[token] = 1
         else:
-            dictionary[i] = dictionary[i]+1
+            dictionary[token] = dictionary[token]+1
     return dictionary
 
 
@@ -64,15 +64,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if not isinstance(freq_dict, dict):
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
     sorted_freq_list = sorted(freq_dict.values())
     sorted_dict_n = {}
     sorted_freq_list = sorted_freq_list[::-1]
-    for i in sorted_freq_list:
-        for k in freq_dict.keys():
-            if freq_dict[k] == i:
-                sorted_dict_n[k] = freq_dict[k]
+    for value in sorted_freq_list:
+        for key in freq_dict.keys():
+            if freq_dict[key] == value:
+                sorted_dict_n[key] = freq_dict[key]
     top_n_list = sorted_dict_n.keys()
     top_n_list = list(top_n_list)
     top_n_list = top_n_list[:top_n]
@@ -113,8 +113,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     unknown_profile_top_n = get_top_n_words(unknown_profile['freq'], top_n)
     profile_to_compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
     common_top_n = 0
-    for i in unknown_profile_top_n:
-        if i in profile_to_compare_top_n:
+    for word in unknown_profile_top_n:
+        if word in profile_to_compare_top_n:
             common_top_n = common_top_n + 1
     proportion = common_top_n/len(profile_to_compare_top_n)
     proportion = round(proportion, 2)
@@ -166,16 +166,16 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
         unknown_top_n = get_top_n_words(unknown_profile['freq'], top_n)
         compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
         common_top_n = []
-        for i in compare_top_n:
-            if i in unknown_top_n:
-                common_top_n.append(i)  # common
+        for token in compare_top_n:
+            if token in unknown_top_n:
+                common_top_n.append(token)  # common
         score = len(common_top_n)/top_n  # score
         all_words_compare = list(profile_to_compare['freq'].keys())
         max_length_word = max(all_words_compare, key=len)  # max
         min_length_word = min(all_words_compare, key=len)  # min
         sum_of_letters = 0
-        for i in all_words_compare:
-            sum_of_letters += len(i)
+        for word in all_words_compare:
+            sum_of_letters += len(word)
         average_token_length = sum_of_letters / len(all_words_compare)
         report = {'name': profile_to_compare['name'],
                   'common': common_top_n,
