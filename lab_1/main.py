@@ -133,8 +133,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 
 def detect_language(unknown_profile: dict,
-                    profile_1: dict,
-                    profile_2: dict, top_n: int) -> str or None:
+                    first_profile: dict,
+                    second_profile: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
