@@ -19,9 +19,9 @@ def tokenize(text: str) -> list or None:
                 text = text.replace(i, "")
         text = re.sub(r"\d+", "", text)
         tokens = re.split(r"\s", text)
-        for a in tokens:
-            if a == "":
-                tokens.remove(a)
+        for v in tokens:
+            if v == "":
+                tokens.remove(v)
         return tokens
     return None
 
