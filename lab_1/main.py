@@ -146,7 +146,34 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
+    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
+        return None
+    full_profile_to_compare = {}
+    match = 0
+    common = []
+    unknown_lang_tokens = unknown_profile['freq'].keys()
+    max_len_word = unknown_lang_tokens[0]
+    min_len_word = unknown_lang_tokens[0]
+    len_of_all_tokens = 0
+    comparable_lang_tokens = profile_to_compare['freq'].keys()
+    full_profile_to_compare['name'] = profile_to_compare['name']
+    for word in get_top_n_words(unknown_profile['freq'], top_n):
+        if word in get_top_n_words(profile_to_compare['freq'], top_n):
+            match += 1
+            common.append(word)
+    full_profile_to_compare['score'] = match / top_n
+    full_profile_to_compare['common'] = common
+    for word in comparable_lang_tokens:
+        if len(word) > len(max_len_word):
+            max_len_word = word
+        elif len(word) < len(min_len_word):
+            min_len_word = word
+        len_of_all_tokens += len(word)
+    full_profile_to_compare['max_length_word'] = max_len_word
+    full_profile_to_compare['min_length_word'] = min_len_word
+    full_profile_to_compare['average_token_length'] = len_of_all_tokens / len(comparable_lang_tokens)
+    full_profile_to_compare['sorted_common'] = sorted(common)
+    return full_profile_to_compare
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
@@ -158,7 +185,17 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if not (isinstance(unknown_profile, dict) and isinstance(profiles, list)):
+        return None
+    if not (isinstance(languages,list) and isinstance(top_n,int)):
+        return None
+    scores_of_lang = []
+    for profile in profiles:
+        if languages == [] or (profile['name'] in languages):
+            result_of_comparison = compare_profiles_advanced(unknown_profile, profile, top_n)
+            scores_of_lang.append((profile['name'], result_of_comparison['score']))
+    scores_of_lang.sort(key=lambda x: (-x[1], x[0]))
+    return scores_of_lang[0][0]
 
 
 def load_profile(path_to_file: str) -> dict or None:
