@@ -7,7 +7,7 @@ def tokenize(text_str):
             if i in symbols:
                 text_str = text_str.replace(i, "")
                 text_update = ''.join([i for i in text_str if not i.isdigit()])
-                return text_update.lower().split()
+        return text_update.lower().split()
 
 def remove_stop_words(text_update, STOP_WORDS):
     if isinstance(STOP_WORDS, list) and isinstance(text_update, list):
