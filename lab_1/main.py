@@ -15,7 +15,7 @@ def tokenize(text: str) -> list or None:
     if not isinstance(text, str):
         return None
     text = text.lower()
-    punktmarks = '''1234567890?!.,'"/\\<>{}[]():;-+=_@#№^|$%*'''
+    punktmarks = '''1234567890?!.,'"/\\<>&{}[]():;-+=_@#№^|$%*'''
     for i in text:
         if i in punktmarks:
             text = text.replace(i, '')
