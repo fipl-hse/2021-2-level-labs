@@ -8,6 +8,7 @@ def tokenize(text_str):
                    text_str = text_str.replace(i, "")
            text_update = ''.join([i for i in text_str if not i.isdigit()])
            return text_update.lower().split()
+
 def remove_stop_words(text_update, STOP_WORDS):
     if isinstance(STOP_WORDS, list) and isinstance(text_update, list):
         if text_update:
@@ -21,6 +22,7 @@ def remove_stop_words(text_update, STOP_WORDS):
             return None
     else:
         return None
+
 def calculate_frequencies(text_update):
    if isinstance(text_update, list):
        for j in text_update:
@@ -34,6 +36,7 @@ def calculate_frequencies(text_update):
                return frequency_dict
            return None
    return None
+
 def get_top_n_words(frequency_dict, top_n):
     if isinstance(frequency_dict, dict) and isinstance(top_n, int):
         freq_sort_dict = dict(sorted(frequency_dict.items(), key=lambda item: item[1], reverse=True)[:top_n])
