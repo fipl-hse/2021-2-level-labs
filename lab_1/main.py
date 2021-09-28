@@ -140,7 +140,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
 
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int)\
+        -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -156,9 +157,9 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     match = 0
     common = []
     len_of_all_tokens = 0
-    comparable_lang_tokens = list(profile_to_compare['freq'].keys())
-    max_len_word = comparable_lang_tokens[0]
-    min_len_word = comparable_lang_tokens[0]
+    comparable_l_tokens = list(profile_to_compare['freq'].keys())
+    max_len_word = comparable_l_tokens[0]
+    min_len_word = comparable_l_tokens[0]
     full_profile_to_compare['name'] = profile_to_compare['name']
     for word in get_top_n_words(unknown_profile['freq'], top_n):
         if word in get_top_n_words(profile_to_compare['freq'], top_n):
@@ -166,7 +167,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
             common.append(word)
     full_profile_to_compare['score'] = match / top_n
     full_profile_to_compare['common'] = sorted(common)
-    for word in comparable_lang_tokens:
+    for word in comparable_l_tokens:
         if len(word) > len(max_len_word):
             max_len_word = word
         elif len(word) < len(min_len_word):
@@ -174,7 +175,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
         len_of_all_tokens += len(word)
     full_profile_to_compare['max_length_word'] = max_len_word
     full_profile_to_compare['min_length_word'] = min_len_word
-    full_profile_to_compare['average_token_length'] = len_of_all_tokens / len(comparable_lang_tokens)
+    full_profile_to_compare['average_token_length'] = len_of_all_tokens / len(comparable_l_tokens)
     full_profile_to_compare['sorted_common'] = sorted(common)
     return full_profile_to_compare
 
