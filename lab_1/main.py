@@ -80,7 +80,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
     pass
-    if (not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list)):
+    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
         return None
     text = tokenize(text)
     tokens = remove_stop_words(text, stop_words)
@@ -97,7 +97,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
     pass
-    if (not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not (top_n, int)):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not (top_n, int):
         return None
     top_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_compare = get_top_n_words(profile_to_compare["freq"], top_n)
@@ -106,8 +106,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         if w in top_unknown:
             shared_tokens += 1
     distance = round(shared_tokens/len(top_unknown), 2)
+    return distance
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -116,6 +117,18 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict) -> 
     :return: a language
     """
     pass
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict or not isinstance(top_n, int)):
+        return None
+    distance_1 = compare_profiles(unknown_profile, profile_1, top_n)
+    distance_2 = compare_profiles(unknown_profile, profile_2, top_n)
+    if distance_1 == distance_2:
+        names = sorted([profile_1['name'], profile_2['name']])
+        language = names[0]
+    elif distance_1 > distance_2:
+        language = profile_1['name']
+    elif distance_1 < distance_2:
+        language = profile_2['name']
+    return language
 
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list) -> str or None:
