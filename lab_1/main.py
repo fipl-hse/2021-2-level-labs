@@ -3,6 +3,8 @@ Lab 1
 Language detection
 """
 import json
+import os
+from os.path import exists
 
 
 def tokenize(text: str) -> list or None:
@@ -72,19 +74,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not freq_dict or top_n <= 0:
         return []
 
-    sort_values = sorted(freq_dict.values(), reverse=True)
-    dict_keys = list(freq_dict.keys())
-    sort_dict = {}
-
-    for i in sort_values:
-        for k in dict_keys:
-            if freq_dict[k] == i:
-                sort_dict[k] = freq_dict[k]
-                dict_keys.remove(k)
-
-    freq_list = list(sort_dict.keys())
-
-    top_n_words = freq_list[:top_n]
+    sort_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
+    top_n_words = sort_dict[:top_n]
     return top_n_words
 
 
@@ -221,10 +212,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
 
     reports = []
     for i in profiles:
-        if languages:
-            if i['name'] in languages:
-                reports.append(compare_profiles_advanced(unknown_profile, i, top_n))
-        else:
+        if i['name'] in languages or not languages:
             reports.append(compare_profiles_advanced(unknown_profile, i, top_n))
 
     scores = []
@@ -235,10 +223,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
         if i['score'] == max(scores):
             possible_languages.append(i['name'])
 
-    if len(possible_languages) > 1:
-        language = sorted(possible_languages)[0]
-    else:
-        language = possible_languages[0]
+    language = sorted(possible_languages)[0]
     return language
 
 
@@ -250,11 +235,11 @@ def load_profile(path_to_file: str) -> dict or None:
     """
     if not isinstance(path_to_file, str):
         return None
-    try:
-        with open(path_to_file, encoding='utf-8') as file:
-            language_profile = json.load(file)
-    except FileNotFoundError:
+    if not exists(path_to_file):
         return None
+
+    with open(path_to_file, encoding='utf-8') as file:
+        language_profile = json.load(file)
     return language_profile
 
 
