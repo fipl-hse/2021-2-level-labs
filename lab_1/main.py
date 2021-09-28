@@ -11,7 +11,7 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if isinstance(text,str) != True:
+    if not isinstance(text,str):
         return None
     text = text.lower()
     for symbol in text:
@@ -48,7 +48,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if isinstance(tokens,list) != True:
+    if not isinstance(tokens, list):
         return None
     t_dict = {}
     for word in tokens:
@@ -151,11 +151,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     full_profile_to_compare = {}
     match = 0
     common = []
-    unknown_lang_tokens = unknown_profile['freq'].keys()
-    max_len_word = unknown_lang_tokens[0]
-    min_len_word = unknown_lang_tokens[0]
     len_of_all_tokens = 0
     comparable_lang_tokens = profile_to_compare['freq'].keys()
+    max_len_word = comparable_lang_tokens[0]
+    min_len_word = comparable_lang_tokens[0]
     full_profile_to_compare['name'] = profile_to_compare['name']
     for word in get_top_n_words(unknown_profile['freq'], top_n):
         if word in get_top_n_words(profile_to_compare['freq'], top_n):
@@ -195,6 +194,8 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             result_of_comparison = compare_profiles_advanced(unknown_profile, profile, top_n)
             scores_of_lang.append((profile['name'], result_of_comparison['score']))
     scores_of_lang.sort(key=lambda x: (-x[1], x[0]))
+    if scores_of_lang == []:
+        return None
     return scores_of_lang[0][0]
 
 
