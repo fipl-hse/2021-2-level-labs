@@ -11,16 +11,16 @@ def tokenize(text: str):
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if isinstance(text, str) == False:
+    if isinstance(text, str) is False:
         return None
-    else:
-        symbols = ["'", ',', '.', '!', '?', '@', '#', '$', '%', '&', '*', '<', '>', ';', ':', '-','=','+','_']
-        for i in text:
-            if i in symbols:
-                text = text.replace(i, "")
-        text1 = ''.join([i for i in text if not i.isdigit()])
-        tokens = text1.lower().split()
-        return text1.lower().split()
+    symbols = ["'", ',', '.', '!', '?', '@', '#', '$', '%', '&', '*', '<',
+                   '>', ';', ':', '-','=','+','_']
+    for i in text:
+        if i in symbols:
+            text = text.replace(i, "")
+    text1 = ''.join([i for i in text if not i.isdigit()])
+    tokens = text1.lower().split()
+    return tokens
 
 def remove_stop_words(tokens, stop_words):
     """
@@ -29,11 +29,10 @@ def remove_stop_words(tokens, stop_words):
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if type(tokens) == list and type(stop_words) == list:
+    if isinstance(tokens, list) and isinstance(stop_words, list):
         clean_text = [x for x in tokens if x not in stop_words]
         return clean_text
-    else:
-        return None
+    return None
 
 
 def calculate_frequencies(clean_text) -> dict or None:
@@ -49,8 +48,7 @@ def calculate_frequencies(clean_text) -> dict or None:
             freq.append((i, word_count))
         freq_dict = dict(freq)
         return freq_dict
-    else:
-        return None
+    return None
 
 
 def get_top_n_words(freq_dict, top_n):
@@ -60,12 +58,11 @@ def get_top_n_words(freq_dict, top_n):
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    if type(freq_dict) == dict and type(top_n) == int:
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_sort1 = dict (sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)[:top_n])
         freq_sort = list((freq_sort1).keys())
         return freq_sort
-    else:
-        return None
+    return None
 
 
 
@@ -92,7 +89,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     pass
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict,
+                    profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -104,7 +102,8 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     pass
 
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare:
+dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -116,7 +115,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     pass
 
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
