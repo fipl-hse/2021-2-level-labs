@@ -121,7 +121,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for i in unknown_profile_tokens:
         if i in profile_to_compare_tokens:
             common_top_n = common_top_n + 1
-    distance = round(common_top_n/len(profile_to_compare_tokens))
+    distance = round((common_top_n/len(profile_to_compare_tokens), 2)
     return distance
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
