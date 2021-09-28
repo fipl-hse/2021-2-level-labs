@@ -156,7 +156,7 @@ def detect_language(unknown_profile: dict,
         return profile_1['name']
     if compare_2 > compare_1:
         return profile_2['name']
-    return max(profile_1['name'], profile_2['name'])
+    return sorted(profile_1['name'], profile_2['name'])
 
 
 def compare_profiles_advanced(unknown_profile: dict,
