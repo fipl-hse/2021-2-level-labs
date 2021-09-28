@@ -16,9 +16,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     punktmarks = '''1234567890?!.,'"/\\<>{}[]():;-+=_@#№^|$%*'''
-    for b in text:
-        if b in punktmarks:
-            text = text.replace(b, '')
+    for i in text:
+        if i in punktmarks:
+            text = text.replace(i, '')
     tokens = text.split()
     return tokens
     
@@ -33,9 +33,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     tokenlist = []
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
-    for b in tokens: 
-        if b not in stop_words:
-            tokenlist.append(b)
+    for i in tokens: 
+        if i not in stop_words:
+            tokenlist.append(i)
     return tokenlist
         
 
