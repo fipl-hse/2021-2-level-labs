@@ -11,9 +11,9 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    symbols = ['.', ',', '!', '*', '?', '-', '\\', '|', '/', ':', ';', '<', '>', '^', '@', '#', '$', '%', '&', '(',
+    if isinstance(text, str):
+        symbols = ['.', ',', '!', '*', '?', '-', '\\', '|', '/', ':', ';', '<', '>', '^', '@', '#', '$', '%', '&', '(',
                    ')', '[', ']', '{', '}', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-    if type(text) == str:
         text = text.lower()
         for symbol in symbols:
             text = text.replace(symbol, '')
@@ -30,7 +30,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if type(tokens) == list and type(stop_words) == list:
+    if isinstance(tokens, list) and isinstance(stop_words, list):
         tokens = [token for token in tokens if token not in stop_words]
         return tokens
     else:
@@ -43,8 +43,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    freq_dict = {}
-    if type(tokens) == list:
+    if isinstance(tokens, list):
+        freq_dict = {}
         for token in tokens:
             if type(token) == str:
                 if token in freq_dict:
@@ -63,7 +63,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    top_n_words = []
     if type(freq_dict) == dict:
         for i in list(freq_dict.keys()):
             top_words = sorted(freq_dict, key=freq_dict.get, reverse=True) #по убыванию
@@ -81,8 +80,8 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
-    if type(language) == str and type(text) == str and type(stop_words) == list:
+    if isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list):
+        freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
         lang_profile = {'language name': language, 'frequency': freq_dict, 'n_words': len(freq_dict)}
         return lang_profile
     else:
@@ -97,7 +96,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if type(unknown_profile) == dict and type(profile_to_compare) == dict and type(top_n) == int:
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
         top_of_unknown_profile = get_top_n_words(unknown_profile['frequency'], top_n)
         top_of_profile_to_compare = get_top_n_words(profile_to_compare['frequency'], top_n)
         shared_words = []
