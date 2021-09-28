@@ -64,7 +64,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     for i in list(freq_dict.keys()):
         top_words = sorted(freq_dict, key=freq_dict.get, reverse=True) #по убыванию
-        top_words = top_words[:top_n] #первые топ_н
+        top_words = top_words[:top_n] #срез по листу
     return top_words
 
 
@@ -99,11 +99,12 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for word in top_of_unknown_profile:
         if word in top_of_profile_to_compare:
             shared_words.append(word)
-            distance = len(shared_words) / len(top_of_unknown_profile)
-            return round(distance, 1)
+    distance = len(shared_words) / len(top_of_unknown_profile)
+    distance = round(distance, 2)
+    return distance
 
 
-#def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -112,46 +113,12 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: a language
     """
-    #pass
-
-
-#def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
-    """
-    Compares profiles and calculates some advanced parameters
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-    min_length_word, average_token_length
-    """
-    #pass
-
-
-#def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile within the list of possible languages
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    #pass
-
-
-#def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    #pass
-
-
-#def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    #pass
+    if not isinstance((unknown_profile, profile_1, profile_2), dict) or not isinstance(top_n, int):
+        return None
+    first_compare = compare_profiles(profile_1, unknown_profile, top_n) # -> int
+    second_compare = compare_profiles(profile_2, unknown_profile, top_n) # -> int
+    if first_compare > second_compare:
+        language = profile_1['language name']
+    elif second_compare > first_compare:
+        language = profile_2['language name']
+    return language
