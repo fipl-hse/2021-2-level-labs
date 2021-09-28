@@ -21,9 +21,9 @@ def tokenize(text: str) -> list or None:
     tokens = re.findall(r"\w+", text)
     return tokens
 
-unknown_text = open('unknown.txt', encoding='utf-8').read()
-en_text = open('en.txt', encoding='utf-8').read()
-de_text = open('de.txt', encoding='utf-8').read()
+# unknown_text = open('unknown.txt', encoding='utf-8').read()
+# en_text = open('en.txt', encoding='utf-8').read()
+# de_text = open('de.txt', encoding='utf-8').read()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
