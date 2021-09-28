@@ -258,9 +258,9 @@ def save_profile(profile: dict) -> int:
     """
     if not (
         isinstance(profile, dict)
-        or isinstance(profile['name'], str)
-        or isinstance(profile['freq'], dict)
-        or isinstance(profile['n_words'], int)
+        and isinstance(profile['name'], str)
+        and isinstance(profile['freq'], dict)
+        and isinstance(profile['n_words'], int)
     ):
         return 1
     profile_dict = '{}.json'.format(profile['name'])
