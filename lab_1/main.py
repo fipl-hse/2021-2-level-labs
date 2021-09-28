@@ -3,6 +3,7 @@ Lab 1
 Language detection
 """
 import json
+from os.path import exists
 
 
 def tokenize(text: str) -> list or None:
@@ -12,16 +13,17 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    if not isinstance(text, str):
+        return None
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '\t', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-    if not isinstance(text, str):
-        return None
     text = text.lower()
     for symbols in invaluable_trash:
         text = text.replace(symbols, '')
     tokens = text.split()
     return tokens
+# change for "I'd put such checks just at the beginning" - is done
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -46,9 +48,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    frequency_dictionary = {}
     if not isinstance(tokens, list):
         return None
+    frequency_dictionary = {}
     for word in tokens:
         if isinstance(word, str):
             if word in frequency_dictionary:
@@ -59,6 +61,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
             return None
     return frequency_dictionary
 # return dict e.g. {'assessment': 5, 'karina': 90, 'hello': 1, 'ship': 3}
+# change for "to the beginning" is done
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -70,15 +73,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
-    freq_list = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
-    top_n_words = []
-    # take the zero element of the tuples (it is the sorted tokens) and add to the new list
-    for tuple_element in freq_list:
-        top_n_words.append(tuple_element[0])
-    # take the top_n tokens from the list of sorted tokens
-    top_n_words = top_n_words[:top_n]
+    # sort by keys and take the top_n tokens from the list of sorted tokens
+    top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
     return top_n_words
 # return list e.g. ['karina', 'assessment']
+# change for "Can you sort keys just here (not items)?" is done
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -99,9 +98,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     frequency_dictionary = calculate_frequencies(tokens)
     # find the number of tokens in the dictionary
     n_words = len(frequency_dictionary.keys())
-    # create language profile
-    profile = {"name": language, "freq": frequency_dictionary, "n_words": n_words}
-    return profile
+    # create and return language profile
+    return {"name": language, "freq": frequency_dictionary, "n_words": n_words}
+# change for "you can return just here" is done
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -119,11 +118,12 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     # use function get_top_n_words
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
-    # find common tokens
-    common_things = list(set(top_n_words_unknown) & set(top_n_words_compare))
+    # find common tokens WITHOUT creating list
+    common_things = set(top_n_words_unknown) & set(top_n_words_compare)
     # find share of common tokens
     share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
     return share_of_common_things
+# change for "why list?" is done
 
 
 def detect_language(unknown_profile: dict,
@@ -147,8 +147,8 @@ def detect_language(unknown_profile: dict,
     share_the_second_language = compare_profiles(unknown_profile, profile_2, top_n)
     # detect the language via share of common tokens
     if share_the_first_language == share_the_second_language:
-        if_two_language = sorted([profile_1["name"], profile_2["name"]])
-        language_name = if_two_language[0]
+        language_name = sorted([profile_1["name"], profile_2["name"]])[0]
+        # change for "can you get [0] just here?" is done
     elif share_the_first_language > share_the_second_language:
         language_name = profile_1["name"]
     else:
@@ -218,25 +218,27 @@ def detect_language_advanced(unknown_profile: dict,
             or not isinstance(languages, list)
             or not isinstance(top_n, int)):
         return None
-    # sort the reports by score
+    # create the list of reports (they are dict) and sort the reports by score
     reports = []
     for profile in profiles:
         if profile["name"] in languages or not languages:
             report = compare_profiles_advanced(unknown_profile, profile, top_n)
             reports.append(report)
     reports = sorted(reports, key=lambda x: x["score"], reverse=True)
-    # sort in alphabetically order if some languages have the same max scores
-    if len(reports) == 0:
+    if not reports:
         return None
-    if len(reports) > 1:
-        if reports[0]["score"] == reports[1]["score"]:
-            reports_with_max_score = []
-            for element in reports:
-                if element["score"] == reports[0]["score"]:
-                    reports_with_max_score.append(element)
-            reports = sorted(reports_with_max_score, key=lambda x: x["name"])
-    language = reports[0]["name"]
-    return language
+    # sort in alphabetically order if some languages have the same max scores
+    # create the list with only scores and count the max score-element in it
+    list_with_only_scores = []
+    for element_dict in reports:
+        list_with_only_scores.append(element_dict["score"])
+    max_scores = max(list_with_only_scores)
+    number_of_max_scores = list_with_only_scores.count(max_scores)
+    # use the count as a stop index to take the part of the 'reports' that we want to sort
+    reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
+    # return a language
+    return reports[0]["name"]
+# change for "this function is hard to read" and "return just here" is done
 
 
 def load_profile(path_to_file: str) -> dict or None:
@@ -245,15 +247,14 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance(path_to_file, str):
+    # check for bad input
+    if not isinstance(path_to_file, str) or not exists(path_to_file):
         return None
     # load profile from file
-    try:
-        with open(path_to_file, "r", encoding="utf-8") as json_file:
-            profile = json.load(json_file)
-    except FileNotFoundError:
-        return None
+    with open(path_to_file, "r", encoding="utf-8") as json_file:
+        profile = json.load(json_file)
     return profile
+# change for "try/except" is done
 
 
 def save_profile(profile: dict) -> int:
