@@ -115,7 +115,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
         for i in unknown_profile_tokens:
             if i in profile_to_compare_tokens:
                 shared_tokens += 1
-        common_freq_words = shared_tokens / len(profile_to_compare_tokens)
+        common_freq_words = shared_tokens / len(unknown_profile_tokens)
         common_freq_words = round(common_freq_words, 2)
         return common_freq_words
     return None
