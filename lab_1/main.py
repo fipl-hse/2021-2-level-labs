@@ -138,11 +138,16 @@ def detect_language(unknown_profile: dict, profile_1: dict,
             and isinstance(profile_2, dict) and isinstance(top_n, int):
         eq_per_1 = compare_profiles(unknown_profile, profile_1, top_n)
         eq_per_2 = compare_profiles(unknown_profile, profile_2, top_n)
+        detected_language_1 = profile_1.get('name')
+        detected_language_2 = profile_2.get('name')
         if eq_per_1 > eq_per_2:
-            detected_language = profile_1.get('name')
-        elif eq_per_2 > eq_per_1:
-            detected_language = profile_2.get('name')
-        return detected_language
+            return detected_language_1
+        if eq_per_2 > eq_per_1:
+            return detected_language_2
+        if eq_per_2 == eq_per_1:
+            detected_languages = [detected_language_1, detected_language_2]
+            detected_languages.sort()
+            return detected_languages[0]
     return None
 
 
