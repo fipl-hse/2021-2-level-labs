@@ -37,7 +37,7 @@ def tokenize():
                 None
             
             def get_top_n_words():
-                t = sorted(freqdict.items(), key=lambda kv: kv[1], reverse=True)
+                t = dict(sorted(freqdict.items(), key=lambda kv: kv[0], reverse=True))
                 return t
             get_top_n_words()
         calculate_frequencies()
