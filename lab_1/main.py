@@ -13,7 +13,7 @@ def tokenize(text: str) -> list or None:
     """
     if not isinstance(text, str):
         return None
-    symbols = """".,!?/'"&@#№$%^<>;:*()[]{}|`1234567890"""
+    symbols = """".,!?/'"-&@#№$%^<>;:*()[]{}|`1234567890"""
     text = text.lower()
     for symbol in symbols:
         text = text.replace(symbol, '')
