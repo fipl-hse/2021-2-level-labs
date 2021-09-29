@@ -11,11 +11,16 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    text = text.lower()
     pattern = r"[^a-zA-Z]+"
-    removegaps = re.sub("[-'’]", "", text)
+    removegaps = re.sub("[^a-zA-Z \n]", "", text)
     removestuff = re.sub(pattern, " ", removegaps)
-    y = re.split("\W+", removestuff)
-    return True
+    tokens = re.split("\W+", removestuff)
+    for token in tokens:
+        if token == '':
+            tokens.remove(token)
+    print(tokens)
+    return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -122,3 +127,6 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
+
+x = open('en.txt', 'r').read()
+tokenize(x)
