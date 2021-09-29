@@ -141,12 +141,12 @@ def detect_language(unknown_profile: dict, profile_1: dict,
     if not isinstance(profile_2, dict) or not isinstance(top_n, int):
         return None
 
-    p1_cross = compare_profiles(unknown_profile, profile_1, top_n)
-    p2_cross = compare_profiles(unknown_profile, profile_2, top_n)
+    first_cross = compare_profiles(unknown_profile, profile_1, top_n)
+    second_cross = compare_profiles(unknown_profile, profile_2, top_n)
 
-    if p1_cross > p2_cross:
+    if first_cross > second_cross:
         return profile_1["name"]
-    if p2_cross > p1_cross:
+    if second_cross > first_cross:
         return profile_2["name"]
 
     return sorted(list[profile_1["name"], profile_2["name"]])[0]
