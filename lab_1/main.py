@@ -149,6 +149,12 @@ def detect_language(unknown_profile:dict, profile_1:dict, profile_2:dict,
 
 
 
+
+
+
+
+
+
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
