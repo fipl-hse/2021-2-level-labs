@@ -3,6 +3,7 @@ Lab 1
 Language detection
 """
 import json
+import os.path
 
 
 def tokenize(text: str) -> list or None:
@@ -14,14 +15,11 @@ def tokenize(text: str) -> list or None:
     """
     if not isinstance(text, str):
         return None
-    if "\n" in text:
-        for i in range(text.count("\n")):
-            text = text.replace("\n", " ")
     text_without_symbols = ""
     for i in text:
-        if i == " " or i.isalpha():
+        if i.isspace() or i.isalpha():
             text_without_symbols += i
-    tokens = (text_without_symbols.lower()).split()
+    tokens = text_without_symbols.lower().split()
     return tokens
 
 
@@ -69,13 +67,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not isinstance(freq_dict, dict) or \
             not isinstance(top_n, int):
         return None
-    inf = list(freq_dict.items())
-    inf = sorted(inf, key=lambda x: x[1], reverse=True)
-    popular_words = []
-    vals = []
-    for key, val in inf:
-        popular_words.append(key)
-        vals.append(val)
+    popular_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
     if len(popular_words) >= top_n:
         popular_words = popular_words[:top_n]
     return popular_words
@@ -144,7 +136,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     elif compare_with_1 < compare_with_2:
         lang.append(profile_2["name"])
     elif compare_with_1 == compare_with_2:
-        (lang.append(profile_1["name"], profile_2["name"])).sort()
+        lang.append(profile_1["name"], profile_2["name"]).sort()
     return lang[0]
 
 
@@ -237,13 +229,11 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance(path_to_file, str):
+    if not isinstance(path_to_file, str) or \
+        os.path.exists(path_to_file) == False:
         return None
-    try:
-        with open(path_to_file, "r", encoding="utf-8") as json_file:
-            imported_profile = json.load(json_file)
-    except FileNotFoundError:
-        return None
+    with open(path_to_file, "r", encoding="utf-8") as json_file:
+        imported_profile = json.load(json_file)
     return imported_profile
 
 
