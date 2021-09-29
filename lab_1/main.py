@@ -101,18 +101,18 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if isinstance(unknown_profile, dict) \
+    if not (isinstance(unknown_profile, dict) \
             and isinstance(profile_to_compare, dict) \
-            and isinstance(top_n, int):
-        top_n_common_words = []
-        top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
-        top_n_words_known_profile = get_top_n_words(profile_to_compare['freq'], top_n)
-        for i in top_n_words_unknown_profile:
-            if i in top_n_words_known_profile:
-                top_n_common_words.append(i)
-        distance = len(top_n_common_words) / len(top_n_words_unknown_profile)
-        return round(float(distance), 2)
-    return None
+            and isinstance(top_n, int)):
+        return None
+    top_n_common_words = []
+    top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
+    top_n_words_known_profile = get_top_n_words(profile_to_compare['freq'], top_n)
+    for i in top_n_words_unknown_profile:
+        if i in top_n_words_known_profile:
+            top_n_common_words.append(i)
+    distance = len(top_n_common_words) / len(top_n_words_unknown_profile)
+    return round(float(distance), 2)
 
 
 def detect_language(unknown_profile: dict,
