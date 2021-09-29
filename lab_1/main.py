@@ -177,19 +177,18 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     len_of_words_dict = {}
     for i in new_keys:
         len_of_words_dict[i] = len(i)
-    len_of_words_dict_vals = list(len_of_words_dict.values())
+    len_of_words_dict_val = list(len_of_words_dict.values())
     max_len_word = \
-        list(len_of_words_dict.keys())[len_of_words_dict_vals.index(max(len_of_words_dict_vals))]
+        list(len_of_words_dict.keys())[len_of_words_dict_val.index(max(len_of_words_dict_val))]
     min_len_word = \
-        list(len_of_words_dict.keys())[len_of_words_dict_vals.index(min(len_of_words_dict_vals))]
+        list(len_of_words_dict.keys())[len_of_words_dict_val.index(min(len_of_words_dict_val))]
 
     l_summary = []
     for i in new_keys:
         l_summary.append(len(i))
-    average_token_length = sum(l_summary) / len(l_summary)
     advanced = dict(name=profile_to_compare["name"], common=top_common,
                     score=score, max_length_word=max_len_word,
-                    min_length_word=min_len_word, average_token_length=average_token_length,
+                    min_length_word=min_len_word, average_token_length=sum(l_summary) / len(l_summary),
                     sorted_common=sorted(top_common))
 
     return advanced
