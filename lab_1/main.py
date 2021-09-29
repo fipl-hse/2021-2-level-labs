@@ -53,8 +53,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
-    for i in tokens:
-        if not i:
+    for word in tokens:
+        if not word:
             return None
 
     freq_dict = {i: tokens.count(i) for i in tokens}
