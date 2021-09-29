@@ -32,7 +32,7 @@ def remove_stop_words(tokens: list,
         return None
     if tokens:
         tokens = [n for n in tokens if n not in stop_words]
-        return tokens
+    return tokens
 
 
 
