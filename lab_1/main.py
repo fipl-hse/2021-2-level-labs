@@ -2,7 +2,7 @@
 Lab 1
 Language detection
 """
-
+import re
 
 def tokenize(text: str) -> list or None:
     """
@@ -11,6 +11,10 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    pattern = r"[^a-zA-Z]+"
+    removegaps = re.sub("[-'’]", "", text)
+    removestuff = re.sub(pattern, " ", removegaps)
+    y = re.split("\W+", removestuff)
     return True
 
 
@@ -21,6 +25,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+
     pass
 
 
@@ -117,3 +122,7 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
+
+x = open('en.txt', 'r').read()
+y = tokenize(x)
+print(y)
