@@ -95,8 +95,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     """
     if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
-    top_of_unknown_profile = get_top_n_words(unknown_profile['frequency'], top_n)
-    top_of_profile_to_compare = get_top_n_words(profile_to_compare['frequency'], top_n)
+    top_of_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
+    top_of_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
     shared_words = []
     for word in top_of_unknown_profile:
         if word in top_of_profile_to_compare:
@@ -120,7 +120,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     first_distance = compare_profiles(profile_1, unknown_profile, top_n) # -> int
     second_distance = compare_profiles(profile_2, unknown_profile, top_n) # -> int
     if first_distance > second_distance:
-        language = profile_1['language name']
+        language = profile_1['name']
     elif second_distance > first_distance:
-        language = profile_2['language name']
+        language = profile_2['name']
     return language
