@@ -76,7 +76,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance((language, text), str) or not isinstance(stop_words, list):
+    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
         return None
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     lang_profile = {'language name': language, 'frequency': freq_dict, 'n_words': len(freq_dict)}
@@ -91,7 +91,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    if not isinstance((unknown_profile, profile_to_compare), dict) or not isinstance(top_n, int):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
     top_of_unknown_profile = get_top_n_words(unknown_profile['frequency'], top_n)
     top_of_profile_to_compare = get_top_n_words(profile_to_compare['frequency'], top_n)
@@ -113,7 +113,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    if not isinstance((unknown_profile, profile_1, profile_2), dict) or not isinstance(top_n, int):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict)or not isinstance(top_n, int):
         return None
     first_distance = compare_profiles(profile_1, unknown_profile, top_n) # -> int
     second_distance = compare_profiles(profile_2, unknown_profile, top_n) # -> int
