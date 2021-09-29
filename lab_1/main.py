@@ -16,7 +16,7 @@ def tokenize(text: str) -> list or None:
         return None
     tokens = ''
     for i in text:
-        if i.isalpha() or i == ' ':
+        if i.isalpha() or i.isspace():
             tokens += i
     return tokens.lower().split()
 
@@ -28,7 +28,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
 
-    if not (isinstance(tokens, list) and isinstance(stop_words, list)):
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
     tokens_list = []
     for i in tokens:
@@ -65,7 +65,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
 
-    if not (isinstance(freq_dict, dict) and isinstance(top_n, int)):
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
 
     freq_dict_sort = sorted(freq_dict.items(), key = lambda x: x[1], reverse=True)
@@ -88,8 +88,9 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if not (isinstance(language, str) and isinstance(text, str) and isinstance(stop_words, list)):
+    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
         return None
+
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     language_profile = dict(name = language, freq = freq_dict, n_words = len(freq_dict))
     return language_profile
@@ -103,10 +104,9 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :return: the distance
     """
 
-    if not (isinstance(unknown_profile, dict)
-            and isinstance(profile_to_compare, dict)
-            and isinstance(top_n, int)):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
+
     common_words = []
     top_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_compare = get_top_n_words(profile_to_compare["freq"], top_n)
@@ -127,19 +127,16 @@ def detect_language(unknown_profile: dict, profile_1: dict,
     :return: a language
     """
 
-    if not (isinstance(unknown_profile, dict)
-            and isinstance(profile_1, dict)
-            and isinstance(profile_2, dict)
-            and isinstance(top_n, int)):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict) or not isinstance(top_n, int):
         return None
-    compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
-    compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
+    first_compare = compare_profiles(unknown_profile, profile_1, top_n)
+    second_compare = compare_profiles(unknown_profile, profile_2, top_n)
     language = ''
-    if compare_1 > compare_2:
-        language = language.join(profile_1["name"])
-    elif compare_2 > compare_1:
-        language = language.join(profile_2["name"])
-    if compare_1 == compare_2:
+    if first_compare > second_compare:
+        language += profile_1["name"]
+    elif second_compare > first_compare:
+        language += profile_2["name"]
+    if first_compare == second_compare:
         language += sorted([profile_1["name"], profile_2["name"]])
     return language
 
@@ -154,9 +151,7 @@ def compare_profiles_advanced(unknown_profile: dict,
     min_length_word, average_token_length
     """
 
-    if not (isinstance(unknown_profile, dict)
-            and isinstance(profile_to_compare, dict)
-            and isinstance(top_n, int)):
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
 
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
@@ -195,10 +190,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     :return: a language
     """
 
-    if not (isinstance(unknown_profile, dict)
-            and isinstance(profiles, list)
-            and isinstance(languages, list)
-            and isinstance(top_n, int)):
+    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or not isinstance(languages, list) or not isinstance(top_n, int):
         return None
 
     available_profiles = []
