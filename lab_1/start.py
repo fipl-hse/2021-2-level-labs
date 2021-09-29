@@ -32,10 +32,11 @@ if __name__ == '__main__':
 
     languages_complete = [english, german, latin]
 
-    top_n = 4
+    TOP_N = 4
 
     EXPECTED = 'en'
-    RESULT = main.detect_language(unknown, english, german, top_n)
-    RESULT_advanced = main.detect_language_advanced(unknown, languages_complete, [latin, german], top_n)
+    RESULT = main.detect_language(unknown, english, german, TOP_N)
+    RESULT_ADVANCED = main.detect_language_advanced(unknown,
+            languages_complete, [latin, german], TOP_N)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
