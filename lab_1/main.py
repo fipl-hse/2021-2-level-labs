@@ -188,7 +188,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
         l_summary.append(len(i))
     advanced = dict(name=profile_to_compare["name"], common=top_common,
                     score=score, max_length_word=max_len_word,
-                    min_length_word=min_len_word, average_token_length=sum(l_summary) / len(l_summary),
+                    min_length_word=min_len_word,
+                    average_token_length=sum(l_summary) / len(l_summary),
                     sorted_common=sorted(top_common))
 
     return advanced
