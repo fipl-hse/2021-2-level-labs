@@ -22,4 +22,14 @@ if __name__ == '__main__':
     EXPECTED = 'en'
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+     en_tokens = tokenize(en_text)
+    en_stop_words = ['a', 'and', 'the', 'an', 'am', 'is', 'are']
+    de_stop_words = ['ich', 'du', 'der', 'die', 'das', 'sein', 'bin']
+    print(en_tokens)
+    en_tokens_without_stop_words = remove_stop_words(en_tokens, en_stop_words)
+    print(en_tokens_without_stop_words)
+    freq_dict = calculate_frequencies(en_tokens_without_stop_words)
+    TOP_N = 10
+    print(freq_dict)
+    print(get_top_n_words(freq_dict, TOP_N))
     assert RESULT, 'Detection not working'
