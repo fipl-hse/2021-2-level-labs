@@ -17,7 +17,7 @@ def tokenize(text: str) -> list or None:
     punctuation_marks= """1234567890-=!@#$%^&*()_+{};:[]'"№,./<>?\|~`"""
     for i in text:
         if i in punctuation_marks:
-            text=text.replace(i, ' ')
+            text=text.replace(i, '')
     tokens=text.split()
     return tokens 
 
