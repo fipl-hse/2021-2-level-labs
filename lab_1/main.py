@@ -230,7 +230,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :return: a dictionary with three keys – name, freq, n_words
     """
     if not isinstance(path_to_file, str) or \
-        os.path.exists(path_to_file) == False:
+        not os.path.exists(path_to_file):
         return None
     with open(path_to_file, "r", encoding="utf-8") as json_file:
         imported_profile = json.load(json_file)
