@@ -134,7 +134,7 @@ def detect_language(unknown_profile: dict, profile_1: dict,
             compare_profiles(unknown_profile, profile_2, top_n):
         fin_lang = sorted([profile_1['name'], profile_2['name']])
         return fin_lang[0]
-
+    return None
 
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict, top_n: int) -> list or None:
@@ -207,4 +207,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     else:
         return None
     return final[0]['name']
-
