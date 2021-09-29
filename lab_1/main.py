@@ -5,16 +5,31 @@ Language detection
 
 
 def tokenize(text: str) -> list or None:
-   import re
-   textnew=re.sub(r'[^\w\s]','',text)
-   tokens = re.split(r' ', textnew)
-   return tokens
+    if isinstance(text, str):
+        textnew = ''
+        for i in text:
+            i = i.lower()
+            if i.isalpha() or i.isspace():
+                textnew = textnew + i
+        tokens = textnew.split()
+        return tokens
+    else:
+        return None
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-    for i in range(tokens):
-        if i in stop_words:
-            tokens.remove(i)
+    if isinstance(tokens, list):
+        if isinstance(stop_words, list):
+            for i in tokens:
+                if i in stop_words:
+                    tokens.remove(i)
+                    if len(tokens) == 0:
+                        return []
+            return tokens
+        else:
+            return tokens
+    else:
+        return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
