@@ -11,17 +11,18 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    if not isinstance(text, str):
+        return None
     symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', '}',
                ']', ';', '<', ',', '>', '.', '?', '|', '\\', ':', ';', '"', "'",
-               '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '\t']
+               '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     if isinstance(text, str):
         for s in symbols:
             text = text.replace(s, '')
         text = text.lower()
         text = text.split()
         return text
-    elif not isinstance(text, str):
-        return None
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -34,11 +35,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
     checking_tokens = []
-    if isinstance(tokens, list) and isinstance(stop_words, list):
-        for token in tokens:
-            if token not in stop_words:
-                checking_tokens.append(token)
-        return checking_tokens
+    for token in tokens:
+        if token not in stop_words:
+            checking_tokens.append(token)
+    return checking_tokens
 
 
 
@@ -48,9 +48,10 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    freq_dict = {}
+
     if not isinstance(tokens, list):
         return None
+    freq_dict = {}
     for token in tokens:
         if isinstance(token, str):
             if token in freq_dict:
@@ -74,8 +75,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     top_n_words = []
     freq_dict_keys = [key for key in freq_dict]
-    for i in freq_dict_keys:
-        top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
+    top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
     return top_n_words
 
 
@@ -92,17 +92,12 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :return: a dictionary with three keys – name, freq, n_words
     """
 
-    if not isinstance(language, str):
+    if not isinstance(language, str) or not isinstance(text, str) \
+            or not isinstance(stop_words, list):
         return None
-    if not isinstance(text, str):
-        return None
-    if not isinstance(stop_words, list):
-        return None
-    tokens = tokenize(text)
-    tokens_without_stop_words = remove_stop_words(tokens, stop_words)
-    frequencies = calculate_frequencies(tokens_without_stop_words)
-    language_profile = {'name': language, 'freq': frequencies, 'n_words': len(frequencies)}
-    return language_profile
+    frequencies = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
+    return {'name': language, 'freq': frequencies, 'n_words': len(frequencies)}
+
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
