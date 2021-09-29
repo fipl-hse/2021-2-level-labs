@@ -4,8 +4,6 @@ Language detection
 """
 
 import re
-from typing import List, Dict, Any
-
 
 def tokenize(text: str) -> list or None:
     """
