@@ -177,8 +177,11 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     len_of_words_dict = {}
     for i in new_keys:
         len_of_words_dict[i] = len(i)
-    max_len_word = list(len_of_words_dict.keys())[list(len_of_words_dict.values()).index(max(list(len_of_words_dict.values())))]
-    min_len_word = list(len_of_words_dict.keys())[list(len_of_words_dict.values()).index(min(list(len_of_words_dict.values())))]
+    len_of_words_dict_vals = list(len_of_words_dict.values())
+    max_len_word = \
+        list(len_of_words_dict.keys())[len_of_words_dict_vals.index(max(len_of_words_dict_vals))]
+    min_len_word = \
+        list(len_of_words_dict.keys())[len_of_words_dict_vals.index(min(len_of_words_dict_vals))]
 
     l_summary = []
     for i in new_keys:
