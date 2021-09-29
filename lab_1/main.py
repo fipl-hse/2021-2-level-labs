@@ -3,6 +3,7 @@ Language detection
 """
 
 import json
+from os.path import exists
 
 
 def tokenize(text: str) -> list or None:
@@ -14,12 +15,11 @@ def tokenize(text: str) -> list or None:
     """
     if not isinstance(text, str):
         return None
-    puncs = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890\t"""
+    puncs = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890"""
     for symbol in text:
         if symbol in puncs:
             text = text.replace(symbol, '')
-    tokens = text.lower().split()
-    return tokens
+    return text.lower().split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
@@ -44,18 +44,15 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    frequencies = {}
-    if not isinstance(tokens, list):
+    if (not isinstance(tokens, list)
+            or not all(isinstance(token, str) for token in tokens)):
         return None
+    frequencies = {}
     for token in tokens:
-        if not isinstance(token, str):
-            return None
         if token not in frequencies.keys():
             frequencies[token] = 1
         else:
-            frequency = frequencies.get(token)
-            frequency += 1
-            frequencies.update({token: frequency})
+            frequencies[token] += 1
     return frequencies
 
 
@@ -70,9 +67,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
     if freq_dict.keys() and top_n > 0:
         top_words = []
-        freq_words = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
-        for element in freq_words[:top_n]:
-            top_words.append(element[0])
+        freq_words = sorted(freq_dict.keys(), key=freq_dict.get, reverse=True)
+        top_words.extend(freq_words[:top_n])
         return top_words
     return []
 
@@ -136,11 +132,11 @@ def detect_language(unknown_profile: dict,
             or not isinstance(profile_2, dict)
             or not isinstance(top_n, int)):
         return None
-    proportion_1 = compare_profiles(unknown_profile, profile_1, top_n)
-    proportion_2 = compare_profiles(unknown_profile, profile_2, top_n)
-    if proportion_1 > proportion_2:
+    first_proportion = compare_profiles(unknown_profile, profile_1, top_n)
+    second_proportion = compare_profiles(unknown_profile, profile_2, top_n)
+    if first_proportion > second_proportion:
         result_language = profile_1.get('name')
-    elif proportion_1 < proportion_2:
+    elif first_proportion < second_proportion:
         result_language = profile_2.get('name')
     else:
         languages = sorted([profile_1.get('name'), profile_2.get('name')])
@@ -167,18 +163,13 @@ def compare_profiles_advanced(unknown_profile: dict,
     compare_top_words = get_top_n_words(profile_to_compare.get('freq'), top_n)
     shared_top_words = [word for word in compare_top_words if word in unknown_top_words]
     shared_proportions = len(shared_top_words) / len(unknown_top_words)
-    max_length_word = ''
     tokens_length = 0
-    frequency = profile_to_compare.get('freq')
-    for word in frequency.keys():
-        if len(word) > len(max_length_word):
-            max_length_word = word
-    min_length_word = max_length_word
-    for word in frequency.keys():
-        if len(word) < len(min_length_word):
-            min_length_word = word
+    words = sorted(profile_to_compare.get('freq'), key=len)
+    max_length_word = words[-1]
+    min_length_word = words[0]
+    for word in words:
         tokens_length += len(word)
-    average_token_length = tokens_length / len(frequency.keys())
+    average_token_length = tokens_length / len(words)
     report = {'name': profile_to_compare.get('name'),
               'common': shared_top_words,
               'score': shared_proportions,
@@ -222,16 +213,14 @@ def detect_language_advanced(unknown_profile: dict,
         if language_profile.get('name') in languages:
             proportion = compare_profiles_advanced(unknown_profile, language_profile, top_n)
             proportions.append([language_profile.get('name'), proportion.get('score')])
+    proportions.sort(key=lambda x: x[1], reverse=True)
     for res in proportions[:-1]:
         if proportions[0][1] == proportions[proportions.index(res) + 1][1]:
             languages_with_same_proportions.append(proportions[proportions.index(res)][0])
     languages_with_same_proportions.sort()
     if len(languages_with_same_proportions) > 0:
-        result = languages_with_same_proportions[0]
-        return result
-    proportions.sort(key=lambda x: x[1], reverse=True)
-    result = proportions[0][0]
-    return result
+        return languages_with_same_proportions[0]
+    return proportions[0][0]
 
 
 def load_profile(path_to_file: str) -> dict or None:
@@ -242,11 +231,10 @@ def load_profile(path_to_file: str) -> dict or None:
     """
     if not isinstance(path_to_file, str):
         return None
-    try:
-        with open(path_to_file, 'r', encoding='utf-8') as file_to_read:
-            language_profile = json.load(file_to_read)
-    except FileNotFoundError:
+    if not exists(path_to_file):
         return None
+    with open(path_to_file, 'r', encoding='utf-8') as file_to_read:
+        language_profile = json.load(file_to_read)
     return language_profile
 
 
