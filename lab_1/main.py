@@ -3,14 +3,6 @@ Lab 1
 Language detection
 """
 
-
-
-"""
-Lab 1
-Language detection
-"""
-
-
 import re
 def tokenize(text: str) -> list or None:
     if isinstance(text,str):
@@ -25,12 +17,14 @@ def tokenize(text: str) -> list or None:
 
 def remove_stop_words(token2: list, stop_words: list)-> list or None:
     if isinstance(token2, list) and isinstance(stop_words, list):
-        for token in token2:
-            if isinstance(token, str):
-                for token in token2:
-                    if token in stop_words:
-                        token2.remove(token)
-                    return token2
+        if token2:
+            for token in enumerate(token2):
+                if token[1] in stop_words:
+                    token2[token[0]] = ' '
+            while ' ' in token2:
+                token2.remove(' ')
+            return token2
+        return None
     return None
                     
 def calculate_frequencies(token2: list)-> dict or None:
