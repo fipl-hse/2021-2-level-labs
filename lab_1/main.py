@@ -19,9 +19,7 @@ def tokenize(text: str) -> list or None:
     if isinstance(text, str):
         for s in symbols:
             text = text.replace(s, '')
-        text = text.lower()
-        text = text.split()
-        return text
+        return text.lower().split()
 
 
 
