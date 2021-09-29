@@ -39,9 +39,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         return tokens
 
     for i in stop_words:
-        for k in tokens:
-            if i == k:
-                tokens.remove(k)
+        for word in tokens:
+            if i == word:
+                tokens.remove(word)
     return tokens
 
 
@@ -53,8 +53,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
-    for word in tokens:
-        if not word:
+    for i in tokens:
+        if not i:
             return None
 
     freq_dict = {i: tokens.count(i) for i in tokens}
