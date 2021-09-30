@@ -85,7 +85,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return sorted_words
 
 
-
 def create_language_profile(language: str,
                             text: str,
                             stop_words: list) -> dict or None:
@@ -111,8 +110,6 @@ def create_language_profile(language: str,
         lang_profile = {'name': language,
                             'freq': freq_dict, 'n_words': len(freq_dict)}
         return lang_profile
-
-
 
 
 def compare_profiles(unknown_profile: dict,
@@ -211,62 +208,3 @@ def compare_profiles_advanced(unknown_profile: dict,
               'average_token_length': average_token_length,
               'sorted_common': sorted_common}
     return report
-
-
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile within the list of possible languages
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-
-    if not (isinstance(unknown_profile, dict)
-            and isinstance(profiles, list)
-            and isinstance(languages, list)
-            and isinstance(top_n, int)):
-        return None
-
-    else:
-        languages_match_scores = {} #создаем словарь с долей пересекающихся частотных слов
-
-        for profile in profiles: #проходимся по списку языковых профилей на известных языках
-            if not languages or profile['name'] in languages: #если нет языков в списке возможных языков /
-                # или есть языковой профиль
-                match_score = compare_profiles_advanced(unknown_profile, profile, top_n)['score']
-                # match_score это отчет с именем с топ Н с долей пересекающихся слов и так далее
-                languages_match_scores[profile['name']] = match_score
-
-        languages_match_scores_sorted = sorted(languages_match_scores.items(), key=lambda x: x[1], reverse=True)
-
-        if languages_match_scores_sorted:
-            identical_match_scores = []
-            highest_score = languages_match_scores_sorted[0][1]
-            for language_match_pair in languages_match_scores_sorted:
-                if language_match_pair[1] == highest_score:
-                    identical_match_scores.append(language_match_pair[0])
-
-            identical_match_scores.sort()
-            return identical_match_scores[0]
-
-        return None
-
-
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
-
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
