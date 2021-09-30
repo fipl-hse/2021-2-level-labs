@@ -58,6 +58,7 @@ def create_language_profile(language, text_str, STOP_WORDS):
 
 def compare_profiles(unknown_profile, profile_to_compare, top_n):
     if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+        crosses = float()
         common_tokens = 0
         tn1_unknown = get_top_n_words(unknown_profile['freq'], top_n)
         tn2_pr_to_comp = get_top_n_words(profile_to_compare['freq'], top_n)
@@ -67,6 +68,23 @@ def compare_profiles(unknown_profile, profile_to_compare, top_n):
                     common_tokens += 1
         crosses = round(common_tokens/top_n, 2)
         return crosses
+    return None
+
+def detect_language(unknown_profile, profile_1, profile_2, top_n):
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) \
+            and isinstance(top_n, int):
+        frequency_1 = compare_profiles(unknown_profile, profile_1, top_n)
+        frequency_2 = compare_profiles(unknown_profile, profile_2, top_n)
+        pr1 = profile_1['name']
+        pr2 = profile_2['name']
+        if frequency_1 < frequency_2:
+            return pr2
+        if frequency_1 > frequency_2:
+            return pr1
+        if frequency_1 == frequency_2:
+            pr = [pr1, pr2]
+            pr.sort()
+            return pr[0]
     return None
 
 

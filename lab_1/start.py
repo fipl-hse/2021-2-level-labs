@@ -19,7 +19,14 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
+    from main import create_language_profile, detect_language
+
+    en_profile = create_language_profile('en', en_text, [])
+    de_profile = create_language_profile('de', de_text, [])
+    unknown_profile = create_language_profile('unknown', unknown_text, [])
+
     EXPECTED = 'en'
-    RESULT = ''
+    RESULT = detect_language(unknown_profile, en_profile, de_profile, 4)
+    print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
