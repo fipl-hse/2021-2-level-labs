@@ -3,7 +3,7 @@ Language detection starter
 """
 
 import os
-
+import main
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
@@ -20,7 +20,6 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    import main
 
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'la.txt'), 'r', encoding='utf-8') as file_to_read:
         la_text = file_to_read.read()
@@ -34,9 +33,13 @@ if __name__ == '__main__':
 
     TOP_N = 4
 
-    EXPECTED = 'en'
     RESULT = main.detect_language(unknown, english, german, TOP_N)
+    print('Language of this text is ', RESULT)
+
     RESULT_ADVANCED = main.detect_language_advanced(unknown,
             languages_complete, [latin, german], TOP_N)
+    print('Language of this text is ', RESULT_ADVANCED)
+
+    EXPECTED = 'en'
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
