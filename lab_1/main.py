@@ -66,10 +66,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
     if freq_dict.keys() and top_n > 0:
-        top_words = []
-        freq_words = sorted(freq_dict.keys(), key=freq_dict.get, reverse=True)
-        top_words.extend(freq_words[:top_n])
-        return top_words
+        return sorted(freq_dict.keys(), key=freq_dict.get, reverse=True)[:top_n]
     return []
 
 
