@@ -79,37 +79,47 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
-    """
-    Creates a language profile
-    :param language: a language
-    :param text: a text
-    :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
+    if isinstance(language,str) and isinstance(text, str) and isinstance(stop_words, list):
+        profile = {}
+        tokens=tokenize(text)
+        tokens=remove_stop_words(tokens, stop_words)
+        dict=calculate_frequencies(tokens)
+        profile['name']=language
+        profile['freq']=dict
+        profile['n_words']= len(dict.keys())
+        return profile
+    else:
+        return None
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
-    """
-    Compares profiles and calculates the distance using top n words
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: the distance
-    """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(unknown_profile, dict) and isinstance(top_n, int):
+        unk_dict = get_top_n_words(unknown_profile.get('freq'), top_n)
+        com_dict = get_top_n_words(profile_to_compare.get('freq'), top_n)
+        res = 0
+        for i in unk_dict:
+            if i in com_dict:
+                res = res + 1
+        return float("{0:.2f}".format(res / top_n))
+    else:
+        return None
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile
-    :param unknown_profile: a dictionary
-    :param profile_1: a dictionary
-    :param profile_2: a dictionary
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    pass
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int):
+        prof_1_num = compare_profiles(unknown_profile, profile_1, top_n)
+        prof_2_num = compare_profiles(unknown_profile, profile_2, top_n)
+        if prof_1_num>prof_2_num:
+            return profile_1.get('name')
+        elif prof_1_num<prof_2_num:
+            return profile_2.get('name')
+        else:
+            if profile_1.get('name')>profile_2.get('name'):
+                return profile_1.get('name')
+            else:
+                return profile_2.get('name')
+    else:
+        return None
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
