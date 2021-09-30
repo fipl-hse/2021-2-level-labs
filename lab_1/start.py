@@ -29,31 +29,39 @@ if __name__ == '__main__':
     EXPECTED = 'en'
     RESULT = 'en'
 
-    tokens_eng = tokenize(en_text)
-    print(tokens_eng)
+    tokens_en = tokenize(en_text)
+    tokens_de = tokenize(de_text)
+    print('english tokens: ', tokens_en, '\ngerman tokens: ', tokens_de)
 
     en_stop_words = ['a', 'an', 'the', 'are', 'is', 'am', 'was', 'were']
     de_stop_words = ['das', 'die', 'der', 'und']
 
-    tokens_eng_removed = remove_stop_words(tokens_eng, en_stop_words)
-    print('remove_stop_words:', tokens_eng_removed)
+    tokens_en_removed = remove_stop_words(tokens_en, en_stop_words)
+    tokens_de_removed = remove_stop_words(tokens_de, de_stop_words)
+    print('english without stop words: ', tokens_en_removed,
+          '\ngerman without stop words: ', tokens_de_removed)
 
-    freq_dict = calculate_frequencies(tokens_eng_removed)
-    print('calculate_frequencies:', freq_dict)
+    freq_dict_en = calculate_frequencies(tokens_en_removed)
+    freq_dict_de = calculate_frequencies(tokens_en_removed)
+    print('frequencies in english:', freq_dict_en,
+          '\nfrequencies in german: ',)
 
     top_n_words = 10
 
-    print('get_top_n_words:', get_top_n_words(freq_dict, top_n_words))
+    print('top words in english:', get_top_n_words(freq_dict_en, top_n_words),
+          '\ntop words in german:', get_top_n_words(freq_dict_de, top_n_words))
+
     english_profile = create_language_profile('en', en_text, en_stop_words)
-    print('create_language_profile:', english_profile)
+    print('english language profile:', english_profile)
 
     deutsch_profile = create_language_profile('de', de_text, de_stop_words)
-    print('create_language_profile:', deutsch_profile)
+    print('german language profile:', deutsch_profile)
 
     unknown_profile = create_language_profile('unknown language', unknown_text, [])
-    print('create_language_profile:', unknown_profile)
-    print('compare_profiles:', compare_profiles(unknown_profile, english_profile, top_n_words))
-    print('detect_language:', detect_language(unknown_profile, deutsch_profile, english_profile, top_n_words))
+    print('unknown language profile:', unknown_profile)
+
+    print('compare profiles:', compare_profiles(unknown_profile, english_profile, top_n_words))
+    print('detect language:', detect_language(unknown_profile, deutsch_profile, english_profile, top_n_words))
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
