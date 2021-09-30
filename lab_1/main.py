@@ -56,5 +56,20 @@ def create_language_profile(language, text_str, STOP_WORDS):
         return l_profile
     return None
 
+def compare_profiles(unknown_profile, profile_to_compare, top_n):
+    if isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int):
+        common_tokens = 0
+        tn1_unknown = get_top_n_words(unknown_profile['freq'], top_n)
+        tn2_pr_to_comp = get_top_n_words(profile_to_compare['freq'], top_n)
+        for word_1 in tn1_unknown:
+            for word_2 in tn2_pr_to_comp:
+                if word_1 == word_2:
+                    common_tokens += 1
+        crosses = round(common_tokens/top_n, 2)
+        return crosses
+    return None
+
+
+
 
 
