@@ -14,7 +14,11 @@ def tokenize(text: str) -> list or None:
     return true
 
 def tokenize():
+    alphabet = 'abcdefghijklmnopqrstuvwxyzäöüßāīūēō'
     s = input('Введите строку: ')
+    for i in s:
+        if i not in alphabet:
+            s = s.replace(i, '')
     import re
     s_1 = re.sub(r'[^\w\s]', '', s)
     s_2 = re.sub(r'[\d]', '', s_1)
