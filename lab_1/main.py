@@ -6,7 +6,7 @@ def tokenize(text_str):
         for i in text_str:
             if i in symbols:
                 text_str = text_str.replace(i, "")
-                text_update = ''.join([i for i in text_str if not i.isdigit()])
+        text_update = ''.join([i for i in text_str if not i.isdigit()])
         return text_update.lower().split()
 
 def remove_stop_words(text_update, STOP_WORDS):
@@ -44,3 +44,17 @@ def get_top_n_words(frequency_dict, top_n):
         return freq_sort_list
     else:
         return None
+
+def create_language_profile(language, text_str, STOP_WORDS):
+    if isinstance(language, str) and isinstance(text_str, str) and isinstance(STOP_WORDS, list):
+        l_profile = {'name': '', 'freq': {}, 'n_words': 0}
+        tokens = tokenize(text_str)
+        tokens = remove_stop_words(tokens, STOP_WORDS)
+        l_profile['name'] = language
+        l_profile['freq'] = calculate_frequencies(tokens)
+        l_profile['n_words'] = len(l_profile['freq'].keys())
+        return l_profile
+    return None
+
+
+
