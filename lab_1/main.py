@@ -67,7 +67,8 @@ def get_top_n_words(freq_dict, top_n):
 
 
 
-def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
+def create_language_profile(language: str, text: str,
+                            stop_words: list) -> dict or None:
     """
     Creates a language profile
     :param language: a language
@@ -75,10 +76,21 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    if isinstance(language, str) and isinstance(text, str) \
+            and isinstance(stop_words, list):
+        language_profile = {}
+        tokens = tokenize(text)
+        tokens = remove_stop_words(tokens, stop_words)
+        dict = calculate_frequencies(tokens)
+        language_profile['name'] = language
+        language_profile['freq'] = dict
+        language_profile['n_words'] = len(language_profile['freq'].keys())
+        return language_profile
+    return None
 
 
-def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
+def compare_profiles(unknown_profile: dict, profile_to_compare: dict,
+                     top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
@@ -86,7 +98,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
 
 
 def detect_language(unknown_profile: dict, profile_1: dict,
