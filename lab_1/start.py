@@ -37,7 +37,7 @@ if __name__ == '__main__':
     print('Language of this text is ', RESULT)
 
     RESULT_ADVANCED = main.detect_language_advanced(unknown,
-            languages_complete, [latin, german], TOP_N)
+            languages_complete, ['la', 'de'], TOP_N)
     print('Language of this text is ', RESULT_ADVANCED)
 
     EXPECTED = 'en'
