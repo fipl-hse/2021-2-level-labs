@@ -18,37 +18,64 @@ def tokenize(text: str) -> list or None:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
-    if isinstance(tokens, list):
-        if isinstance(stop_words, list):
-            for i in tokens:
-                if i in stop_words:
-                    tokens.remove(i)
-                    if len(tokens) == 0:
-                        return []
-            return tokens
-        else:
-            return tokens
+    if isinstance(tokens, list) and len(tokens) != 0:
+        new_tokens = []
+        for i in tokens:
+            if i in stop_words:
+                continue
+            else:
+                new_tokens.append(i)
+        return new_tokens
     else:
         return None
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
-
+    k = 0
+    if isinstance(tokens, list) and len(tokens) != 0:
+        for i in tokens:
+            if i == None:
+                k = 1
+                break
+        if k == 1:
+            return None
+        else:
+            freq_list = {}
+            for i in tokens:
+                if i in freq_list.keys():
+                    freq_list[i] += 1
+                else:
+                    freq_list[i] = 1
+            return freq_list
+    else:
+        return None
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words
-    :return: a list of the most common words
-    """
-    pass
+    if isinstance(freq_dict, dict):
+        keys = []
+        for i in freq_dict.keys():
+            keys.append(i)
+        nums = []
+        new_keys = []
+        for i in freq_dict:
+            nums.append(freq_dict.get(i))
+        for i in range(len(nums)-1):
+            for j in range(i,len(nums)):
+                if nums[i]<nums[j]:
+                    n=nums[i]
+                    nums[i]=nums[j]
+                    nums[j]=n
+
+                    k=keys[i]
+                    keys[i] = keys[j]
+                    keys[j] = k
+        if top_n> len(keys):
+            return keys
+        else:
+            for i in range(top_n):
+                new_keys.append(keys[i])
+            return new_keys
+    return None
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
