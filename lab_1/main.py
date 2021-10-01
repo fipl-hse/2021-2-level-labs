@@ -133,9 +133,9 @@ def detect_language(unknown_profile: dict, profile_1: dict,
         return None
     first_compare = compare_profiles(unknown_profile, profile_1, top_n)
     second_compare = compare_profiles(unknown_profile, profile_2, top_n)
-    language = ''
+    #language = ''
     if first_compare > second_compare:
-        language = profile_1["name"]
+        language = profile_1["name"] #language += profile_1["name"]
     elif second_compare > first_compare:
         language = profile_2["name"]
     if first_compare == second_compare:
