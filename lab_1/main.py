@@ -15,9 +15,9 @@ def tokenize(text: str) -> list or None:
         return None
     text = text.lower()
     punctuation = '''`~!§№@#$%^&|*()_º-=+[{]};:'"\\,<.>/?1234567890'''
-    for i in text:
-        if i in punctuation:
-            text = text.replace(i, '')
+    for symbol in text:
+        if symbol in punctuation:
+            text = text.replace(symbol, '')
     text = text.split()
     text = list(filter(None, text))
     return text
@@ -33,9 +33,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     tokens_got_right = []
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
-    for i in tokens:
-        if i not in stop_words:
-            tokens_got_right.append(i)
+    for token in tokens:
+        if token not in stop_words:
+            tokens_got_right.append(token)
     return tokens_got_right
 
 
@@ -66,10 +66,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     top_dict = {}
     freq_list = sorted(freq_dict.values())
     freq_list = freq_list[::-1]
-    for i in freq_list:
-        for j in freq_dict.keys():
-            if freq_dict[j] == i:
-                top_dict[j] = freq_dict[j]
+    for value in freq_list:
+        for key in freq_dict.keys():
+            if freq_dict[key] == value:
+                top_dict[key] = freq_dict[key]
     top_list = list(top_dict.keys())
     top_list = top_list[:top_n]
     return top_list
@@ -105,8 +105,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     unknown_profile_top_n = get_top_n_words(unknown_profile['freq'], top_n)
     profile_to_compare_top_n = get_top_n_words(profile_to_compare['freq'], top_n)
     common_top_n = 0
-    for i in unknown_profile_top_n:
-        if i in profile_to_compare_top_n:
+    for word in unknown_profile_top_n:
+        if word in profile_to_compare_top_n:
             common_top_n = common_top_n + 1
     proportion = common_top_n / len(profile_to_compare_top_n)
     proportion = round(proportion, 2)
