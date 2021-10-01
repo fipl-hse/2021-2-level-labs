@@ -106,7 +106,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
-    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) and isinstance(profile_2, dict) and isinstance(top_n, int):
+    if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) \
+            and isinstance(profile_2, dict) and isinstance(top_n, int):
         prof_1_num = compare_profiles(unknown_profile, profile_1, top_n)
         prof_2_num = compare_profiles(unknown_profile, profile_2, top_n)
         if prof_1_num>prof_2_num:
