@@ -74,16 +74,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not (isinstance(freq_dict, dict) and isinstance(top_n, int)):
         return None
 
-    freq_items = sorted(freq_dict.items(), key = lambda x: x[1], reverse=True)
-    top_words = []
-    values = []
-
-    for key, value in freq_items:
-        top_words.append(key)
-        values.append(value)
-
-    if len(top_words) >= top_n:
-        top_words = top_words[:top_n]
+    freq_items = dict(sorted(freq_dict.items(), key=lambda x: x[1], reverse=True))
+    top_words = list(freq_items.keys())
+    top_words = top_words[:top_n]
     return top_words
 
 
@@ -123,6 +116,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     for word in top_unknown:
         if word in top_language_compare:
             compared_list.append(word)
+
 
     score = round(len(compared_list)/len(top_unknown), 2)
     return score
