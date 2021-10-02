@@ -71,15 +71,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         return None
 
     most_common = []
-    sorted_freqs = sorted(freq_dict.values(), reverse=True)
+    sorted_freqs = sorted(freq_dict.values(), reverse=True)[:top_n]
     for freq in sorted_freqs:
         for k, val in freq_dict.items():
-            if val == freq:
+            if val == freq and k not in most_common:
                 most_common.append(k)
 
-    most_common = list(dict.fromkeys(most_common))
-
-    return most_common[:top_n]
+    return most_common
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
