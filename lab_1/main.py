@@ -90,7 +90,8 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance(language, str) or not isinstance(text, str) or not isinstance(stop_words, list):
+    if not isinstance(language, str) or not isinstance(text, str) \
+            or not isinstance(stop_words, list):
         return None
     tokens = tokenize(text)
     tokens = remove_stop_words(tokens, stop_words)
@@ -249,4 +250,3 @@ def save_profile(profile: dict) -> int:
     with open("{}.json".format(profile["name"]), 'w', encoding='utf-8') as file:
         json.dump(profile, file)
     return 0
-
