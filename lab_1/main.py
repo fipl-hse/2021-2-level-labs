@@ -30,27 +30,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    if not all(isinstance(s, str) for s in stop_words):
-        return tokens
 
-    if check_if_tokens_are_valid(tokens):
-        filtered_tokens = [x for x in tokens if x not in stop_words]
-        return filtered_tokens
-    else:
+    if not isinstance(stop_words, list) or not isinstance(tokens, list):
         return None
 
+    clean_tokens = []
 
-def check_if_tokens_are_valid(tokens: list) -> bool:
-    """
-    Checks if list contains letter-only strings without any numbers or special characters.
-    :param tokens: a list of strngs (tokens)
-    :return: boolean value indicating whether list contains letter-only strings without any special characters
-    """
-    if all(isinstance(s, str) for s in tokens):
-        for token in tokens:
-            if not token.isalpha():
-                return False
-    return True
+    for token in tokens:
+        if token not in stop_words:
+            clean_tokens.append(token)
+
+    return clean_tokens
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -83,7 +73,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not isinstance(freq_dict, dict):
         return None
     freq_dict = sorted(freq_dict.items(), key=lambda x: -x[1])
-    most_common_words = list(freq_dict)
+    most_common_words = []
+    for freq_tuple in freq_dict:
+        most_common_words.append(freq_tuple[0])
     most_common_words = most_common_words[:top_n]
     return most_common_words
 
@@ -114,7 +106,16 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
+        return None
+    top_n_words_compare = get_top_n_words(profile_to_compare['freq'], top_n)
+    top_n_words_unknown = get_top_n_words(unknown_profile['freq'], top_n)
+    i = 0   # количество общих токенов
+    for word in top_n_words_unknown:
+        if word in top_n_words_compare:
+            i += 1
+    distance = round(i/len(top_n_words_unknown), 2)    # доля пересекающихся слов
+    return distance
 
 
 def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
@@ -126,7 +127,18 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
+    if not isinstance(unknown_profile, dict) or not isinstance(profile_1, dict) or not isinstance(profile_2, dict) or not isinstance(top_n, int):
+        return None
+    profile_1_dist = compare_profiles(unknown_profile, profile_1, top_n)
+    profile_2_dist = compare_profiles(unknown_profile, profile_2, top_n)
+    if profile_1_dist > profile_2_dist:
+        language = profile_1['name']
+    elif profile_2_dist > profile_1_dist:
+        language = profile_2['name']
+    elif profile_1_dist == profile_2_dist:
+        language_names = sorted([profile_1['name'], profile_2['names']])
+        language = language_names[0]
+    return language
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
