@@ -1,5 +1,7 @@
 # Лабораторные работы для 2-го курса ФПЛ (2021/2022)
 
+[![Coverage Status](https://coveralls.io/repos/github/fipl-hse/2021-2-level-labs/badge.svg?branch=main)](https://coveralls.io/github/fipl-hse/2021-2-level-labs?branch=main)
+
 В рамках предмета 
 ["Программирование для лингвистов"](https://www.hse.ru/edu/courses/476645685) 
 в НИУ ВШЭ - Нижний Новгород.
@@ -35,9 +37,9 @@
 1. Mark Lutz. 
    [Learning Python](https://www.amazon.com/Learning-Python-5th-Mark-Lutz/dp/1449355730).
 2. Хирьянов Тимофей Фёдорович. Видеолекции. 
-   [Практика программирования на Python 3](https://www.youtube.com/watch?v=fgf57Sa5A-A&list=PLRDzFCPr95fLuusPXwvOPgXzBL3ZTzybY) 
+   [Практика программирования на Python 3](https://www.youtube.com/watch?v=fgf57Sa5A-A&list=PLRDzFCPr95fLuusPXwvOPgXzBL3ZTzybY).
 3. Хирьянов Тимофей Фёдорович. Видеолекции. 
-   [Алгоритмы и структуры данных на Python 3](https://www.youtube.com/watch?v=KdZ4HF1SrFs&list=PLRDzFCPr95fK7tr47883DFUbm4GeOjjc0)
+   [Алгоритмы и структуры данных на Python 3](https://www.youtube.com/watch?v=KdZ4HF1SrFs&list=PLRDzFCPr95fK7tr47883DFUbm4GeOjjc0).
 4. [Official Python 3 documentation](https://docs.python.org/3/).
 
 ### Продвинутый уровень
