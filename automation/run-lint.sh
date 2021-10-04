@@ -4,6 +4,7 @@ export PYTHONPATH="$(pwd)/lab_1:$(pwd)/lab_2:$(pwd)/lab_3:$(pwd)/lab_4:$(pwd):${
 
 echo -e '\n'
 echo 'Running lint check...'
+
 LABS=$(cat automation/labs.txt)
 
 for lab in $LABS; do
