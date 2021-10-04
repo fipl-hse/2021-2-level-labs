@@ -59,7 +59,7 @@ class PredictLanguageKnnTest(unittest.TestCase):
                                [0.12, 0.7, 0.34, 0.1, 0.12, 0, 0.18, 0.12, 0.1],
                                [0.15, 0, 0.2, 0.15, 0.1, 0.16, 0.34, 0.3, 0.14]]
         language_labels = ['en', 'la', 'en', 'la', 'de']
-        expected = ['la', 0.47508]
+        expected = ['de', 0.47508]
         actual = predict_language_knn(first_text_vector, second_text_vectors,
                                       language_labels, 2, metric='euclid')
         self.assertEqual(expected, actual)
