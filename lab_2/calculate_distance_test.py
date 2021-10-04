@@ -17,7 +17,7 @@ class CalculateDistanceTest(unittest.TestCase):
         """
         first_text_vector = [0.2, 0, 0.2, 0, 0.2, 0, 0.2, 0, 0]
         second_text_vector = [0, 0.2, 0, 0.1, 0, 0.49, 0, 0.3, 0]
-        expected = 0.7349149610669251
+        expected = 0.73491
         actual = calculate_distance(first_text_vector, second_text_vector)
         self.assertEqual(expected, actual)
 

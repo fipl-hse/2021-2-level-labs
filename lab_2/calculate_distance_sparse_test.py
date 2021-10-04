@@ -17,7 +17,7 @@ class CalculateDistanceSparseTest(unittest.TestCase):
         """
         first_text_vector = [[0, 0.4], [2, 0.2], [4, 0.2], [6, 0.2]]
         second_text_vector = [[1, 0.1], [3, 0.1], [5, 0.49], [7, 0.3]]
-        expected = 0.7937883848986453
+        expected = 0.79379
         actual = calculate_distance_sparse(first_text_vector, second_text_vector)
         self.assertEqual(expected, actual)
 

@@ -23,8 +23,8 @@ class GetFreqDictTest(unittest.TestCase):
         """
         Get frequency dictionary with several same tokens
         """
-        expected = {'weather': 0.3333333333333333, 'sunny': 0.16666666666666666,
-                    'man': 0.3333333333333333, 'happy': 0.16666666666666666}
+        expected = {'weather': 0.33333, 'sunny': 0.16667,
+                    'man': 0.33333, 'happy': 0.16667}
         actual = get_freq_dict(['weather', 'sunny', 'man', 'happy', 'weather', 'man'])
         self.assertEqual(expected, actual)
 

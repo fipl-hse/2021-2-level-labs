@@ -26,7 +26,7 @@ class PredictLanguageKnnTest(unittest.TestCase):
                                [0.18, 0, 0.2, 0.15, 0.1, 0.11, 0.35, 0.34, 0],
                                [0.15, 0, 0.4, 0.21, 0, 0.09, 0.24, 0.33, 0]]
         language_labels = ['en', 'en', 'de', 'de', 'de', 'de']
-        expected = ['de', 0.5729746940310715]
+        expected = ['de', 0.57297]
         actual = predict_language_knn(first_text_vector, second_text_vectors,
                                       language_labels, 3, metric='euclid')
         self.assertEqual(expected, actual)
@@ -43,7 +43,7 @@ class PredictLanguageKnnTest(unittest.TestCase):
                                [0.11, 0.42, 0.2, 0.1, 0.1, 0.11, 0.34, 0.3, 0],
                                [0.1, 0, 0.44, 0.1, 0, 0, 0.34, 0.34, 0]]
         language_labels = ['la', 'la', 'la', 'la', 'de', 'de']
-        expected = ['de', 1.2599999999999998]
+        expected = ['de', 1.26000]
         actual = predict_language_knn(first_text_vector, second_text_vectors,
                                       language_labels, 3, metric='manhattan')
         self.assertEqual(expected, actual)
@@ -59,7 +59,7 @@ class PredictLanguageKnnTest(unittest.TestCase):
                                [0.12, 0.7, 0.34, 0.1, 0.12, 0, 0.18, 0.12, 0.1],
                                [0.15, 0, 0.2, 0.15, 0.1, 0.16, 0.34, 0.3, 0.14]]
         language_labels = ['en', 'la', 'en', 'la', 'de']
-        expected = ['la', 0.47507894080878815]
+        expected = ['la', 0.47508]
         actual = predict_language_knn(first_text_vector, second_text_vectors,
                                       language_labels, 2, metric='euclid')
         self.assertEqual(expected, actual)
@@ -142,5 +142,4 @@ class PredictLanguageKnnTest(unittest.TestCase):
                                       language_labels, 3, metric='manhattan')
         self.assertTrue(isinstance(actual, list))
         self.assertTrue(isinstance(actual[0], str))
-        self.assertTrue(isinstance(actual[1], list))
-        self.assertTrue(isinstance(actual[1][0], float))
+        self.assertTrue(isinstance(actual[1], float))

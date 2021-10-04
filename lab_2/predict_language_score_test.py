@@ -22,7 +22,7 @@ class PredictLanguageScoreTest(unittest.TestCase):
                                [0.1, 0, 0.4, 0.1, 0, 0, 0.34, 0.3, 0],
                                [0, 0.2, 0, 0.1, 0, 0.49, 0, 0.3, 0.35]]
         language_labels = ['en', 'de', 'en']
-        expected = ['de', 0.4578209256903839]
+        expected = ['de', 0.45782]
         actual = predict_language_score(first_text_vector, second_text_vectors, language_labels)
         self.assertEqual(expected, actual)
 

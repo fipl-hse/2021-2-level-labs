@@ -29,7 +29,7 @@ class PredictLanguageKnnSparseTest(unittest.TestCase):
                                 [4, 0.1], [5, 0.11], [6, 0.34], [7, 0.3]],
                                [[2, 0.4], [6, 0.6], [7, 0.3], [8, 0.35]]]
         language_labels = ['en', 'de', 'en', 'en', 'de', 'de']
-        expected = ['de', 0.43783558557979274]
+        expected = ['de', 0.43784]
         actual = predict_language_knn_sparse(first_text_vector,
                                              second_text_vectors,
                                              language_labels, 3)
@@ -50,7 +50,7 @@ class PredictLanguageKnnSparseTest(unittest.TestCase):
                                [[0, 0.1], [2, 0.4], [3, 0.1],
                                 [4, 0.1], [5, 0.11], [6, 0.34], [7, 0.3]]]
         language_labels = ['en', 'de', 'en', 'en', 'de']
-        expected = ['de', 0.43783558557979274]
+        expected = ['de', 0.43784]
         actual = predict_language_knn_sparse(first_text_vector,
                                              second_text_vectors,
                                              language_labels, 3)
@@ -130,5 +130,4 @@ class PredictLanguageKnnSparseTest(unittest.TestCase):
                                              language_labels, 3)
         self.assertTrue(isinstance(actual, list))
         self.assertTrue(isinstance(actual[0], str))
-        self.assertTrue(isinstance(actual[1], list))
-        self.assertTrue(isinstance(actual[1][0], float))
+        self.assertTrue(isinstance(actual[1], float))
