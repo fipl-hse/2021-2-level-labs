@@ -3,7 +3,6 @@ Lab 1
 Language detection
 """
 
-import json
 
 def tokenize(text: str) -> list or None:
     """
@@ -144,88 +143,3 @@ def detect_language(unknown_profile:dict, profile_1:dict, profile_2:dict, \
         language = all_languages.sort()[0]
     return language
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,\
-                              top_n: int) -> list or None:
-    """
-    Compares profiles and calculates some advanced parameters
-    :param unknown_profile: a dictionary
-    :param profile_to_compare: a dictionary
-    :param top_n: a number of the most common words
-    :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
-    min_length_word, average_token_length
-    """
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or \
-            not isinstance(top_n, int):
-        return None
-    profile_advanced = {}
-    profile_advanced['name'] = profile_to_compare['name']
-    top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
-    top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
-    common_words = []
-    for word_profile_to_compare in top_n_words_profile_to_compare:
-        if word_profile_to_compare in top_n_words_unknown_profile:
-            common_words.append(word_profile_to_compare)
-    profile_advanced['common'] = common_words
-    profile_advanced['score'] = compare_profiles(unknown_profile,profile_to_compare,top_n)
-    list_words = []
-    for word in profile_to_compare['freq'].keys():
-        list_words.append(word)
-    profile_advanced['max_length_word'] = max(list_words, key=len)
-    profile_advanced['min_length_word'] = min(profile_to_compare['freq'])
-    len_value = 0
-    for value in profile_to_compare['freq']:
-        len_value += len(value)
-    profile_advanced['average_token_length'] = len_value / len(profile_to_compare['freq'])
-    profile_advanced['sorted_common'] = sorted(common_words)
-    return profile_advanced
-
-def detect_language_advanced(unknown_profile: dict, profiles: list, \
-                             languages: list,top_n: int) -> str or None:
-    """
-    Detects the language of an unknown profile within the list of possible languages
-    :param unknown_profile: a dictionary
-    :param profiles: a list of dictionaries
-    :param languages: a list of possible languages
-    :param top_n: a number of the most common words
-    :return: a language
-    """
-    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) or\
-            not isinstance(languages, list):
-        return None
-    language_profiles = [compare_profiles_advanced(unknown_profile, profile, top_n)
-            for profile in profiles if len(languages) == 0 or profile['name'] in languages]
-    shares_sorted_name = sorted(language_profiles, key=lambda profile: profile['name'])
-    shares_sorted_name_and_score = sorted(shares_sorted_name, key=lambda profile: profile['score'])
-    if len(shares_sorted_name_and_score) == 0:
-        return None
-    language_with_max_shares = shares_sorted_name_and_score[-1]['name']
-    return language_with_max_shares
-
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    if not isinstance(path_to_file, str):
-        return None
-    try:
-        with open (path_to_file, 'r', encoding='utf-8') as file:
-            data = json.loads(file.read())
-    except FileNotFoundError:
-        return None
-
-    return data
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    if not isinstance(profile,dict):
-        return None
-    name = profile['name']
-    with open (name.json, 'w', encoding='utf-8') as new_file:
-        json.dump(profile, new_file)
-    return 0
