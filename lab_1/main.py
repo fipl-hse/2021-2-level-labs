@@ -6,7 +6,7 @@ import json
 from os.path import exists
 
 
-def tokenize(text: str):
+def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
@@ -246,7 +246,7 @@ def load_profile(path_to_file: str) -> dict or None:
     return profile
 
 
-#def save_profile(profile: dict) -> int:
+def save_profile(profile: dict) -> int:
     """
     Saves a language profile
     :param profile: a dictionary
