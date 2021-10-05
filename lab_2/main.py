@@ -22,7 +22,7 @@ def get_freq_dict(tokens: list) -> dict or None:
         if token not in freq_dict:
             freq_dict[token] = 0
         freq_dict[token] += 1 / len(tokens)
-    return {k: round(v, 5) for k, v in freq_dict}
+    return {k: round(v, 5) for k, v in freq_dict.items()}
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
