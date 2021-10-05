@@ -191,20 +191,6 @@ def compare_profiles_advanced(unknown_profile: dict,
               'sorted_common': sorted_common}
     return report
 
-    if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict):
-        return None
-    if not isinstance(top_n, int):
-        return None
-
-    top_n_words = get_top_n_words(profile_to_compare['freq'], top_n)
-    top_n_words_2 = get_top_n_words(unknown_profile['freq'], top_n)  # unknown text
-
-    top_n_common = []
-    for word in top_n_words:
-        if word in top_n_words_2:
-            top_n_common.append(word)
-    score = len(top_n_common) / len(top_n_words_2)
-    sorted_common = sorted(top_n_common)
 
 def detect_language_advanced(unknown_profile: dict,
                              profiles: list,
