@@ -26,36 +26,30 @@ if __name__ == '__main__':
 
     EXPECTED = 'en'
     RESULT = ''
-    TOP_N = 6
+    TOP_N = 7
+    unknown_profile = main.create_language_profile('unknown_text', unknown_text, [])
 
-    unknown_profile = main.create_language_profile('unk', unknown_text, [])
+    # compare language detective results
+    profile_en_10 = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'en.json'))
+    profile_de_10 = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'de.json'))
+    profile_la_10 = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'la.json'))
+    profiles_10 = [profile_en_10, profile_de_10, profile_la_10]
+    # we may save profiles in json file
+    main.save_profile(unknown_profile)
 
-    # detect_language_external_profiles
-    en_profile_external = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'en.json'))
-    la_profile_external = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'la.json'))
-    de_profile_external = main.load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'de.json'))
-    compare_profiles_external = [en_profile_external, la_profile_external, de_profile_external]
-    RESULT_EXTERNAL = main.detect_language_advanced(unknown_profile,
-                                                    compare_profiles_external,
-                                                    [],
-                                                    TOP_N)
+    RESULT = main.detect_language_advanced(unknown_profile, profiles_10, [], TOP_N)
 
-    # detect_language_internal_profiles
-    en_profile_internal = main.create_language_profile('en', en_text, [])
-    la_profile_internal = main.create_language_profile('la', la_text, [])
-    de_profile_internal = main.create_language_profile('de', de_text, [])
-    compare_profiles_internal = [en_profile_internal, la_profile_internal, de_profile_internal]
-    RESULT_INTERNAL = main.detect_language_advanced(unknown_profile,
-                                                    compare_profiles_internal,
-                                                    [],
-                                                    TOP_N)
+    # profile_en_8 = main.create_language_profile("en", en_text, [])
+    # profile_de_8 = main.create_language_profile("de", de_text, [])
+    # profile_la_8 = main.create_language_profile("la", la_text, [])
+    # profiles_8 = [profile_en_8, profile_de_8, profile_la_8]
+    # RESULT_8 = main.detect_language_advanced(unknown_profile, profiles_8, [], TOP_N)
 
-    # verification
-    if RESULT_EXTERNAL == RESULT_INTERNAL:
-        RESULT = RESULT_EXTERNAL
-        print('RESULT: ', RESULT)
-    else:
-        print('The code is not working')
+    # if RESULT_10 == RESULT_8:
+    # print("Great!", RESULT_10, "==", RESULT_8)
+    # else:
+    # print("Something is wrong!")
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == EXPECTED, 'Detection not working'
+    # assert RESULT, 'Detection not working'
+    assert EXPECTED == RESULT, 'Detection not working'
