@@ -10,6 +10,7 @@ PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 
 if __name__ == '__main__':
+
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'en.txt'), 'r', encoding='utf-8') as file_to_read:
         en_text = file_to_read.read()
 
@@ -22,22 +23,6 @@ if __name__ == '__main__':
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as \
             file_to_read:
         unknown_text = file_to_read.read()
-
-    unknown = create_language_profile("unk", unknown_text, [])
-
-    english = create_language_profile("en", en_text, [])
-    german = create_language_profile("de", de_text, [])
-    latin = create_language_profile("la", la_text, [])
-
-    all_languages = [english, german, latin]
-
-    TOP_N = 5
-
-    RESULT = detect_language(unknown, english, german, TOP_N)
-    print("Between English and German, unknown language is closer to profile called", RESULT)
-
-    RESULT_ADV = detect_language_advanced(unknown, all_languages, [latin, german], TOP_N)
-    print("Between Latin and German, unknown language is closer to profile called", RESULT_ADV)
 
     EXPECTED = 'en'
     RESULT = ''

@@ -10,8 +10,8 @@ def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
     removes punctuation and other symbols from words
-        :param text: a text
-        :return: a list of lower-cased tokens without punctuation
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
     """
     if not isinstance(text, str):
         return None
@@ -118,7 +118,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
     return share_of_common_things
 
-    return round(cross / top_n, 2)
 
 def detect_language(unknown_profile: dict,
                     profile_1: dict,
@@ -148,7 +147,6 @@ def detect_language(unknown_profile: dict,
         language_name = profile_2["name"]
     return language_name
 
-    return sorted(list[profile_1["name"], profile_2["name"]])[0]
 
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
