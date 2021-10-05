@@ -38,7 +38,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         return None
     profiles = {}
     for text, label in zip(texts_corpus, language_labels):
-        if (not isinstance(text, str)
+        if (not isinstance(text, list)
                 or not isinstance(label, str)):
             return None
         profiles[label] = get_freq_dict(text)
