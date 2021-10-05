@@ -118,8 +118,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
     return share_of_common_things
 
-    distance = round(count_common / len(top_n_words_unk), 2)
-    return distance
 
 def detect_language(unknown_profile: dict,
                     profile_1: dict,
@@ -149,14 +147,6 @@ def detect_language(unknown_profile: dict,
         language_name = profile_2["name"]
     return language_name
 
-    if distance_1 > distance_2:
-        language = profile_1['name']
-    elif distance_1 == distance_2:
-        names = [profile_1['name'], profile_2['name']]
-        language = sorted(names)[0]
-    else:
-        language = profile_2['name']
-    return language
 
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
