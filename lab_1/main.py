@@ -1,9 +1,7 @@
-"""Lab 1
+"""
+Lab 1
 Language detection
 """
-import json
-from os.path import exists
-
 import json
 from os.path import exists
 
@@ -77,9 +75,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     return top_n_words
 
 
-def create_language_profile(language: str,
-                            text: str,
-                            stop_words: list) -> dict or None:
+def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
     Creates a language profile
     :param language: a language
@@ -101,9 +97,7 @@ def create_language_profile(language: str,
     return {"name": language, "freq": frequency_dictionary, "n_words": n_words}
 
 
-def compare_profiles(unknown_profile: dict,
-                     profile_to_compare: dict,
-                     top_n: int) -> float or None:
+def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     """
     Compares profiles and calculates the distance using top n words
     :param unknown_profile: a dictionary
