@@ -66,13 +66,19 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
+    if not isinstance(original_text, list):
+        return None
+    for word in original_text:
+        if not isinstance(word, str):
+            return None
     features = get_language_features(language_profiles)
     if not features:
         return None
+    original_text = set(original_text)
     max_scores = {word: 0 for word in features}
     for profile in language_profiles.values():
         for word, score in profile.items():
-            if score > max_scores[word]:
+            if score > max_scores[word] and word in original_text:
                 max_scores[word] = score
     return [max_scores[word] for word in features]
 
