@@ -24,28 +24,12 @@ def tokenize(text: str) -> list or None:
     tokens = text.split()
     return tokens
 
-    if not (isinstance(text, str)):  # text не является экземпляром классом str
-        return None
-    else:
-        text = text.lower()  # перевод строки в нижний регистр
-        for char in text:
-            if not(char.isspace()) and not (char.isalpha()):  # проверка то,что символ символ не пробел, не \t, \n,
-                #  и тд и не является буквой
-                text = text.replace(char, "")  # удаление этого символа
 
-        tokens = text.split()
-        if tokens:  # если массив не пустой
-            return tokens
-        else:
-            return None
-
-
-def remove_stop_words(tokens: list, stop_words: list):
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
-    :param stop_words.words(language): a list of stop words
     :return: a list of tokens without stop words
     """
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
