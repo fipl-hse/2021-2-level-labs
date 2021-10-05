@@ -41,10 +41,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     return new_tokens
 
 
-def calculate_frequencies(blank_list: list) -> dict or None:
+def calculate_frequencies(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
-    :param blank_list: a list of tokens
+    :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
     if not isinstance(tokens, list):
@@ -118,8 +118,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
     return share_of_common_things
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) \
-        -> str or None:
 
 def detect_language(unknown_profile: dict,
                     profile_1: dict,
@@ -193,15 +191,6 @@ def compare_profiles_advanced(unknown_profile: dict,
               'sorted_common': sorted_common}
     return report
 
-    new_keys = list((profile_to_compare["freq"]).keys())
-    len_of_words_dict = {}
-    for i in new_keys:
-        len_of_words_dict[i] = len(i)
-    len_of_words_dict_val = list(len_of_words_dict.values())
-    max_len_word = \
-        list(len_of_words_dict.keys())[len_of_words_dict_val.index(max(len_of_words_dict_val))]
-    min_len_word = \
-        list(len_of_words_dict.keys())[len_of_words_dict_val.index(min(len_of_words_dict_val))]
 
 def detect_language_advanced(unknown_profile: dict,
                              profiles: list,

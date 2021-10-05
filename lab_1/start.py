@@ -24,21 +24,6 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-        import main
-
-        en = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r"profiles\en.json"))
-        de = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r"profiles\de.json"))
-        la = main.load_profile(os.path.join(PATH_TO_LAB_FOLDER, r"profiles\la.json"))
-        new_profile = main.create_language_profile("unk", unknown_text, [])
-        interesting = main.compare_profiles_advanced(new_profile, en, 5)
-        print(interesting)
-        result = main.detect_language_advanced(new_profile, [en, de, la], [], 5)
-        print(result)
-        main.save_profile(new_profile)
-
-    with open(os.path.join(PATH_TO_TEXTS_FOLDER, "la.txt"), "r", encoding="utf-8") as file_to_read:
-        la_text = file_to_read.read()
-
     EXPECTED = 'en'
     RESULT = ''
     TOP_N = 7
