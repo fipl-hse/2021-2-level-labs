@@ -24,24 +24,6 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    unk_profile = main.create_language_profile("unk", unknown_text, [])
-    #detection from my profiles
-    profile_en = main.create_language_profile("en", en_text, [])
-    profile_de = main.create_language_profile("de", de_text, [])
-    profile_la = main.create_language_profile("la", la_text, [])
-    profiles_my = [profile_en, profile_de, profile_la]
-    det_from_my_profiles = main.detect_language_advanced(unk_profile, profiles_my, [], 5)
-
-    #detection from external profiles
-    en_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "en.json"))
-    de_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "de.json"))
-    la_profile = main.load_profile(os.path.join(PATH_TO_LANG_PROFILES, "la.json"))
-    profiles_extrnl = [en_profile, de_profile, la_profile]
-    det_from_extrnl_profiles = main.detect_language_advanced(unk_profile, profiles_extrnl, [], 5)
-
-    print('According to detection from my profiles, it\'s probably', det_from_my_profiles)
-    print('According to detection from external profiles, it\'s probably', det_from_extrnl_profiles)
-
     EXPECTED = 'en'
     RESULT = ''
     TOP_N = 7
