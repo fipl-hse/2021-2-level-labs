@@ -71,7 +71,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         return None
     max_scores = {word: 0 for word in features}
     for profile in language_profiles.values():
-        for word, score in profile:
+        for word, score in profile.items():
             if score > max_scores[word]:
                 max_scores[word] = score
     return [max_scores[word] for word in features]
