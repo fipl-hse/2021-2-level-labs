@@ -62,7 +62,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
-    list_output = sorted(freq_dict, key=freq_dict.get, reverse=True)
+    list_output = sorted(freq_dict, key=freq_dict.get)
     return list_output[:top_n]
 
 
@@ -121,15 +121,14 @@ def detect_language(unknown_profile: dict, profile_1: dict,
     compare_1 = compare_profiles(unknown_profile, profile_1, top_n)
     compare_2 = compare_profiles(unknown_profile, profile_2, top_n)
     if compare_1 > compare_2:
-        return profile_1.get('name')
+        return profile_1['name']
     elif compare_2 > compare_1:
-        return profile_2.get('name')
+        return profile_2['name']
     else:
-        language_list = [profile_1.get('name'), profile_2.get('name')]
-        sort_language_list = sorted(language_list)
-        return sort_language_list[0]
+        language_list = [profile_1['name'], profile_2['name']]
+        language_list = sorted(language_list)
+        return language_list[0]
 
-    pass
 
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int, ) -> list or None:
@@ -143,7 +142,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     """
     if not isinstance(unknown_profile, dict) or not isinstance(profile_to_compare, dict) or not isinstance(top_n, int):
         return None
-    tokens_profile_to_compare = tokenize(profile_to_compare.get('freq'))
+    tokens_profile_to_compare = tokenize(profile_to_compare['freq'])
     top_n_unknown = get_top_n_words(unknown_profile, top_n)
     top_n_compare = get_top_n_words(profile_to_compare, top_n)
     common_words = []
@@ -153,13 +152,38 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     language_profile_advanced = {'name': profile_to_compare.get('name'),
                                  'common': common_words,
                                  'score': compare_profiles(unknown_profile, profile_to_compare, top_n),
-                                 'max_length_word': max(tokens_profile_to_compare, key=len),
-                                 'min_length_word': min(tokens_profile_to_compare, key=len),
+                                 'max_length_word': max(tokens_profile_to_compare),
+                                 'min_length_word': min(tokens_profile_to_compare),
                                  'average_token_length': sum(tokens_profile_to_compare) / len(
                                      tokens_profile_to_compare),
-                                 'sorted_common': sorted(common_words, reverse=True)
+                                 'sorted_common': sorted(common_words)
                                  }
     return language_profile_advanced
 
-
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+    """
+    Detects the language of an unknown profile within the list of possible languages
+    :param unknown_profile: a dictionary
+    :param profiles: a list of dictionaries
+    :param languages: a list of possible languages
+    :param top_n: a number of the most common words
+    :return: a language
+    """
+    if not isinstance(unknown_profile, dict) or not isinstance(profiles, list) \
+            or not isinstance(languages, list) or not isinstance(top_n, int):
+        return None
+    language_score = {}
+    for profile_to_compare in profiles:
+        if (profile_to_compare['name'] in languages) or not languages:
+            comparison = compare_profiles_advanced(unknown_profile, profile_to_compare, top_n)
+            language_score.update({comparison['name']: comparison['score']})
+    if language_score == {}:
+        return None
+    else:
+        name_of_language = []
+        for name, score in language_score.items():
+            if score == max(language_score.values()):
+                name_of_language.append(name)
+    name_of_language = sorted(name_of_language) # сортировка языков по алфавиту
+    return name_of_language[0]
 
