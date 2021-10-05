@@ -108,7 +108,7 @@ def create_language_profile(language: str,
         cleaned_tokens = remove_stop_words(tokens, stop_words)
         freq_dict = calculate_frequencies(cleaned_tokens)
         lang_profile = {'name': language,
-                            'freq': freq_dict, 'n_words': len(freq_dict)}
+                        'freq': freq_dict, 'n_words': len(freq_dict)}
         return lang_profile
 
 
@@ -208,3 +208,41 @@ def compare_profiles_advanced(unknown_profile: dict,
               'average_token_length': average_token_length,
               'sorted_common': sorted_common}
     return report
+
+
+def detect_language_advanced(unknown_profile: dict,
+                             profiles: list,
+                             languages: list,
+                             top_n: int) -> str or None:
+    """
+    Detects the language of an unknown profile within the list of possible languages
+    :param unknown_profile: a dictionary
+    :param profiles: a list of dictionaries
+    :param languages: a list of possible languages
+    :param top_n: a number of the most common words
+    :return: a language
+    """
+    if not (isinstance(unknown_profile, dict)
+            and isinstance(profiles, list)
+            and isinstance(languages, list)
+            and isinstance(top_n, int)):
+        return None
+
+    lang_score = {}
+    for profile_to_compare in profiles:
+
+        if (profile_to_compare['name'] in languages) or not languages:
+            comparison = compare_profiles_advanced(unknown_profile,
+                                                   profile_to_compare, top_n)
+            lang_score[comparison['name']] = comparison['score']
+
+    if lang_score == {}:
+        return None
+
+    else:
+        sorted_languages = []
+        for name, score in lang_score.items():
+            if score == max(lang_score.values()):
+                sorted_languages.append(name)
+        sorted_languages = sorted(sorted_languages)
+        return sorted_languages[0]
