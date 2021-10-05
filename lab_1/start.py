@@ -23,6 +23,7 @@ if __name__ == '__main__':
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as \
             file_to_read:
         unknown_text = file_to_read.read()
+
     EXPECTED = 'en'
     RESULT = ''
     TOP_N = 7
