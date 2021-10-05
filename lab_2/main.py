@@ -42,7 +42,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
                 or not isinstance(label, str)):
             return None
         profiles[label] = get_freq_dict(text)
-    return profile
+    return profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
