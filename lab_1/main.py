@@ -1,4 +1,3 @@
-
 """
 Lab 1
 Language detection
@@ -6,11 +5,11 @@ Language detection
 import json
 from os.path import exists
 
-import json
+
 def tokenize(text: str) -> list or None:
     """
     Splits a text into tokens, converts the tokens into lowercase,
-    removes punctuation and other symbols from words list
+    removes punctuation and other symbols from words
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
@@ -148,23 +147,6 @@ def detect_language(unknown_profile: dict,
         language_name = profile_2["name"]
     return language_name
 
-    if not isinstance(unknown_profile, dict) \
-            or not isinstance(profile_1, dict)\
-            or not isinstance(profile_2, dict):
-        return None
-    if not isinstance(top_n, int):
-        return None
-    proportion_of_frequency_1 = compare_profiles(unknown_profile, profile_1, top_n)
-    proportion_of_frequency_2 = compare_profiles(unknown_profile, profile_2, top_n)
-    two_profiles = [profile_1['name'], profile_2['name']]
-    list_1 = two_profiles.sort()
-    if proportion_of_frequency_1 > proportion_of_frequency_2:
-        language = profile_1['name']
-    elif proportion_of_frequency_2 > proportion_of_frequency_1:
-        language = profile_2['name']
-    else:
-        language = list_1[0]
-    return language
 
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
