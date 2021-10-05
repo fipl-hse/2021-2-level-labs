@@ -24,11 +24,6 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    en_profile = create_language_profile('en', en_text, ['a', 'the', 'is', 'are', 'and'])
-    de_profile = create_language_profile('de', de_text, ['und', 'ich', 'du', 'das'])
-    unknown_profile = create_language_profile('unknown', unknown_text, [])
-    print(detect_language(unknown_profile, en_profile, de_profile, 5))
-
     EXPECTED = 'en'
     RESULT = ''
     TOP_N = 7
