@@ -5,8 +5,6 @@ Language detection
 import json
 from os.path import exists
 
-import json
-from os.path import exists
 
 def tokenize(text: str) -> list or None:
     """
@@ -43,7 +41,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     return new_tokens
 
 
-def calculate_frequencies(tokens_new: list) -> dict or None:
+def calculate_frequencies(tokens: list) -> dict or None:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
     """
     if not isinstance(tokens, list):
         return None

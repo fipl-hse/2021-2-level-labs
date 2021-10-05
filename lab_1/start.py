@@ -24,17 +24,6 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    en_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'en.json'))
-    de_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'de.json'))
-    la_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'la.json'))
-    profiles = [en_profile, de_profile, la_profile]
-
-    unknown_profile = main.create_language_profile('unk', unknown_text, [])
-
-    detection = main.detect_language_advanced(unknown_profile, profiles, [], 6)
-
-    main.save_profile(unknown_profile)
-
     EXPECTED = 'en'
     RESULT = ''
     TOP_N = 7
