@@ -5,10 +5,6 @@ Language detection
 import json
 from os.path import exists
 
-import json
-import os
-from os.path import exists
-
 
 def tokenize(text: str) -> list or None:
     """
@@ -203,7 +199,7 @@ def detect_language_advanced(unknown_profile: dict,
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
-    :param profiles: a dictionary
+    :param profiles: a list of dictionaries
     :param languages: a list of possible languages
     :param top_n: a number of the most common words
     :return: a language
