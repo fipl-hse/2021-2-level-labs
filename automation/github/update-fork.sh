@@ -21,6 +21,8 @@ while (( "$#" )); do
   esac
 done
 
+echo "${USER}"
+
 git config --global user.name "${USER}"
 git config --global user.email "${USER}@users.noreply.github.com"
 
