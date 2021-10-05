@@ -16,11 +16,11 @@ def tokenize(text: str) -> list or None:
     """
     if not isinstance(text, str):
         return None
-    else:
-        text = text.lower()
-        text = re.sub(r'[^\w\s]', '', text)
-        text = text.split()
-        return text
+
+    text = text.lower()
+    text = re.sub(r'[^\w\s]', '', text)
+    text = text.split()
+    return text
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
