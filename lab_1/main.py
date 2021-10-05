@@ -5,7 +5,6 @@ Language detection
 import json
 from os.path import exists
 
-import json
 
 def tokenize(text: str) -> list or None:
     """
