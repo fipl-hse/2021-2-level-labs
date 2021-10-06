@@ -136,7 +136,7 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     elif profile_2_dist > profile_1_dist:
         language = profile_2['name']
     elif profile_1_dist == profile_2_dist:
-        language_names = sorted([profile_1['name'], profile_2['names']])
+        language_names = sorted([profile_1['name'], profile_2['name']])
         language = language_names[0]
     return language
 
