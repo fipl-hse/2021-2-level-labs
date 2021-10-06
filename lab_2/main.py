@@ -236,4 +236,24 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)
+            or not isinstance(k, int)):
+        return None
+    if (not elements_instances(unknown_text_vector, list)
+            or not elements_instances(known_text_vectors, list)
+            or not elements_instances(language_labels, str)):
+        return None
+    if len(known_text_vectors) != len(language_labels):
+        return None
+    scores = [calculate_distance_sparse(unknown_text_vector, vector)
+              for vector in known_text_vectors]
+    best_fits = sorted(zip(language_labels, scores), key=lambda x: x[1])[:k]
+
+    label_freq = {}
+    for label, _ in best_fits:
+        if label not in label_freq:
+            label_freq[label] = 0
+        label_freq[label] += 1
+    return [max(label_freq, key=label_freq.get), min(scores)]
