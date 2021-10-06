@@ -1,4 +1,4 @@
-# Лабораторные работы для 2-го курса ФПЛ (2021/2022)
+# Лабораторные работы для 2-го курса ФПЛ (2021/2022) 
 
 [![Coverage Status](https://coveralls.io/repos/github/fipl-hse/2021-2-level-labs/badge.svg?branch=main)](https://coveralls.io/github/fipl-hse/2021-2-level-labs?branch=main)
 
