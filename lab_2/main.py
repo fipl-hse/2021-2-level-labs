@@ -7,6 +7,11 @@ from lab_1.main import tokenize, remove_stop_words
 
 
 def elements_instances(iterable, *types):
+    """
+    Checks if all elements in an iterable are instances of allowed types
+    :param iterable: an iterable with elements to be checked
+    :params types: types allowed to be in the iterable
+    """
     return all(any(isinstance(elem, t) for t in types) for elem in iterable)
 
 # 4
