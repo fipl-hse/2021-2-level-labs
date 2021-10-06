@@ -210,8 +210,14 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    unknown_text_dict = {k: v for k, v in unknown_text_vector}
-    known_text_dict = {k: v for k, v in known_text_vector}
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
+        return None
+    if (not elements_instances(unknown_text_vector, list)
+            or not elements_instances(unknown_text_vector, list)):
+        return None
+    unknown_text_dict = dict(unknown_text_vector)
+    known_text_dict = dict(known_text_vector)
     combined = {**unknown_text_dict, **known_text_dict}
     for index in combined:
         if index in unknown_text_dict and index in known_text_dict:
