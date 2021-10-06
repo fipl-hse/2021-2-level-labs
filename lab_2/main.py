@@ -76,8 +76,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     if not elements_instances(original_text, str):
         return None
     features = get_language_features(language_profiles)
-    if not features:
-        return None
     original_text = set(original_text)
     max_scores = {word: 0 for word in features}
     for profile in language_profiles.values():
@@ -159,10 +157,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             or not isinstance(k, int)
             or not isinstance(metric, str)):
         return None
-    if (not elements_instances(unknown_text_vector, int, float)
-            or not elements_instances(known_text_vectors, list)
-            or not elements_instances(language_labels, str)):
-        return None
     if len(known_text_vectors) != len(language_labels):
         return None
     distance = calculate_distance_manhattan if metric == "manhattan" else calculate_distance
@@ -190,9 +184,6 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     if not elements_instances(original_text, str):
         return None
     features = get_language_features(language_profiles)
-    if not features:
-        return None
-
     original_text = set(original_text)
     max_scores = {word: 0 for word in features}
     for profile in language_profiles.values():
@@ -240,10 +231,6 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
             or not isinstance(known_text_vectors, list)
             or not isinstance(language_labels, list)
             or not isinstance(k, int)):
-        return None
-    if (not elements_instances(unknown_text_vector, list)
-            or not elements_instances(known_text_vectors, list)
-            or not elements_instances(language_labels, str)):
         return None
     if len(known_text_vectors) != len(language_labels):
         return None
