@@ -176,11 +176,4 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     """
 
 
-def load_profile(path_to_file: str):
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-
 
