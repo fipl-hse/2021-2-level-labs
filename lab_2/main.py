@@ -6,8 +6,8 @@ Language classification
 from lab_1.main import tokenize, remove_stop_words
 
 
-def elements_instances(iterable, type):
-    return all(isinstance(element, type) for element in iterable)
+def elements_instances(iterable, *types):
+    return all(any(isinstance(elem, t) for t in types) for elem in iterable)
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -95,8 +95,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if (not isinstance(unknown_text_vector, list)
             or not isinstance(known_text_vector, list)):
         return None
-    if (not elements_instances(unknown_text_vector + known_text_vector, float)
-            and not elements_instances(unknown_text_vector + known_text_vector, int)):
+    if not elements_instances(unknown_text_vector + known_text_vector, int, float):
         return None
     distance = sum((a-b)**2 for a, b in zip(unknown_text_vector, known_text_vector))**0.5
     return round(float(distance), 5)
@@ -114,8 +113,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             or not isinstance(known_text_vectors, list)
             or not isinstance(language_labels, list)):
         return None
-    if (not elements_instances(unknown_text_vector, int)
-            and not elements_instances(unknown_text_vector, float)
+    if (not elements_instances(unknown_text_vector, int, float)
             or not elements_instances(known_text_vectors, list)
             or not elements_instances(language_labels, str)):
         return None
