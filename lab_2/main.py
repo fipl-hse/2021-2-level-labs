@@ -170,12 +170,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     best_fits = sorted(zip(language_labels, scores), key=lambda x: x[1])[:k]
 
     label_freq = {}
-    for label, score in best_fits:
+    for label, _ in best_fits:
         if label not in label_freq:
             label_freq[label] = 0
         label_freq[label] += 1
     return [max(label_freq, key=label_freq.get), min(scores)]
-    
 
 
 # 10 implementation
