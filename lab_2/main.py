@@ -6,6 +6,9 @@ Language classification
 from lab_1.main import tokenize, remove_stop_words
 
 
+def elements_instances(iterable, type):
+    return all(isinstance(element, type) for element in iterable)
+
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -15,10 +18,10 @@ def get_freq_dict(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
+    if not elements_instances(tokens, str):
+        return None
     freq_dict = {}
     for token in tokens:
-        if not isinstance(token, str):
-            return None
         if token not in freq_dict:
             freq_dict[token] = 0
         freq_dict[token] += 1 / len(tokens)
@@ -36,11 +39,11 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if (not isinstance(texts_corpus, list)
             or not isinstance(language_labels, list)):
         return None
+    if (not elements_instances(texts_corpus, list)
+            or not elements_instances(language_labels, str)):
+        return None
     profiles = {}
     for text, label in zip(texts_corpus, language_labels):
-        if (not isinstance(text, list)
-                or not isinstance(label, str)):
-            return None
         profiles[label] = get_freq_dict(text)
     return profiles
 
@@ -68,9 +71,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     """
     if not isinstance(original_text, list):
         return None
-    for word in original_text:
-        if not isinstance(word, str):
-            return None
+    if not elements_instances(original_text, str):
+        return None
     features = get_language_features(language_profiles)
     if not features:
         return None
@@ -93,10 +95,9 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if (not isinstance(unknown_text_vector, list)
             or not isinstance(known_text_vector, list)):
         return None
-    for number in unknown_text_vector + known_text_vector:
-        if (not isinstance(number, float)
-                and not isinstance(number, int)):
-            return None
+    if (not elements_instance(unknown_text_vector + known_text_vector, float)
+            and not elements_instance(unknown_text_vector + known_text_vector, int)):
+        return None
     distance = sum((a-b)**2 for a, b in zip(unknown_text_vector, known_text_vector))**0.5
     return round(float(distance), 5)
 
@@ -109,7 +110,20 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list):
+        return None
+    if (not elements_instances(unknown_text_vector, int)
+            and not elements_instances(unknown_text_vector, float)
+            or not elements_instances(known_text_vectors, list)
+            or not elements_instances(language_labels, str):
+        return None
+    if len(known_text_vectors) != len(language_labels):
+        return None
+    scores = [calculate_distance(unknown_text_vector, vector) for vector in known_text_vectors]
+    return list(max(zip(language_labels, scores), key=lambda x: x[1]))
+    
 
 
 # 8
