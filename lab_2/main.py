@@ -42,7 +42,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if (not elements_instances(texts_corpus, list)
             or not elements_instances(language_labels, str)):
         return None
-    return {k: get_freq_dict(v) for k, v in zip(texts_corpus, language_labels)}
+    return {k: get_freq_dict(v) for k, v in zip(language_labels, texts_corpus)}
 
 
 def get_language_features(language_profiles: dict) -> list or None:
