@@ -9,6 +9,7 @@ de_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
                'u', 'v', 'w', 'x', 'y', 'z', 'ß', 'ö', 'ü', 'ä']
 stop_words = ['the', 'a', 'is']
 
+
 def tokenize(text):
     """
     Splits a text into tokens, converts the tokens into lowercase,
@@ -16,6 +17,10 @@ def tokenize(text):
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+
+    # Validate input
+    if type(text) != str:
+        return None
 
     result = []
     word = ''
@@ -53,13 +58,12 @@ def remove_stop_words(tokens, st_words):
                     st_word_valid.append(stop_word)
 
     # Check tokens
+    if type(tokens) != list or len(tokens) == 0:
+        return None
+
     tokens_valid = []
     for word in tokens:
-        if type(word) == str:
-            for char in word:
-                if char not in de_alphabet:
-                    return None
-        else:
+        if type(word) != str:
             return None
 
         if word not in st_word_valid:
@@ -76,13 +80,12 @@ def calculate_frequencies(tokens):
     """
 
     # Check tokens validity
-    for word in tokens:
-        if type(word) == str:
-            for char in word:
-                if char not in de_alphabet:
-                    return None
-        else:
-            return None
+    if type(tokens) == list:
+        for word in tokens:
+            if type(word) != str:
+                return None
+    else:
+        return None
 
     # Creation of dictionary [token, freq]
     token_dict = {}
@@ -104,20 +107,21 @@ def get_top_n_words(freq_dict, top_n):
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
+    if not isinstance(freq_dict, dict):
+        return None
 
-    if top_n > 0 and len(freq_dict) > 0:
+    top_list = []
+    if top_n > 0:
         ind = 0
-        top_list = []
-        for i in sorted(freq_dict.items(), reverse = True, key=lambda pair: pair[1]):
+        for i in sorted(freq_dict.items(), reverse=True, key=lambda pair: pair[1]):
             top_list.append(i[0])
             ind = ind + 1
             if ind == top_n:
                 return top_list
-        return top_list
-    else:
-        return None
 
+    return top_list
 
+'''
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
     Creates a language profile
@@ -140,7 +144,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     pass
 
 
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
+def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int):
     """
     Detects the language of an unknown profile
     :param unknown_profile: a dictionary
@@ -192,3 +196,4 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
+'''
