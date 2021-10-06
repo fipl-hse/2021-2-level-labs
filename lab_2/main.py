@@ -153,7 +153,25 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)
+            or not isinstance(k, int)
+            or not isinstance(metric, str)):
+        return None
+    if (not elements_instances(unknown_text_vector, int, float)
+            or not elements_instances(known_text_vectors, list)
+            or not elements_instances(language_labels, str)):
+        return None
+    if len(known_text_vectors) != len(language_labels):
+        return None
+    distance = calculate_distance_manhattan if metric == "manhattan" else calculate_distance
+    scores = [distance(unknown_text_vector, vector) for vector in known_text_vectors]
+    best_fits = sorted(zip(labels, scores), key=lambda x: x[1])[:k]
+    label_occurences = [label for label, score in best_fits]
+    label_frequencies = {label: label_occurences.count(label) for label in labels}
+    best_fit_label = max(label_frequencies, key=label_frequencies.get)
+    return [[label, score] for label, score in best_fits if label == best_fit_label][0]
 
 
 # 10 implementation
