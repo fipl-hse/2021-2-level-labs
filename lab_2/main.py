@@ -167,9 +167,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         return None
     distance = calculate_distance_manhattan if metric == "manhattan" else calculate_distance
     scores = [distance(unknown_text_vector, vector) for vector in known_text_vectors]
-    best_fits = sorted(zip(labels, scores), key=lambda x: x[1])[:k]
+    best_fits = sorted(zip(language_labels, scores), key=lambda x: x[1])[:k]
     label_occurences = [label for label, score in best_fits]
-    label_frequencies = {label: label_occurences.count(label) for label in labels}
+    label_frequencies = {label: label_occurences.count(label) for label in language_labels}
     best_fit_label = max(label_frequencies, key=label_frequencies.get)
     return [[label, score] for label, score in best_fits if label == best_fit_label][0]
 
