@@ -184,9 +184,3 @@ def load_profile(path_to_file: str):
     """
 
 
-def save_profile(profile: dict):
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
