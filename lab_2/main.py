@@ -95,8 +95,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if (not isinstance(unknown_text_vector, list)
             or not isinstance(known_text_vector, list)):
         return None
-    if (not elements_instance(unknown_text_vector + known_text_vector, float)
-            and not elements_instance(unknown_text_vector + known_text_vector, int)):
+    if (not elements_instances(unknown_text_vector + known_text_vector, float)
+            and not elements_instances(unknown_text_vector + known_text_vector, int)):
         return None
     distance = sum((a-b)**2 for a, b in zip(unknown_text_vector, known_text_vector))**0.5
     return round(float(distance), 5)
