@@ -19,7 +19,7 @@ def tokenize(text):
     """
 
     # Validate input
-    if type(text) != str:
+    if not isinstance(text, str):
         return None
 
     result = []
@@ -37,8 +37,8 @@ def tokenize(text):
 
     if len(result) > 0:
         return result
-    else:
-        return None
+
+    return None
 
 
 def remove_stop_words(tokens, st_words):
@@ -51,9 +51,9 @@ def remove_stop_words(tokens, st_words):
 
     # Check stop words
     st_word_valid = []
-    if type(st_words) == list:
+    if isinstance(st_words, list):
         for stop_word in st_words:
-            if type(stop_word) == str:
+            if isinstance(stop_word, str):
                 if stop_word in stop_words:
                     st_word_valid.append(stop_word)
 
@@ -63,7 +63,7 @@ def remove_stop_words(tokens, st_words):
 
     tokens_valid = []
     for word in tokens:
-        if type(word) != str:
+        if not isinstance(word, str):
             return None
 
         if word not in st_word_valid:
@@ -80,9 +80,9 @@ def calculate_frequencies(tokens):
     """
 
     # Check tokens validity
-    if type(tokens) == list:
+    if isinstance(tokens, list):
         for word in tokens:
-            if type(word) != str:
+            if not isinstance(word, str):
                 return None
     else:
         return None
