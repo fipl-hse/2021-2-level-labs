@@ -120,7 +120,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     if len(known_text_vectors) != len(language_labels):
         return None
     scores = [calculate_distance(unknown_text_vector, vector) for vector in known_text_vectors]
-    return list(max(zip(language_labels, scores), key=lambda x: x[1]))
+    return list(min(zip(language_labels, scores), key=lambda x: x[1]))
     
 
 
