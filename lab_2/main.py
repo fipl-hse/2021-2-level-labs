@@ -118,7 +118,6 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         return None
     scores = [calculate_distance(unknown_text_vector, vector) for vector in known_text_vectors]
     return list(min(zip(language_labels, scores), key=lambda x: x[1]))
-    
 
 
 # 8
@@ -129,7 +128,13 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
+        return None
+    if not elements_instances(unknown_text_vector + known_text_vector, int, float):
+        return None
+    distance = sum(abs(a-b) for a, b in zip(unknown_text_vector, known_text_vector))
+    return round(float(distance), 5)
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
