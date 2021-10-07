@@ -130,13 +130,12 @@ def create_language_profile(language: str, text: str, stop_words: list):
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    if not isinstance(language, str) and isinstance(text, str) \
-        and isinstance(stop_words, list) and text == '':
+    if not (isinstance(language, str) and isinstance(text, str) \
+            and isinstance(stop_words, list)):
         return None
     else:
         tokens = tokenize(text)
         tokens = remove_stop_words(tokens, stop_words)
-        dictionary = calculate_frequencies(tokens)
         freq_dict = calculate_frequencies(tokens)
         profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
         return profile
