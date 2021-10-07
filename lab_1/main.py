@@ -48,28 +48,16 @@ def remove_stop_words(tokens, st_words):
     :param st_words: a list of stop words
     :return: a list of tokens without stop words
     """
-
-    # Check stop words
-    st_word_valid = []
-    if isinstance(st_words, list):
-        for stop_word in st_words:
-            if isinstance(stop_word, str):
-                if stop_word in stop_words:
-                    st_word_valid.append(stop_word)
-
-    # Check tokens
-    if type(tokens) != list or len(tokens) == 0:
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
-
-    tokens_valid = []
-    for word in tokens:
-        if not isinstance(word, str):
-            return None
-
-        if word not in st_word_valid:
-            tokens_valid.append(word)
-
-    return tokens_valid
+    if not tokens:
+        return None
+    for token in enumerate(tokens):
+        if token[1] in stop_words:
+            tokens[token[0]] = ''
+    while '' in tokens:
+        tokens.remove('')
+    return tokens
 
 
 def calculate_frequencies(tokens):
@@ -131,17 +119,14 @@ def create_language_profile(language: str, text: str, stop_words: list):
     :return: a dictionary with three keys – name, freq, n_words
     """
     if not isinstance(language, str) and isinstance(text, str) \
-        and isinstance(stop_words, list):
+        and isinstance(stop_words, list) and text == []:
         return None
     else:
-        profile = {}
         tokens = tokenize(text)
         tokens = remove_stop_words(tokens, stop_words)
         dictionary = calculate_frequencies(tokens)
         freq_dict = calculate_frequencies(tokens)
-        profile['name'] = language
-        profile['freq'] = dictionary
-        profile['n_words'] = len(freq_dict)
+        profile = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
         return profile
 
 
