@@ -124,18 +124,18 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
     """
     if isinstance(unknown_profile, dict) and isinstance(profile_1, dict) \
             and isinstance(profile_2, dict) and isinstance(top_n, int):
-    compare_with_1 = compare_profiles(unknown_profile, profile_1, top_n)
-    compare_with_2 = compare_profiles(unknown_profile, profile_2, top_n)
-    name_1 = profile_1['name']
-    name_2 = profile_2['name']
-    if compare_with_1 > compare_with_2:
-        return name_1
-    if compare_with_2 > compare_with_1:
-        return name_2
-    if compare_with_2 == compare_with_1:
-        names = [name1, name2]
-        names.sort()
-        return names[0]
+        compare_with_1 = compare_profiles(unknown_profile, profile_1, top_n)
+        compare_with_2 = compare_profiles(unknown_profile, profile_2, top_n)
+        name_1 = profile_1['name']
+        name_2 = profile_2['name']
+        if compare_with_1 > compare_with_2:
+            return name_1
+        if compare_with_2 > compare_with_1:
+            return name_2
+        if compare_with_2 == compare_with_1:
+            names = [name1, name2]
+            names.sort()
+            return names[0]
     return None
 
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
