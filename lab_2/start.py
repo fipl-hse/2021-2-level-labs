@@ -9,7 +9,7 @@ from main import (
     get_language_profiles,
     get_language_features,
     get_sparse_vector,
-    predict_language_knn_score
+    predict_language_knn_sparse
 )
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
