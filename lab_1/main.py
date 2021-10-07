@@ -160,7 +160,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-     if (not isinstance(unknown_profile, dict)
+    if (not isinstance(unknown_profile, dict)
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
         return None
@@ -214,6 +214,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             report = compare_profiles_advanced(unknown_profile, profile, top_n)
             reports.append(report)
     reports = sorted(reports, key=lambda x: x["score"], reverse=True)
+    
     if not reports:
         return None
  
@@ -233,7 +234,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
-     if not isinstance(path_to_file, str) or not exists(path_to_file):
+    if not isinstance(path_to_file, str) or not exists(path_to_file):
         return None
     with open(path_to_file, "r", encoding="utf-8") as json_file:
         profile = json.load(json_file)
