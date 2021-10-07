@@ -34,7 +34,7 @@ def get_freq_dict(tokens: list) -> dict or None:
         count[token] += 1
     # Convert the counts to frequencies in the range from 0 to 1
     # Round the frequencies, which is apparently required by the tests
-    return {k: round(v / len(tokens), 5) for k, v in freq_dict.items()}
+    return {k: round(v / len(tokens), 5) for k, v in count.items()}
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -186,7 +186,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         return None
     # Choose the appropriate distance function
     distance = calculate_distance_manhattan if metric == "manhattan" else calculate_distance
-    # 
+    # Get a list of distances comparing unknown vector and known vectors
     scores = [distance(unknown_text_vector, vector) for vector in known_text_vectors]
     # Choose K nearest neighbours (label, score)
     best_fits = sorted(zip(language_labels, scores), key=lambda x: x[1])[:k]
