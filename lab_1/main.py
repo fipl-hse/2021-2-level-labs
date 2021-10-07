@@ -60,8 +60,8 @@ def get_top_n_words(freq_dict, top_n):
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
-    list_output = sorted(freq_dict, key=freq_dict.get, reverse=True)
-    return list_output[:top_n]
+    common_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
+    return common_words[:top_n]
 
 
 def create_language_profile(language: str, text: str,
