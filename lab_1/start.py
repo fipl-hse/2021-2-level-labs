@@ -8,7 +8,8 @@ from lab_1.main import tokenize, remove_stop_words, calculate_frequencies, get_t
     compare_profiles, detect_language, compare_profiles_advanced, detect_language_advanced
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
-PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')git
+PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
+PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 
 if __name__ == '__main__':
 
