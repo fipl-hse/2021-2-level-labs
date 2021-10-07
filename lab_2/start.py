@@ -3,6 +3,7 @@ Language detection starter
 """
 
 import os
+import main
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -38,6 +39,33 @@ if __name__ == '__main__':
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
     EXPECTED = ['de', 'eng', 'lat']
-    RESULT = ''
+    RESULT = []
+
+    corpus = []
+    labels = []
+    STOP_WORDS = []
+    KNN = 3
+    for text in DE_SAMPLES:
+        corpus.append(main.remove_stop_words(main.tokenize(text), STOP_WORDS))
+        labels.append('de')
+    for text in EN_SAMPLES:
+        corpus.append(main.remove_stop_words(main.tokenize(text), STOP_WORDS))
+        labels.append('eng')
+    for text in LAT_SAMPLES:
+        corpus.append(main.remove_stop_words(main.tokenize(text), STOP_WORDS))
+        labels.append('lat')
+    dummy_labels = [str(i) for i in range(len(corpus))]
+    dummy_labeled_profiles = main.get_language_profiles(corpus, dummy_labels)
+    features = main.get_language_features(dummy_labeled_profiles)
+    vectors = [main.get_sparse_vector(text, dummy_labeled_profiles) for text in corpus]
+
+    for text in UNKNOWN_SAMPLES:
+        unknown_text = main.remove_stop_words(main.tokenize(text), STOP_WORDS)
+        unknown_vector = main.get_sparse_vector(unknown_text, dummy_labeled_profiles)
+        prediction = main.predict_language_knn_sparse(unknown_vector,
+                                                      vectors,
+                                                      labels,
+                                                      KNN)
+        RESULT.append(prediction[0])
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert EXPECTED == RESULT, 'Detection not working'
