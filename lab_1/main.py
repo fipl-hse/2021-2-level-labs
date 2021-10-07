@@ -49,13 +49,11 @@ def remove_stop_words(tokens, st_words):
     :return: a list of tokens without stop words
     """
     # Check stop words
-
-    st_word_valid = []
-    if isinstance(st_words, list):
-        for stop_word in st_words:
-            if isinstance(stop_word, str):
-                if stop_word in stop_words:
-                    st_word_valid.append(stop_word)
+    if not isinstance(st_words, list):
+        return None
+    for stop_word in st_words:
+        if not isinstance(stop_word, str):
+            return None
 
     # Check tokens
     if type(tokens) != list or len(tokens) == 0:
@@ -66,7 +64,7 @@ def remove_stop_words(tokens, st_words):
         if not isinstance(word, str):
             return None
 
-        if word not in st_word_valid:
+        if word not in st_words:
             tokens_valid.append(word)
 
     return tokens_valid
