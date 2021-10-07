@@ -1,6 +1,7 @@
 """
 Language detection starter
 """
+from lab_1.main import create_language_profile
 import os
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
