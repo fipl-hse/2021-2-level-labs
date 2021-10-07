@@ -3,7 +3,7 @@ Language detection starter
 """
 
 import os
-from main import (
+from lab_2.main import (
     tokenize,
     remove_stop_words,
     get_language_profiles,
