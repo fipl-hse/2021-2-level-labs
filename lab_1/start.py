@@ -11,6 +11,8 @@ from main import get_top_n_words
 from main import create_language_profile
 from main import compare_profiles
 from main import detect_language
+from main import compare_profiles_advanced
+from main import detect_language_advanced 
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
@@ -55,6 +57,8 @@ la_profile = create_language_profile('la', la_text, la_stop_words)
 unknown_profile = create_language_profile('unknown', unknown_text, [])
 print('compare profiles: ', compare_profiles(unknown_profile, en_profile, TOP_N))
 print('detect language: ', detect_language(unknown_profile, en_profile, de_profile, TOP_N))
-
+print('compare profile advanced: ', compare_profiles_advanced(unknown_profile, de_profile, TOP_N)) 
+profiles = [en_profile, de_profile, la_profile] 
+print('detect_language_advanced: ', detect_language_advanced(unknown_profile, profiles, [], TOP_N))
 assert RESULT, 'Detection not working'
  
