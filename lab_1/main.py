@@ -283,9 +283,9 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         isinstance(unknown_profile, dict)
         and isinstance(profiles, list)
         and isinstance(languages, list)
-        and isinstance(top_n, int)
-    ):
+        and isinstance(top_n, int)):
         return None
+    
     reports = []
     for profile in profiles:
         if profile["name"] in languages or not languages:
