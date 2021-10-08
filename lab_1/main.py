@@ -110,8 +110,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     pass
 
 def  get_top_n_words():
-    print(input('Число слов в топе: '))
-    num = int(input())
+    
+    num = int(input('Число слов в топе: '))
     freq_dict = {}
     while True:
         print('Введите токен (нажмите enter после ввода крайнего токена): ')
@@ -276,6 +276,33 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :return: a language
     """
     pass
+
+def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+    
+      if not (
+        isinstance(unknown_profile, dict)
+        and isinstance(profiles, list)
+        and isinstance(languages, list)
+        and isinstance(top_n, int)
+    ):
+        return None
+    reports = []
+    for profile in profiles:
+        if profile["name"] in languages or not languages:
+            report = compare_profiles_advanced(unknown_profile, profile, top_n)
+            reports.append(report)
+    reports = sorted(reports, key=lambda x: x["score"], reverse=True)
+
+    if not reports:
+        return None
+
+    list_with_only_scores = []
+    for element_dict in reports:
+        list_with_only_scores.append(element_dict["score"])
+    max_scores = max(list_with_only_scores)
+    number_of_max_scores = list_with_only_scores.count(max_scores)
+    reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
+    return reports[0]["name"]
 
 
 def load_profile(path_to_file: str) -> dict or None:
