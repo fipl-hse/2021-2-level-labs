@@ -203,11 +203,4 @@ def detect_language_advanced(unknown_profile: dict, profiles: list,
     list_of_languages = sorted(list_of_languages, reverse=True, key=lambda x: x['score'])
     if not list_of_languages:
         return None
-    if len(list_of_languages) > 1:
-        if list_of_languages[0]['score'] == list_of_languages[1]['score']:
-            equal_scores = []
-            for i in list_of_languages:
-                if i['score'] == list_of_languages[0]:
-                    equal_scores.append(i)
-            list_of_languages = sorted(equal_scores, reverse=True, key=lambda x: x['score'])
     return list_of_languages[0]['name']
