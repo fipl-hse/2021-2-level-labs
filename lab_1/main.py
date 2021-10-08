@@ -285,7 +285,6 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
             and isinstance(top_n, int)):
         return None
 
-
     reports = []
     for profile in profiles:
         if profile["name"] in languages or not languages:
