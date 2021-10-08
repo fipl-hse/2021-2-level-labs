@@ -110,7 +110,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     pass
 
 def  get_top_n_words():
-    num = int(float(input('Число слов в топе: ')))
+    num = input('Число слов в топе: ')
+    num = int(num)
     freq_dict = {}
     while True:
         print('Введите токен (нажмите enter после ввода крайнего токена): ')
