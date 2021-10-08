@@ -2,7 +2,8 @@
 Lab 1
 Language detection
 """
-
+import json
+from os.path import exists 
 
 def tokenize(text: str) -> list or None:
     """
