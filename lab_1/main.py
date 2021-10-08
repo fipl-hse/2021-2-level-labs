@@ -182,12 +182,12 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
     sorted_common = shared_tokens.copy()
     sorted_common.sort()
     report = {'name': profile_to_compare['name'],
-                'common': shared_tokens,
-                'score': score,
-                'max_length_word': max_length_word,
-                'min_length_word': min_length_word,
-                'average_token_length': sum_letters / len(words),
-                'sorted_common': sorted_common}
+              'common': shared_tokens,
+              'score': score,
+              'max_length_word': max_length_word,
+              'min_length_word': min_length_word,
+              'average_token_length': sum_letters / len(words),
+              'sorted_common': sorted_common}
     return report
 
 
