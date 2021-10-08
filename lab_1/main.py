@@ -133,12 +133,13 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict,
         if compare_with_2 > compare_with_1:
             return name_2
         if compare_with_2 == compare_with_1:
-            names = [name1, name2]
+            names = [name_1, name_2]
             names.sort()
             return names[0]
     return None
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
+def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
+                              top_n: int) -> list or None:
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -181,7 +182,8 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
              "average_token_length": tokens_length / len(profile_to_compare["freq"])}
     return report
 
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+def detect_language_advanced(unknown_profile: dict, profiles: list,
+                             languages: list, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -210,20 +212,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
                     equal_scores.append(i)
             list_of_languages = sorted(equal_scores, reverse=True, key=lambda x: x['score'])
     return list_of_languages[0]['name']
-
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
-
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
