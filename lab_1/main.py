@@ -278,14 +278,14 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     pass
 
 def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
-    
-      if not (
-        isinstance(unknown_profile, dict)
-        and isinstance(profiles, list)
-        and isinstance(languages, list)
-        and isinstance(top_n, int)):
+    if not (
+            isinstance(unknown_profile, dict)
+            and isinstance(profiles, list)
+            and isinstance(languages, list)
+            and isinstance(top_n, int)):
         return None
-    
+
+
     reports = []
     for profile in profiles:
         if profile["name"] in languages or not languages:
@@ -299,11 +299,10 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     list_with_only_scores = []
     for element_dict in reports:
         list_with_only_scores.append(element_dict["score"])
-    max_scores = max(list_with_only_scores)
-    number_of_max_scores = list_with_only_scores.count(max_scores)
-    reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
+        max_scores = max(list_with_only_scores)
+        number_of_max_scores = list_with_only_scores.count(max_scores)
+        reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
     return reports[0]["name"]
-
 
 def load_profile(path_to_file: str) -> dict or None:
     """
