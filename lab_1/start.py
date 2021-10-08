@@ -4,6 +4,7 @@ Language detection starter
 
 import os
 
+from lab_1 import main
 from lab_1.main import tokenize, remove_stop_words, calculate_frequencies, get_top_n_words, create_language_profile, \
     compare_profiles, detect_language, compare_profiles_advanced, detect_language_advanced
 
@@ -26,10 +27,23 @@ if __name__ == '__main__':
 
 
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'la.txt'), 'r', encoding='utf-8') as file_to_read:
+        la_text = file_to_read.read()
+
+    with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as file_to_read:
         unknown_text = file_to_read.read()
 
+    unknown = main.create_language_profile("unknown", unknown_text, [])
+    english = main.create_language_profile("english", en_text, [])
+    deutsch = main.create_language_profile("german", de_text, [])
 
-    EXPECTED = 'en'
-    RESULT = ''
+    all_languages = [english, deutsch]
+
+    TOP_N = 5
+    EXPECTED = 'english'
+    RESULT = main.detect_language(unknown, english, deutsch, TOP_N)
+
+    print('The result is', RESULT)
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
+
