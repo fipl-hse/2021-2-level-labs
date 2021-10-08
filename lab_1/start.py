@@ -5,8 +5,6 @@ Language detection starter
 import os
 
 from lab_1 import main
-from lab_1.main import tokenize, remove_stop_words, calculate_frequencies, get_top_n_words, create_language_profile, \
-    compare_profiles, detect_language, compare_profiles_advanced, detect_language_advanced
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
