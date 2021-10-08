@@ -13,7 +13,7 @@ def tokenize(text: str) -> list or None:
     if not isinstance(text, str):
         return None
     text = text.lower()
-    gaps = """1234567890-=!@#$%^&*()_+{};:[]'"№,./<>?\|~`"""
+    gaps = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
     for i in text:
         if i in gaps:
             text = text.replace(i, '')
@@ -67,7 +67,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
     top_n_words = []
-    '''freq_keys = [key for key in freq_dict]'''
     top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
     return top_n_words
 
