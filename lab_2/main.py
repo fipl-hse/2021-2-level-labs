@@ -20,7 +20,6 @@ def get_freq_dict(tokens: list):
         else:
             return None
     for word in result:
-        print (word, result[word])
         result[word] = round(result[word]/len(tokens), 5)
     return result
 
