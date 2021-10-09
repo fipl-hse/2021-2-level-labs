@@ -49,12 +49,14 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(language_profiles, dict):
+if not isinstance(language_profiles, dict):
         return None
     words = set()
     for item in language_profiles.items():
         for word in item[1]:
             words.add(word)
+        if not words:
+            return None
     return sorted(list(words))
 
 
