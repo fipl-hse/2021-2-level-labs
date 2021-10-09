@@ -55,8 +55,8 @@ def get_language_features(language_profiles: dict) -> list or None:
     for item in language_profiles.items():
         for word in item[1]:
             words.add(word)
-        if not words:
-            return None
+    if not words:
+        return None
     return sorted(list(words))
 
 
