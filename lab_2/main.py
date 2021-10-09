@@ -7,13 +7,22 @@ from lab_1.main import tokenize, remove_stop_words
 
 
 # 4
-def get_freq_dict(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
+def get_freq_dict(tokens: list):
+    if not isinstance(tokens, list):
+        return None
+    result = {}
+    for token in tokens:
+        if isinstance(token, str):
+            if token in result:
+                result[token] += 1
+            else:
+                result[token] = 1
+        else:
+            return None
+    for word in result:
+        print (word, result[word])
+        result[word] = round(result[word]/len(tokens), 5)
+    return result
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
