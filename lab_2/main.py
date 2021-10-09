@@ -51,7 +51,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     """
     if not isinstance(language_profiles, dict):
         return None
-    words = set()
+    words = ()
     for item in language_profiles.items():
         for word in item[1]:
             words.add(word)
