@@ -32,7 +32,15 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+        if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+        return None
+    result = {}
+    for i in range(len(texts_corpus)):
+        if not isinstance(texts_corpus[i], list) or not isinstance(language_labels[i], str):
+            return None
+        else:
+            result[language_labels[i]] = get_freq_dict(texts_corpus[i])
+    return result
 
 
 def get_language_features(language_profiles: dict) -> list or None:
