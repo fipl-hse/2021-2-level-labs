@@ -42,7 +42,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for element in language_labels:
         if not isinstance(element, str):
             return None
-    # use get_freq_dict in list comprehension cause texts_corpus is a list of lists but not ONE list
+    # use function get_freq_dict for EVERY list in texts_corpus via list comprehension
     new_texts_corpus = [get_freq_dict(element) for element in texts_corpus]
     language_profiles = dict(zip(language_labels, new_texts_corpus))
     return language_profiles
@@ -54,7 +54,19 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    # return freq_dict keys from language_profiles as lists of unique words
+    # put lists of unique words to main list "language_features"
+    language_features = []
+    for freq_dict in language_profiles.values():
+        language_features.append(freq_dict.keys())
+    if not language_features:
+        return None
+    # convert lists of unique words to sets and unite them
+    language_features = set().union(*language_features)
+    # sort in alphabetically order and return
+    return sorted(language_features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -64,6 +76,12 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
+        return None
+    for element in original_text:
+        if not isinstance(element, str):
+            return None
+    language_features = get_language_features(language_profiles)
     pass
 
 
