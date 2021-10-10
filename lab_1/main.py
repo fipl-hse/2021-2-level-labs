@@ -118,8 +118,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
     return share_of_common_things
 
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_to_compare, dict) and isinstance(top_n, int)):
-        return None
 
 def detect_language(unknown_profile: dict,
                     profile_1: dict,
@@ -149,10 +147,6 @@ def detect_language(unknown_profile: dict,
         language_name = profile_2["name"]
     return language_name
 
-    compared_list = []
-    for word in top_unknown:
-        if word in top_language_compare:
-            compared_list.append(word)
 
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
@@ -197,18 +191,16 @@ def compare_profiles_advanced(unknown_profile: dict,
               'sorted_common': sorted_common}
     return report
 
-    score = round(len(compared_list)/len(top_unknown), 2)
-    return score
 
 def detect_language_advanced(unknown_profile: dict,
                              profiles: list,
                              languages: list,
                              top_n: int) -> str or None:
     """
-    Detects the language of an unknown profile
+    Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
-    :param profile_1: a dictionary
-    :param profile_2: a dictionary
+    :param profiles: a list of dictionaries
+    :param languages: a list of possible languages
     :param top_n: a number of the most common words
     :return: a language
     """
@@ -238,9 +230,6 @@ def detect_language_advanced(unknown_profile: dict,
     # return a language
     return reports[0]["name"]
 
-    if not (isinstance(unknown_profile, dict) and isinstance(profile_1, dict) \
-            and isinstance(profile_2, dict) and isinstance(top_n, int)):
-        return None
 
 def load_profile(path_to_file: str) -> dict or None:
     """
