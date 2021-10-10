@@ -43,6 +43,10 @@ class SaveProfileTest(unittest.TestCase):
         """
         expected = 1
 
-        profile = {1: 1000, 2: [], 3: 'welcome'}
+        bad_inputs = ['goodbye', {}, None, 9, 9.34, True, [None], []]
+        for index in range(len(bad_inputs) - 2):
+            profile = {'name': bad_inputs[index],
+                       'freq': bad_inputs[index+1],
+                       'n_words': bad_inputs[index+2]}
         actual = save_profile(profile)
         self.assertEqual(expected, actual)
