@@ -13,6 +13,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+    print('oh shit im sorry')
     pass
 
 
