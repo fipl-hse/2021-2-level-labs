@@ -23,7 +23,6 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token] += 1 / len(tokens)
         else:
             freq_dict[token] = 1 / len(tokens)
-
     return freq_dict
 
 
