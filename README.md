@@ -51,7 +51,7 @@
 1. J. Burton Browning. 
    [Pro Python 3: Features and Tools for Professional Development](https://www.amazon.com/Pro-Python-Features-Professional-Development/dp/1484243846).
 
-## Порядок сдачи и оценивания лабораторной работы
+## Порядок сдачи и оценивания лабораторной работы 
 
 Порядок сдачи:
 
