@@ -5,8 +5,6 @@ Language detection starter
 import os
 
 from main import tokenize
-
-from main import tokenize
 from main import remove_stop_words
 from main import calculate_frequencies
 from main import get_top_n_words
@@ -38,15 +36,6 @@ if __name__ == '__main__':
     EXPECTED = 'en'
     RESULT = 'en'
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-
-english_tokens = tokenize(en_text)
-tokens_less_5 = []
-for token in english_tokens:
-    if len(token) < 5:
-        tokens_less_5.append(token)
-tokens_less_5 = sorted(tokens_less_5, reverse=True, key=len)
-print(tokens_less_5)
-
 
 en_tokens = tokenize(en_text)
 print('tokenization:', tokenize(en_text))
