@@ -37,7 +37,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     """
 
     if (not isinstance(texts_corpus, list) or
-            not isinstance(language_labels, list) or not all(isinstance(i, list) for i in texts_corpus) and
+            not isinstance(language_labels, list) or not all(isinstance(i, list) for i in texts_corpus) or
             not all(isinstance(i, str) for i in language_labels)):
         return None
     lang_pr = {}
@@ -52,7 +52,18 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if (not isinstance(language_profiles, dict) or
+            not all(isinstance(key, str) for key in language_profiles.keys()) or
+            not all(isinstance(value, dict) for value in language_profiles.values()) or
+            not language_profiles.items()):
+        return None
+    features = []
+    for i in language_profiles.values():
+        for word in i:
+            if word not in features:
+                features.append(word)
+    return sorted(features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
