@@ -90,7 +90,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         return None
     return text_vector
 
-
 # 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
     """
