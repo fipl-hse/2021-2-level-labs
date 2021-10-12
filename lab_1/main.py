@@ -5,8 +5,6 @@ Language detection
 import json
 from os.path import exists
 
-import json
-from os.path import exists
 
 def tokenize(text: str) -> list or None:
     """
@@ -17,6 +15,7 @@ def tokenize(text: str) -> list or None:
     """
     if not isinstance(text, str):
         return None
+<<<<<<< HEAD
 #<<<<<<< HEAD
     tokens = ''
     for i in text:
@@ -25,6 +24,8 @@ def tokenize(text: str) -> list or None:
 
     tokens = tokens.lower().split()
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
@@ -32,7 +33,10 @@ def tokenize(text: str) -> list or None:
     for symbols in invaluable_trash:
         text = text.replace(symbols, '')
     tokens = text.split()
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     return tokens
 
 
@@ -43,6 +47,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not (isinstance(stop_words, list) and isinstance(tokens, list)):
         return None
@@ -52,6 +57,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
             tokens_new.append(i)
     return tokens_new
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return None
     new_tokens = []
@@ -59,11 +66,19 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         if word not in stop_words:
             new_tokens.append(word)
     return new_tokens
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 
-def calculate_frequencies(tokens_new: list) -> dict or None:
+def calculate_frequencies(tokens: list) -> dict or None:
     """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
+<<<<<<< HEAD
 <<<<<<< HEAD
    Calculates frequencies of given tokens
    :param tokens: a list of tokens
@@ -80,6 +95,8 @@ def calculate_frequencies(tokens_new: list) -> dict or None:
     return freq_dict
 
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if not isinstance(tokens, list):
         return None
     frequency_dictionary = {}
@@ -92,7 +109,10 @@ def calculate_frequencies(tokens_new: list) -> dict or None:
         else:
             return None
     return frequency_dictionary
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -102,6 +122,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not (isinstance(freq_dict, dict) and isinstance(top_n, int)):
         return None
@@ -123,13 +144,18 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         top_n_copy -= 1
     return top_n_words
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return None
     # sort by keys and take the top_n tokens from the list of sorted tokens
     top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
     return top_n_words
 
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
@@ -139,6 +165,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     freq_dict = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     if not (isinstance(language, str) and isinstance(freq_dict, dict)):
@@ -148,6 +175,8 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
                         'n_words': len(freq_dict)}
     return language_profile
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if (not isinstance(language, str)
             or not isinstance(text, str)
             or not isinstance(stop_words, list)):
@@ -160,7 +189,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     n_words = len(frequency_dictionary.keys())
     # create and return language profile
     return {"name": language, "freq": frequency_dictionary, "n_words": n_words}
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
@@ -171,6 +203,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not (isinstance(unknown_profile, dict)
             and isinstance(profile_to_compare, dict)
@@ -187,6 +220,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 '''
 def detect_language(unknown_profile: dict, profile_1: dict,
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if (not isinstance(unknown_profile, dict)
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
@@ -203,7 +238,10 @@ def detect_language(unknown_profile: dict, profile_1: dict,
 
 def detect_language(unknown_profile: dict,
                     profile_1: dict,
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
                     profile_2: dict, top_n: int) -> str or None:
     """
     Detects the language of an unknown profile
@@ -213,6 +251,7 @@ def detect_language(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     percentage_1 = compare_profiles(unknown_profile, profile_1, top_n)
     percentage_2 = compare_profiles(unknown_profile, profile_2, top_n)
@@ -228,6 +267,8 @@ def detect_language(unknown_profile: dict,
 def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
                               top_n: int) -> list or None:
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if (not isinstance(unknown_profile, dict)
             or not isinstance(profile_1, dict)
             or not isinstance(profile_2, dict)
@@ -249,7 +290,10 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,
 def compare_profiles_advanced(unknown_profile: dict,
                               profile_to_compare: dict,
                               top_n: int) -> dict or None:
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     """
     Compares profiles and calculates some advanced parameters
     :param unknown_profile: a dictionary
@@ -258,6 +302,7 @@ def compare_profiles_advanced(unknown_profile: dict,
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not (isinstance(unknown_profile, dict)
             and isinstance(profile_to_compare, dict)
@@ -286,6 +331,8 @@ def compare_profiles_advanced(unknown_profile: dict,
 def detect_language_advanced(unknown_profile: dict, profiles: list,
                              languages: list, top_n: int) -> str or None:
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if (not isinstance(unknown_profile, dict)
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
@@ -323,7 +370,10 @@ def detect_language_advanced(unknown_profile: dict,
                              profiles: list,
                              languages: list,
                              top_n: int) -> str or None:
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -332,6 +382,7 @@ def detect_language_advanced(unknown_profile: dict,
     :param top_n: a number of the most common words
     :return: a language
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not(isinstance(unknown_profile, dict) and isinstance(profiles, list)
            and isinstance(languages, list) and isinstance(top_n, int)):
@@ -356,6 +407,8 @@ def detect_language_advanced(unknown_profile: dict,
         language = reports[0]['name']
     return language
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     if (not isinstance(unknown_profile, dict)
             or not isinstance(profiles, list)
             or not isinstance(languages, list)
@@ -382,7 +435,10 @@ def detect_language_advanced(unknown_profile: dict,
     # return a language
     return reports[0]["name"]
 
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 def load_profile(path_to_file: str) -> dict or None:
     """
@@ -390,6 +446,7 @@ def load_profile(path_to_file: str) -> dict or None:
     :param path_to_file: a path
     :return: a dictionary with three keys – name, freq, n_words
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not isinstance(path_to_file, str) or not exists(path_to_file):
         return None
@@ -400,6 +457,8 @@ def load_profile(path_to_file: str) -> dict or None:
     return None
 
 #=======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     # check for bad input
     if not isinstance(path_to_file, str) or not exists(path_to_file):
         return None
@@ -407,7 +466,10 @@ def load_profile(path_to_file: str) -> dict or None:
     with open(path_to_file, "r", encoding="utf-8") as json_file:
         profile = json.load(json_file)
     return profile
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 
 def save_profile(profile: dict) -> int:
@@ -416,16 +478,27 @@ def save_profile(profile: dict) -> int:
     :param profile: a dictionary
     :return: 0 if everything is ok, 1 if not
     """
+<<<<<<< HEAD
 #<<<<<<< HEAD
     if not isinstance(profile, dict) or ('name' or 'freq' or 'n_words') not in profile.keys():
         return 1
     if not (isinstance(profile['name'], str) and isinstance(profile['freq'], dict)
             and isinstance(profile['n_words'], int)):
+=======
+    if not isinstance(profile, dict) or ("name" or "freq" or "n_words") not in profile.keys():
+        return 1
+    if (not isinstance(profile["name"], str)
+            or not isinstance(profile["freq"], dict)
+            or not isinstance(profile["n_words"], int)):
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
         return 1
     # generate file name from profile name
     path_to_file = "{}.json".format(profile["name"])
     # save profile in json file
     with open(path_to_file, "w", encoding="utf-8") as file:
+<<<<<<< HEAD
 #>>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
         json.dump(profile, file)
     return 0

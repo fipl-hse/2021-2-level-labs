@@ -8,10 +8,14 @@ import main
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
 <<<<<<< HEAD
+<<<<<<< HEAD
 PATH_TO_PROFILES = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 =======
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 >>>>>>> upstream/main
+=======
+PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
 
 if __name__ == '__main__':
 
@@ -28,24 +32,16 @@ if __name__ == '__main__':
             file_to_read:
         unknown_text = file_to_read.read()
 
-    en_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'en.json'))
-    de_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'de.json'))
-    la_profile = main.load_profile(os.path.join(PATH_TO_PROFILES, 'la.json'))
-    profiles = [en_profile, de_profile, la_profile]
-
-    unknown_profile = main.create_language_profile('unk', unknown_text, [])
-
-    detection = main.detect_language_advanced(unknown_profile, profiles, [], 6)
-
-    main.save_profile(unknown_profile)
-
     EXPECTED = 'en'
+<<<<<<< HEAD
 <<<<<<< HEAD
     RESULT = detection
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
     assert RESULT == EXPECTED, 'Detection not working'
 =======
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
     RESULT = ''
     TOP_N = 7
     unknown_profile = main.create_language_profile('unknown_text', unknown_text, [])
@@ -74,4 +70,7 @@ if __name__ == '__main__':
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
     assert EXPECTED == RESULT, 'Detection not working'
+<<<<<<< HEAD
 >>>>>>> upstream/main
+=======
+>>>>>>> f879af63c19cd3ab83fafc164775077f80f0bfd7
