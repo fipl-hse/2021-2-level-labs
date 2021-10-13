@@ -2,8 +2,10 @@
 Lab 2
 Language classification
 """
+import math
 
 from lab_1.main import tokenize, remove_stop_words
+from math import dist
 
 
 # 4
@@ -107,7 +109,19 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
+        return None
+    for element in unknown_text_vector:
+        if not isinstance(element, int) and not isinstance(element, float):
+            return None
+    for element in known_text_vector:
+        if not isinstance(element, int) and not isinstance(element, float):
+            return None
+    # math.dist returns the Euclidean distance between two points a and b
+    # roughly equivalent to: sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))
+    distance = math.dist(unknown_text_vector, known_text_vector)
+    return round(distance, 5)
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
