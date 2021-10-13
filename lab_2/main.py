@@ -21,8 +21,8 @@ def get_freq_dict(tokens: list) -> dict or None:
             return None
         freq_dict[word] = freq_dict.get(word, 0) + 1
     # convert the values in freq_dict to tokens frequency divided by the total number of tokens
-    for key in freq_dict:
-        freq_dict[key] = round(freq_dict[key] / len(tokens), 5)
+    for word in freq_dict:
+        freq_dict[word] = round(freq_dict[word] / len(tokens), 5)
     return freq_dict
 
 
@@ -81,8 +81,23 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     for element in original_text:
         if not isinstance(element, str):
             return None
+    # unite freq_dicts from language_profiles via creating new dict
+    main_freq_dict = {}
+    for freq_dict in language_profiles.values():
+        for key, val in freq_dict.items():
+            # write the key with the highest value to the dictionary
+            if val > main_freq_dict.get(key, 0):
+                main_freq_dict[key] = val
+                # e.g. main_freq_dict = {'a': 1,'b': 3,'c': 1}
+    # use function get_language_features
     language_features = get_language_features(language_profiles)
-    pass
+    text_vector = []
+    for word in language_features:
+        if word in original_text:
+            text_vector.append(main_freq_dict[word])
+        else:
+            text_vector.append(0)
+    return text_vector
 
 
 # 6
