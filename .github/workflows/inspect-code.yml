@@ -135,6 +135,5 @@ jobs:
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@master
         with:
-          parallel-finished: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: lcov.info
