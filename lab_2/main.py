@@ -17,13 +17,14 @@ def get_freq_dict(tokens: list) -> dict or None:
         return None
 
     freq_dict = {}
+    tokens_len = len(tokens)
 
     for token in tokens:
         if token in freq_dict:
-            freq_dict[token] += 1 / len(tokens)
+            freq_dict[token] += 1 / tokens_len
             freq_dict[token] = round(freq_dict[token], 1)
         else:
-            freq_dict[token] = 1 / len(tokens)
+            freq_dict[token] = 1 / tokens_len
             freq_dict[token] = round(freq_dict[token], 1)
 
     return freq_dict
