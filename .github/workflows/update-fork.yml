@@ -39,8 +39,6 @@ jobs:
             FORCE=1
           fi
 
-          echo "$GITHUB_CONTEXT"
-
           chmod +x automation/github/update-fork.sh
           automation/github/update-fork.sh --URL ${{ steps.fetch_remote_url.outputs.pr_remote_url }} --USER WhiteJaeger --FORCE $FORCE --AUTH "$AUTH_TOKEN"
 
