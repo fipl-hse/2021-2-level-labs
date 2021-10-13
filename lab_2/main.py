@@ -20,11 +20,11 @@ def get_freq_dict(tokens: list) -> dict or None:
 
     for token in tokens:
         if token not in freq_dict:
-            freq_dict[token] = 1 / tokens_len
+            freq_dict[token] = 1
         else:
-            freq_dict[token] += 1 / tokens_len
+            freq_dict[token] += 1
     for token in freq_dict:
-        freq_dict[token] = round(freq_dict[token], 5)
+        freq_dict[token] = round(freq_dict[token] / tokens_len, 5)
     return freq_dict
 
 
