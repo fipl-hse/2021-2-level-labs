@@ -9,7 +9,7 @@ from lab_1.main import tokenize, remove_stop_words
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
-    :param tokens: alist of tokens
+    :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
     if not isinstance(tokens, list):
@@ -26,7 +26,7 @@ def get_freq_dict(tokens: list) -> dict or None:
         else:
             freqs[word] += 1
 
-    freqs.update((x, round(y / full_length, ndigits = 5)) for x, y in freqs.items())
+    freqs.update((x, round(y / full_length, ndigits=5)) for x, y in freqs.items())
 
     return freqs
 
@@ -40,6 +40,20 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :return: a dictionary of dictionaries - language profiles
     """
 
+    if not isinstance(texts_corpus, list):
+        return None
+    if not isinstance(language_labels, list):
+        return None
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+
+    language_profiles = {}
+
+    for i in range(len(language_labels)):
+        language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
+
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
