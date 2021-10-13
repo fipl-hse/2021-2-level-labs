@@ -17,17 +17,18 @@ def get_freq_dict(tokens: list) -> dict or None:
     for token in tokens:
         if not isinstance(token, str):
             return None
-    else:
-        freqs = {}
-        full_length = len(tokens)
-        for word in tokens:
-            if word not in freqs.keys():
-                freqs[word] = 1
-            else:
-                freqs[word] += 1
-        freqs.update((x, round(y / full_length, ndigits = 5)) for x, y in freqs.items())
 
-        return freqs
+    freqs = {}
+    full_length = len(tokens)
+    for word in tokens:
+        if word not in freqs.keys():
+            freqs[word] = 1
+        else:
+            freqs[word] += 1
+
+    freqs.update((x, round(y / full_length, ndigits = 5)) for x, y in freqs.items())
+
+    return freqs
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -38,7 +39,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+
 
 
 def get_language_features(language_profiles: dict) -> list or None:
