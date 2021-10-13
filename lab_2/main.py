@@ -50,8 +50,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
 
     language_profiles = {}
 
-    for i in range(len(language_labels)):
-        language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
+    for i, label in enumerate(language_labels)):
+        language_profiles[label] = get_freq_dict(texts_corpus[i])
 
     return language_profiles
 
@@ -62,7 +62,7 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
