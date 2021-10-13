@@ -73,7 +73,25 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if (not isinstance(original_text, list) or
+            not isinstance(language_profiles, dict) or
+            not all(isinstance(key, str) for key in language_profiles.keys()) or
+            not all(isinstance(value, dict) for value in language_profiles.values()) or
+            not language_profiles.items()):
+        return None
+    unique_words = get_language_features(language_profiles)
+    text_vector = []
+    for i in unique_words:
+        freq_list = []
+        if i in original_text:
+            for lang in language_profiles.values():
+                if i in lang:
+                    freq_list.append(lang.get(i))
+        else:
+            freq_list.append(0)
+        text_vector.append(sorted(freq_list)[0])
+    return text_vector
 
 
 # 6
