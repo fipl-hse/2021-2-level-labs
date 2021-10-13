@@ -62,7 +62,24 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    if language_profiles == {}:
+        return None
+    for profile_name, profile in language_profiles.items():
+        if not isinstance(profile_name, str):
+            return None
+        if not isinstance(profile, dict):
+            return None
+
+    unique = []
+
+    for profile_full in language_profiles.values():
+        for profile_word in profile_full.keys():
+            if profile_word not in unique:
+                unique.append(profile_word)
+
+    return sorted(unique)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
