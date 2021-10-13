@@ -43,6 +43,6 @@ if __name__ == '__main__':
     print(all_profiles_result)
     print(new_all_profiles_result)
 
-    RESULT = ''
+    RESULT = new_all_profiles_result
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'

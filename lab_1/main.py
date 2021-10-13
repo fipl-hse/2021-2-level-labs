@@ -111,7 +111,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
     len_top_n_words_unknown_profile = len(top_n_words_unknown_profile)
     for word in top_n_words_profile_to_compare:
-        if len(top_n_words_profile_to_compare) == len(top_n_words_unknown_profile) and \
+        if (len(top_n_words_profile_to_compare) == len(top_n_words_unknown_profile)) and \
                 (word in top_n_words_unknown_profile):
             share_of_common_frequency_words = float(1)
         else:
@@ -171,9 +171,9 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict,\
     for word in profile_to_compare['freq'].keys():
         list_words.append(word)
     profile_advanced['max_length_word'] = max(list_words, key=len)
-    profile_advanced['min_length_word'] = min(profile_to_compare['freq'])
+    profile_advanced['min_length_word'] = min(list_words, key=len)
     len_value = 0
-    for value in profile_to_compare['freq']:
+    for value in profile_to_compare['freq'].keys():
         len_value += len(value)
     profile_advanced['average_token_length'] = len_value / len(profile_to_compare['freq'])
     profile_advanced['sorted_common'] = sorted(common_words)
@@ -194,11 +194,11 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, \
         return None
     language_profiles = [compare_profiles_advanced(unknown_profile, profile, top_n)
             for profile in profiles if len(languages) == 0 or profile['name'] in languages]
-    shares_sorted_name = sorted(language_profiles, key=lambda profile: profile['name'])
-    shares_sorted_name_and_score = sorted(shares_sorted_name, key=lambda profile: profile['score'])
-    if len(shares_sorted_name_and_score) == 0:
+    sorted_name = sorted(language_profiles, key=lambda profile: profile['name'])
+    sorted_name_and_score = sorted(sorted_name, key=lambda profile: profile['score'])
+    if len(sorted_name_and_score) == 0:
         return None
-    language_with_max_shares = shares_sorted_name_and_score[-1]['name']
+    language_with_max_shares = sorted_name_and_score[-1]['name']
     return language_with_max_shares
 
 def load_profile(path_to_file: str) -> dict or None:
