@@ -1,7 +1,7 @@
 """
 Programming 2021
 Seminar 6
-Data Type: List
+Data Type: Lists
 """
 
 # Common information about lists
