@@ -5,23 +5,29 @@ Language classification
 
 from lab_1.main import tokenize, remove_stop_words
 
+
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    freqs = {}
-    full_length = len(tokens)
-    for word in tokens:
-        if word not in freqs.keys():
-            freqs[word] = 1
-        else:
-            freqs[word] += 1
-    for k, v in freqs.items():
-        freqs[k] = int(freqs[v]/full_length)
+    if not isinstance(tokens, list):
+        return None
+    for token in tokens:
+        if not isinstance(token, str):
+            return None
+    else:
+        freqs = {}
+        full_length = len(tokens)
+        for word in tokens:
+            if word not in freqs.keys():
+                freqs[word] = 1
+            else:
+                freqs[word] += 1
+        freqs.update((x, round(y / full_length, ndigits = 5)) for x, y in freqs.items())
 
-    return freqs
+        return freqs
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
