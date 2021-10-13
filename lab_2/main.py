@@ -9,7 +9,7 @@ from lab_1.main import tokenize, remove_stop_words
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
-    :param tokens: a list of tokens
+    :param tokens: alist of tokens
     :return: a dictionary with frequencies
     """
     if not isinstance(tokens, list):
