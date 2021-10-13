@@ -13,9 +13,18 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+
     if not isinstance(tokens, list):
         return None
 
+    freq_dict = {}
+    for word in tokens:
+        if not isinstance(word, str):
+            return None
+        else:
+            freq_dict[word] = round(tokens.count(word)/len(tokens), 5)
+
+    return freq_dict
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -26,7 +35,14 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+        return None
+    profiles_dict = {}
+    for text in texts_corpus:
+        for label in language_labels:
+            profiles_dict[label] = text
+    #return profiles_dict
+
 
 
 def get_language_features(language_profiles: dict) -> list or None:
