@@ -133,7 +133,7 @@ jobs:
           chmod +x automation/run-coverage.sh
           automation/run-coverage.sh
       - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@1.1.3
+        uses: coverallsapp/github-action@master
         with:
           parallel-finished: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
