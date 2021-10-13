@@ -112,14 +112,14 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if (not isinstance(unknown_text_vector, list)
             or not isinstance(known_text_vector, list)):
         return None
-    for element in unknown_text_vector:
-        if not isinstance(element, int) and not isinstance(element, float):
+    for vector in unknown_text_vector:
+        if not isinstance(vector, int) and not isinstance(vector, float):
             return None
-    for element in known_text_vector:
-        if not isinstance(element, int) and not isinstance(element, float):
+    for vector in known_text_vector:
+        if not isinstance(vector, int) and not isinstance(vector, float):
             return None
-    # math.dist returns the Euclidean distance between two points a and b
-    # roughly equivalent to: sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))
+    # math.dist(a, b) returns the Euclidean distance between two points a and b
+    # roughly equivalent to: (sum((px - qx) ** 2.0 for px, qx in zip(p, q)))**0,5
     distance = math.dist(unknown_text_vector, known_text_vector)
     return round(distance, 5)
 
@@ -132,7 +132,26 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)):
+        return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    for vector in unknown_text_vector:
+        if not isinstance(vector, int) and not isinstance(vector, float):
+            return None
+    # create list with distances
+    # use for finding distances the function calculate_distance
+    distances = []
+    for list_of_vectors in known_text_vectors:
+        # check for bad input
+        for vector in list_of_vectors:
+            if not isinstance(vector, int) and not isinstance(vector, float):
+                return None
+        distances.append(calculate_distance(unknown_text_vector, list_of_vectors))
+    # return [language_label, distance] with the min distance
+    return list(min(zip(language_labels, distances)))
 
 
 # 8
