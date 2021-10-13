@@ -122,7 +122,21 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+
+    if (not isinstance(unknown_text_vector, list) or
+            not isinstance(known_text_vectors, list) or
+            not isinstance(language_labels, list) or
+            not all(isinstance(i, (float, int)) for i in unknown_text_vector) or
+            not all(isinstance(i, list) for i in known_text_vectors) or
+            not all(isinstance(i, str) for i in language_labels) or
+            not len(known_text_vectors) == len(language_labels)):
+        return None
+    all_dist = []
+    for i in known_text_vectors:
+        all_dist.append(calculate_distance(unknown_text_vector, i))
+    dist = sorted(all_dist)[0]
+    lang = language_labels[all_dist.index(dist)]
+    return [lang, dist]
 
 
 # 8
