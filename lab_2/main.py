@@ -71,7 +71,18 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict) or not isinstance(original_text, list):
+        return None
+
+    text_vector = []
+    for word in get_language_features(language_profiles):
+        if word in original_text:
+            for d in language_profiles:
+                if word in language_profiles[d]:
+                    text_vector.append(language_profiles[d][word])
+        else:
+            text_vector.append(0)
+    return text_vector
 
 
 # 6
