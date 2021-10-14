@@ -114,13 +114,13 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         ):
         return None
     distance = 0
-    for index, value in enumerate(unknown_text_vector):
+    for index, _ in enumerate(unknown_text_vector):
         distance += ((unknown_text_vector[index] - known_text_vector[index])**2)
     distance = round(distance**0.5, 5)
     return distance
 
 
-def predict_language_score(unknown_text_vector: list, known_text_vectors: list, 
+def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
                            language_labels: list) -> [str, int] or None:
     if not (
         isinstance(unknown_text_vector, list)
@@ -157,7 +157,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         ):
         return None
     distance = 0
-    for index, value in enumerate(unknown_text_vector):
+    for index, _ in enumerate(unknown_text_vector):
         distance += abs(unknown_text_vector[index] - known_text_vector[index])
     distance = round(distance, 5)
     return distance
@@ -197,14 +197,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for i in sorted_distances:
         index = distances.index(i)
         langs.append(language_labels[index])
-    lang_dist = sorted(zip(langs, sorted_distances), key=lambda x: x[1])
+    langs = sorted(zip(langs, sorted_distances), key=lambda x: x[1])
     lang_count = {}
-    for lang, dist in lang_dist:
+    for lang, _ in langs:
         if lang not in lang_count:
             lang_count[lang] = 0
         lang_count[lang] += 1
-    knn_predict = [max(lang_count, key=lang_count.get), min(sorted_distances)]
-    return knn_predict
+    return [max(lang_count, key=lang_count.get), min(sorted_distances)]
 
 
 # 10 implementation
