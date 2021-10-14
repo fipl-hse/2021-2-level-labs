@@ -88,7 +88,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     for freq_dict in language_profiles.values():
         for index, token in freq_dict.items():
             if token > lang_profiles_mix.get(index, 0):
-                    lang_profiles_mix[index] = token
+                lang_profiles_mix[index] = token
     lang_features = get_language_features(language_profiles)
     text_vector = []
     for feature in lang_features:
@@ -114,13 +114,14 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         ):
         return None
     distance = 0
-    for i in range(len(unknown_text_vector)):
-        distance += ((unknown_text_vector[i] - known_text_vector[i])**2)
+    for index, value in enumerate(unknown_text_vector):
+        distance += ((unknown_text_vector[index] - known_text_vector[index])**2)
     distance = round(distance**0.5, 5)
     return distance
 
 
-def predict_language_score(unknown_text_vector: list, known_text_vectors: list, language_labels: list) ->  [str, int] or None:
+def predict_language_score(unknown_text_vector: list, known_text_vectors: list, 
+                           language_labels: list) -> [str, int] or None:
     if not (
         isinstance(unknown_text_vector, list)
         and all(isinstance(n, (int, float)) for n in unknown_text_vector)
@@ -156,8 +157,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         ):
         return None
     distance = 0
-    for i in range(len(unknown_text_vector)):
-        distance += abs(unknown_text_vector[i] - known_text_vector[i])
+    for index, value in enumerate(unknown_text_vector):
+        distance += abs(unknown_text_vector[index] - known_text_vector[index])
     distance = round(distance, 5)
     return distance
 
@@ -196,10 +197,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for i in sorted_distances:
         index = distances.index(i)
         langs.append(language_labels[index])
-    langs_counter = {}
-    for l in set(langs):
-        langs_counter[l] = langs.count(l)
-    knn_predict = [max(langs_counter, key=langs_counter.get), min(sorted_distances)]
+    lang_dist = sorted(zip(langs, sorted_distances), key=lambda x: x[1])
+    lang_count = {}
+    for lang, dist in lang_dist:
+        if lang not in lang_count:
+            lang_count[lang] = 0
+        lang_count[lang] += 1
+    knn_predict = [max(lang_count, key=lang_count.get), min(sorted_distances)]
     return knn_predict
 
 
@@ -224,7 +228,7 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     for freq_dict in language_profiles.values():
         for index, token in freq_dict.items():
             if token > lang_profiles_mix.get(index, 0):
-                    lang_profiles_mix[index] = token
+                lang_profiles_mix[index] = token
     lang_features = get_language_features(language_profiles)
     text_vector_standard = []
     for feature in lang_features:
@@ -233,9 +237,9 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
         else:
             text_vector_standard.append(0)
     text_vector_sparse = []
-    for i, v in enumerate(text_vector_standard):
-        if v != 0:
-            text_vector_sparse.append([i, v])
+    for index, value in enumerate(text_vector_standard):
+        if value != 0:
+            text_vector_sparse.append([index, value])
     return text_vector_sparse
 
 
@@ -256,14 +260,14 @@ def calculate_distance_sparse(unknown_text_vector: list,
     unknown_text_dict = dict(unknown_text_vector)
     known_text_dict = dict(known_text_vector)
     dict_mix = unknown_text_dict.copy()
-    for k, v in known_text_dict.items():
-        if k not in dict_mix:
-            dict_mix[k] = v
+    for key, value in known_text_dict.items():
+        if key not in dict_mix:
+            dict_mix[key] = value
         else:
-            dict_mix[k] = dict_mix[k] - known_text_dict[k]
+            dict_mix[key] = dict_mix[key] - known_text_dict[key]
     distance = 0
-    for v in dict_mix.values():
-        distance += v**2
+    for value in dict_mix.values():
+        distance += value**2
     return round(distance**0.5, 5)
 
 
@@ -297,7 +301,7 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
         index = distances.index(i)
         langs.append(language_labels[index])
     langs_counter = {}
-    for l in set(langs):
-        langs_counter[l] = langs.count(l)
+    for lang in set(langs):
+        langs_counter[lang] = langs.count(lang)
     knn_predict = [max(langs_counter, key=langs_counter.get), min(sorted_distances)]
     return knn_predict
