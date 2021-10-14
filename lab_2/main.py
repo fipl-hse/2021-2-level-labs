@@ -122,6 +122,12 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
                            language_labels: list) -> [str, int] or None:
+     """
+    Predicts unknown text label and its distance to the closest known text
+    :param unknown_text_vector: vector for unknown text
+    :param known_text_vectors: a list of vectors for known texts
+    :param language_labels: language labels for each known text
+    """
     if not (
         isinstance(unknown_text_vector, list)
         and all(isinstance(n, (int, float)) for n in unknown_text_vector)
@@ -188,18 +194,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         calc_dist = calculate_distance
     elif metric == 'manhattan':
         calc_dist = calculate_distance_manhattan
-    distances = []
-    for known_text_vector in known_text_vectors:
-        distance = calc_dist(unknown_text_vector, known_text_vector)
-        distances.append(distance)
+    distances = [calc_dist(unknown_text_vector, knw_vector) for knw_vector in known_text_vectors]
     sorted_distances = (sorted(distances))[:k]
-    langs = []
-    for i in sorted_distances:
-        index = distances.index(i)
-        langs.append(language_labels[index])
+    for dist in sorted_distances:
+        langs = [language_labels[distances.index(dist)] for dist in sorted_distances]
     langs = sorted(zip(langs, sorted_distances), key=lambda x: x[1])
     lang_count = {}
-    for lang, _ in langs:
+    for lang, dist in langs:
         if lang not in lang_count:
             lang_count[lang] = 0
         lang_count[lang] += 1
