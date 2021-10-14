@@ -199,7 +199,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     langs = [language_labels[distances.index(dist)] for dist in sorted_distances]
     langs = sorted(zip(langs, sorted_distances), key=lambda x: x[1])
     lang_count = {}
-    for lang, dist in langs:
+    for lang, _ in langs:
         if lang not in lang_count:
             lang_count[lang] = 0
         lang_count[lang] += 1
