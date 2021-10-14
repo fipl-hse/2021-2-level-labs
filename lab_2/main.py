@@ -120,19 +120,12 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     return distance
 
 
-def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
-                           language_labels: list) -> [str, int] or None:
-    """
-    Predicts unknown text label and its distance to the closest known text
-    :param unknown_text_vector: vector for unknown text
-    :param known_text_vectors: a list of vectors for known texts
-    :param language_labels: language labels for each known text
-    """
+def predict_language_score(unknown_text_vector: list, known_text_vectors: list, language_labels: list) ->  [str, int] or None:
     if not (
         isinstance(unknown_text_vector, list)
         and all(isinstance(n, (int, float)) for n in unknown_text_vector)
         and isinstance(known_text_vectors, list)
-        and all(isinstance(m, (int, float)) for m in known_text_vectors)
+        and all(isinstance(m, list) for m in known_text_vectors)
         and isinstance(language_labels, list)
         and all(isinstance(s, str) for s in language_labels)
         and len(known_text_vectors) == len(language_labels)
