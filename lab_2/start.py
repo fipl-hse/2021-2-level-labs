@@ -13,7 +13,6 @@ from lab_2.main import (
     calculate_distance,
     predict_language_score,
     predict_language_knn,
-    get_text_vector_sparse,
     calculate_distance_sparse,
     predict_language_knn_sparse
 )
