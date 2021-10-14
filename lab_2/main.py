@@ -2,8 +2,8 @@
 Lab 2
 Language classification
 """
-from lab_1.main import tokenize, remove_stop_words
 from math import dist
+from lab_1.main import tokenize, remove_stop_words
 
 
 # 4
