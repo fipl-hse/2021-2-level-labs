@@ -197,8 +197,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     knn = sorted(zip(language_labels, distance))[:k]
     # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
     language_labels_counts = {}
-    for key, val in knn:
-        language_labels_counts[key] = language_labels_counts.get(key, 0) + 1
+    for key in knn:
+        language_labels_counts[key[0]] = language_labels_counts.get(key[0], 0) + 1
     # {'de': 2, 'la': 1}
     return [max(language_labels_counts, key=language_labels_counts.get), min(distance)]
 
