@@ -3,6 +3,20 @@ Language detection starter
 """
 
 import os
+from lab_2.main import (
+    tokenize,
+    remove_stop_words,
+    get_freq_dict,
+    get_language_profiles,
+    get_language_features,
+    get_text_vector,
+    calculate_distance,
+    predict_language_score,
+    predict_language_knn,
+    get_text_vector_sparse,
+    calculate_distance_sparse,
+    predict_language_knn_sparse
+)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
