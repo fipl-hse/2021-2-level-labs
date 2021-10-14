@@ -196,8 +196,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         calc_dist = calculate_distance_manhattan
     distances = [calc_dist(unknown_text_vector, knw_vector) for knw_vector in known_text_vectors]
     sorted_distances = (sorted(distances))[:k]
-    for dist in sorted_distances:
-        langs = [language_labels[distances.index(dist)] for dist in sorted_distances]
+    langs = [language_labels[distances.index(dist)] for dist in sorted_distances]
     langs = sorted(zip(langs, sorted_distances), key=lambda x: x[1])
     lang_count = {}
     for lang, dist in langs:
