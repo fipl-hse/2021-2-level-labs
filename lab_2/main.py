@@ -121,8 +121,27 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
-
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)
+            or len(known_text_vectors) != len(language_labels)):
+        return None
+    for i in unknown_text_vector:
+        if not isinstance(i, (float, int)):
+            return None
+    for i in known_text_vectors:
+        if not isinstance(i, list):
+            return None
+    for i in language_labels:
+        if not isinstance(i, str):
+            return None
+    dictionary = {}
+    for i in range(len(known_text_vectors)):
+        dictionary[language_labels[i]] = calculate_distance(unknown_text_vector, known_text_vectors[i])
+    min_value = min(dictionary.values())
+    for key, value in dictionary.items():
+        if value == min_value:
+            return [key, value]
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
