@@ -27,6 +27,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     return freq_dict
 
 
+
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
     """
     Computes language profiles for a collection of texts
@@ -35,13 +36,21 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
+
     if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
+    for label in language_labels:
+        if not label:
+            return None
+    for label in texts_corpus:
+        if not label:
+            return None
+
     profiles_dict = {}
-    for text in texts_corpus:
-        for label in language_labels:
-            profiles_dict[label] = text
-    #return profiles_dict
+    for label in range(len(language_labels)):
+        profiles_dict[language_labels[label]] = get_freq_dict(texts_corpus[label])
+
+    return profiles_dict
 
 
 
@@ -51,7 +60,15 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict) or not language_profiles:
+        return None
+
+    features = []
+    for lang_profile in language_profiles.values():
+        for word in lang_profile.keys():
+            features.append(word)
+    return sorted(features)
+
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -61,7 +78,20 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict) or not language_profiles:
+        return None
+
+    features = get_language_features(language_profiles)
+    vector_list = []
+    for word in features:
+        if word in original_text:
+            for lang_profile in language_profiles.values():
+                if word in lang_profile.keys():
+                    vector_list.append(lang_profile[word])
+        else:
+            vector_list.append(0)
+
+    return vector_list
 
 
 # 6
