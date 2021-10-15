@@ -12,6 +12,9 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
 
+    if not isinstance(text, str):
+        return None
+
     alphabet = 'abcdefghijklmnopqrstuvwxyzäöüßāīūēō'
     text = input('Введите строку: ')
     for i in text:
@@ -34,6 +37,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :return: a list of tokens without stop words
     """
 
+    if not (
+            isinstance(tokens, list)
+            and isinstance(stop_words, list)):
+        return None
+
     a = """0123456789=+'";:?/\|><.,@#№$%^&*()-_~`"""
     oth = list(a)
     tokens = list(input('Введите список токенов: ').split())
@@ -55,8 +63,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
                     n_tokens.append(i)
         else:
             return None
-    else:
-        return None
 
     return n_tokens
 
@@ -67,6 +73,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+
+    if not isinstance(tokens, list):
+        return None
 
     a = """0123456789=+'";:?/\|><.,@#№$%^&*()-_~`"""
     oth = list(a)
@@ -97,7 +106,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    
+    if not (
+            isinstance(freq_dict, dict)
+            and isinstance(top_n, int)):
+        return None
+
     num = int(input('Число слов в топе: '))
     freq_dict = {}
     while True:
@@ -110,7 +123,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
         freq_dict[k] = v
     dlist = []
     for key in freq_dict.keys():
-        dictList.append(key)
+        dlist.append(key)
     dlist_1 = dlist[:num]
     
     return dlist_1
@@ -161,8 +174,8 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
 
         for i in unknown_profile_top_n:
             if i in profile_to_compare_top_n:
-                common +=1 
-        len_prof= len(profile_to_compare_top_n)
+                common += 1
+        len_prof = len(profile_to_compare_top_n)
         res = round((common/len_prof), 2)
         
         return res
@@ -279,20 +292,3 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
         
     return reports[0]["name"]
-
-def load_profile(path_to_file: str) -> dict or None:
-    """
-    Loads a language profile
-    :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
-    """
-    pass
-
-
-def save_profile(profile: dict) -> int:
-    """
-    Saves a language profile
-    :param profile: a dictionary
-    :return: 0 if everything is ok, 1 if not
-    """
-    pass
