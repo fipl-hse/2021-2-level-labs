@@ -18,13 +18,13 @@ def get_freq_dict(tokens: list) -> dict or None:
     if not isinstance(tokens, list) or not all(isinstance(i, str) for i in tokens):
         return None
     freq_dict = {}
-    for i in tokens:
-        if i in freq_dict:
-            freq_dict[i] += 1/len(tokens)
+    for word in tokens:
+        if word in freq_dict:
+            freq_dict[word] += 1/len(tokens)
         else:
-            freq_dict[i] = 1/len(tokens)
-    for i in freq_dict:
-        freq_dict[i] = round(freq_dict[i], 5)
+            freq_dict[word] = 1/len(tokens)
+    for word in freq_dict:
+        freq_dict[word] = round(freq_dict[word], 5)
     return freq_dict
 
 
@@ -42,8 +42,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             not all(isinstance(i, str) for i in language_labels)):
         return None
     lang_pr = {}
-    for i in range(len(texts_corpus)):
-        lang_pr[language_labels[i]] = get_freq_dict(texts_corpus[i])
+    for text in range(len(texts_corpus)):
+        lang_pr[language_labels[text]] = get_freq_dict(texts_corpus[text])
     return lang_pr
 
 
@@ -60,8 +60,8 @@ def get_language_features(language_profiles: dict) -> list or None:
             not language_profiles.items()):
         return None
     features = []
-    for i in language_profiles.values():
-        for word in i:
+    for profile in language_profiles.values():
+        for word in profile:
             if word not in features:
                 features.append(word)
     return sorted(features)
@@ -83,12 +83,12 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         return None
     unique_words = get_language_features(language_profiles)
     text_vector = []
-    for i in unique_words:
+    for word in unique_words:
         freq_list = []
-        if i in original_text:
+        if word in original_text:
             for lang in language_profiles.values():
-                if i in lang:
-                    freq_list.append(lang.get(i))
+                if word in lang:
+                    freq_list.append(lang.get(word))
         else:
             freq_list.append(0)
         text_vector.append(sorted(freq_list)[0])
@@ -147,7 +147,16 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+
+    if (not isinstance(unknown_text_vector, list) or
+            not isinstance(known_text_vector, list) or
+            not all(isinstance(i, (float, int)) for i in unknown_text_vector) or
+            not all(isinstance(i, (float, int)) for i in known_text_vector)):
+        return None
+    man_dif = []
+    for i in range(len(unknown_text_vector)):
+        man_dif.append(abs(unknown_text_vector[i] - known_text_vector[i]))
+    return round(sum(man_dif), 5)
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
