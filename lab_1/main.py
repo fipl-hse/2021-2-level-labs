@@ -25,6 +25,7 @@ def tokenize(text: str) -> list or None:
     
     return a
 
+
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
@@ -58,8 +59,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
         return None
 
     return n_tokens
-
-remove_stop_words()
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
