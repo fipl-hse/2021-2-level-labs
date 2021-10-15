@@ -11,23 +11,19 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    return true
 
-def tokenize():
     alphabet = 'abcdefghijklmnopqrstuvwxyzäöüßāīūēō'
-    s = input('Введите строку: ')
-    for i in s:
+    text = input('Введите строку: ')
+    for i in text:
         if i not in alphabet:
-            s = s.replace(i, '')
+            text = text.replace(i, '')
     import re
-    s_1 = re.sub(r'[^\w\s]', '', s)
-    s_2 = re.sub(r'[\d]', '', s_1)
-    a = s_2.split(' ')
+    text_1 = re.sub(r'[^\w\s]', '', text)
+    text_2 = re.sub(r'[\d]', '', text_1)
+    a = text_2.split(' ')
     a = [item.lower() for item in a]
-    print (a)
-
-tokenize ()
-
+    
+    return a
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
@@ -36,9 +32,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
 
-def remove_stop_words():
     a = """0123456789=+'";:?/\|><.,@#№$%^&*()-_~`"""
     oth = list(a)
     tokens = list(input('Введите список токенов: ').split())
@@ -47,7 +41,7 @@ def remove_stop_words():
 
     for x in swords:
         if x in oth:
-            print (tokens)
+            print(tokens)
 
     for i in tokens:
         if i in oth:
@@ -55,15 +49,15 @@ def remove_stop_words():
 
     if isinstance(tokens, list) and isinstance(swords, list):
         if all(isinstance(s, str) for s in tokens):
-             for i in tokens:
-                 if i not in swords:
-                     n_tokens.append(i)
+            for i in tokens:
+                if i not in swords:
+                    n_tokens.append(i)
         else:
             return None
     else:
         return None
 
-    print(n_tokens)
+    return n_tokens
 
 remove_stop_words()
 
@@ -74,9 +68,7 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
 
-def calculate_frequencies():
     a = """0123456789=+'";:?/\|><.,@#№$%^&*()-_~`"""
     oth = list(a)
     tokens = list(input('Введите список токенов: ').split())
@@ -85,19 +77,18 @@ def calculate_frequencies():
         if i in oth:
             return None
 
-    Dict = {}
+    dict = {}
     for key in tokens:
         key = key.lower()
-        if key in Dict:
-            value = Dict[key]
-            Dict[key] = value + 1
+        if key in dict:
+            value = dict[key]
+            dict[key] = value + 1
         else:
-            Dict[key] = 1
+            dict[key] = 1
 
-    fin = sorted(Dict, key=lambda x: int(Dict[x]), reverse=True)
-    print(fin)
-
-calculate_frequencies()
+    fin = sorted(dict, key=lambda x: int(dict[x]), reverse=True)
+    
+    return fin
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -107,9 +98,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
-    pass
-
-def  get_top_n_words():
     
     num = int(input('Число слов в топе: '))
     freq_dict = {}
@@ -121,12 +109,12 @@ def  get_top_n_words():
         print('Ведите частотность: ')
         v = input()
         freq_dict[k] = v
-    dictList = []
+    dlist = []
     for key in freq_dict.keys():
         dictList.append(key)
-    dictlist = dictList[:num]
-    return dictList
-get_top_n_words()
+    dlist_1 = dlist[:num]
+    
+    return dlist_1
 
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
@@ -137,8 +125,6 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
-def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     
     if not (isinstance(language, str)
             and isinstance(text, str)
@@ -152,6 +138,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     tokens = remove_stop_words(tokens, stop_words)
     freq_dict = calculate_frequencies(tokens)
     lang_prof = {'name': language, 'freq': freq_dict, 'n_words': len(freq_dict)}
+    
     return lang_prof
 
 
@@ -163,9 +150,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     :param top_n: a number of the most common words
     :return: the distance
     """
-    pass
-
-def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
     
     if not (isinstance(unknown_profile, dict)
             and isinstance(profile_to_compare, dict)
@@ -181,6 +165,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
                 common +=1 
         len_prof= len(profile_to_compare_top_n)
         res = round((common/len_prof), 2)
+        
         return res
 
 
@@ -193,10 +178,6 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
-
-
-def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top_n: int) -> str or None:
     
     if not (isinstance(unknown_profile, dict)
             and isinstance(profile_1, dict)
@@ -229,10 +210,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
     :return: a dictionary with 7 keys – name, score, common, sorted_common, max_length_word,
     min_length_word, average_token_length
     """
-    pass
 
-def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> list or None:
-    
     if (not isinstance(unknown_profile, dict)
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
@@ -263,6 +241,7 @@ def compare_profiles_advanced(unknown_profile: dict, profile_to_compare: dict, t
               'min_length_word': min_length_word,
               'average_token_length': average_token_length,
               'sorted_common': sorted_common}
+    
     return report
 
 
@@ -275,9 +254,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
     :param top_n: a number of the most common words
     :return: a language
     """
-    pass
-
-def detect_language_advanced(unknown_profile: dict, profiles: list, languages: list, top_n: int) -> str or None:
+    
     if not (
             isinstance(unknown_profile, dict)
             and isinstance(profiles, list)
@@ -301,6 +278,7 @@ def detect_language_advanced(unknown_profile: dict, profiles: list, languages: l
         max_scores = max(list_with_only_scores)
         number_of_max_scores = list_with_only_scores.count(max_scores)
         reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
+        
     return reports[0]["name"]
 
 def load_profile(path_to_file: str) -> dict or None:
