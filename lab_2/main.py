@@ -5,7 +5,6 @@ Language classification
 
 from lab_1.main import tokenize, remove_stop_words
 
-
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -93,6 +92,22 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param known_text_vector: vector for known text
     """
     pass
+    if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vector,list):
+        return None
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        return None
+    for el_unknown_vector in unknown_text_vector:
+        if not isinstance(el_unknown_vector, (float, int)):
+            return None
+    for el_known_vector in known_text_vector:
+        if not isinstance(el_known_vector, (float, int)):
+            return None
+    distance = 0
+    for i in range(len(unknown_text_vector)):
+        distance += ((unknown_text_vector[i] - known_text_vector[i]) ** 2)
+    distance = round(distance ** 0.5, 5)
+    return distance
+
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -104,6 +119,20 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param language_labels: language labels for each known text
     """
     pass
+
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list):
+        return None
+    all_distance = []
+    for vectors in known_text_vectors:
+        if not isinstance(vectors,list) or len(language_labels) != len(known_text_vectors):
+            return None
+        distance = calculate_distance(unknown_text_vector, vectors)
+        all_distance.append(distance)
+    min_distance = min(all_distance)
+    language_score = [language_labels[all_distance.index(min_distance)], min_distance]
+    return language_score
+
 
 
 # 8
