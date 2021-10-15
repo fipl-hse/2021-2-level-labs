@@ -3,8 +3,9 @@ Lab 2
 Language classification
 """
 
-from lab_1.main import tokenize, remove_stop_words
 from math import sqrt
+from lab_1.main import tokenize, remove_stop_words
+
 
 
 def get_freq_dict(tokens: list) -> dict or None:
@@ -147,8 +148,29 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list):
+        return None
 
+    if not isinstance(known_text_vectors, list):
+        return None
+    for known_vector in known_text_vectors:
+        if not isinstance(known_vector, list):
+            return None
+
+    if len(known_text_vectors) != len(language_labels):
+        return None
+
+    if not isinstance(language_labels, list):
+        return None
+
+    detected_language = ['', 1]
+    for i, known_vector in enumerate(known_text_vectors):
+        tmp = calculate_distance(unknown_text_vector, known_vector)
+        if detected_language[1] > tmp:
+            detected_language[1] = tmp
+            detected_language[0] = language_labels[i]
+
+    return detected_language
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
