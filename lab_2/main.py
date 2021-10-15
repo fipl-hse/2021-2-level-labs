@@ -51,7 +51,19 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    features = []
+    for dictionaries in language_profiles.values():
+        for token in dictionaries.keys():
+            features.append(token)
+    if not features:
+        return None
+    return sorted(features)
+
+
+
+
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -61,7 +73,22 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
+        return None
+    text_vector = []
+    for uniq_word in get_language_features(language_profiles):
+        if uniq_word in original_text:
+            for language in language_profiles.values():
+                if uniq_word in language.keys():
+                    text_vector.append(language.get(uniq_word))
+        else:
+            text_vector.append(0)
+    return text_vector
+
+
+
+
+
 
 
 # 6
