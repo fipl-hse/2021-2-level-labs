@@ -212,7 +212,31 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not isinstance(unknown_text_vector, list):
+        return None
+
+    if not isinstance(known_text_vectors, list):
+        return None
+    for known_vector in known_text_vectors:
+        if not isinstance(known_vector, list):
+            return None
+
+    if len(known_text_vectors) != len(language_labels):
+        return None
+
+    if not isinstance(language_labels, list):
+        return None
+
+    distances = []
+
+    for i, known_vector in enumerate(known_text_vectors):
+        distances.append([language_labels[i], calculate_distance_manhattan(unknown_text_vector, known_vector)])
+
+    distances.sort()
+    distances = distances[:k]
+
+    for language in distances:
+
 
 
 # 10 implementation
