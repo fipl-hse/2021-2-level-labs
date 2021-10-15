@@ -2,9 +2,8 @@
 Lab 2
 Language classification
 """
-
-from lab_1.main import tokenize, remove_stop_words
-
+from lab_1.main import tokenize
+from lab_1.main import remove_stop_words
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -13,8 +12,16 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
 
+    if not isinstance(tokens, list):
+        return None
+    freq_dict = {}
+    for token in tokens:
+        if not isinstance(token, str):
+            return None
+        if token in tokens:
+            freq_dict[token] = round(tokens.count(token)/len(tokens), 5)
+    return freq_dict
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
     """
@@ -24,7 +31,18 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+        return None
+    for texts in texts_corpus:
+        if not isinstance(texts, list):
+            return None
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+    language_profiles = {}
+    for texts, label in zip(texts_corpus, language_labels):
+        language_profiles[label] = get_freq_dict(texts)
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
