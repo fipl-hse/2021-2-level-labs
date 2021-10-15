@@ -85,12 +85,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     text_vector = []
     for word in unique_words:
         freq_list = []
-        if word in original_text:
-            for lang in language_profiles.values():
-                if word in lang:
-                    freq_list.append(lang.get(word))
-        else:
-            freq_list.append(0)
+        for lang in language_profiles.values():
+            if word in lang:
+                freq_list.append(lang.get(word) if word in original_text else 0)
         text_vector.append(sorted(freq_list)[0])
     return text_vector
 
@@ -109,8 +106,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             not all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     sq_dif = []
-    for i in range(len(unknown_text_vector)):
-        sq_dif.append((unknown_text_vector[i] - known_text_vector[i])**2)
+    for vector in range(len(unknown_text_vector)):
+        sq_dif.append((unknown_text_vector[vector] - known_text_vector[vector])**2)
     return round(math.sqrt(sum(sq_dif)), 5)
 
 
@@ -132,8 +129,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             not len(known_text_vectors) == len(language_labels)):
         return None
     all_dist = []
-    for i in known_text_vectors:
-        all_dist.append(calculate_distance(unknown_text_vector, i))
+    for vector in known_text_vectors:
+        all_dist.append(calculate_distance(unknown_text_vector, vector))
     dist = sorted(all_dist)[0]
     lang = language_labels[all_dist.index(dist)]
     return [lang, dist]
@@ -154,8 +151,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             not all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     man_dif = []
-    for i in range(len(unknown_text_vector)):
-        man_dif.append(abs(unknown_text_vector[i] - known_text_vector[i]))
+    for vector in range(len(unknown_text_vector)):
+        man_dif.append(abs(unknown_text_vector[vector] - known_text_vector[vector]))
     return round(sum(man_dif), 5)
 
 
