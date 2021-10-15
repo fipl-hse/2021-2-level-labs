@@ -15,13 +15,13 @@ def get_freq_dict(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
-    for i in tokens:
-        if not i:
+    for token in tokens:
+        if not token:
             return None
 
     freq_dict = {}
-    for i in tokens:
-        freq_dict[i] = round(tokens.count(i)/len(tokens), 5)
+    for token in tokens:
+        freq_dict[token] = round(tokens.count(token)/len(tokens), 5)
     return freq_dict
 
 
@@ -35,11 +35,11 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     """
     if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
-    for i in texts_corpus:
-        if not i:
+    for text in texts_corpus:
+        if not text:
             return None
-    for i in language_labels:
-        if not i:
+    for label in language_labels:
+        if not label:
             return None
 
     language_profiles = {}
@@ -58,8 +58,8 @@ def get_language_features(language_profiles: dict) -> list or None:
         return None
 
     features = []
-    for i in language_profiles.values():
-        for key in i.keys():
+    for dictionary in language_profiles.values():
+        for key in dictionary.keys():
             features.append(key)
     return sorted(features)
 
@@ -77,9 +77,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     text_vector = []
     for word in get_language_features(language_profiles):
         if word in original_text:
-            for d in language_profiles:
-                if word in language_profiles[d]:
-                    text_vector.append(language_profiles[d][word])
+            for dictionary in language_profiles:
+                if word in language_profiles[dictionary]:
+                    text_vector.append(language_profiles[dictionary][word])
         else:
             text_vector.append(0)
     return text_vector
