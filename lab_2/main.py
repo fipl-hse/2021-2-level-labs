@@ -13,7 +13,12 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    return
+    if not (isinstance(tokens, list) and all(isinstance(s, str) for s in tokens)):
+        return None
+    freq_dict = {}
+    for i in tokens:
+        freq_dict[i] = round(tokens.count(i) / len(tokens), 5)
+    return freq_dict
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -24,7 +29,15 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not (isinstance(texts_corpus, list)
+            and all(isinstance(i, list) for i in texts_corpus)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)):
+        return None
+    language_profiles = {}
+    for i, n in enumerate(language_labels):
+        language_profiles[n] = get_freq_dict(texts_corpus[i])
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -33,7 +46,13 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not (isinstance(language_profiles, dict) and language_profiles != {}
+            and all(isinstance(i, str)  for i in language_profiles)
+            and all(isinstance(i, dict) for i in language_profiles.values())):
+        return None
+    features = [i for n in language_profiles.values() for i in n if all(n)]
+    features.sort()
+    return features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -43,7 +62,16 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not (isinstance(original_text, list)
+            and all(isinstance(i, str) for i in original_text)
+            and isinstance(language_profiles, dict)
+            and all(isinstance(i, dict) for i in language_profiles.values())):
+        return None
+    text_vector = []
+    features = get_language_features(language_profiles)
+    for i in features:
+        if i == [n for n in original_text]:
+
 
 
 # 6
