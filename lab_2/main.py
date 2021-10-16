@@ -164,7 +164,6 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         distance += abs(num_unk-num_kn)
     return round(distance, 5)
 
-
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
