@@ -13,6 +13,22 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+    if isinstance(tokens,list) == False:
+        return None
+    word_counter = len(tokens)
+    counted_words_dict = {}
+    for token in tokens:
+        if token in counted_words_dict.keys():
+            counted_words_dict[token] = 1
+        else:
+            counted_words_dict[token] += 1
+    for key, value in counted_words_dict.items():
+        counted_words_dict[key] = value / word_counter
+    return counted_words_dict
+
+
+
+
     pass
 
 
