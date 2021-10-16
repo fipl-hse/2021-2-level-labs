@@ -193,13 +193,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     return list_with_language_and_min_distance
 
 
-
-
-
-
-
-
-
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
