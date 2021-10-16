@@ -90,7 +90,20 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list)\
+            or not isinstance(known_text_vector, list):
+        return None
+    for num in unknown_text_vector:
+        if not isinstance(num, (int, float)):
+            return None
+    for num in known_text_vector:
+        if not isinstance(num, (int, float)):
+            return None
+    distance = 0
+    for i in range(len(unknown_text_vector)):
+        distance += (unknown_text_vector[i] - known_text_vector[i])**2
+    distance = round(distance**0.5, 5)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -101,10 +114,27 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
-
-
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list)\
+            or len(language_labels) != len(known_text_vectors):
+        return None
+    predictions = []
+    for vector in known_text_vectors:
+        if not isinstance(vector, list):
+            return None
+        distance = calculate_distance(unknown_text_vector, vector)
+        index = known_text_vectors.index(vector)
+        lang_pred = [language_labels[index], distance]
+        predictions.append(lang_pred)
+    min_dist = ['x', 100]
+    for item in predictions:
+        if item[1] < min_dist[1]:
+            min_dist = item
+    return min_dist
 # 8
+
+
 def calculate_distance_manhattan(unknown_text_vector: list,
                                  known_text_vector: list) -> float or None:
     """
