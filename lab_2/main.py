@@ -94,8 +94,6 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     pass
     if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vector,list):
         return None
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
-        return None
     for el_unknown_vector in unknown_text_vector:
         if not isinstance(el_unknown_vector, (float, int)):
             return None
@@ -121,11 +119,11 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     pass
 
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list):
+            or not isinstance(language_labels, list) or len(language_labels) != len(known_text_vectors):
         return None
     all_distance = []
     for vectors in known_text_vectors:
-        if not isinstance(vectors,list) or len(language_labels) != len(known_text_vectors):
+        if not isinstance(vectors, list):
             return None
         distance = calculate_distance(unknown_text_vector, vectors)
         all_distance.append(distance)
@@ -144,7 +142,19 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param known_text_vector: vector for known text
     """
     pass
-
+    if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vector,list):
+        return None
+    for el_unknown_vector in unknown_text_vector:
+        if not isinstance(el_unknown_vector, (float, int)):
+            return None
+    for el_known_vector in known_text_vector:
+        if not isinstance(el_known_vector, (float, int)):
+            return None
+    distance = 0
+    for i in range(len(unknown_text_vector)):
+        distance += abs(unknown_text_vector[i] - known_text_vector[i])
+    distance = round(distance, 5)
+    return distance
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
@@ -158,6 +168,36 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param metric: specific metric to use while calculating distance
     """
     pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) or not isinstance(k, int) or not isinstance(metric, str) \
+            or len(language_labels) != len(known_text_vectors):
+        return None
+    if metric == "manhattan":
+        distances = [calculate_distance_manhattan(unknown_text_vector, vectors) for vectors in known_text_vectors]
+    elif metric == 'euclid':
+        distances = [calculate_distance(unknown_text_vector, vectors) for vectors in known_text_vectors]
+    sorted_distance = sorted(distances)[:k]
+    languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
+    list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
+    list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
+    dict_of_tuples_and_counts = {}
+    for language, dist in list_of_tuples:
+        if language in dict_of_tuples_and_counts.keys():
+            dict_of_tuples_and_counts[language] += 1
+        else:
+            dict_of_tuples_and_counts[language] = 1
+    print(dict_of_tuples_and_counts)
+    most_frequent_language = max(dict_of_tuples_and_counts, key=dict_of_tuples_and_counts.get)
+    print(most_frequent_language)
+    list_with_language_and_min_distance = [most_frequent_language, float(min(sorted_distance))]
+    return list_with_language_and_min_distance
+
+
+
+
+
+
+
 
 
 # 10 implementation
