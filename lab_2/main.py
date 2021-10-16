@@ -7,7 +7,6 @@ from math import sqrt
 from lab_1.main import tokenize, remove_stop_words
 
 
-
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
@@ -172,6 +171,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
     return detected_language
 
+
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
                                  known_text_vector: list) -> float or None:
@@ -229,14 +229,43 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
 
     distances = []
 
-    for i, known_vector in enumerate(known_text_vectors):
-        distances.append([language_labels[i], calculate_distance_manhattan(unknown_text_vector, known_vector)])
+    if metric == "manhattan":
+        for i, known_vector in enumerate(known_text_vectors):
+            distances.append([language_labels[i], calculate_distance_manhattan(unknown_text_vector, known_vector)])
 
-    distances.sort()
-    distances = distances[:k]
+        distances.sort(key=lambda x: x[1])
+        distances = distances[:k]
 
-    for language in distances:
+        tmp = {}
 
+        for language in distances:
+            if language[0] not in tmp:
+                tmp[language[0]] = 1
+            else:
+                tmp[language[0]] += 1
+
+        max_l_tmp = max(tmp, key=tmp.get)
+        result = [max_l_tmp, distances[0][1]]
+
+    if metric == "euclid":
+        for i, known_vector in enumerate(known_text_vectors):
+            distances.append([language_labels[i], calculate_distance(unknown_text_vector, known_vector)])
+
+        distances.sort(key=lambda x: x[1])
+        distances = distances[:k]
+
+        tmp = {}
+
+        for language in distances:
+            if language[0] not in tmp:
+                tmp[language[0]] = 1
+            else:
+                tmp[language[0]] += 1
+
+        max_l_tmp = max(tmp, key=tmp.get)
+        result = [max_l_tmp, distances[0][1]]
+
+    return result
 
 
 # 10 implementation
