@@ -187,7 +187,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         else:
             dict_of_tuples_and_counts[language] = 1
     print(dict_of_tuples_and_counts)
-    most_frequent_language = max(dict_of_tuples_and_counts, key=dict_of_tuples_and_counts.get)
+    most_frequent_language = max(dict_of_tuples_and_counts.items(), key=lambda x: x[1])[0]
     print(most_frequent_language)
     list_with_language_and_min_distance = [most_frequent_language, float(min(sorted_distance))]
     return list_with_language_and_min_distance
