@@ -68,9 +68,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     if language_profiles == {}:
         return None
     for profile_name, profile in language_profiles.items():
-        if not isinstance(profile_name, str):
-            return None
-        if not isinstance(profile, dict):
+        if not isinstance(profile_name, str) or not isinstance(profile, dict):
             return None
 
     unique = []
@@ -222,6 +220,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if len(known_text_vectors) != len(language_labels) or not isinstance(language_labels, list):
         return None
 
+    # list of calculated distances and their tags with each pair separated
     distances = []
 
     if metric == "manhattan":
@@ -229,38 +228,26 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             distances.append([language_labels[i],
                               calculate_distance_manhattan(unknown_text_vector, known_vector)])
 
-        distances.sort(key=lambda x: x[1])
-        distances = distances[:k]
-
-        tmp = {}
-
-        for language in distances:
-            if language[0] not in tmp:
-                tmp[language[0]] = 1
-            else:
-                tmp[language[0]] += 1
-
-        max_l_tmp = max(tmp, key=tmp.get)
-        result = [max_l_tmp, distances[0][1]]
-
     if metric == "euclid":
         for i, known_vector in enumerate(known_text_vectors):
             distances.append([language_labels[i],
                               calculate_distance(unknown_text_vector, known_vector)])
 
-        distances.sort(key=lambda x: x[1])
-        distances = distances[:k]
+    # sorting by the second value (distance) lists in distance list
+    distances.sort(key=lambda x: x[1])
+    distances = distances[:k]
 
-        tmp = {}
+    # counting the number of each label occurring in the sitances list in tmp
+    tmp = {}
+    for language in distances:
+        if language[0] not in tmp:
+            tmp[language[0]] = 1
+        else:
+            tmp[language[0]] += 1
 
-        for language in distances:
-            if language[0] not in tmp:
-                tmp[language[0]] = 1
-            else:
-                tmp[language[0]] += 1
-
-        max_l_tmp = max(tmp, key=tmp.get)
-        result = [max_l_tmp, distances[0][1]]
+    # getting the biggest value from tmp dict
+    max_l_tmp = max(tmp, key=tmp.get)
+    result = [max_l_tmp, distances[0][1]]
 
     return result
 
@@ -273,7 +260,24 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
+        return None
+    for label, language in language_profiles.items():
+        if not isinstance(label, str) or not isinstance(language, dict):
+            return None
+
+    unique_words = get_language_features(language_profiles)
+    counter = 0
+    text_vector_sparse = []
+    # going through unique tokens and their numbers
+    for i, word in enumerate(unique_words):
+        # if the word is in the original text then we look for it in the profiles and add it
+        # in [position, frequency] format
+        if word in original_text:
+            for profile in language_profiles.values():
+                if word in profile.keys():
+                    text_vector_sparse.append([i, profile[word]])
+    return text_vector_sparse
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
