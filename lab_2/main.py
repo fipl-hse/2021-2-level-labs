@@ -247,11 +247,24 @@ def calculate_distance_sparse(unknown_text_vector: list,
             or not isinstance(known_text_vector, list)):
         return None
     for element in unknown_text_vector:
-        if not isinstance(element, int) and not isinstance(element, float):
+        if not isinstance(element, list):
             return None
     # [[4, 0.2], [6, 0.2], [8, 0.2]]
     unknown_text_vector = dict(unknown_text_vector)
+    # [[0, 1]]
     known_text_vector = dict(known_text_vector)
+    # [[1, 1]]
+    # unite dictionaries
+    difference_unknown_known = unknown_text_vector | known_text_vector
+    for key, val in unknown_text_vector.items():
+        if key in known_text_vector:
+            difference_unknown_known[key] = val - known_text_vector[key]
+    # (sum(val ** 2 for val in difference_unknown_known.values())) ** 0.5
+    euclidean_distance = 0
+    for val in difference_unknown_known.values():
+        euclidean_distance += val ** 2
+    euclidean_distance **= 0.5
+    return round(euclidean_distance, 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -264,4 +277,24 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)
+            or not isinstance(k, int)):
+        return None
+    for element in unknown_text_vector:
+        if not isinstance(element, list):
+            return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    # use function euclidean_distance
+    distance = [calculate_distance_sparse(unknown_text_vector, vector)
+                for vector in known_text_vectors]
+    # find knn
+    knn = sorted(zip(language_labels, distance))[:k]
+    # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
+    language_labels_counts = {}
+    for key in knn:
+        language_labels_counts[key[0]] = language_labels_counts.get(key[0], 0) + 1
+    # {'de': 2, 'la': 1}
+    return [max(language_labels_counts, key=language_labels_counts.get), min(distance)]
