@@ -29,7 +29,19 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(texts_corpus, list) \
+            or not isinstance(language_labels, list) \
+            or None in texts_corpus \
+            or None in language_labels:
+        return None
+    language_profiles = {}
+    for tokens in texts_corpus:
+        if None in tokens \
+                or not isinstance(tokens, list):
+            return None
+        freq_dict = get_freq_dict(tokens)
+        language_profiles[language_labels[texts_corpus.index(tokens)]] = freq_dict
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -38,8 +50,18 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
-
+    if not isinstance(language_profiles, dict)\
+            or language_profiles == {}:
+        return None
+    uniq_list = []
+    for freq_dict in language_profiles.values():
+        if None in freq_dict \
+                or not isinstance(freq_dict, dict):
+            return None
+        uniq_list.extend(list(freq_dict.keys()))
+    uniq_list = list(set(uniq_list))
+    uniq_list = sorted(uniq_list)
+    return uniq_list
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
     """
