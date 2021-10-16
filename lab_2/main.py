@@ -138,7 +138,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             return None
     dictionary = {}
     for i in range(len(known_text_vectors)):
-        dictionary[language_labels[i]] = calculate_distance(unknown_text_vector, known_text_vectors[i])
+        dictionary[language_labels[i]] = calculate_distance(unknown_text_vector,
+                                                            known_text_vectors[i])
     return [min(dictionary, key=dictionary.get), min(dictionary.values())]
 
 
