@@ -55,13 +55,11 @@ def get_language_features(language_profiles: dict) -> list or None:
         return None
     uniq_list = []
     for freq_dict in language_profiles.values():
-        if None in freq_dict \
-                or not isinstance(freq_dict, dict):
-            return None
         uniq_list.extend(list(freq_dict.keys()))
     uniq_list = list(set(uniq_list))
     uniq_list = sorted(uniq_list)
     return uniq_list
+
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
     """
@@ -70,10 +68,22 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
-
-
+    if not isinstance(original_text, list)\
+            or not isinstance(language_profiles, dict):
+        return None
+    text_features = get_language_features(language_profiles)
+    text_vector = []
+    for word in text_features:
+        if word in original_text:
+            for dic in language_profiles.values():
+                if word in dic:
+                    text_vector.append(dic[word])
+        else:
+            text_vector.append(0)
+    return text_vector
 # 6
+
+
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
     """
     Calculates distance between two vectors using euclid metric
