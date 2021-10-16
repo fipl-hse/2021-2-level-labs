@@ -127,7 +127,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         index = known_text_vectors.index(vector)
         lang_pred = [language_labels[index], distance]
         predictions.append(lang_pred)
-    min_dist = ['x', 100]
+    min_dist = ['unk', 100]
     for item in predictions:
         if item[1] < min_dist[1]:
             min_dist = item
