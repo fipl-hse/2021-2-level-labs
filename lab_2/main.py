@@ -13,6 +13,21 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
+    if not isinstance(tokens, list):
+        return None
+    freq_dict = {}
+    frequency = {}
+    for token in tokens:
+        if isinstance(token, str):
+            if token in freq_dict:
+                freq_dict[token] += 1
+            else:
+                freq_dict[token] = 1
+            frequency[token] = round(freq_dict[token]/len(tokens),5)
+        else:
+            return None
+    return frequency
+
     pass
 
 
@@ -24,6 +39,18 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
+    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+        return None
+    for x in language_labels:
+        if not isinstance(x, str):
+            return None
+    for y in texts_corpus:
+        if not isinstance(y, list):
+            return None
+    language_profile = {}
+    for element in range(len(language_labels)):
+            language_profile [language_labels[element]] = get_freq_dict(texts_corpus[element])
+    return language_profile
     pass
 
 
@@ -33,6 +60,15 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
+    if not isinstance(language_profiles, dict) or not language_profiles:
+        return None
+    unique_tokens = []
+    for value in language_profiles.values():
+        for value_1 in value:
+            if value_1 not in unique_tokens:
+                unique_tokens.append(value_1)
+    unique_tokens.sort()
+    return unique_tokens
     pass
 
 
@@ -43,6 +79,26 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
+    if not isinstance (original_text, list) or not isinstance(language_profiles,dict):
+        return None
+    for x in original_text:
+        if not isinstance(x, str):
+            return None
+    text_vector = []
+    unique_tokens = get_language_features(language_profiles)
+    max_unique_token_freq = {}
+    for token in unique_tokens:
+        token_freq_value = 0
+        for language_profile in language_profiles.keys():
+            if language_profiles[language_profile].get(token, 0)>token_freq_value:
+                token_freq_value = language_profiles[language_profile].get(token, 0)
+        max_unique_token_freq [token] = token_freq_value
+    for token_1 in unique_tokens:
+        if token_1 in original_text:
+                text_vector.append(max_unique_token_freq[token_1])
+        else:
+            text_vector.append(0)
+    return text_vector
     pass
 
 
