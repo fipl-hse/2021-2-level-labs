@@ -13,7 +13,19 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+
+    if not isinstance(tokens, list):
+        return None
+
+    freq = {}
+    all_words = len(tokens)
+
+    for token in tokens:
+        if not isinstance(token, str):
+            return None
+        else:
+            freq[token] = round(tokens.count(token) / all_words, 5)
+    return freq
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -24,7 +36,15 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if not (isinstance(texts_corpus, list) and (language_labels, list)):
+        return None
+
+    language_profiles = {}
+
+    for language in range(len(language_labels)):
+        language_profiles[language_labels[language]] = get_freq_dict(texts_corpus[language])
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -33,7 +53,17 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if not isinstance(language_profiles, dict):
+        return None
+
+    features = []
+
+    vals = list(language_profiles.values())
+    for val in vals:
+        features.append(val)
+        features.sort()
+    return features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -43,7 +73,17 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    vector = []
+
+    for vals in list(language_profiles.values()):
+        if vals in original_text:
+            tokens = vals
+            vector.append(tokens)
+        else:
+            tokens = 0
+            vector.append(tokens)
+    return vector
 
 
 # 6
