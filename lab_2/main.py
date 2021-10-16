@@ -108,8 +108,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance(number, int) and not isinstance(number, float):
             return None
     distance = 0
-    for a, b in zip(unknown_text_vector, known_text_vector):
-        distance += (a-b)**2
+    for num_unk, num_kn in zip(unknown_text_vector, known_text_vector):
+        distance += (num_unk-num_kn)**2
     return round(distance**0.5, 5)
 
 
@@ -137,9 +137,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         if not isinstance(label, str):
             return None
     dictionary = {}
-    for i in range(len(known_text_vectors)):
-        dictionary[language_labels[i]] = calculate_distance(unknown_text_vector,
-                                                            known_text_vectors[i])
+    for ind, element in enumerate(known_text_vectors):
+        dictionary[language_labels[ind]] = calculate_distance(unknown_text_vector, element)
     return [min(dictionary, key=dictionary.get), min(dictionary.values())]
 
 
@@ -161,8 +160,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         if not isinstance(number, int) and not isinstance(number, float):
             return None
     distance = 0
-    for a, b in zip(unknown_text_vector, known_text_vector):
-        distance += abs(a-b)
+    for num_unk, num_kn in zip(unknown_text_vector, known_text_vector):
+        distance += abs(num_unk-num_kn)
     return round(distance, 5)
 
 
@@ -181,8 +180,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             or not isinstance(known_text_vectors, list)
             or not isinstance(language_labels, list)
             or not isinstance(k, int)
-            or not isinstance(metric, str)
-            or len(language_labels) != len(known_text_vectors)):
+            or not isinstance(metric, str)):
+        return None
+    if len(language_labels) != len(known_text_vectors):
         return None
     for number in unknown_text_vector:
         if not isinstance(number, int) and not isinstance(number, float):
