@@ -186,9 +186,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for number in unknown_text_vector:
         if not isinstance(number, int) and not isinstance(number, float):
             return None
-    for number in known_text_vectors:
-        if not isinstance(number, list):
-            return None
     distances = []
     if metric == 'euclid':
         for vector in known_text_vectors:
