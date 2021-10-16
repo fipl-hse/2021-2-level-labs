@@ -189,10 +189,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         # calculate manhattan_distance
         distance = [calculate_distance_manhattan(unknown_text_vector, vector)
                     for vector in known_text_vectors]
+    # [1.89, 1.04, 2.24, 1.2334, 1.05, 1.6456]
     else:
+        # what if metric='euclid'
         distance = [calculate_distance(unknown_text_vector, vector)
                     for vector in known_text_vectors]
-    # [1.89, 1.04, 2.24, 1.2334, 1.05, 1.6456]
     # find knn
     knn = sorted(zip(language_labels, distance))[:k]
     # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
@@ -211,7 +212,28 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not (language_profiles, dict):
+        return None
+    for element in original_text:
+        if not isinstance(element, str):
+            return None
+    # unite freq_dicts from language_profiles via creating new dict
+    main_freq_dict = {}
+    for freq_dict in language_profiles.values():
+        for key, val in freq_dict.items():
+            # write the key with the highest value to the dictionary
+            if val > main_freq_dict.get(key, 0):
+                main_freq_dict[key] = val
+                # e.g. main_freq_dict = {'a': 1,'b': 3,'c': 1}
+    # use function get_language_features to get text_vector
+    language_features = get_language_features(language_profiles)
+    # ['a', 'b', 'c']
+    text_vector = []
+    for index, word in enumerate(language_features):
+        # [(0, 'a'), (1, 'b'), (2, 'c')]
+        if word in original_text:
+            text_vector.append([index, main_freq_dict[word]])
+    return text_vector
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
@@ -221,7 +243,15 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
+        return None
+    for element in unknown_text_vector:
+        if not isinstance(element, int) and not isinstance(element, float):
+            return None
+    # [[4, 0.2], [6, 0.2], [8, 0.2]]
+    unknown_text_vector = dict(unknown_text_vector)
+    known_text_vector = dict(known_text_vector)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
