@@ -195,7 +195,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         distance = [calculate_distance(unknown_text_vector, vector)
                     for vector in known_text_vectors]
     # find knn
-    knn = sorted(zip(language_labels, distance))[:k]
+    knn = sorted(zip(language_labels, distance), key=lambda x: x[1])[:k]
     # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
     language_labels_counts = {}
     for key in knn:
@@ -291,7 +291,7 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     distance = [calculate_distance_sparse(unknown_text_vector, vector)
                 for vector in known_text_vectors]
     # find knn
-    knn = sorted(zip(language_labels, distance))[:k]
+    knn = sorted(zip(language_labels, distance), key=lambda x: x[1])[:k]
     # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
     language_labels_counts = {}
     for key in knn:
