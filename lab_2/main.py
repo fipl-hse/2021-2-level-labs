@@ -114,7 +114,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance(element, int) and not isinstance(element, float):
             return None
     # dist(p, q) returns the Euclidean distance between two points p and q
-    # roughly equivalent to: (sum((px - qx) ** 2.0 for px, qx in zip(p, q)))**0,5
+    # roughly equivalent to: (sum((px - qx) ** 2 for px, qx in zip(p, q)))**0,5
     euclidean_distance = dist(unknown_text_vector, known_text_vector)
     return round(euclidean_distance, 5)
 

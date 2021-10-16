@@ -3,6 +3,12 @@ Language detection starter
 """
 
 import os
+from lab_2.main import (tokenize,
+                        remove_stop_words,
+                        get_language_profiles,
+                        get_language_features,
+                        get_sparse_vector,
+                        predict_language_knn_sparse)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -38,6 +44,48 @@ if __name__ == '__main__':
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
     EXPECTED = ['de', 'eng', 'lat']
-    RESULT = ''
+    RESULT = []
+
+    STOP_WORDS = []
+    KNN = 3
+    known_text_corpus = []
+    language_labels = []
+    # work with known texts
+    # get known_text_corpus with the de, en, lat texts and language labels
+    for de_text in DE_SAMPLES:
+        known_text_corpus.append(remove_stop_words(tokenize(de_text), STOP_WORDS))
+        language_labels.append('de')
+    for en_text in EN_SAMPLES:
+        known_text_corpus.append(remove_stop_words(tokenize(en_text), STOP_WORDS))
+        language_labels.append('en')
+    for lat_text in LAT_SAMPLES:
+        known_text_corpus.append(remove_stop_words(tokenize(lat_text), STOP_WORDS))
+        language_labels.append('lat')
+    # get language_profiles
+    language_profiles = get_language_profiles(known_text_corpus, language_labels)
+    print('language_labels', language_labels)
+    print('language_profiles', language_profiles)
+    features = get_language_features(language_profiles)
+    # get known_text_vectors
+    known_text_vectors = [get_sparse_vector(text, language_profiles) for text in known_text_corpus]
+    print('known_text_vectors', known_text_vectors)
+
+    # work with unknown texts
+    for unk_text in UNKNOWN_SAMPLES:
+        # tokenize unknown text and remove stop words in it
+        unknown_text = remove_stop_words(tokenize(unk_text), STOP_WORDS)
+        print('unknown_text', unknown_text)
+        # build a sparse vector of unknown text
+        unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
+        print('unknown_text_vector', unknown_text_vector)
+        # predict the language of unknown text
+        prediction_unknown_languages = predict_language_knn_sparse(unknown_text_vector,
+                                                                   known_text_vectors,
+                                                                   language_labels,
+                                                                   KNN)
+        print('prediction_unknown_languages', prediction_unknown_languages)
+        RESULT.append(prediction_unknown_languages[0])
+        print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
+    # assert EXPECTED == RESULT, 'Detection not working'
