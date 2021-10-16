@@ -3,7 +3,7 @@ Language detection starter
 """
 
 import os
-<<<<<<< HEAD
+
 
 from main import tokenize
 from main import remove_stop_words
@@ -14,9 +14,9 @@ from main import compare_profiles
 from main import detect_language
 from main import compare_profiles_advanced
 from main import detect_language_advanced
-=======
+
 import main
->>>>>>> eb1822d647b9afe0d5a6ceb20c9a5e8c69f29c40
+
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXTS_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'texts')
