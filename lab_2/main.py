@@ -5,7 +5,6 @@ Language classification
 
 from lab_1.main import tokenize, remove_stop_words
 
-# hello word 2
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -14,7 +13,15 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+
+    if not isinstance(tokens, list) or None in tokens:
+        return None
+    frequency_dictionary = {}
+    for word in tokens:
+        frequency_dictionary[word] = round(tokens.count(word)/len(tokens), 5)
+        # создание пары ключ:значение, где word - ключ, а значение
+        # это частота этого слова, деленая на длину списка всех токенов
+    return frequency_dictionary
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -25,7 +32,22 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if (not isinstance(texts_corpus, list)
+            or not isinstance(language_labels, list)
+            or None in texts_corpus
+            or None in language_labels):
+        return None
+    language_profiles = {}
+    for text in texts_corpus:
+        if None in text or not isinstance(text, list):
+            return None
+        frequency_dictionary = get_freq_dict(text)
+        index_of_language = texts_corpus.index(text)
+        language_profiles[language_labels[index_of_language]] = frequency_dictionary
+        # словарь, где значение - частотный словарь
+        # а ключ - название языка из списка language_labels
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
