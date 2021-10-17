@@ -191,10 +191,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     close_dist = sorted(dist_list)[:k]
     close_lang = [language_labels[dist_list.index(dist)] for dist in close_dist]
     count_lang = dict((lang, close_lang.count(lang)) for lang in set(close_lang))
-    if list(count_lang.values())[0] == list(count_lang.values())[1]:
-        closest_lang = close_lang[0]
-    else:
-        closest_lang = sorted(count_lang, key=count_lang.get, reverse=True)[0]
+    closest_lang = max(count_lang, key=count_lang.get)
     return [closest_lang, close_dist[0]]
 
 
@@ -276,8 +273,5 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     close_dist = sorted(dist_list)[:k]
     close_lang = [language_labels[dist_list.index(dist)] for dist in close_dist]
     count_lang = dict((lang, close_lang.count(lang)) for lang in set(close_lang))
-    if list(count_lang.values())[0] == list(count_lang.values())[1]:
-        closest_lang = close_lang[0]
-    else:
-        closest_lang = sorted(count_lang, key=count_lang.get, reverse=True)[0]
+    closest_lang = max(count_lang, key=count_lang.get)
     return [closest_lang, close_dist[0]]
