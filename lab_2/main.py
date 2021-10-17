@@ -18,8 +18,6 @@ def get_freq_dict(tokens: list) -> dict or None:
     frequency_dictionary = {}
     for word in tokens:
         frequency_dictionary[word] = round(tokens.count(word) / len(tokens), 5)
-        # создание пары ключ:значение, где word - ключ, а значение
-        # это частота этого слова, деленая на длину списка всех токенов
     return frequency_dictionary
 
 
@@ -43,8 +41,6 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         frequency_dictionary = get_freq_dict(text)
         index_of_language = texts_corpus.index(text)
         language_profiles[language_labels[index_of_language]] = frequency_dictionary
-        # словарь, где значение - частотный словарь
-        # а ключ - название языка из списка language_labels
     return language_profiles
 
 
@@ -132,9 +128,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             return None
     label_vector = {}
     for i in range(len(known_text_vectors)):
-        # проходимся по индексам всех элементов вектора
         label_vector[language_labels[i]] = calculate_distance(unknown_text_vector, known_text_vectors[i])
-    # ключ - язык, значение - расстояние, считается при помощи функции calculate_distance
     for key, value in label_vector.items():
         if value == min(label_vector.values()):
             return [key, value]
