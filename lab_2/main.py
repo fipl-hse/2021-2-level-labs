@@ -230,7 +230,21 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+
+    if (not isinstance(unknown_text_vector, list) or
+            not isinstance(known_text_vector, list) or
+            not all(isinstance(i, list) for i in unknown_text_vector) or
+            not all(isinstance(i, list) for i in known_text_vector)):
+        return None
+    unknown_dict = dict(unknown_text_vector)
+    known_dict = dict(known_text_vector)
+    combine_dict = dict(unknown_text_vector[:])
+    combine_dict.update(known_dict)
+    for index in combine_dict:
+        if index in unknown_dict and index in known_dict:
+            combine_dict[index] = unknown_dict[index] - known_dict[index]
+    distance = math.sqrt(sum(score**2 for score in combine_dict.values()))
+    return round(distance, 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
