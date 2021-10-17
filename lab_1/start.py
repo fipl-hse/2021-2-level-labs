@@ -25,21 +25,6 @@ if __name__ == '__main__':
         unknown_text = file_to_read.read()
 
     EXPECTED = 'en'
-
-
-    de_and_la_result = main.detect_language_advanced(unknown_profile,[de_profile,la_profile],[],4)
-    print(de_and_la_result)
-
-    all_profiles = [de_profile,en_profile,la_profile]
-    new_all_profiles = [main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER,'de.json')),
-                main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER,'en.json')),
-                main.load_profile(os.path.join(PATH_TO_PROFILE_FOLDER,'la.json'))]
-    all_profiles_result = main.detect_language_advanced(unknown_profile,all_profiles,[],4)
-    new_all_profiles_result = main.detect_language_advanced(unknown_profile,new_all_profiles,[],4)
-    print(all_profiles_result)
-    print(new_all_profiles_result)
-
-    RESULT = new_all_profiles_result
     RESULT = ''
     TOP_N = 7
     unknown_profile = main.create_language_profile('unknown_text', unknown_text, [])
@@ -64,7 +49,6 @@ if __name__ == '__main__':
     # print("Great!", RESULT_10, "==", RESULT_8)
     # else:
     # print("Something is wrong!")
-
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
