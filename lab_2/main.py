@@ -148,7 +148,20 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vector, list):
+        return None
+    for number in unknown_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    for number in known_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    distance = 0
+    for i in range(len(unknown_text_vector)):
+        distance += abs(unknown_text_vector[i] - known_text_vector[i])
+    distance = round(distance, 5)
+    return distance
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
