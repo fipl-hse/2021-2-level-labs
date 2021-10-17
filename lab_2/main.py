@@ -257,4 +257,26 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+
+    if (not isinstance(unknown_text_vector, list) or
+            not isinstance(known_text_vectors, list) or
+            not isinstance(language_labels, list)):
+        return None
+    if (not all(isinstance(i, list) for i in unknown_text_vector) or
+            not all(isinstance(i, list) for i in known_text_vectors) or
+            not all(isinstance(i, str) for i in language_labels)):
+        return None
+    if (len(known_text_vectors) != len(language_labels) or
+            not isinstance(k, int)):
+        return None
+    dist_list = []
+    for vector in known_text_vectors:
+        dist_list.append(calculate_distance_sparse(unknown_text_vector, vector))
+    close_dist = sorted(dist_list)[:k]
+    close_lang = [language_labels[dist_list.index(dist)] for dist in close_dist]
+    count_lang = dict((lang, close_lang.count(lang)) for lang in set(close_lang))
+    if list(count_lang.values())[0] == list(count_lang.values())[1]:
+        closest_lang = close_lang[0]
+    else:
+        closest_lang = sorted(count_lang, key=count_lang.get, reverse=True)[0]
+    return [closest_lang, close_dist[0]]
