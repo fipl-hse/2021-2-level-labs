@@ -3,7 +3,10 @@ Lab 2
 Language classification
 """
 
+from itertools import zip_longest
+
 from math import sqrt
+
 from lab_1.main import tokenize, remove_stop_words
 
 
@@ -237,7 +240,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     distances.sort(key=lambda x: x[1])
     distances = distances[:k]
 
-    # counting the number of each label occurring in the sitances list in tmp
+    # counting the number of each label occurring in the distances list in tmp
     tmp = {}
     for language in distances:
         if language[0] not in tmp:
@@ -304,26 +307,24 @@ def calculate_distance_sparse(unknown_text_vector: list,
     len_2 = sorted(known_text_vector, reverse=True)
     len_2 = len_2[0][0]
     # +1 to convert № of the element to the lists length
-    len_12 = max([len_1, len_2])+1
+    len_12 = max([len_1, len_2]) + 1
 
-    for i in range(len_12):
-        for unknown, known in zip(unknown_text_vector, known_text_vector):
-            if unknown[0] == i:
-                distance += unknown[1] ** 2
-            if known[0] == i:
-                distance += known[1] ** 2
-            if unknown[0] == i and known[0] == i:
-                distance += (unknown[1] - known[1]) ** 2
+    # comparing the index from 0 to max with each
+    # index in each pair [index,  vector_element] in both vectors
+    # adding whichever has index of i
+    for unknown, known in zip_longest(unknown_text_vector, known_text_vector,
+                                      fillvalue=[-1, -1]):
+        print(distance)
+        if unknown[0] == known[0]:
+            distance += (unknown[1] - known[1]) ** 2
+        elif known[0] > 0:
+            distance += known[1] ** 2
+        elif unknown[0] > 0:
+            distance += unknown[1] ** 2
 
     distance = round(sqrt(distance), 5)
 
     return distance
-
-
-first_text_vector = [[0, 0.4], [2, 0.2], [4, 0.2], [6, 0.2]]
-second_text_vector = [[1, 0.1], [3, 0.1], [5, 0.49], [7, 0.3]]
-expected = 0.79379
-print(calculate_distance_sparse(first_text_vector, second_text_vector))
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -336,4 +337,40 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list):
+        return None
+
+    for known_vector in known_text_vectors:
+        if not isinstance(known_vector, list):
+            return None
+
+    if len(known_text_vectors) != len(language_labels) or not isinstance(language_labels, list):
+        return None
+
+    # list of calculated distances and their tags with each pair separated
+    distances = []
+
+    for i, known_vector in enumerate(known_text_vectors):
+        distances.append([language_labels[i],
+                          calculate_distance_sparse(unknown_text_vector, known_vector)])
+
+    # sorting by the second value (distance) lists in distance list
+    distances.sort(key=lambda x: x[1])
+    distances = distances[:k]
+
+    # counting the number of each label occurring in the distances list in tmp
+    tmp = {}
+    for language in distances:
+        if language[0] not in tmp:
+            tmp[language[0]] = 1
+        else:
+            tmp[language[0]] += 1
+
+    # getting the biggest value from tmp dict
+    max_l_tmp = max(tmp, key=tmp.get)
+    result = [max_l_tmp, distances[0][1]]
+
+    return result
+
+
+
