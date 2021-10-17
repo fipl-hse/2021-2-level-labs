@@ -132,7 +132,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
     label_vector = {}
     for i in range(len(known_text_vectors)):
-        label_vector[language_labels[i]] = calculate_distance(unknown_text_vector, known_text_vectors[i])
+        label_vector[language_labels[i]] = calculate_distance(unknown_text_vector,
+                                                              known_text_vectors[i])
     for key, value in label_vector.items():
         if value == min(label_vector.values()):
             return [key, value]
@@ -146,7 +147,19 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        return None
+    for number in unknown_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    for number in known_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+
+    distance = 0
+    for i in range(len(unknown_text_vector)):
+        distance += abs(unknown_text_vector[i] - known_text_vector[i])
+    return round(distance, 5)
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -160,7 +173,35 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or not isinstance(k, int) \
+            or not isinstance(metric, str):
+        return None
+    if len(known_text_vectors) != len(language_labels):
+        return None
+    for number in unknown_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+
+    distances = []
+    if metric == 'manhattan':
+        for vector in known_text_vectors:
+            distances.append(calculate_distance_manhattan(unknown_text_vector, vector))
+    else:
+        for vector in known_text_vectors:
+            distances.append(calculate_distance(unknown_text_vector, vector))
+
+    k_nearest = sorted(zip(language_labels, distances), key=lambda x: x[1])[:k]
+    language_freq = {}
+    for language in k_nearest:
+        if language[0] not in language_freq:
+            language_freq[language[0]] = 1
+        else:
+            language_freq[language[0]] += 1
+    possible_language = [max(language_freq, key=language_freq.get), k_nearest[0][1]]
+    return possible_language
 
 
 # 10 implementation
