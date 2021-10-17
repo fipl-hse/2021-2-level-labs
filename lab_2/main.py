@@ -134,9 +134,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             return None
     label_vector = {}
     for i in range(len(known_text_vectors)):
-# проходимся по индексам всех элементов вектора
         label_vector[language_labels[i]] = calculate_distance(unknown_text_vector, known_text_vectors[i])
-# ключ - язык, значение - расстояние, считается при помощи функции calculate_distance
     for key, value in label_vector.items():
         if value == min(label_vector.values()):
             return [key, value]
