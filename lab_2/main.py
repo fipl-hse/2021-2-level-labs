@@ -4,7 +4,7 @@ Language classification
 """
 
 from lab_1.main import tokenize, remove_stop_words
-
+from math import sqrt
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -74,14 +74,14 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         return None
     vectors = []
     uni_tokens = get_language_features(language_profiles)
-    for word in original_text:
-        if word in uni_tokens:
+    for word in uni_tokens:
+        if word in original_text:
             for lang in language_profiles:
                 for key in language_profiles[lang]:
                     if key == word:
                         vectors.append(language_profiles[lang][key])
-                    if key != word:
-                        vectors.append(0)
+        else:
+            vectors.append(0)
     return vectors
 
 
@@ -92,10 +92,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector,list):
-        return None
-    distance = sqrt(sum((unknown_text_vector - known_text_vector) ** 2 for unknown_text_vector, known_text_vector in zip(unknown_text_vector, known_text_vector))
-    return distance
+    pass
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
