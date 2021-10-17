@@ -43,16 +43,16 @@ if __name__ == '__main__':
     EXPECTED = ['de', 'eng', 'lat']
     STOP_WORDS = []
     texts_corpus = []
-    lanuage_labels = []
+    language_labels = []
     for text in DE_SAMPLES:
         texts_corpus.append(remove_stop_words(tokenize(text), STOP_WORDS))
-        lanuage_labels.append('de')
+        language_labels.append('de')
     for text in EN_SAMPLES:
         texts_corpus.append(remove_stop_words(tokenize(text), STOP_WORDS))
-        lanuage_labels.append('eng')
+        language_labels.append('eng')
     for text in LAT_SAMPLES:
         texts_corpus.append(remove_stop_words(tokenize(text), STOP_WORDS))
-        lanuage_labels.append('lat')
+        language_labels.append('lat')
     language_profiles = get_language_profiles(texts_corpus, language_labels)
     known_text_vectors = []
     for text in texts_corpus:
@@ -60,11 +60,10 @@ if __name__ == '__main__':
     KNN = 3
     RESULT = []
     for text in UNKNOWN_SAMPLES:
-        unknown_text = remove_stop_words(tokenize(unk_text), STOP_WORDS)
+        unknown_text = remove_stop_words(tokenize(text), STOP_WORDS)
         unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
         predicted_lang = predict_language_knn_sparse(unknown_text_vector, known_text_vectors,
                                                      language_labels, KNN)
         RESULT.append(predicted_lang[0])
-    
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
