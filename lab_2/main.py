@@ -157,8 +157,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         if not isinstance(number, (int, float)):
             return None
     distance = 0
-    for number in range(len(unknown_text_vector)):
-        distance += abs(unknown_text_vector[number] - known_text_vector[number])
+    for index, number in range(len(unknown_text_vector)):
+        distance += abs(number - known_text_vector[index])
     distance = round(distance, 5)
     return distance
 
