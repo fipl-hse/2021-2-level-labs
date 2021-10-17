@@ -43,8 +43,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             not all(isinstance(i, str) for i in language_labels)):
         return None
     lang_pr = {}
-    for text in range(len(texts_corpus)):
-        lang_pr[language_labels[text]] = get_freq_dict(texts_corpus[text])
+    for index, text in enumerate(texts_corpus):
+        lang_pr[language_labels[index]] = get_freq_dict(texts_corpus[index])
     return lang_pr
 
 
@@ -219,7 +219,8 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
         for lang in language_profiles.values():
             if word in lang:
                 word_scores.append([index, lang.get(word)])
-    sparse_vector = [word_scores[index] for index, word in enumerate(unique_words) if word in original_text]
+    sparse_vector = [word_scores[index] for index, word in enumerate(unique_words)
+                     if word in original_text]
     return sparse_vector
 
 
