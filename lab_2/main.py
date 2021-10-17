@@ -101,8 +101,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance(el_known_vector, (float, int)):
             return None
     distance = 0
-    for i, el in enumerate(unknown_text_vector):
-        distance += ((unknown_text_vector[i] - known_text_vector[i]) ** 2)
+    for ind_and_value in enumerate(unknown_text_vector):
+        distance += ((unknown_text_vector[ind_and_value[0]] - known_text_vector[ind_and_value[0]]) ** 2)
     distance = round(distance ** 0.5, 5)
     return distance
 
@@ -152,8 +152,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         if not isinstance(el_known_vector, (float, int)):
             return None
     distance = 0
-    for i, el in enumerate(unknown_text_vector):
-        distance += abs(unknown_text_vector[i] - known_text_vector[i])
+    for ind_and_value in enumerate(unknown_text_vector):
+        distance += abs(unknown_text_vector[ind_and_value[0]] - known_text_vector[ind_and_value[0]])
     distance = round(distance, 5)
     return distance
 
@@ -173,8 +173,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             or not isinstance(known_text_vectors, list) \
             or not isinstance(language_labels, list) \
             or not isinstance(k, int) \
-            or not isinstance(metric, str) \
-            or len(language_labels) != len(known_text_vectors):
+            or not isinstance(metric, str):
+        return None
+    if len(language_labels) != len(known_text_vectors):
         return None
     if metric == "manhattan":
         distances = [calculate_distance_manhattan(unknown_text_vector, vectors)
@@ -184,7 +185,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                      for vectors in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
-    list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
+    list_of_tuple = list(zip(languages, sorted_distance))
     list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
     for language, dist in list_of_tuples:
@@ -277,7 +278,7 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
                  for vector in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
-    list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
+    list_of_tuple = list(zip(languages, sorted_distance))
     list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
     for language, dist in list_of_tuples:
