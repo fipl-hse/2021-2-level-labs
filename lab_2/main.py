@@ -3,6 +3,8 @@ Lab 2
 Language classification
 """
 
+from lab_1.main import tokenize, remove_stop_words
+
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -18,16 +20,12 @@ def get_freq_dict(tokens: list) -> dict or None:
     tokens_len = len(tokens)
 
     for token in tokens:
-        if not isinstance(token, str):
-            return None
-
-    for token in tokens:
         if token not in freq_dict:
             freq_dict[token] = 1
-            freq_dict[token] = round(freq_dict[token] / tokens_len, 2)
         else:
             freq_dict[token] += 1
-            freq_dict[token] = round(freq_dict[token] / tokens_len, 2)
+    for token in freq_dict:
+        freq_dict[token] = round(freq_dict[token] / tokens_len, 5)
     return freq_dict
 
 
