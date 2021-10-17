@@ -233,7 +233,24 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param known_text_vector: sparse vector for known text
     """
     pass
-
+    if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vector,list):
+        return None
+    for vector in unknown_text_vector:
+        if not isinstance(vector, list):
+            return None
+    for vector in known_text_vector:
+        if not isinstance(vector, list):
+            return None
+    distance = 0
+    dictionary_of_indices_and_scores = dict(unknown_text_vector)
+    for index_and_score in known_text_vector:
+        if index_and_score[0] not in dictionary_of_indices_and_scores:
+            dictionary_of_indices_and_scores[index_and_score[0]] = index_and_score[1]
+        else:
+            dictionary_of_indices_and_scores[index_and_score[0]] -= index_and_score[1]
+    for value in dictionary_of_indices_and_scores.values():
+        distance += value ** 2
+    return round(distance ** 0.5, 5)
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
@@ -246,3 +263,22 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param k: the number of neighbors to choose label from
     """
     pass
+    if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vectors,list) \
+            or not isinstance(language_labels,list) or not isinstance(k,int):
+        return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    distances = [calculate_distance_sparse(unknown_text_vector,vector) for vector in known_text_vectors]
+    sorted_distance = sorted(distances)[:k]
+    languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
+    list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
+    list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
+    dict_of_tuples_and_counts = {}
+    for language, dist in list_of_tuples:
+        if language in dict_of_tuples_and_counts.keys():
+            dict_of_tuples_and_counts[language] += 1
+        else:
+            dict_of_tuples_and_counts[language] = 1
+    most_frequent_language = max(dict_of_tuples_and_counts, key=dict_of_tuples_and_counts.get)
+    list_with_language_and_min_distance = [most_frequent_language, float(min(sorted_distance))]
+    return list_with_language_and_min_distance
