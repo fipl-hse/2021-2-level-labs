@@ -4,7 +4,7 @@ Language classification
 """
 
 from lab_1.main import tokenize, remove_stop_words
-
+import math
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -19,10 +19,10 @@ def get_freq_dict(tokens: list) -> dict or None:
 
     freq_dict = {}
     for word in tokens:
-        if not isinstance(word, str):
-            return None
-        else:
+        if isinstance(word, str):
             freq_dict[word] = round(tokens.count(word)/len(tokens), 5)
+        else:
+            return None
 
     return freq_dict
 
@@ -78,7 +78,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(original_text, list) or not isinstance(language_profiles, dict) or not language_profiles:
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict) \
+            or not language_profiles:
         return None
 
     features = get_language_features(language_profiles)
@@ -90,7 +91,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
                     vector_list.append(lang_profile[word])
         else:
             vector_list.append(0)
-
     return vector_list
 
 
@@ -101,7 +101,19 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not \
+            isinstance(known_text_vector, list) or:
+        return None
+    for i in unknown_text_vector:
+        if not isinstance(i, float):
+            return None
+        if not isinstance(i, float):
+            return None
+
+
+    for i in range(len(unknown_text_vector)):
+        distance = math.sqrt((unknown_text_vector[i] - known_text_vector[i])**2)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
