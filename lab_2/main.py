@@ -38,9 +38,11 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     """
     if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
+
     language_profiles = {}
+
     for label in language_labels:
-        language_profiles[label] = get_freq_dict(texts_corpus)  # I need to change it
+        language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
 
     return language_profiles
 
