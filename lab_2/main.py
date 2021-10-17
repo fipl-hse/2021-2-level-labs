@@ -103,8 +103,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance(number, (int, float)):
             return None
     distance = 0
-    for number in range(len(unknown_text_vector)):
-        distance += (unknown_text_vector[number] - known_text_vector[number])**2
+    for index, number in enumerate(unknown_text_vector):
+        distance += (number - known_text_vector[index])**2
     distance = round(distance**0.5, 5)
     return distance
 
@@ -132,8 +132,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         if not isinstance(label, str):
             return None
     label_vector = {}
-    for vector in range(len(known_text_vectors)):
-        label_vector[language_labels[vector]] = calculate_distance(unknown_text_vector, known_text_vectors[vector])
+    for index, vector in enumerate(known_text_vectors):
+        label_vector[language_labels[index]] = calculate_distance(unknown_text_vector, vector)
     for key, value in label_vector.items():
         if value == min(label_vector.values()):
             return [key, value]
@@ -147,7 +147,20 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vector, list):
+        return None
+    for number in unknown_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    for number in known_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    distance = 0
+    for number in range(len(unknown_text_vector)):
+        distance += abs(unknown_text_vector[number] - known_text_vector[number])
+    distance = round(distance, 5)
+    return distance
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
