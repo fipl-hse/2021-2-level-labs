@@ -102,7 +102,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             return None
     distance = 0
     for ind_and_value in enumerate(unknown_text_vector):
-        distance += ((unknown_text_vector[ind_and_value[0]] - known_text_vector[ind_and_value[0]]) ** 2)
+        distance += ((unknown_text_vector[ind_and_value[0]]
+                      - known_text_vector[ind_and_value[0]]) ** 2)
     distance = round(distance ** 0.5, 5)
     return distance
 
@@ -188,11 +189,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     list_of_tuple = list(zip(languages, sorted_distance))
     list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
-    for language, dist in list_of_tuples:
-        if language in dict_of_tuples_and_counts.keys():
-            dict_of_tuples_and_counts[language] += 1
+    for language_and_dist in list_of_tuples:
+        if language_and_dist[0] in dict_of_tuples_and_counts.keys():
+            dict_of_tuples_and_counts[language_and_dist[0]] += 1
         else:
-            dict_of_tuples_and_counts[language] = 1
+            dict_of_tuples_and_counts[language_and_dist[0]] = 1
     most_frequent_language = max(dict_of_tuples_and_counts, key=dict_of_tuples_and_counts.get)
     list_with_language_and_min_distance = [most_frequent_language, float(min(sorted_distance))]
     return list_with_language_and_min_distance
@@ -281,11 +282,11 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     list_of_tuple = list(zip(languages, sorted_distance))
     list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
-    for language, dist in list_of_tuples:
-        if language in dict_of_tuples_and_counts.keys():
-            dict_of_tuples_and_counts[language] += 1
+    for language_and_dist in list_of_tuples:
+        if language_and_dist[0] in dict_of_tuples_and_counts.keys():
+            dict_of_tuples_and_counts[language_and_dist[0]] += 1
         else:
-            dict_of_tuples_and_counts[language] = 1
+            dict_of_tuples_and_counts[language_and_dist[0]] = 1
     most_frequent_language = max(dict_of_tuples_and_counts, key=dict_of_tuples_and_counts.get)
     list_with_language_and_min_distance = [most_frequent_language, float(min(sorted_distance))]
     return list_with_language_and_min_distance
