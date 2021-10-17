@@ -4,7 +4,6 @@ Language classification
 """
 
 from itertools import zip_longest
-
 from math import sqrt
 
 from lab_1.main import tokenize, remove_stop_words
@@ -30,6 +29,8 @@ def get_freq_dict(tokens: list) -> dict or None:
         else:
             freqs[word] += 1
 
+    # changing the values of the keys from raw frequencies to freq / all elements
+    # resulting in asked value
     freqs.update((x, round(y / full_length, ndigits=5)) for x, y in freqs.items())
 
     return freqs
@@ -54,8 +55,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
 
     language_profiles = {}
 
-    for i, label in enumerate(language_labels):
-        language_profiles[label] = get_freq_dict(texts_corpus[i])
+    for index, label in enumerate(language_labels):
+        language_profiles[label] = get_freq_dict(texts_corpus[index])
 
     return language_profiles
 
@@ -104,10 +105,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     for word in unique_words:
         if word in original_text:
             for profile in language_profiles.values():
-                if word in profile.keys():
-                    text_vector.append(profile[word])
-        else:
-            text_vector.append(0)
+                text_vector.append(profile.get(word, 0))
 
     return text_vector
 
@@ -304,7 +302,8 @@ def calculate_distance_sparse(unknown_text_vector: list,
     distance = 0
 
     for unknown, known in zip_longest(unknown_text_vector, known_text_vector,
-                                      fillvalue=[-1, -1]):
+                                      fillvalue=[-1, 0]):
+
         if unknown[0] == known[0]:
             distance += (unknown[1] - known[1]) ** 2
         else:
@@ -313,9 +312,7 @@ def calculate_distance_sparse(unknown_text_vector: list,
             if unknown[0] >= 0:
                 distance += unknown[1] ** 2
 
-    distance = round(sqrt(distance), 5)
-
-    return distance
+    return round(sqrt(distance), 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -362,6 +359,3 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     result = [max_l_tmp, distances[0][1]]
 
     return result
-
-
-

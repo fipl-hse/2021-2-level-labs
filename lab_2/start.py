@@ -2,6 +2,7 @@
 Language detection starter
 """
 
+from main import *
 import os
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -36,6 +37,7 @@ if __name__ == '__main__':
     with open(os.path.join(PATH_TO_DATASET_FOLDER, 'unknown_samples.txt'),
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
+
 
     EXPECTED = ['de', 'eng', 'lat']
     RESULT = ''
