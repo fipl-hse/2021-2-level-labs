@@ -107,8 +107,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             not all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     sq_dif = []
-    for vector in range(len(unknown_text_vector)):
-        sq_dif.append((unknown_text_vector[vector] - known_text_vector[vector]) ** 2)
+    for count, vector in enumerate(unknown_text_vector):
+        sq_dif.append((vector - known_text_vector[count]) ** 2)
     return round(math.sqrt(sum(sq_dif)), 5)
 
 
@@ -154,8 +154,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             not all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     man_dif = []
-    for vector in range(len(unknown_text_vector)):
-        man_dif.append(abs(unknown_text_vector[vector] - known_text_vector[vector]))
+    for count, vector in enumerate(unknown_text_vector):
+        man_dif.append(abs(vector - known_text_vector[count]))
     return round(sum(man_dif), 5)
 
 
@@ -183,12 +183,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             not isinstance(k, int) or metric not in ('euclid', 'manhattan')):
         return None
     dist_list = []
-    for lang in range(len(known_text_vectors)):
+    for lang in known_text_vectors:
         if metric == 'euclid':
-            dist_list.append(calculate_distance(unknown_text_vector, known_text_vectors[lang]))
+            dist_list.append(calculate_distance(unknown_text_vector, lang))
         elif metric == 'manhattan':
-            dist_list.append(calculate_distance_manhattan(unknown_text_vector,
-                                                          known_text_vectors[lang]))
+            dist_list.append(calculate_distance_manhattan(unknown_text_vector, lang))
     close_dist = sorted(dist_list)[:k]
     close_lang = [language_labels[dist_list.index(dist)] for dist in close_dist]
     count_lang = dict((lang, close_lang.count(lang)) for lang in set(close_lang))
