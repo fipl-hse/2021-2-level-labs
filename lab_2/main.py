@@ -15,6 +15,9 @@ def get_freq_dict(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
+    for token in tokens:
+        if not isinstance(token, str):
+            return None
 
     freq_dict = {}
     tokens_len = len(tokens)
@@ -24,8 +27,10 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token] = 1
         else:
             freq_dict[token] += 1
+
     for token in freq_dict:
         freq_dict[token] = round(freq_dict[token] / tokens_len, 2)
+
     return freq_dict
 
 
