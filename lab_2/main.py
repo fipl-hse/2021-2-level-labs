@@ -98,7 +98,17 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        return None
+    distance = 0
+    counter = 0
+    for vector_value in unknown_text_vector:
+        if not isinstance(vector_value, (int, float)) or not \
+                isinstance(known_text_vector[counter], (int, float)):
+            return None
+        distance += (vector_value - known_text_vector[counter]) ** 2
+        counter += 1
+    return round(distance**0.5, 5)
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
