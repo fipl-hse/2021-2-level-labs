@@ -169,10 +169,39 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
-
-
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or len(language_labels) != len(known_text_vectors):
+        return None
+    vector_list = []
+    for index, vector in enumerate(known_text_vectors):
+        if not isinstance(vector, list):
+            return None
+        if metric == 'euclid':
+            vector_list.append([language_labels[index],
+                                calculate_distance(unknown_text_vector, vector)])
+        elif metric == 'manhattan':
+            vector_list.append([language_labels[index],
+                                calculate_distance_manhattan(unknown_text_vector, vector)])
+        else:
+            return None
+    min_dist = sorted(vector_list, key=lambda x: x[1])
+    min_dist = min_dist[:k]
+    labels = []
+    for item in min_dist:
+        labels.append(item[0])
+    labels_count = {}
+    for item in labels:
+        labels_count[item] = labels.count(item)
+    max_label = ['x', -1]
+    for key, value in labels_count.items():
+        if value > max_label[1]:
+            max_label = [key, value]
+    return [max_label[0], min_dist[0][1]]
 # 10 implementation
+
+
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
     Builds a sparse vector representation of a given text
