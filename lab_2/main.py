@@ -302,30 +302,26 @@ def calculate_distance_sparse(unknown_text_vector: list,
             return None
 
     distance = 0
-    len_1 = sorted(unknown_text_vector, reverse=True)
-    len_1 = len_1[0][0]
-    len_2 = sorted(known_text_vector, reverse=True)
-    len_2 = len_2[0][0]
-    # +1 to convert № of the element to the lists length
-    len_12 = max([len_1, len_2]) + 1
 
-    # comparing the index from 0 to max with each
-    # index in each pair [index,  vector_element] in both vectors
-    # adding whichever has index of i
     for unknown, known in zip_longest(unknown_text_vector, known_text_vector,
                                       fillvalue=[-1, -1]):
-        print(distance)
         if unknown[0] == known[0]:
             distance += (unknown[1] - known[1]) ** 2
-        elif known[0] > 0:
-            distance += known[1] ** 2
-        elif unknown[0] > 0:
-            distance += unknown[1] ** 2
+        else:
+            if known[0] >= 0:
+                distance += known[1] ** 2
+            if unknown[0] >= 0:
+                distance += unknown[1] ** 2
 
     distance = round(sqrt(distance), 5)
 
     return distance
 
+
+first_text_vector = [[0, 0.4], [2, 0.2], [4, 0.2], [6, 0.2]]
+second_text_vector = [[1, 0.1], [3, 0.1], [5, 0.49], [7, 0.3]]
+expected = 0.79379
+print(calculate_distance_sparse(first_text_vector, second_text_vector))
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
