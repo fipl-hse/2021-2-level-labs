@@ -4,7 +4,7 @@ Language classification
 """
 
 from lab_1.main import tokenize, remove_stop_words
-
+from math import sqrt
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -15,7 +15,17 @@ def get_freq_dict(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
-    pass
+    frequency_dictionary = {}
+    for token in tokens:
+        if not isinstance(token, str):
+            return None
+        if token in frequency_dictionary:
+            frequency_dictionary[token] += 1
+        else:
+            frequency_dictionary[token] = 1
+    for token in frequency_dictionary:
+        frequency_dictionary[token] = round(frequency_dictionary[token]/len(tokens), 5)
+    return frequency_dictionary
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -26,7 +36,18 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    if (not isinstance(texts_corpus, list)
+            or not isinstance(language_labels, list)):
+        return None
+    for elem in texts_corpus:
+        if not isinstance(elem, list):
+            return None
+    for elem in language_labels:
+        if not isinstance(elem, str):
+            return None
+    freq_dictionary = [get_freq_dict(elem) for elem in texts_corpus]
+    language_profiles = dict(zip(language_labels, freq_dictionary))
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -35,7 +56,15 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    language_features = []
+    for freq_dictionary in language_profiles.values():
+        language_features += freq_dictionary.keys()
+    language_features.sort()
+    if not language_features:
+        return None
+    return language_features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -45,7 +74,18 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if (not isinstance(original_text, list)
+            or not isinstance(language_profiles, dict)):
+        return None
+    text_vector = []
+    for language_feature in get_language_features(language_profiles):
+        if language_feature in original_text:
+            for freq_dictionary in language_profiles.values():
+                if language_feature in freq_dictionary.keys():
+                    text_vector.append(freq_dictionary[language_feature])
+        else:
+            text_vector.append(0)
+    return text_vector
 
 
 # 6
@@ -55,7 +95,16 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
+        return None
+    distance = 0
+    for unknown, known in zip(unknown_text_vector, known_text_vector):
+        if known is None or unknown is None:
+            return None
+        distance += (unknown - known)**2
+    distance = round(sqrt(distance), 5)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -66,7 +115,21 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)):
+        return None
+    if len(known_text_vectors) != len(language_labels):
+        return None
+    predicted_language = ['', 1]
+    for language, known_text_vector in enumerate(known_text_vectors):
+        if known_text_vector is None:
+            return None
+        distance = calculate_distance(unknown_text_vector, known_text_vector)
+        if predicted_language[1] > distance:
+            predicted_language[0] = language_labels[language]
+            predicted_language[1] = distance
+    return predicted_language
 
 
 # 8
@@ -77,7 +140,15 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
+        return None
+    distance = 0
+    for unknown, known in zip(unknown_text_vector, known_text_vector):
+        if known is None or unknown is None:
+            return None
+        distance += abs(unknown - known)
+    return distance
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -91,7 +162,14 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)):
+        return None
+    predicted_language = ['', 1]
+    if metric == 'manhattan':
+        distance = calculate_distance(unknown_text_vector, known_text_vector)
+    return predicted_language
 
 
 # 10 implementation
