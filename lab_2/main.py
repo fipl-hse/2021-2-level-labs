@@ -175,7 +175,42 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or not isinstance(k, int) \
+            or not isinstance(metric, str):
+        return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    distances = []
+    for vector in known_text_vectors:
+        if metric == 'euclid':
+            distance = calculate_distance(unknown_text_vector, vector)
+            distances.append(distance)
+        elif metric == 'manhattan':
+            distance = calculate_distance_manhattan(unknown_text_vector, vector)
+            distances.append(distance)
+    sorted_distances = sorted(distances)
+    sorted_distances = sorted_distances[:k]
+    labels = []
+    for distance in sorted_distances:
+        index_of_distance = distances.index(distance)
+        if len(language_labels) == len(known_text_vectors):
+            label = language_labels[index_of_distance]
+            labels.append(label)
+        else:
+            return None
+    dictionary_of_labels = {}
+    for label in labels:
+        if label in dictionary_of_labels:
+            dictionary_of_labels[label] += 1
+        else:
+            dictionary_of_labels[label] = 1
+    possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
+    possible_distance = round(min(distances), 5)
+    possible_result = [possible_label, possible_distance]
+    return possible_result
 
 
 # 10 implementation
