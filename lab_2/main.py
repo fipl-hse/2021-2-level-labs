@@ -303,16 +303,17 @@ def calculate_distance_sparse(unknown_text_vector: list,
     len_1 = len_1[0][0]
     len_2 = sorted(known_text_vector, reverse=True)
     len_2 = len_2[0][0]
-    len_12 = max([len_1, len_2])
+    # +1 to convert № of the element to the lists length
+    len_12 = max([len_1, len_2])+1
 
     for i in range(len_12):
         for unknown, known in zip(unknown_text_vector, known_text_vector):
+            if unknown[0] == i:
+                distance += unknown[1] ** 2
+            if known[0] == i:
+                distance += known[1] ** 2
             if unknown[0] == i and known[0] == i:
                 distance += (unknown[1] - known[1]) ** 2
-            elif unknown[0] == i:
-                distance += (unknown[1] - 0) ** 2
-            elif known[0] == i:
-                distance += (0 - known[i]) ** 2
 
     distance = round(sqrt(distance), 5)
 
