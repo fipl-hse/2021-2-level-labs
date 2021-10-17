@@ -107,8 +107,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             not all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     sq_dif = []
-    for count, vector in enumerate(unknown_text_vector):
-        sq_dif.append((vector - known_text_vector[count]) ** 2)
+    for index, vector in enumerate(unknown_text_vector):
+        sq_dif.append((vector - known_text_vector[index]) ** 2)
     return round(math.sqrt(sum(sq_dif)), 5)
 
 
@@ -154,8 +154,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             not all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     man_dif = []
-    for count, vector in enumerate(unknown_text_vector):
-        man_dif.append(abs(vector - known_text_vector[count]))
+    for index, vector in enumerate(unknown_text_vector):
+        man_dif.append(abs(vector - known_text_vector[index]))
     return round(sum(man_dif), 5)
 
 
@@ -206,7 +206,21 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if (not isinstance(original_text, list) or
+            not isinstance(language_profiles, dict) or
+            not all(isinstance(key, str) for key in language_profiles.keys()) or
+            not all(isinstance(value, dict) for value in language_profiles.values()) or
+            not language_profiles.items()):
+        return None
+    unique_words = get_language_features(language_profiles)
+    word_scores = []
+    for index, word in enumerate(unique_words):
+        for lang in language_profiles.values():
+            if word in lang:
+                word_scores.append([index, lang.get(word)])
+    sparse_vector = [word_scores[index] for index, word in enumerate(unique_words) if word in original_text]
+    return sparse_vector
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
