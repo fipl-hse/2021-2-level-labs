@@ -192,9 +192,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             dist = calculate_distance(unknown_text_vector, vector)
             distances.append(dist)
     k_distances = sorted(distances)
-    kn_distances = k_distances[:(k + 1)]
+    k_distances = k_distances[:(k + 1)]
     labels = []
-    for dist in kn_distances:
+    for dist in k_distances:
         ind = distances.index(dist)
         if len(language_labels) == len(known_text_vectors):
             label = language_labels[ind]
@@ -289,9 +289,9 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
         dst = calculate_distance_sparse(unknown_text_vector, vector)
         distances.append(dst)
     k_distances = sorted(distances)
-    kn_distances = k_distances[:(k + 1)]
+    k_distances = k_distances[:(k + 1)]
     labels = []
-    for dist in kn_distances:
+    for dist in k_distances:
         ind = distances.index(dist)
         if len(language_labels) == len(known_text_vectors):
             label = language_labels[ind]
