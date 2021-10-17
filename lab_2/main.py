@@ -13,7 +13,18 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    if not isinstance(tokens, list):
+        return None
+    if len(tokens) > 0 and not isinstance(tokens[0], str):
+        return None
+    set_words = set(tokens.copy())
+    number_of_tokens = len(tokens)
+    freq_dict = {}
+    for word in set_words:
+        freq_of_tokens = tokens.count(word)
+        d = {word: round(freq_of_tokens / number_of_tokens, 5)}
+        freq_dict.update(d)
+    return freq_dict
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -24,7 +35,14 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+        return None
+    if not isinstance(texts_corpus[0], list):
+        return None
+    language_profiles = {language_labels[0]: get_freq_dict(texts_corpus[0])}
+    d = {language_labels[-1]: get_freq_dict(texts_corpus[-1])}
+    language_profiles.update(d)
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -33,7 +51,16 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    lst_of_tokens = []
+    for lang in language_profiles:
+        for key in language_profiles[lang]:
+            lst_of_tokens.append(key)
+    if len(lst_of_tokens) == 0:
+        return None
+    lst_of_tokens = sorted(lst_of_tokens)
+    return lst_of_tokens
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -43,7 +70,19 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
+        return None
+    vectors = []
+    uni_tokens = get_language_features(language_profiles)
+    for word in original_text:
+        if word in uni_tokens:
+            for lang in language_profiles:
+                for key in language_profiles[lang]:
+                    if key == word:
+                        vectors.append(language_profiles[lang][key])
+                    if key != word:
+                        vectors.append(0)
+    return vectors
 
 
 # 6
@@ -53,7 +92,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector,list):
+        return None
+    distance = sqrt(sum((unknown_text_vector - known_text_vector) ** 2 for unknown_text_vector, known_text_vector in zip(unknown_text_vector, known_text_vector))
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
