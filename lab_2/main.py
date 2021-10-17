@@ -229,16 +229,10 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
             if token > lang_profiles_mix.get(index, 0):
                 lang_profiles_mix[index] = token
     lang_features = get_language_features(language_profiles)
-    text_vector_standard = []
-    for feature in lang_features:
-        if feature in original_text:
-            text_vector_standard.append(lang_profiles_mix[feature])
-        else:
-            text_vector_standard.append(0)
     text_vector_sparse = []
-    for index, value in enumerate(text_vector_standard):
-        if value != 0:
-            text_vector_sparse.append([index, value])
+    for index, feature in enumerate(lang_features):
+        if feature in original_text:
+            text_vector_sparse.append([index, lang_profiles_mix[feature]])
     return text_vector_sparse
 
 
