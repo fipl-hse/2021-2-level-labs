@@ -169,32 +169,25 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param metric: specific metric to use while calculating distance
     """
     pass
-    if not isinstance(unknown_text_vector, list) \
-            or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list) or not isinstance(k, int) \
-            or not isinstance(metric, str):
-        return None
-    if len(language_labels) != len(known_text_vectors):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) or not isinstance(k, int) or not isinstance(metric, str) \
+            or len(language_labels) != len(known_text_vectors):
         return None
     if metric == "manhattan":
-        distances = [calculate_distance_manhattan(unknown_text_vector, vectors)
-                     for vectors in known_text_vectors]
+        distances = [calculate_distance_manhattan(unknown_text_vector, vectors) for vectors in known_text_vectors]
     elif metric == 'euclid':
-        distances = [calculate_distance(unknown_text_vector, vectors)
-                     for vectors in known_text_vectors]
+        distances = [calculate_distance(unknown_text_vector, vectors) for vectors in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
-    list_of_tuple = list(zip(languages, sorted_distance))
+    list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
     list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
-    for language, distance in list_of_tuples:
+    for language, dist in list_of_tuples:
         if language in dict_of_tuples_and_counts.keys():
             dict_of_tuples_and_counts[language] += 1
         else:
             dict_of_tuples_and_counts[language] = 1
-    print(dict_of_tuples_and_counts)
-    most_frequent_language = max(dict_of_tuples_and_counts.items(), key=lambda x: x[1])[0]
-    print(most_frequent_language)
+    most_frequent_language = max(dict_of_tuples_and_counts, key=dict_of_tuples_and_counts.get)
     list_with_language_and_min_distance = [most_frequent_language, float(min(sorted_distance))]
     return list_with_language_and_min_distance
 
@@ -208,6 +201,28 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
     pass
+    if not isinstance(original_text,list) or not isinstance(language_profiles,dict):
+        return None
+    for word in original_text:
+        if not isinstance(word, str):
+            return None
+    list_with_word_and_score = []
+    new_list_with_word_and_score = []
+    features = get_language_features(language_profiles)
+    vector = dict.fromkeys(features, 0)
+    for profile in language_profiles.values():
+        for unique_word, value_score in profile.items():
+            if (value_score > vector[unique_word]) and (unique_word in original_text):
+                vector[unique_word] = value_score
+    for key_word, score in vector.items():
+        list_with_word_and_score.append([key_word, score])
+        for index, lst in enumerate(list_with_word_and_score):
+            if lst[1] == 0:
+                list_with_word_and_score.pop(index)
+    for new_lst in list_with_word_and_score:
+        new_list_with_word_and_score.append([features.index(new_lst[0]), new_lst[1]])
+    return new_list_with_word_and_score
+
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
