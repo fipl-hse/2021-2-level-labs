@@ -15,9 +15,11 @@ def get_freq_dict(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
+
     for token in tokens:
         if not isinstance(token, str):
             return None
+
     freq_dict = {}
     tokens_len = len(tokens)
 
@@ -29,6 +31,7 @@ def get_freq_dict(tokens: list) -> dict or None:
 
     for token in freq_dict:
         freq_dict[token] = round(freq_dict[token] / tokens_len, 5)
+
     return freq_dict
 
 
@@ -45,7 +48,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
 
     language_profiles = {}
 
-    for label in language_labels:
+    for label in range(len(language_labels)):
         language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
 
     return language_profiles
