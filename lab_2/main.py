@@ -169,14 +169,19 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param metric: specific metric to use while calculating distance
     """
     pass
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list) or not isinstance(k, int) or not isinstance(metric, str) \
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or not isinstance(k, int) \
+            or not isinstance(metric, str) \
             or len(language_labels) != len(known_text_vectors):
         return None
     if metric == "manhattan":
-        distances = [calculate_distance_manhattan(unknown_text_vector, vectors) for vectors in known_text_vectors]
+        distances = [calculate_distance_manhattan(unknown_text_vector, vectors)
+                     for vectors in known_text_vectors]
     elif metric == 'euclid':
-        distances = [calculate_distance(unknown_text_vector, vectors) for vectors in known_text_vectors]
+        distances = [calculate_distance(unknown_text_vector, vectors)
+                     for vectors in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
     list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
@@ -268,7 +273,8 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
         return None
     if len(language_labels) != len(known_text_vectors):
         return None
-    distances = [calculate_distance_sparse(unknown_text_vector,vector) for vector in known_text_vectors]
+    distances = [calculate_distance_sparse(unknown_text_vector,vector)
+                 for vector in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
     list_of_tuple = [tpl for tpl in zip(languages, sorted_distance)]
