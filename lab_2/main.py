@@ -318,11 +318,6 @@ def calculate_distance_sparse(unknown_text_vector: list,
     return distance
 
 
-first_text_vector = [[0, 0.4], [2, 0.2], [4, 0.2], [6, 0.2]]
-second_text_vector = [[1, 0.1], [3, 0.1], [5, 0.49], [7, 0.3]]
-expected = 0.79379
-print(calculate_distance_sparse(first_text_vector, second_text_vector))
-
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
     """
