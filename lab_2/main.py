@@ -136,7 +136,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
                                                               known_text_vectors[i])
     for key, value in label_vector.items():
         if value == min(label_vector.values()):
-            return [key, value]
+            possible_language = [key, value]
+    return possible_language
 
 
 # 8
