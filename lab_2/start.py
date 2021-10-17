@@ -50,7 +50,7 @@ if __name__ == '__main__':
     known_text_corpus = []
     language_labels = []
     # work with known texts
-    # get known_text_corpus with the de, en, lat texts and language labels
+    # get known_text_corpus with the de, en, lat texts and language_labels
     for de_text in DE_SAMPLES:
         known_text_corpus.append(remove_stop_words(tokenize(de_text), STOP_WORDS))
         language_labels.append('de')
@@ -75,6 +75,7 @@ if __name__ == '__main__':
                                                                    known_text_vectors,
                                                                    language_labels,
                                                                    KNN)
+        # get language_labels_counts of unknown texts and check the result
         RESULT.append(prediction_unknown_languages[0])
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'

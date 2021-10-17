@@ -2,7 +2,6 @@
 Lab 2
 Language classification
 """
-from math import dist
 from lab_1.main import tokenize, remove_stop_words
 
 
@@ -81,11 +80,11 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     for element in original_text:
         if not isinstance(element, str):
             return None
-    # unite freq_dicts from language_profiles via creating new dict
+    # unite frequency dictionaries from language_profiles via creating new dict
     main_freq_dict = {}
     for freq_dict in language_profiles.values():
         for key, val in freq_dict.items():
-            # write the key with the highest value to the dictionary
+            # record the key with the highest value in the main dictionary
             if val > main_freq_dict.get(key, 0):
                 main_freq_dict[key] = val
                 # e.g. main_freq_dict = {'a': 1,'b': 3,'c': 1}
@@ -113,9 +112,9 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     for element in unknown_text_vector:
         if not isinstance(element, int) and not isinstance(element, float):
             return None
-    # dist(p, q) returns the Euclidean distance between two points p and q
-    # roughly equivalent to: (sum((px - qx) ** 2 for px, qx in zip(p, q)))**0,5
-    euclidean_distance = dist(unknown_text_vector, known_text_vector)
+    # calculate euclidean distance
+    euclidean_distance = (sum((x - y) ** 2 for x, y in zip(unknown_text_vector,
+                                                           known_text_vector)))**0.5
     return round(euclidean_distance, 5)
 
 
@@ -136,12 +135,12 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             return None
     if len(language_labels) != len(known_text_vectors):
         return None
-    # create list with distances via list comprehension
-    # use the function calculate_distance to find distances
-    euclidean_distance = [calculate_distance(unknown_text_vector, vector)
-                          for vector in known_text_vectors]
+    # create list with euclidean distances via list comprehension
+    # use the function calculate_distance to find euclidean distances
+    euclidean_distances = [calculate_distance(unknown_text_vector, vector)
+                           for vector in known_text_vectors]
     # return [language_label, distance] with the min distance
-    return list(min(zip(language_labels, euclidean_distance)))
+    return list(min(zip(language_labels, euclidean_distances)))
 
 
 # 8
@@ -184,24 +183,23 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             return None
     if len(language_labels) != len(known_text_vectors):
         return None
-    # use function manhattan_distance
     if metric == 'manhattan':
-        # calculate manhattan_distance
-        distance = [calculate_distance_manhattan(unknown_text_vector, vector)
-                    for vector in known_text_vectors]
-    # [1.89, 1.04, 2.24, 1.2334, 1.05, 1.6456]
+        # calculate manhattan distances via function calculate_distance_manhattan
+        distances = [calculate_distance_manhattan(unknown_text_vector, vector)
+                     for vector in known_text_vectors]
     else:
-        # what if metric='euclid'
-        distance = [calculate_distance(unknown_text_vector, vector)
-                    for vector in known_text_vectors]
+        # what if metric='euclid'? calculate euclidean distances via function calculate_distance
+        distances = [calculate_distance(unknown_text_vector, vector)
+                     for vector in known_text_vectors]
     # find knn
-    knn = sorted(zip(language_labels, distance), key=lambda x: x[1])[:k]
-    # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
+    knn = sorted(zip(language_labels, distances), key=lambda x: x[1])[:k]
+    # count language labels and record them in the dictionary
     language_labels_counts = {}
     for key in knn:
         language_labels_counts[key[0]] = language_labels_counts.get(key[0], 0) + 1
-    # {'de': 2, 'la': 1}
-    return [max(language_labels_counts, key=language_labels_counts.get), min(distance)]
+    # return list with language label with the highest frequency
+    # and the minimum distance to the nearest neighbor
+    return [max(language_labels_counts, key=language_labels_counts.get), min(distances)]
 
 
 # 10 implementation
@@ -217,20 +215,21 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     for element in original_text:
         if not isinstance(element, str):
             return None
-    # unite freq_dicts from language_profiles via creating new dict
+    # unite frequency dictionaries from language_profiles via creating new dict
     main_freq_dict = {}
     for freq_dict in language_profiles.values():
         for key, val in freq_dict.items():
-            # write the key with the highest value to the dictionary
+            # record the key with the highest value in the main dictionary
             if val > main_freq_dict.get(key, 0):
                 main_freq_dict[key] = val
                 # e.g. main_freq_dict = {'a': 1,'b': 3,'c': 1}
-    # use function get_language_features to get text_vector
+    # use function get_language_features to get text vector
     language_features = get_language_features(language_profiles)
-    # ['a', 'b', 'c']
+    # language_features -> e.g. ['a', 'b', 'c']
     text_vector = []
+    # get tuples containing pairs ('counter', 'element') from the language_features via enumerate()
     for index, word in enumerate(language_features):
-        # [(0, 'a'), (1, 'b'), (2, 'c')]
+        # e.g. [(0, 'a'), (1, 'b'), (2, 'c')]
         if word in original_text:
             text_vector.append([index, main_freq_dict[word]])
     return text_vector
@@ -249,22 +248,21 @@ def calculate_distance_sparse(unknown_text_vector: list,
     for element in unknown_text_vector:
         if not isinstance(element, list):
             return None
-    # [[4, 0.2], [6, 0.2], [8, 0.2]]
+    # convert text vectors into dictionaries where indexes are keys
     unknown_text_vector = dict(unknown_text_vector)
-    # [[0, 1]]
     known_text_vector = dict(known_text_vector)
-    # [[1, 1]]
     # unite dictionaries
     difference_unknown_known = unknown_text_vector | known_text_vector
+    # if an index appeared in both dictionaries, the united value is the difference of values
     for key, val in unknown_text_vector.items():
         if key in known_text_vector:
             difference_unknown_known[key] = val - known_text_vector[key]
+    # find euclidean_distance
     # (sum(val ** 2 for val in difference_unknown_known.values())) ** 0.5
     euclidean_distance = 0
     for val in difference_unknown_known.values():
         euclidean_distance += val ** 2
-    euclidean_distance **= 0.5
-    return round(euclidean_distance, 5)
+    return round(euclidean_distance**0.5, 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -287,14 +285,15 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
             return None
     if len(language_labels) != len(known_text_vectors):
         return None
-    # use function euclidean_distance
-    distance = [calculate_distance_sparse(unknown_text_vector, vector)
-                for vector in known_text_vectors]
+    # use function calculate_distance_sparse for finding euclidean distances
+    euclidean_distances = [calculate_distance_sparse(unknown_text_vector, vector)
+                          for vector in known_text_vectors]
     # find knn
-    knn = sorted(zip(language_labels, distance), key=lambda x: x[1])[:k]
-    # [('de', 1.26), ('de', 1.32), ('la', 1.53)]
+    knn = sorted(zip(language_labels, euclidean_distances), key=lambda x: x[1])[:k]
+    # count language labels and record them in the dictionary
     language_labels_counts = {}
     for key in knn:
         language_labels_counts[key[0]] = language_labels_counts.get(key[0], 0) + 1
-    # {'de': 2, 'la': 1}
-    return [max(language_labels_counts, key=language_labels_counts.get), min(distance)]
+    # return list with language label with the highest frequency
+    # and the minimum distance to the nearest neighbor
+    return [max(language_labels_counts, key=language_labels_counts.get), min(euclidean_distances)]
