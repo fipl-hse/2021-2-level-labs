@@ -43,8 +43,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             not all(isinstance(i, str) for i in language_labels)):
         return None
     lang_pr = {}
-    for index, text in enumerate(texts_corpus):
-        lang_pr[text] = get_freq_dict(texts_corpus[index])
+    for index, lang in enumerate(language_labels):
+        lang_pr[lang] = get_freq_dict(texts_corpus[index])
     return lang_pr
 
 
