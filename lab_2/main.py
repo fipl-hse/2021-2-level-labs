@@ -102,19 +102,18 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param known_text_vector: vector for known text
     """
     if not isinstance(unknown_text_vector, list) or not \
-            isinstance(known_text_vector, list) or:
+            isinstance(known_text_vector, list):
         return None
     for i in unknown_text_vector:
-        if not isinstance(i, float):
+        if not isinstance(i, (int, float)):
             return None
-        if not isinstance(i, float):
+        if not isinstance(i, (int, float)):
             return None
 
-
-    for i in range(len(unknown_text_vector)):
-        distance = math.sqrt((unknown_text_vector[i] - known_text_vector[i])**2)
-    return distance
-
+    distance = 0
+    for number in range(len(unknown_text_vector)):
+        distance += (unknown_text_vector[number] - known_text_vector[number])**2
+    return round(math.sqrt(distance), 5)
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
                            language_labels: list) -> [str, int] or None:
@@ -124,7 +123,25 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) or len(known_text_vectors) != len(language_labels):
+        return None
+    for i in unknown_text_vector:
+        if not isinstance(i, (int, float)):
+            return None
+    for i in known_text_vectors:
+        if not isinstance(i, list):
+            return None
+    for i in language_labels:
+        if not isinstance(i, str):
+            return None
+
+    distances = {}
+    for vector in range(len(known_text_vectors)):
+        distances[language_labels[vector]] = calculate_distance(unknown_text_vector, known_text_vectors[vector])
+    for key, value in distances.items():
+        if value == min(distances.values()):
+            return [key, value]
 
 
 # 8
