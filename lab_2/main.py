@@ -267,7 +267,6 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
             return None
 
     unique_words = get_language_features(language_profiles)
-    counter = 0
     text_vector_sparse = []
     # going through unique tokens and their numbers
     for i, word in enumerate(unique_words):
@@ -287,7 +286,43 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list):
+        return None
+    for element in unknown_text_vector:
+        if element is None:
+            return None
+
+    if not isinstance(known_text_vector, list):
+        return None
+    for element in known_text_vector:
+        if element is None:
+            return None
+
+    distance = 0
+    len_1 = sorted(unknown_text_vector, reverse=True)
+    len_1 = len_1[0][0]
+    len_2 = sorted(known_text_vector, reverse=True)
+    len_2 = len_2[0][0]
+    len_12 = max([len_1, len_2])
+
+    for i in range(len_12):
+        for unknown, known in zip(unknown_text_vector, known_text_vector):
+            if unknown[0] == i and known[0] == i:
+                distance += (unknown[1] - known[1]) ** 2
+            elif unknown[0] == i:
+                distance += (unknown[1] - 0) ** 2
+            elif known[0] == i:
+                distance += (0 - known[i]) ** 2
+
+    distance = round(sqrt(distance), 5)
+
+    return distance
+
+
+first_text_vector = [[0, 0.4], [2, 0.2], [4, 0.2], [6, 0.2]]
+second_text_vector = [[1, 0.1], [3, 0.1], [5, 0.49], [7, 0.3]]
+expected = 0.79379
+print(calculate_distance_sparse(first_text_vector, second_text_vector))
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
