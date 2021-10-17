@@ -109,22 +109,6 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
         return None
-
-    count = 0
-    top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'],top_n)
-    top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
-    len_top_n_words_unknown_profile = len(top_n_words_unknown_profile)
-    for word in top_n_words_profile_to_compare:
-        if (len(top_n_words_profile_to_compare) == len(top_n_words_unknown_profile)) and \
-                (word in top_n_words_unknown_profile):
-            share_of_common_frequency_words = float(1)
-        else:
-            for word_profile_to_compare in top_n_words_profile_to_compare:
-                if word_profile_to_compare in top_n_words_unknown_profile:
-                    count += 1
-            share_of_common_frequency_words = round(count / len_top_n_words_unknown_profile,2)
-        return share_of_common_frequency_words
-
     # use function get_top_n_words
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
@@ -179,32 +163,6 @@ def compare_profiles_advanced(unknown_profile: dict,
             or not isinstance(profile_to_compare, dict)
             or not isinstance(top_n, int)):
         return None
-
-    profile_advanced = {}
-    profile_advanced['name'] = profile_to_compare['name']
-    top_n_words_profile_to_compare = get_top_n_words(profile_to_compare['freq'], top_n)
-    top_n_words_unknown_profile = get_top_n_words(unknown_profile['freq'], top_n)
-    common_words = []
-    for word_profile_to_compare in top_n_words_profile_to_compare:
-        if word_profile_to_compare in top_n_words_unknown_profile:
-            common_words.append(word_profile_to_compare)
-    profile_advanced['common'] = common_words
-    profile_advanced['score'] = compare_profiles(unknown_profile,profile_to_compare,top_n)
-    list_words = []
-    for word in profile_to_compare['freq'].keys():
-        list_words.append(word)
-    profile_advanced['max_length_word'] = max(list_words, key=len)
-    profile_advanced['min_length_word'] = min(list_words, key=len)
-    len_value = 0
-    for value in profile_to_compare['freq'].keys():
-        len_value += len(value)
-    profile_advanced['average_token_length'] = len_value / len(profile_to_compare['freq'])
-    profile_advanced['sorted_common'] = sorted(common_words)
-    return profile_advanced
-
-def detect_language_advanced(unknown_profile: dict, profiles: list, \
-                             languages: list,top_n: int) -> str or None:
-
     # use function get_top_n_words to get common and sorted_common
     top_n_words_unknown = get_top_n_words(unknown_profile["freq"], top_n)
     top_n_words_compare = get_top_n_words(profile_to_compare["freq"], top_n)
@@ -238,7 +196,6 @@ def detect_language_advanced(unknown_profile: dict,
                              profiles: list,
                              languages: list,
                              top_n: int) -> str or None:
-
     """
     Detects the language of an unknown profile within the list of possible languages
     :param unknown_profile: a dictionary
@@ -252,16 +209,6 @@ def detect_language_advanced(unknown_profile: dict,
             or not isinstance(languages, list)
             or not isinstance(top_n, int)):
         return None
-
-    language_profiles = [compare_profiles_advanced(unknown_profile, profile, top_n)
-            for profile in profiles if len(languages) == 0 or profile['name'] in languages]
-    sorted_name = sorted(language_profiles, key=lambda profile: profile['name'])
-    sorted_name_and_score = sorted(sorted_name, key=lambda profile: profile['score'])
-    if len(sorted_name_and_score) == 0:
-        return None
-    language_with_max_shares = sorted_name_and_score[-1]['name']
-    return language_with_max_shares
-
     # create the list of reports (they are dict) and sort the reports by score
     reports = []
     for profile in profiles:
@@ -282,7 +229,6 @@ def detect_language_advanced(unknown_profile: dict,
     reports = sorted(reports[:number_of_max_scores], key=lambda x: x["name"])
     # return a language
     return reports[0]["name"]
-
 
 
 def load_profile(path_to_file: str) -> dict or None:
