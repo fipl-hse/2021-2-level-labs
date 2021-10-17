@@ -40,6 +40,14 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if not (isinstance(texts_corpus, list) and (language_labels, list)):
         return None
 
+    for language in language_labels:
+        for text in texts_corpus:
+            if not language:
+                return None
+            if not text:
+                return None
+
+
     language_profiles = {}
 
     for language in range(len(language_labels)):
@@ -59,11 +67,10 @@ def get_language_features(language_profiles: dict) -> list or None:
 
     features = []
 
-    vals = list(language_profiles.values())
-    for val in vals:
-        features.append(val)
-        features.sort()
-    return features
+    for language in language_profiles.values():
+        for key in language.keys():
+            features.append(key)
+        return sorted(features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -74,16 +81,20 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
 
+    if not (isinstance(original_text, list) and (language_profiles, dict)):
+        return None
+
+    features = get_language_features(language_profiles)
     vector = []
 
-    for vals in list(language_profiles.values()):
-        if vals in original_text:
-            tokens = vals
-            vector.append(tokens)
+    for word in features:
+        if word in original_text:
+            for vals in language_profiles.values():
+                if word in vals.keys():
+                    vector.append(vals[word])
         else:
-            tokens = 0
-            vector.append(tokens)
-    return vector
+            vector.append(0)
+        return vector
 
 
 # 6
@@ -93,7 +104,14 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+
+    if not (isinstance(unknown_text_vector, list) and (known_text_vector, list)):
+        return None
+
+
+
+
+
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -104,7 +122,14 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+
+    if not (isinstance(unknown_text_vector, list) and (known_text_vectors, list)
+            and (language_labels, list)):
+        return None
+
+
+
+
 
 
 # 8
