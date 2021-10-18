@@ -107,7 +107,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
 
     # going through the unique words
     # if we can find the word and its value in profiles
-    # and it's lower than the one we might've updated earlier
+    # and it's higher than the one we might've updated earlier
     # we change it to the one stored in the profile
     for word in unique_words:
         if word in original_text:
@@ -280,25 +280,21 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
             return None
 
     unique_words = get_language_features(language_profiles)
+
     text_vector_sparse = []
 
-    # going through unique tokens and their numbers
+    # going through the unique words
+    # if we can find the word and its value in profiles
+    # we change it to the one stored in the profile
+
     for i, word in enumerate(unique_words):
-        # if the word is in the original text then we look for it in the profiles
-        # and add it in [position, frequency] format
         if word in original_text:
             for profile in language_profiles.values():
-                if word in profile.keys():
-                    text_vector_sparse.append([i, profile[word]])
+                for key, value in profile.items():
+                    if key == word:
+                        text_vector_sparse.append([i, profile[word]])
+
     return text_vector_sparse
-
-
-tokens = ['the', 'german', 'tech', 'specialist', 'is', 'playing', 'games']
-language_profiles = {'en': {'the': 0.2, 'boy': 0.2, 'is': 0.2,
-                            'playing': 0.2, 'football': 0.2},
-                     'de': {'der': 0.4, 'junge': 0.2, 'fussball': 0.2, 'spielt': 0.2}}
-expected = [[4, 0.2], [6, 0.2], [8, 0.2]]
-print(get_sparse_vector(tokens, language_profiles))
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
