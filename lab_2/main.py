@@ -102,19 +102,23 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
 
     text_vector = {}
     unique_words = get_language_features(language_profiles)
+    # a dict of type unique word:0
     vector_freq = dict.fromkeys(unique_words, 0)
 
+    # going through the unique words
+    # if we can find the word and its value in profiles
+    # and it's lower than the one we might've updated earlier
+    # we change it to the one stored in the profile
     for word in unique_words:
-        if word not in original_text:
-            continue
-        for profile in language_profiles.values():
-            for key, value in profile.items():
-                if key != word:
-                    continue
-                if value <= vector_freq[key]:
-                    continue
-                vector_freq[key] = value
+        if word in original_text:
+            for profile in language_profiles.values():
+                for key, value in profile.items():
+                    if key == word:
+                        if value <= vector_freq[key]:
+                            continue
+                        vector_freq[key] = value
 
+    # we need the key s
     text_vector = list(vector_freq.values())
 
     return text_vector
