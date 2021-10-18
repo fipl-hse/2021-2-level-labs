@@ -222,7 +222,19 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) \
+            or not isinstance(language_profiles, dict):
+        return None
+    text_features = get_language_features(language_profiles)
+    text_vector = []
+    for word in text_features:
+        if word in original_text:
+            for dictionary in language_profiles.values():
+                for key in dictionary.keys():
+                    if key == word:
+                        value = dictionary.get(word)
+                        text_vector.append([text_features.index(word), value])
+    return text_vector
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
@@ -232,7 +244,9 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vector, list):
+        return None
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
