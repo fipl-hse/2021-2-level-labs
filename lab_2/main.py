@@ -46,6 +46,10 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
 
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+
     language_profiles = {}
 
     for label in language_labels:
