@@ -181,7 +181,21 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    import math
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list)):
+        return None
+    else:
+        for i in unknown_text_vector:
+            if i == None:
+                return None
+        for i in known_text_vector:
+            if i == None:
+                return None
+        distance = 0
+        for i in range(len(known_text_vector)):
+            distance += abs((unknown_text_vector[i]) - (known_text_vector[i]))
+            distance=round(distance,5)
+        return distance
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -195,7 +209,48 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list) and isinstance(language_labels, list) and isinstance(k, int) and isinstance(metric, str) and (len(known_text_vectors)==len(language_labels))):
+        return None
+    else:
+        list_of_distances = []
+        if metric == 'euclid':
+            for i in known_text_vectors:
+                distance = calculate_distance(unknown_text_vector, i)
+                list_of_distances.append(distance)
+        elif metric == 'manhattan':
+            for i in known_text_vectors:
+                distance = calculate_distance_manhattan(unknown_text_vector, i)
+                list_of_distances.append(distance)
+        for i in range(len(list_of_distances) - 1):
+            for j in range(i, len(list_of_distances)):
+                if list_of_distances[i] > list_of_distances[j]:
+                    n = list_of_distances[i]
+                    list_of_distances[i] = list_of_distances[j]
+                    list_of_distances[j] = n
+
+                    x = language_labels[i]
+                    language_labels[i] = language_labels[j]
+                    language_labels[j] = x
+        srez_of_distances = list_of_distances[:k]
+        srez_of_labels = language_labels[:k]
+        count = 0
+        for i in srez_of_labels:
+            curr_frequency = srez_of_labels.count(i)
+            if curr_frequency > count:
+                count = curr_frequency
+                name = i
+                result_distance = min(srez_of_distances)
+        if count == 0:
+            result_distance = min(srez_of_distances)
+            num = srez_of_distances.index(min(srez_of_distances))
+            name = srez_of_labels[num]
+        rlist = [name, result_distance]
+        return rlist
+
+
+
+
+
 
 
 # 10 implementation
