@@ -293,6 +293,14 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     return text_vector_sparse
 
 
+tokens = ['the', 'german', 'tech', 'specialist', 'is', 'playing', 'games']
+language_profiles = {'en': {'the': 0.2, 'boy': 0.2, 'is': 0.2,
+                            'playing': 0.2, 'football': 0.2},
+                     'de': {'der': 0.4, 'junge': 0.2, 'fussball': 0.2, 'spielt': 0.2}}
+expected = [[4, 0.2], [6, 0.2], [8, 0.2]]
+print(get_sparse_vector(tokens, language_profiles))
+
+
 def calculate_distance_sparse(unknown_text_vector: list,
                               known_text_vector: list) -> float or None:
     """
@@ -374,4 +382,3 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     result = [max_l_tmp, distances[0][1]]
 
     return result
-
