@@ -58,7 +58,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
 
     for text_corpus in texts_corpus:
         corpus = get_freq_dict(text_corpus)
-    for label in language_labels:
+    for label in range(len(language_labels)):
         language_profiles[language_labels[label]] = corpus
 
     return language_profiles
