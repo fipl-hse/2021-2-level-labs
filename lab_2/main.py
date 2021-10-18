@@ -148,7 +148,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors,list) and isinstance(language_labels, list) and len(known_text_vectors)==len(language_labels)):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors,list) and
+            isinstance(language_labels, list) and len(known_text_vectors)==len(language_labels)):
         return None
     else:
         for i in unknown_text_vector:
@@ -209,7 +210,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list) and isinstance(language_labels, list) and isinstance(k, int) and isinstance(metric, str) and (len(known_text_vectors)==len(language_labels))):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list) and
+            isinstance(language_labels, list) and isinstance(k, int) and isinstance(metric, str) and
+            (len(known_text_vectors)==len(language_labels))):
         return None
     else:
         list_of_distances = []
@@ -261,7 +264,7 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
@@ -271,7 +274,6 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -284,4 +286,4 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+
