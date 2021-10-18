@@ -13,7 +13,18 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-
+    if not isinstance(tokens, list) or len(tokens) < 1:
+        return None
+    freq_dict = {}
+    for token in tokens:
+        if not isinstance(token, str):
+            tokens.remove(token)
+        else:
+            if token not in freq_dict:
+                freq_dict[token] = round(tokens.count(token) / len(tokens), 5)
+    if len(freq_dict) == 0:
+        return None
+    return freq_dict
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -24,7 +35,16 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    pass
+    language_profiles = {}
+    if not isinstance(texts_corpus, list) or \
+            not isinstance(language_labels, list):
+        return None
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+        else:
+            language_profiles[label] = get_freq_dict(texts_corpus[language_labels.index(label)])
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -33,7 +53,17 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    features = []
+    for val in language_profiles.values():
+        for word in dict(val):
+            if isinstance(word, str):
+                features.append(word)
+    features = sorted(features)
+    if len(features) == 0:
+        return None
+    return features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -43,7 +73,19 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or\
+            not isinstance(language_profiles, dict):
+        return None
+    text_vector = []
+    profiles = list(language_profiles.values())
+    for word in get_language_features(language_profiles):
+        if word in original_text:
+            for profile in profiles:
+                if word in profile:
+                    text_vector.append(profile.get(word))
+        else:
+            text_vector.append(0)
+    return text_vector
 
 
 # 6
