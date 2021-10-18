@@ -290,7 +290,7 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     for i, word in enumerate(unique_words):
         if word in original_text:
             for profile in language_profiles.values():
-                for key, value in profile.items():
+                for key in profile.keys():
                     if key == word:
                         text_vector_sparse.append([i, profile[word]])
 
@@ -324,12 +324,12 @@ def calculate_distance_sparse(unknown_text_vector: list,
                                       fillvalue=[-1, 0]):
 
         if unknown[0] == known[0]:
-            distance += (unknown[1] - known[1]) ** 2
+            distance += (unknown[1] - known[1])**2
         else:
             if known[0] >= 0:
-                distance += known[1] ** 2
+                distance += known[1]**2
             if unknown[0] >= 0:
-                distance += unknown[1] ** 2
+                distance += unknown[1]**2
 
     return round(sqrt(distance), 5)
 
