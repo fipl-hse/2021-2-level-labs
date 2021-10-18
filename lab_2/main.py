@@ -146,6 +146,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     for key, value in distances.items():
         if value == min(distances.values()):
             return [key, value]
+        else:
+            return None
 
 
 # 8
