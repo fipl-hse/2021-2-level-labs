@@ -21,11 +21,11 @@ def get_freq_dict(tokens: list) -> dict or None:
         if not isinstance(token, str):
             return None
         if token in freq_dict:
-            freq_dict[token] += 1 / len(tokens)
+            freq_dict[token] += 1
         else:
-            freq_dict[token] = 1 / len(tokens)
+            freq_dict[token] = 1
     for key, value in freq_dict.items():
-        value = round(value, 5)
+        value = round(value / len(tokens), 5)
         freq_dict[key] = value
     return freq_dict
 
@@ -46,8 +46,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         if not isinstance(text, list):
             return None
         dictionary_lst.append(get_freq_dict(text))
-    for label in enumerate(language_labels):
-        language_profiles[language_labels[label[0]]] = dictionary_lst[label[0]]
+    for index, label in enumerate(language_labels):
+        language_profiles[language_labels[index]] = dictionary_lst[index]
     return language_profiles
 
 
@@ -64,10 +64,12 @@ def get_language_features(language_profiles: dict) -> list or None:
         for key in values.keys():
             if key not in unique_words:
                 unique_words.append(key)
+    if len(unique_words) == 0:
+        return None
     for word in unique_words:
         if not isinstance(word, str):
             return None
-        return sorted(unique_words)
+    return sorted(unique_words)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -103,16 +105,16 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if (not isinstance(unknown_text_vector, list)) or (not isinstance(known_text_vector, list)):
         return None
     dist = 0
-    for i in enumerate(unknown_text_vector):
+    for index_un, freq_un in enumerate(unknown_text_vector):
         for number in unknown_text_vector:
             if not isinstance(number, (int, float)):
                 return None
         for number in known_text_vector:
             if not isinstance(number, (int, float)):
                 return None
-        for j in enumerate(known_text_vector):
-            if i[0] == j[0]:
-                dist += (i[1] - j[1]) ** 2
+        for index_kn, freq_kn in enumerate(known_text_vector):
+            if index_un == index_kn:
+                dist += (freq_un - freq_kn) ** 2
     return round(sqrt(dist), 5)
 
 
@@ -139,9 +141,9 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     if len(known_text_vectors) != len(language_labels):
         return None
     for element in predict:
-        if not isinstance(element, str):
+        if not isinstance(element, (str, float)):
             return None
-        return predict
+    return predict
 
 
 # 8
@@ -155,16 +157,16 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     if (not isinstance(unknown_text_vector, list)) or (not isinstance(known_text_vector, list)):
         return None
     dist = 0
-    for i in enumerate(unknown_text_vector):
+    for index_un, freq_un in enumerate(unknown_text_vector):
         for number in unknown_text_vector:
             if not isinstance(number, (int, float)):
                 return None
         for number in known_text_vector:
             if not isinstance(number, (int, float)):
                 return None
-        for j in enumerate(known_text_vector):
-            if i[0] == j[0]:
-                dist += abs(i[1] - j[1])
+        for index_kn, freq_kn in enumerate(known_text_vector):
+            if index_un == index_kn:
+                dist += abs(freq_un - freq_kn)
     return dist
 
 
@@ -247,27 +249,27 @@ def calculate_distance_sparse(unknown_text_vector: list,
     if (not isinstance(unknown_text_vector, list)) or (not isinstance(known_text_vector, list)):
         return None
     dist = 0
-    lst = []
-    for i in unknown_text_vector:
+    vector = []
+    for lst_un in unknown_text_vector:
         for element in unknown_text_vector:
             if not isinstance(element, list):
                 return None
         for element in known_text_vector:
             if not isinstance(element, list):
                 return None
-        lst.append(i[0])
-        for ind in known_text_vector:
-            lst.append(ind[0])
-    unknown_vector = [0] * max(lst)
-    known_vector = [0] * max(lst)
-    for i in unknown_text_vector:
-        unknown_vector.insert(i[0], i[1])
-    for i in known_text_vector:
-        known_vector.insert(i[0], i[1])
-    for ind in enumerate(unknown_vector):
-        for i in enumerate(known_vector):
-            if ind[0] == i[0]:
-                dist += (ind[1] - i[1]) ** 2
+        vector.append(lst_un[0])
+        for lst_kn in known_text_vector:
+            vector.append(lst_kn[0])
+    unknown_vector = [0] * max(vector)
+    known_vector = [0] * max(vector)
+    for number in unknown_text_vector:
+        unknown_vector.insert(number[0], number[1])
+    for number in known_text_vector:
+        known_vector.insert(number[0], number[1])
+    for index_un, freq_un in enumerate(unknown_vector):
+        for index_kn, freq_kn in enumerate(known_vector):
+            if index_un == index_kn:
+                dist += (freq_un - freq_kn) ** 2
     return round(sqrt(dist), 5)
 
 
