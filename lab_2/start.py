@@ -2,7 +2,12 @@
 Language detection starter
 """
 
-from main import *
+from main import (tokenize,
+                 remove_stop_words,
+                 get_language_profiles,
+                 get_language_features,
+                 get_sparse_vector,
+                 predict_language_knn_sparse)
 import os
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
