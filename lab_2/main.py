@@ -2,19 +2,25 @@
 Lab 2
 Language classification
 """
-
+import math
 from lab_1.main import tokenize, remove_stop_words
 
-
 # 4
-def get_freq_dict(tokens: list) -> dict or None:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
-    """
-    pass
-
+def get_freq_dict(tokens):
+    if not isinstance(tokens, list):
+        return None
+    frequency_dict = {}
+    for word in tokens:
+        if not isinstance(word, str):
+            return None
+        if word in frequency_dict:
+            frequency_dict[word] += 1 / len(tokens)
+        else:
+            frequency_dict[word] = 1 / len(tokens)
+    for key, value in frequency_dict.items():
+        value = round(value, 5)
+        frequency_dict[key] = value
+    return frequency_dict
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
     """
