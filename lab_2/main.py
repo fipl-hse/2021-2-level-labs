@@ -100,7 +100,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     distance = 0
     for a, b in zip(known_text_vector, unknown_text_vector):
         distance += (a - b) ** 2
-    return distance ** 0.5
+    return round(distance ** 0.5, 5)
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
