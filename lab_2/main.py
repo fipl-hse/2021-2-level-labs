@@ -72,7 +72,19 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not (isinstance(language_profiles, dict) and len(language_profiles) != 0):
+        return None
+    else:
+        features=[]
+        for i in language_profiles.values():
+            newdict=i
+            for j in newdict:
+                features.append(j)
+        features.sort()
+        return features
+
+
+
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -82,7 +94,25 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not (isinstance(original_text,list) and isinstance(language_profiles, dict)):
+        return None
+    else:
+        text_vector = []
+        features = get_language_features(language_profiles)
+        for i in features:
+            if i in original_text:
+                for profile in language_profiles.values():
+                    if i in profile.keys():
+                        text_vector.append(profile[i])
+            else:
+                text_vector.append(0)
+        return text_vector
+
+
+
+
+
+
 
 
 # 6
@@ -92,7 +122,22 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    import math
+    if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vector,list)):
+        return None
+    else:
+        for i in unknown_text_vector:
+            if i==None:
+                return None
+        for i in known_text_vector:
+            if i==None:
+                return None
+        sum=0
+        for i in range(len(known_text_vector)):
+            sum += ((unknown_text_vector[i])-(known_text_vector[i]))**2
+        distance = round(math.sqrt(sum), 5)
+        return distance
+
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -103,7 +148,29 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors,list) and isinstance(language_labels, list) and len(known_text_vectors)==len(language_labels)):
+        return None
+    else:
+        for i in unknown_text_vector:
+            if i==None:
+                return None
+        for i in known_text_vectors:
+            for j in i:
+                if j==None:
+                    return None
+        count=0
+        min=calculate_distance(unknown_text_vector, known_text_vectors[0])
+        for i in known_text_vectors:
+            dictance = calculate_distance(unknown_text_vector, i)
+            if dictance<min:
+                count +=1
+                min=dictance
+                metka=language_labels[count]
+        prediction=[metka,min]
+        return prediction
+
+
+
 
 
 # 8

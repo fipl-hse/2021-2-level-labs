@@ -1,37 +1,33 @@
-def get_freq_dict(tokens: list) -> dict or None:
+def get_language_features(language_profiles: dict) -> list or None:
     """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens
-    :return: a dictionary with frequencies
+    Gets all unique words from language profiles
+        and sorts them in alphabetical order
+    :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    k=0
-    if not isinstance(tokens, list):
+    if not (isinstance(language_profiles, dict) and len(language_profiles) != 0):
         return None
     else:
-        for i in tokens:
-            if i is None:
-                k = 1
-                break
-        if k == 1:
-            return None
-        else:
-            freq_list = {}
-            for i in tokens:
-                if i in freq_list.keys():
-                    freq_list[i] += 1
-                else:
-                    freq_list[i] = 1
-            for i in freq_list:
-                freq_list[i] = round(freq_list[i] / len(tokens), 5)
-            return freq_list
+        features=[]
+        for i in language_profiles.values():
+            newdict=i
+            for j in newdict:
+                features.append(j)
+        features.sort()
+        return features
+original_text = ['this', 'boy', 'is', 'playing', 'football']
 
-corpus = [['the', 'boy', 'is', 'playing', 'football'],
-                  ['der', 'junge', 'der', 'fussball', 'spielt']]
-labels = ['en', 'de']
-language_profiles={}
-n=0
-for i in corpus:
-    newdict=get_freq_dict(i)
-    language_profiles[labels[n]]=newdict
-    n+=1
-print(language_profiles)
+language_profiles = {
+    'eng': {'the': 0.2, 'boy': 0.2, 'is': 0.2, 'playing': 0.2, 'football': 0.2},
+    'de': {'der': 0.4, 'junge': 0.2, 'fussball': 0.2, 'spielt': 0.2}
+}
+text_vector = []
+features = get_language_features(language_profiles)
+print(features)
+for i in features:
+    if i in original_text:
+        for profile in language_profiles.values():
+            if i in profile.keys():
+                text_vector.append(profile[i])
+    else:
+        text_vector.append(0)
+print (text_vector)
