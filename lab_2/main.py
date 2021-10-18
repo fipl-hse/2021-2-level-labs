@@ -47,7 +47,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             return None
         dictionary_lst.append(get_freq_dict(text))
     for index, label in enumerate(language_labels):
-        language_profiles[language_labels[index]] = dictionary_lst[index]
+        language_profiles[label] = dictionary_lst[index]
     return language_profiles
 
 
