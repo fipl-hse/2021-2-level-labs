@@ -247,6 +247,24 @@ def calculate_distance_sparse(unknown_text_vector: list,
     if not isinstance(unknown_text_vector, list) \
             or not isinstance(known_text_vector, list):
         return None
+    for element in unknown_text_vector:
+        if not isinstance(element, list):
+            return None
+    for element in known_text_vector:
+        if not isinstance(element, list):
+            return None
+    unknown_text_dict = dict(unknown_text_vector)
+    known_text_dict = dict(known_text_vector)
+    common_dict = unknown_text_dict.copy()
+    for key, value in known_text_dict.items():
+        if key not in common_dict:
+            common_dict[key] = value
+        else:
+            common_dict[key] -= known_text_dict[key]
+    distance = 0
+    for value in common_dict.values():
+        distance += value ** 2
+    return round(float(distance ** 0.5), 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
