@@ -211,7 +211,35 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not (isinstance(original_text, list) and language_profiles != {}
+            and all(isinstance(i, str) for i in original_text)
+            and isinstance(language_profiles, dict)
+            and all(isinstance(i, dict) for i in language_profiles.values())):
+        return None
+    features = get_language_features(language_profiles)
+    vector_freq_dict = dict.fromkeys(features, 0)
+    new_list = []
+    for word in features:
+        if word not in original_text:
+            continue
+        for freq_dict in language_profiles.values():
+            for key, value in freq_dict.items():
+                if key != word:
+                    continue
+                if value <= vector_freq_dict[key]:
+                    continue
+                vector_freq_dict[key] = value
+    list_of_scores = list(vector_freq_dict.values())
+    k = 0
+    for i in list_of_scores:
+        if k == len(list_of_scores):
+            break
+        if i == 0:
+            k += 1
+            continue
+        new_list.append([k, i])
+        k += 1
+    return new_list
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
