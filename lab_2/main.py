@@ -78,7 +78,7 @@ def get_language_features(language_profiles: dict) -> list or None:
 
     for freq_dict in language_profiles.values():
         for key in freq_dict:
-            features.extend(key)
+            features.append(key)
             features = sorted(features)
     return features
 
