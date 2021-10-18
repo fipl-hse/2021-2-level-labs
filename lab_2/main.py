@@ -167,8 +167,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             return None
 
     distance = 0
-    for number, i in enumerate(unknown_text_vector):
-        distance += abs(unknown_text_vector[number] - known_text_vector[number])
+    for i, number in enumerate(unknown_text_vector):
+        distance += abs(unknown_text_vector[i] - known_text_vector[i])
     return round(distance, 5)
 
 
