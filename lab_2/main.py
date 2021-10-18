@@ -19,11 +19,13 @@ def get_freq_dict(tokens: list) -> dict or None:
     freq_dict = {}
 
     for token in tokens:
+        if not isinstance(token, str):
+            return None
         if token not in freq_dict:
             freq_dict[token] = 1
         else:
             freq_dict[token] += 1
-        freq_dict[token] = round(freq_dict[token] / len(tokens), 3)
+        freq_dict[token] = round(freq_dict[token]/len(tokens), 3)
     return freq_dict
 
 
@@ -80,8 +82,18 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
+        return None
 
+    features = get_language_features(language_profiles)
+    text_vector = dict.fromkeys(features, 0)
+
+    for language_profile in language_profiles.values():
+        for feature, value_score in language_profile.items():
+            if value_score > text_vector[feature] and feature in original_text:
+                text_vector[feature] = value_score
+    vector = list(text_vector.values())
+    return vector
 
 # 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
