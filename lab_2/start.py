@@ -3,13 +3,19 @@ Language detection starter
 """
 
 import os
-import lab_2.main
+import lab_2.main import (tokenize,
+                         remove_stop_words,
+                         get_language_profiles,
+                         get_language_features,
+                         get_sparse_vector,
+                         predict_language_knn_sparse)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 PATH_TO_DATASET_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'dataset')
 
 if __name__ == '__main__':
+
     with open(os.path.join(PATH_TO_PROFILES_FOLDER, 'eng.txt'),
               'r', encoding='utf-8') as file_to_read:
         EN_TEXT = file_to_read.read()

@@ -281,10 +281,11 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
 
     unique_words = get_language_features(language_profiles)
     text_vector_sparse = []
+
     # going through unique tokens and their numbers
     for i, word in enumerate(unique_words):
-        # if the word is in the original text then we look for it in the profiles and add it
-        # in [position, frequency] format
+        # if the word is in the original text then we look for it in the profiles
+        # and add it in [position, frequency] format
         if word in original_text:
             for profile in language_profiles.values():
                 if word in profile.keys():
@@ -313,6 +314,8 @@ def calculate_distance_sparse(unknown_text_vector: list,
 
     distance = 0
 
+    # helps with the fact that one lists can be longer than the other
+    # creates [-1, 0] if the list has ended and the other list didn't
     for unknown, known in zip_longest(unknown_text_vector, known_text_vector,
                                       fillvalue=[-1, 0]):
 
