@@ -199,9 +199,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for language in k_nearest:
         if language[0] not in language_freq:
             language_freq[language[0]] = 1
-        else:
-            language_freq[language[0]] += 1
-    possible_language = [max(language_freq, key=language_freq.get), k_nearest[0][1]]
+        language_freq[language[0]] += 1
+    possible_language = [max(language_freq, key=language_freq.get), min(distances)]
     return possible_language
 
 
@@ -288,7 +287,6 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     for language in k_nearest:
         if language[0] not in language_freq:
             language_freq[language[0]] = 1
-        else:
-            language_freq[language[0]] += 1
-    possible_language = [max(language_freq, key=language_freq.get), k_nearest[0][1]]
+        language_freq[language[0]] += 1
+    possible_language = [max(language_freq, key=language_freq.get), min(distances)]
     return possible_language
