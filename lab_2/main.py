@@ -135,7 +135,6 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     return min_distance
 
 
-
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
                                  known_text_vector: list) -> float or None:
@@ -172,7 +171,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         isinstance(known_text_vectors, list) or not \
             isinstance(language_labels, list) or not \
             isinstance(k, int) or not \
-            isinstance(metric, str):
+            isinstance(metric, str) or not \
+            len(known_text_vectors) == len(language_labels):
         return None
     if metric == 'euclid':
         vectors_distances = []
@@ -182,19 +182,28 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             if not isinstance(known_text_vector, list):
                 return None
             vectors_distances.append(calculate_distance(unknown_text_vector, known_text_vector))
-        sorted_vectors_distances = vectors_distances.copy()
-        sorted_vectors_distances.sort()
-        min_distance_vectors = sorted_vectors_distances[:k]
-        for min_distance_vector in min_distance_vectors:
-            predicted_languages.append(language_labels[vectors_distances.index(min_distance_vector)])
-        for language in predicted_languages:
-            if language not in languages_results:
-                languages_results[language] = 1
-            else:
-                languages_results[language] += 1
-        result_language = sorted(languages_results, key=languages_results.get, reverse=True)[0]
-        return [result_language, min_distance_vectors[0]]
-
+    elif metric == 'manhattan':
+        vectors_distances = []
+        predicted_languages = []
+        languages_results = {}
+        for known_text_vector in known_text_vectors:
+            if not isinstance(known_text_vector, list):
+                return None
+            vectors_distances.append(round(calculate_distance_manhattan(unknown_text_vector, known_text_vector), 5))
+    else:
+        return None
+    sorted_vectors_distances = vectors_distances.copy()
+    sorted_vectors_distances.sort()
+    min_distance_vectors = sorted_vectors_distances[:k]
+    for min_distance_vector in min_distance_vectors:
+        predicted_languages.append(language_labels[vectors_distances.index(min_distance_vector)])
+    for language in predicted_languages:
+        if language not in languages_results:
+            languages_results[language] = 1
+        else:
+            languages_results[language] += 1
+    result_language = sorted(languages_results, key=languages_results.get, reverse=True)[0]
+    return [result_language, min_distance_vectors[0]]
 
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
