@@ -25,7 +25,9 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token] = 1
         else:
             freq_dict[token] += 1
-        freq_dict[token] = round(freq_dict[token]/len(tokens), 5)
+
+    for freq in freq_dict:
+        freq_dict[token] = round(freq_dict[freq]/len(tokens), 5)
     return freq_dict
 
 
