@@ -375,19 +375,3 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
 
     return result
 
-
-first_text_vector = [[0, 0.2], [2, 0.2], [4, 0.2], [6, 0.2]]
-second_text_vectors = [[[1, 0.2], [3, 0.1], [5, 0.49], [7, 0.3]],
-                       [[0, 0.1], [2, 0.4], [3, 0.1],
-                        [6, 0.34], [7, 0.3]],
-                       [[1, 0.2], [3, 0.1], [5, 0.49],
-                        [7, 0.3], [8, 0.35]],
-                       [[0, 0.11], [2, 0.34], [3, 0.1],
-                        [4, 0.12], [6, 0.8], [7, 0.12], [8, 0.1]],
-                       [[0, 0.1], [2, 0.4], [3, 0.1],
-                        [4, 0.1], [5, 0.11], [6, 0.34], [7, 0.3]]]
-language_labels = ['en', 'de', 'en', 'en', 'de']
-expected = ['de', 0.43784]
-print(predict_language_knn_sparse(first_text_vector,
-                                     second_text_vectors,
-                                     language_labels, 3))

@@ -80,3 +80,4 @@ if __name__ == '__main__':
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == EXPECTED, 'Detection not working'
+
