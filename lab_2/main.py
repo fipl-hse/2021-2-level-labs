@@ -47,7 +47,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         if not isinstance(text, list):
             return None
     language_profile = {}
-    for index, element in enumerate(language_labels):
+    for index, _ in enumerate(language_labels):
         language_profile [language_labels[index]] = get_freq_dict(texts_corpus[index])
     return language_profile
 
@@ -80,8 +80,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     """
     if not isinstance (original_text, list) or not isinstance(language_profiles,dict):
         return None
-    for x in original_text:
-        if not isinstance(x, str):
+    for word in original_text:
+        if not isinstance(word, str):
             return None
     text_vector = []
     unique_tokens = get_language_features(language_profiles)
@@ -117,7 +117,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance (known_vector, (float, int)):
             return None
     distance = 0
-    for index, value in enumerate(unknown_text_vector):
+    for index, _ in enumerate(unknown_text_vector):
         distance += ((unknown_text_vector [index] - known_text_vector [index])**2)
     distance = round(distance ** 0.5, 5)
     return distance
@@ -167,14 +167,14 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     if not isinstance(unknown_text_vector, list) \
             or not isinstance (known_text_vector, list):
         return None
-    for x in unknown_text_vector:
-        if not isinstance (x, (float,int)):
+    for unknown_vector in unknown_text_vector:
+        if not isinstance (unknown_vector, (float,int)):
             return None
-    for y in known_text_vector:
-        if not isinstance(y, (float,int)):
+    for known_vector in known_text_vector:
+        if not isinstance(known_vector, (float,int)):
             return None
     distance = 0
-    for index, value in enumerate (unknown_text_vector):
+    for index, _ in enumerate (unknown_text_vector):
         distance += (abs(unknown_text_vector[index] - known_text_vector[index]))
     return distance
 
