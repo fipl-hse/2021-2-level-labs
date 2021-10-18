@@ -131,7 +131,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             return None
         vectors_distances.append(calculate_distance(unknown_text_vector, known_text_vector))
     min_distance_vector = min(vectors_distances)
-    min_distance.extend([language_labels[vectors_distances.index(min_distance_vector)], min_distance_vector])
+    min_distance.extend([language_labels[vectors_distances.index(min_distance_vector)],
+                         min_distance_vector])
     return min_distance
 
 
@@ -170,8 +171,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if not isinstance(unknown_text_vector, list) or not \
         isinstance(known_text_vectors, list) or not \
             isinstance(language_labels, list) or not \
-            isinstance(k, int) or not \
-            isinstance(metric, str) or not \
             len(known_text_vectors) == len(language_labels):
         return None
     if metric == 'euclid':
@@ -189,7 +188,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         for known_text_vector in known_text_vectors:
             if not isinstance(known_text_vector, list):
                 return None
-            vectors_distances.append(round(calculate_distance_manhattan(unknown_text_vector, known_text_vector), 5))
+            vectors_distances.append(round(calculate_distance_manhattan(unknown_text_vector,
+                                                                        known_text_vector), 5))
     else:
         return None
     sorted_vectors_distances = vectors_distances.copy()
