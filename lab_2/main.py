@@ -55,9 +55,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             return None
 
     language_profiles = {}
-
     labels_counter = 0
-
     for text_corpus in texts_corpus:
         language_profiles[language_labels[labels_counter]] = get_freq_dict(text_corpus)
         labels_counter += 1
