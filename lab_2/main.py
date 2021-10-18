@@ -80,6 +80,7 @@ def get_language_features(language_profiles: dict) -> list or None:
         for key in freq_dict:
             features.append(key)
             features = sorted(features)
+
     return features
 
 
@@ -90,7 +91,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not (language_profiles, dict):
+        return None
 
 
 # 6
