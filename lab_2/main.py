@@ -277,5 +277,35 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-
-    pass
+    if not (isinstance(unknown_text_vector, list)
+            and all(isinstance(i, list) for i in unknown_text_vector)
+            and isinstance(known_text_vectors, list)
+            and all(isinstance(i, list) for i in known_text_vectors)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)
+            and len(known_text_vectors) == len(language_labels)):
+        return None
+    list_of_scores = [[] for i in range(len(known_text_vectors))]
+    list_knn = []
+    list_newest = []
+    dict_counter = {}
+    counter = 0
+    while True:
+        if counter == len(known_text_vectors):
+            break
+        distance = calculate_distance_sparse(unknown_text_vector,
+                                             known_text_vectors[counter])
+        list_of_scores[counter].append(distance)
+        list_of_scores[counter].append(language_labels[counter])
+        counter += 1
+    list_of_scores.sort()
+    while k != -1:
+        list_of_scores[k][0], list_of_scores[k][1] = list_of_scores[k][1], list_of_scores[k][0]
+        k -= 1
+    for i in list_of_scores[:k]:
+        list_knn.append(i[0])
+    for i in list_knn:
+        dict_counter[i] = list_knn.count(i)
+    right_label = sorted(dict_counter, key=dict_counter.get, reverse=True)[0]
+    list_newest.extend([right_label, list_of_scores[0][1]])
+    return list_newest
