@@ -163,6 +163,18 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
+    if not isinstance(unknown_text_vector, list) or not isinstance (known_text_vector, list):
+        return None
+    for x in unknown_text_vector:
+        if not isinstance (x, (float,int)):
+            return None
+    for y in known_text_vector:
+        if not isinstance(y, (float,int)):
+            return None
+    distance = 0
+    for index, value in enumerate (unknown_text_vector):
+        distance += (abs(unknown_text_vector[index] - known_text_vector[index]))
+    return distance
     pass
 
 
@@ -177,6 +189,32 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
+    if not isinstance (unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list) or not isinstance(k, int) or not isinstance (metric, str):
+        return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    calculate_distances = []
+    if metric == "manhattan":
+        for vector in known_text_vectors:
+            calculate_distances.append(calculate_distance_manhattan(unknown_text_vector, vector))
+    elif metric == "euclid":
+        for vector in known_text_vectors:
+            calculate_distances.append(calculate_distance(unknown_text_vector, vector))
+    distances = sorted(calculate_distances)[:k]
+    sorted_languages = []
+    for distance in distances:
+        sorted_languages.append(language_labels[calculate_distances.index(distance)])
+    list_of_label_and_distances = list(zip(sorted_languages, distances))
+    list_of_label_and_distances = sorted(list_of_label_and_distances, key=lambda i: i[1])
+    dict_of_label_and_distances = {}
+    for pair in list_of_label_and_distances:
+        if pair[0] in dict_of_label_and_distances.keys():
+            dict_of_label_and_distances[pair[0]] += 1
+        else:
+            dict_of_label_and_distances[pair[0]] = 1
+    common_languages = max(dict_of_label_and_distances, key= dict_of_label_and_distances.get)
+    result = [common_languages, round(float(min(distances)),5)]
+    return result
     pass
 
 
