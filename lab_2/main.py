@@ -114,11 +114,10 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
             for profile in language_profiles.values():
                 for key, value in profile.items():
                     if key == word:
-                        if value <= vector_freq[key]:
-                            continue
-                        vector_freq[key] = value
+                        if value > vector_freq[key]:
+                            vector_freq[key] = value
 
-    # we need the key s
+    # we need list of vector element so we convert values to a list
     text_vector = list(vector_freq.values())
 
     return text_vector
