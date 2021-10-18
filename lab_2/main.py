@@ -53,10 +53,13 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for text_corpus in texts_corpus:
         if not isinstance(text_corpus, list):
             return None
+        for word in text_corpus:
+            if not isinstance(word, str):
+                return None
 
     language_profiles = {}
 
-    for label in language_labels:
+    for label in range(len(language_labels)):
         language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
 
     return language_profiles
