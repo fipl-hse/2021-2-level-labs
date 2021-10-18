@@ -2,7 +2,7 @@
 Lab 2
 Language classification
 """
-import math
+
 from lab_1.main import tokenize, remove_stop_words
 
 # 4
@@ -22,25 +22,28 @@ def get_freq_dict(tokens):
         frequency_dict[key] = value
     return frequency_dict
 
-def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
-    """
-    Computes language profiles for a collection of texts
-        and adds appropriate language label for each text
-    :param texts_corpus: a list of given texts
-    :param language_labels: a list of given language labels
-    :return: a dictionary of dictionaries - language profiles
-    """
-    pass
+def get_language_profiles(texts_corpus, language_labels) -> dict or None:
+    if not isinstance(texts_corpus, list) and isinstance(language_labels, list):
+        return None
+    if None in texts_corpus or None in language_labels:
+        return None
+    language_profiles = {}
+    for label in range(len(language_labels)):
+        language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
+    return language_profiles
 
-
-def get_language_features(language_profiles: dict) -> list or None:
-    """
-    Gets all unique words from language profiles
-        and sorts them in alphabetical order
-    :param language_profiles: a dictionary of dictionaries - language profiles
-    """
-    pass
-
+def get_language_features(language_profiles) -> list or None:
+    if not isinstance(language_profiles, dict) or language_profiles == {}:
+        return None
+    unique_list = []
+    for frequency_dict in language_profiles.values():
+        if None in frequency_dict \
+                or not isinstance(frequency_dict, dict):
+            return None
+        unique_list.extend(list(frequency_dict.keys()))
+    unique_list = list(set(unique_list))
+    unique_list = sorted(unique_list)
+    return unique_list
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
     """
