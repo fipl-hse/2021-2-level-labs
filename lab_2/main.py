@@ -47,10 +47,13 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for texts in texts_corpus:
         if not isinstance(texts, list):
             return None
-        for label in language_labels:
-            if not isinstance(label, str):
-                return None
-            language_profiles[label] = get_freq_dict(texts_corpus)
+
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+
+    for texts, label in zip(texts_corpus, language_labels):
+        language_profiles[label] = get_freq_dict(texts)
     return language_profiles
 
 
