@@ -24,8 +24,9 @@ def get_freq_dict(tokens: list) -> dict or None:
                 frequency_dictionary[word] = 1
         else:
             return None
+    len_of_tokens = len(tokens)
     for key, value in frequency_dictionary.items():
-        frequency_dictionary[key] = round((value / len(tokens)),5)
+        frequency_dictionary[key] = round((value / len_of_tokens),5)
     return frequency_dictionary
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
@@ -56,7 +57,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     """
     pass
     features = []
-    if (not isinstance(language_profiles,dict)) or (language_profiles == {}):
+    if (not isinstance(language_profiles,dict)) or (len(language_profiles) == 0):
         return None
     for tokens_and_frequencies in language_profiles.values():
         for token in tokens_and_frequencies:
@@ -186,10 +187,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                      for vectors in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
-    list_of_tuple = list(zip(languages, sorted_distance))
-    list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
+    list_of_lang_and_dist = list(zip(languages, sorted_distance))
+    list_of_lang_and_dist = sorted(list_of_lang_and_dist, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
-    for language_and_dist in list_of_tuples:
+    for language_and_dist in list_of_lang_and_dist:
         if language_and_dist[0] in dict_of_tuples_and_counts.keys():
             dict_of_tuples_and_counts[language_and_dist[0]] += 1
         else:
@@ -279,10 +280,10 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
                  for vector in known_text_vectors]
     sorted_distance = sorted(distances)[:k]
     languages = [language_labels[distances.index(distance)] for distance in sorted_distance]
-    list_of_tuple = list(zip(languages, sorted_distance))
-    list_of_tuples = sorted(list_of_tuple, key=lambda i: i[1])
+    list_of_lang_and_dist = list(zip(languages, sorted_distance))
+    list_of_lang_and_dist = sorted(list_of_lang_and_dist, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
-    for language_and_dist in list_of_tuples:
+    for language_and_dist in list_of_lang_and_dist:
         if language_and_dist[0] in dict_of_tuples_and_counts.keys():
             dict_of_tuples_and_counts[language_and_dist[0]] += 1
         else:
