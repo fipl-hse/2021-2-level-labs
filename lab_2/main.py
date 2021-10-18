@@ -5,7 +5,6 @@ Language classification
 
 from lab_1.main import tokenize
 from lab_1.main import remove_stop_words
-
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
