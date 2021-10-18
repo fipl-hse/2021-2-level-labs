@@ -140,9 +140,9 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
     distances = {}
     nearest_language = []
-    for vector, i in enumerate(known_text_vectors):
-        distances[language_labels[vector]] = \
-            calculate_distance(unknown_text_vector, known_text_vectors[vector])
+    for i, vector in enumerate(known_text_vectors):
+        distances[language_labels[i]] = \
+            calculate_distance(unknown_text_vector, known_text_vectors[i])
     for key, value in distances.items():
         if value == min(distances.values()):
             nearest_language = [key, value]
