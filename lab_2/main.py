@@ -190,7 +190,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             dist_list.append(calculate_distance_manhattan(unknown_text_vector, lang))
     close_dist = sorted(dist_list)[:k]
     close_lang = [language_labels[dist_list.index(dist)] for dist in close_dist]
-    count_lang = dict((lang, close_lang.count(lang)) for lang in set(close_lang))
+    count_lang = {}
+    for lang in close_lang:
+        if lang not in count_lang:
+            count_lang[lang] = 0
+        count_lang[lang] += 1
     closest_lang = max(count_lang, key=count_lang.get)
     return [closest_lang, close_dist[0]]
 
@@ -272,6 +276,10 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
         dist_list.append(calculate_distance_sparse(unknown_text_vector, vector))
     close_dist = sorted(dist_list)[:k]
     close_lang = [language_labels[dist_list.index(dist)] for dist in close_dist]
-    count_lang = dict((lang, close_lang.count(lang)) for lang in set(close_lang))
+    count_lang = {}
+    for lang in close_lang:
+        if lang not in count_lang:
+            count_lang[lang] = 0
+        count_lang[lang] += 1
     closest_lang = max(count_lang, key=count_lang.get)
     return [closest_lang, close_dist[0]]
