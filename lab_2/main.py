@@ -71,7 +71,7 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(language_profiles, dict) or len(language_profiles) != 0:
+    if not isinstance(language_profiles, dict) or language_profiles == {}:
         return None
 
     features = []
