@@ -253,18 +253,18 @@ def calculate_distance_sparse(unknown_text_vector: list,
     for element in known_text_vector:
         if not isinstance(element, list):
             return None
-    unknown_text_dict = dict(unknown_text_vector)
-    known_text_dict = dict(known_text_vector)
-    common_dict = unknown_text_dict.copy()
-    for key, value in known_text_dict.items():
-        if key not in common_dict:
-            common_dict[key] = value
-        else:
-            common_dict[key] -= known_text_dict[key]
     distance = 0
-    for value in common_dict.values():
-        distance += value ** 2
-    return round(float(distance ** 0.5), 5)
+    dictionary = {}
+    for element in unknown_text_vector:
+        dictionary[element[0]] = element[1]
+    for element in known_text_vector:
+        if element[0] not in dictionary:
+            dictionary[element[0]] = element[1]
+        else:
+            dictionary[element[0]] -= element[1]
+    for value in dictionary.values():
+        distance += value**2
+    return round(distance**0.5, 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -277,4 +277,3 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
