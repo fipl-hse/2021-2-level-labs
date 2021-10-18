@@ -2,13 +2,13 @@
 Language detection starter
 """
 
-from main import (tokenize,
-                 remove_stop_words,
-                 get_language_profiles,
-                 get_language_features,
-                 get_sparse_vector,
-                 predict_language_knn_sparse)
 import os
+from main import (remove_stop_words,
+                  tokenize,
+                  get_language_profiles,
+                  get_language_features,
+                  get_sparse_vector,
+                  predict_language_knn_sparse)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
