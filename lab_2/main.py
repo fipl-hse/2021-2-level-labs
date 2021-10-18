@@ -37,8 +37,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             and all(isinstance(i, str) for i in language_labels)):
         return None
     language_profiles = {}
-    for i, n in enumerate(language_labels):
-        language_profiles[n] = get_freq_dict(texts_corpus[i])
+    for i, j in enumerate(language_labels):
+        language_profiles[j] = get_freq_dict(texts_corpus[i])
     return language_profiles
 
 
@@ -98,8 +98,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             and all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     distance = 0
-    for i, n in zip(unknown_text_vector, known_text_vector):
-        distance += (i - n) ** 2
+    for i, j in zip(unknown_text_vector, known_text_vector):
+        distance += (i - j) ** 2
     distance = round(sqrt(distance), 5)
     return distance
 
@@ -148,8 +148,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             and all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     distance = 0
-    for i, n in zip(unknown_text_vector, known_text_vector):
-        distance += abs(i - n)
+    for i, j in zip(unknown_text_vector, known_text_vector):
+        distance += abs(i - j)
     distance = round(distance, 5)
     return distance
 
@@ -177,23 +177,22 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     list_knn = []
     list_newest = []
     dict_counter = {}
-    m = 0
+    counter = 0
     distance = 0
     while True:
-        if m == len(known_text_vectors):
+        if counter == len(known_text_vectors):
             break
         if metric == 'euclid':
-            distance = calculate_distance(unknown_text_vector, known_text_vectors[m])
+            distance = calculate_distance(unknown_text_vector, known_text_vectors[counter])
         if metric == 'manhattan':
-            distance = calculate_distance_manhattan(unknown_text_vector, known_text_vectors[m])
-        list_of_scores[m].append(distance)
-        list_of_scores[m].append(language_labels[m])
-        m += 1
+            distance = calculate_distance_manhattan(unknown_text_vector, known_text_vectors[counter])
+        list_of_scores[counter].append(distance)
+        list_of_scores[counter].append(language_labels[counter])
+        counter += 1
     list_of_scores.sort()
-    f = k
-    while f != -1:
-        list_of_scores[f][0], list_of_scores[f][1] = list_of_scores[f][1], list_of_scores[f][0]
-        f -= 1
+    while k != -1:
+        list_of_scores[k][0], list_of_scores[k][1] = list_of_scores[k][1], list_of_scores[k][0]
+        k -= 1
     for i in list_of_scores[:k]:
         list_knn.append(i[0])
     for i in list_knn:
@@ -249,7 +248,30 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+    if not (isinstance(unknown_text_vector, list)
+            and all(isinstance(i, list) for i in unknown_text_vector)
+            and isinstance(known_text_vector, list)
+            and all(isinstance(i, list) for i in known_text_vector)):
+        return None
+    k = len(unknown_text_vector)
+    unknown_text_vector = dict(unknown_text_vector)
+    known_text_vector = dict(known_text_vector)
+    summary = []
+    for key, value in unknown_text_vector.items():
+        for key_scnd, value_scnd in known_text_vector.items():
+            if k == 0:
+                print('a')
+                break
+            if key != key_scnd:
+                print('b')
+                k -= 1
+                continue
+            summary.append((value - value_scnd)** 2)
+            print('c')
+            k -= 1
+    print(summary)
+    distance = sqrt(sum(summary))
+    return round(distance, 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
