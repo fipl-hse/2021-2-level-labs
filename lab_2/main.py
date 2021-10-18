@@ -55,7 +55,9 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             return None
 
     language_profiles = {}
+
     labels_counter = 0
+
     for text_corpus in texts_corpus:
         language_profiles[language_labels[labels_counter]] = get_freq_dict(text_corpus)
         labels_counter += 1
@@ -69,7 +71,16 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+
+    features = []
+
+    for freq_dict in language_profiles.values():
+        for key in freq_dict:
+            features.extend(key)
+            features = sorted(features)
+    return features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
