@@ -45,8 +45,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             return None
 
     language_profiles = {}
-    for label, i in enumerate(language_labels):
-        language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
+    for i, label in enumerate(language_labels):
+        language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
     return language_profiles
 
 
@@ -124,10 +124,10 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param language_labels: language labels for each known text
     """
 
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list):
-        return None
-    if len(known_text_vectors) != len(language_labels):
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or len(known_text_vectors) != len(language_labels):
         return None
     for i in unknown_text_vector:
         if not isinstance(i, (int, float)):
