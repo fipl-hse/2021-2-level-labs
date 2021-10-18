@@ -235,20 +235,17 @@ def calculate_distance_sparse(unknown_text_vector: list,
             or None in unknown_text_vector:
         return None
     distance = 0
-    uniq_dist = []
+    kor_dic = {}
     for kor in unknown_text_vector:
-        for kor2 in known_text_vector:
-            if kor[0] == kor2[0]:
-                distance += (kor[1] - kor2[1])**2
-            else:
-                if kor not in uniq_dist:
-                    uniq_dist.append(kor)
-                if kor2 not in uniq_dist:
-                    uniq_dist.append(kor2)
-    for kor in uniq_dist:
-        distance += (kor[1] - 0)**2
-    distance = round(distance**0.5, 5)
-    return distance
+        kor_dic[kor[0]] = kor[1]
+    for kor in known_text_vector:
+        if kor[0] in kor_dic:
+            kor_dic[kor[0]] -= kor[1]
+        else:
+            kor_dic[kor[0]] = kor[1]
+    for value in kor_dic.values():
+        distance += value ** 2
+    return round(distance ** 0.5, 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -261,4 +258,27 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or len(language_labels) != len(known_text_vectors):
+        return None
+    vector_list = []
+    for index, vector in enumerate(known_text_vectors):
+        if not isinstance(vector, list):
+            return None
+        vector_list.append([language_labels[index],
+                            calculate_distance_sparse(unknown_text_vector, vector)])
+    min_dist = sorted(vector_list, key=lambda x: x[1])
+    min_dist = min_dist[:k]
+    labels = []
+    for item in min_dist:
+        labels.append(item[0])
+    labels_count = {}
+    for item in labels:
+        labels_count[item] = labels.count(item)
+    max_label = ['x', -1]
+    for key, value in labels_count.items():
+        if value > max_label[1]:
+            max_label = [key, value]
+    return [max_label[0], min_dist[0][1]]
