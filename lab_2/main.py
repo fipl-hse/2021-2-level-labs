@@ -4,7 +4,7 @@ Language classification
 """
 
 from lab_1.main import tokenize, remove_stop_words
-from math import sqrt
+from math import sqrt, fabs
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -92,7 +92,13 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        return None
+    if all(isinstance(i,(int, float)) for i in unknown_text_vector) and all(isinstance(e,(int, float))
+                                                                            for e in known_text_vector):
+        distance = sqrt(sum((j - k) ** 2 for j, k in zip(unknown_text_vector, known_text_vector)))
+        distance = round(distance, 5)
+        return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -114,7 +120,12 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        return None
+    manhattan_distance = fabs(sum((unknown_text_vector - known_text_vector) for unknown_text_vector, known_text_vector
+                                  in zip(unknown_text_vector, known_text_vector)))
+    manhattan_distance = round(manhattan_distance, 5)
+    return manhattan_distance
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
