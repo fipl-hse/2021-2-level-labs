@@ -23,7 +23,7 @@ def get_freq_dict(tokens: list) -> dict or None:
         else:
             counted_words_dict[token] += 1
     for key, value in counted_words_dict.items():
-        counted_words_dict[key] = value / word_counter
+        counted_words_dict[key] = round(value / word_counter,3)
     return counted_words_dict
 
 
@@ -42,7 +42,6 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for i, label in enumerate(language_labels):
         laguage_profiles [label] = texts_corpus[i]
     return laguage_profiles
-    pass
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -51,7 +50,13 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(language_profiles, dict):
+        return None
+    features = []
+    for value in language_profiles.values():
+        features.extend(value.keys())
+    features.sort()
+    return features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -61,7 +66,17 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text,list) or not isinstance(language_profiles,dict):
+        return None
+    vector = []
+    for word in get_language_features(language_profiles):
+        if word in original_text:
+            for language in language_profiles.keys():
+                if word in language_profiles[language].keys():
+                    vector.append(language_profiles[language][word])
+        else:
+            vector.append(0)
+    return vector
 
 
 # 6
@@ -71,7 +86,15 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vector,list):
+        return None
+    future_result = 0
+    for i, not_i in enumerate(unknown_text_vector):
+        future_result += (unknown_text_vector[i] - known_text_vector[i])**2
+    result = future_result**0.5
+    return result
+
+
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -82,7 +105,15 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not (isinstance(unknown_text_vector,list) or isinstance(known_text_vectors,list) or
+            isinstance(language_labels,list)):
+        return None
+    vectors_results = []
+    for vector in known_text_vectors:
+        vectors_results.append(calculate_distance(unknown_text_vector,vector))
+    min_score = min(vectors_results)
+    predicted_and_score =[language_labels[vectors_results.index(min_score)],min_score]
+    return predicted_and_score
 
 
 # 8
