@@ -115,13 +115,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         return None
 
     euclidean_distance = 0
-
-    #for i in range(len(unknown_text_vector)):
-    # for unkn_index, unkn_freq in enumerate(unknown_text_vector):
-    #     for kn_index, kn_freq in enumerate(known_text_vector):
-    #         if unkn_index == kn_index:
-    for ind, vector in enumerate(unknown_text_vector):
-        euclidean_distance += ((vector - known_text_vector[ind]) ** 2)
+    for index, vector in enumerate(unknown_text_vector):
+        euclidean_distance += ((vector - known_text_vector[index]) ** 2)
     return round(sqrt(euclidean_distance), 5)
 
 
@@ -170,8 +165,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         return None
 
     manhattan_distance = 0
-    for ind, vector in enumerate(unknown_text_vector):
-        manhattan_distance += fabs(vector - known_text_vector[ind])
+    for index, vector in enumerate(unknown_text_vector):
+        manhattan_distance += fabs(vector - known_text_vector[index])
     return round(manhattan_distance, 5)
 
 
