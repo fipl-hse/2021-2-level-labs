@@ -99,8 +99,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     for unique_word in get_language_features(language_profiles):
         if unique_word in original_text:
             for freq_dict in language_profiles.values():
-                if unique_word in freq_dict:
-                    vector.append(freq_dict[unique_word])
+                for key in freq_dict:
+                    if key == unique_word:
+                        vector.append(freq_dict[key])
         else:
             vector.append(0)
 
