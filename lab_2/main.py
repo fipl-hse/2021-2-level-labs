@@ -266,7 +266,7 @@ def calculate_distance_sparse(unknown_text_vector: list,
             return None
     distance = 0
     dictionary_of_vectors = dict(unknown_text_vector)
-    for index, value in enumerate(known_text_vector):
+    for _, value in enumerate(known_text_vector):
         if value[0] not in dictionary_of_vectors:
             dictionary_of_vectors[value[0]] = value[1]
         else:
@@ -314,4 +314,4 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     common_languages = max(dict_of_label_and_distances, key= dict_of_label_and_distances.get)
     result = [common_languages, round(float(min(distances)),5)]
     return result
-    pass
+
