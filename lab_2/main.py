@@ -17,13 +17,14 @@ def get_freq_dict(tokens: list) -> dict or None:
         return None
     freq_dict = {}
     frequency = {}
+    len_tokens = len(tokens)
     for token in tokens:
         if isinstance(token, str):
             if token in freq_dict:
                 freq_dict[token] += 1
             else:
                 freq_dict[token] = 1
-            frequency[token] = round(freq_dict[token]/len(tokens),5)
+            frequency[token] = round(freq_dict[token]/len_tokens,5)
         else:
             return None
     return frequency
@@ -47,8 +48,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         if not isinstance(text, list):
             return None
     language_profile = {}
-    for index, _ in enumerate(language_labels):
-        language_profile [language_labels[index]] = get_freq_dict(texts_corpus[index])
+    for index, value in enumerate(language_labels):
+        language_profile[value] = get_freq_dict(texts_corpus[index])
     return language_profile
 
 
@@ -108,17 +109,17 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not isinstance (unknown_text_vector, list) or not isinstance (known_text_vector, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
     for unknown_vector in unknown_text_vector:
-        if not isinstance (unknown_vector, (float, int)):
+        if not isinstance(unknown_vector, (float, int)):
             return None
     for known_vector in known_text_vector:
-        if not isinstance (known_vector, (float, int)):
+        if not isinstance(known_vector, (float, int)):
             return None
     distance = 0
-    for index, _ in enumerate(unknown_text_vector):
-        distance += ((unknown_text_vector [index] - known_text_vector [index])**2)
+    for index, value in enumerate(unknown_text_vector):
+        distance += ((value - known_text_vector[index])**2)
     distance = round(distance ** 0.5, 5)
     return distance
 
@@ -165,17 +166,17 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param known_text_vector: vector for known text
     """
     if not isinstance(unknown_text_vector, list) \
-            or not isinstance (known_text_vector, list):
+            or not isinstance(known_text_vector, list):
         return None
     for unknown_vector in unknown_text_vector:
-        if not isinstance (unknown_vector, (float,int)):
+        if not isinstance(unknown_vector, (float, int)):
             return None
     for known_vector in known_text_vector:
-        if not isinstance(known_vector, (float,int)):
+        if not isinstance(known_vector, (float, int)):
             return None
     distance = 0
-    for index, _ in enumerate (unknown_text_vector):
-        distance += (abs(unknown_text_vector[index] - known_text_vector[index]))
+    for index, value in enumerate(unknown_text_vector):
+        distance += (abs(value - known_text_vector[index]))
     return distance
 
 
@@ -266,7 +267,7 @@ def calculate_distance_sparse(unknown_text_vector: list,
             return None
     distance = 0
     dictionary_of_vectors = dict(unknown_text_vector)
-    for _, value in enumerate(known_text_vector):
+    for value in known_text_vector:
         if value[0] not in dictionary_of_vectors:
             dictionary_of_vectors[value[0]] = value[1]
         else:
