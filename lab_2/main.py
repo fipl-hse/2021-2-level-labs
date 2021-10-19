@@ -2,7 +2,7 @@
 Lab 2
 Language classification
 """
-
+from math import sqrt, fabs
 from lab_1.main import tokenize, remove_stop_words
 
 
@@ -106,7 +106,18 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vector, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, (int, float)) for i in known_text_vector)
+    ):
+        return None
+
+    euclidean_distance = 0
+    for i in range(len(unknown_text_vector)):
+        euclidean_distance += ((unknown_text_vector[i] - known_text_vector[i]) ** 2)
+    return round(sqrt(euclidean_distance), 5)
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -117,7 +128,24 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, list) for i in known_text_vectors)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)
+            and len(known_text_vectors) == len(language_labels)
+    ):
+        return None
+
+    distances = []
+    for i in known_text_vectors:
+        distances.append(calculate_distance(unknown_text_vector, i))
+    closest_distance = distances.index(min(distances))
+    closest_label = language_labels[closest_distance]
+    prediction = [closest_label, min(distances)]
+    return prediction
 
 
 # 8
@@ -128,7 +156,18 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vector, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, (int, float)) for i in known_text_vector)
+    ):
+        return None
+
+    manhattan_distance = 0
+    for i in range(len(unknown_text_vector)):
+        manhattan_distance += fabs(unknown_text_vector[i] - known_text_vector[i])
+    return round(manhattan_distance, 5)
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -142,7 +181,42 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, list) for i in known_text_vectors)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)
+            and len(known_text_vectors) == len(language_labels)
+            and isinstance(k, int)
+    ):
+        return None
+
+    distances = []
+    if metric == 'euclid':
+        for i in known_text_vectors:
+            distances.append(calculate_distance(unknown_text_vector, i))
+    elif metric == 'manhattan':
+        for i in known_text_vectors:
+            distances.append(calculate_distance_manhattan(unknown_text_vector, i))
+
+    knn_distances = sorted(distances)[:k]
+    closest_languages = []
+    for i in knn_distances:
+        ind = distances.index(i)
+        label = language_labels[ind]
+        closest_languages.append(label)
+
+    predict_label = {}
+    for language in closest_languages:
+        if language not in predict_label:
+            predict_label[language] = 1
+        else:
+            predict_label[language] += 1
+    predict_language = max(predict_label, key=predict_label.get)
+    prediction = [predict_language, min(distances)]
+    return prediction
 
 
 # 10 implementation
