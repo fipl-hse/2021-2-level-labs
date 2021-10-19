@@ -17,10 +17,9 @@ def get_freq_dict(tokens: list) -> dict or None:
     if not isinstance(tokens, list) or None in tokens:
         return None
     frequency_dictionary = {}
+    length = len(tokens)
     for word in tokens:
-        frequency_dictionary[word] = round(tokens.count(word)/len(tokens), 5)
-        # создание пары ключ:значение, где word - ключ, а значение
-        # это частота этого слова, деленая на длину списка всех токенов
+        frequency_dictionary[word] = round(tokens.count(word)/length, 5)
     return frequency_dictionary
 
 
@@ -257,12 +256,18 @@ def calculate_distance_sparse(unknown_text_vector: list,
     dictionary = {}
     for element in unknown_text_vector:
         dictionary[element[0]] = element[1]
+        # значение - координата, ключ - позиция в векторе
+        # element[1] - значение (координата)
+        # создание пары ключ-значение
+        # element[0] - ключ, позиция в векторе
+        # взываю к значению по ключу
     for element in known_text_vector:
         if element[0] not in dictionary:
             dictionary[element[0]] = element[1]
         else:
             dictionary[element[0]] -= element[1]
     for value in dictionary.values():
+        # values - это уже разности
         distance += value**2
     return round(distance**0.5, 5)
 
