@@ -83,7 +83,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
                     continue
             words_freq_dict[key] = value
     for unique_word in get_language_features(language_profiles):
-        text_vector.append(words_freq_dict.get(unique_word if unique_word in original_text else 0, 0))
+        text_vector.append(words_freq_dict.get(unique_word if unique_word in
+                                               original_text else 0, 0))
     return text_vector
 
 
@@ -97,7 +98,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
     distance = 0
-    for vector_number in range(len(unknown_text_vector)):
+    for vector_number, vector in enumerate(unknown_text_vector):
         if not isinstance(unknown_text_vector[vector_number], (int, float)) or not \
                 isinstance(known_text_vector[vector_number], (int, float)):
             return None
