@@ -163,7 +163,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     for element in enumerate(items):
         if not isinstance(element[1], list):
             return None
-        if not elements_isinstance(element[1],types[element[0]]):
+        if not elements_isinstance(element[1], types[element[0]]):
             return None
     if len(known_text_vectors) != len(language_labels):
         return None
@@ -221,15 +221,15 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    items = [unknown_text_vector, known_text_vectors, language_labels, k]
+    items = [unknown_text_vector, known_text_vectors, language_labels]
     types_knn = [(int, float), list, str]
     for element in enumerate(items):
         if not isinstance(element[1], list):
             return None
-        if not element:
-            continue
-        if not elements_isinstance(element[1],types_knn[element[0]]):
+        if not elements_isinstance(element[1], types_knn[element[0]]):
             return None
+    if not isinstance(k, int):
+        return None
     if len(known_text_vectors) != len(language_labels):
         return None
     distance_of_vectors = []
@@ -276,7 +276,7 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     """
     if not isinstance(language_profiles, dict) \
             or not (original_text, list) \
-            or not elements_isinstance(original_text, str)\
+            or not elements_isinstance(original_text, str) \
             or not language_profiles:
         return None
     list_of_features = get_language_features(language_profiles)
@@ -326,15 +326,15 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    items_sparse = [unknown_text_vector, known_text_vectors, language_labels, k]
+    items_sparse = [unknown_text_vector, known_text_vectors, language_labels]
     types_knn = [(int, float), list, str]
-    for element in enumerate(items):
+    for element in enumerate(items_sparse):
         if not isinstance(element[1], list):
             return None
-        if not element:
-            continue
-        if not elements_isinstance(element[1],types_knn[element[0]]):
+        if not elements_isinstance(element[1], types_knn[element[0]]):
             return None
+    if not isinstance(k,int):
+        return None
     if len(known_text_vectors) != len(language_labels):
         return None
     distance_of_vectors = []
