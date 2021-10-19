@@ -23,13 +23,14 @@ def get_freq_dict(tokens):
     return frequency_dict
 
 def get_language_profiles(texts_corpus, language_labels):
-    if not (isinstance(texts_corpus, list) and isinstance(language_labels, list)
-            and texts_corpus and language_labels):
+    if not (isinstance(texts_corpus, list) and isinstance(language_labels, list)):
         return None
-    language_profiles = {'key': 'value'}
     for label in language_labels:
-        language_profiles['key'] = language_labels[label]
-    language_profiles['value'] = get_freq_dict(texts_corpus)
+        if not isinstance(label, str):
+            return None
+    language_profiles = {}
+    for index, label in enumerate(language_labels):
+        language_profiles[label] = get_freq_dict(texts_corpus[index])
     return language_profiles
 
 def get_language_features(language_profiles):
