@@ -109,8 +109,23 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
-
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not \
+            isinstance(language_labels, list):
+        return None
+    if len(language_labels) < 3:
+        return None
+    score_list = []
+    for i in known_text_vectors:
+        score = calculate_distance(unknown_text_vector, i)
+        score_list.append(score)
+    label_and_score = dict(zip(language_labels, score_list))
+    min_value = min(label_and_score.values())
+    language_score = []
+    for k in label_and_score:
+        if label_and_score[k] == min_value:
+            language_score.append(k)
+    language_score.append(min_value)
+    return language_score
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
@@ -122,10 +137,11 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
-    manhattan_distance = fabs(sum((unknown_text_vector - known_text_vector) for unknown_text_vector, known_text_vector
-                                  in zip(unknown_text_vector, known_text_vector)))
-    manhattan_distance = round(manhattan_distance, 5)
-    return manhattan_distance
+    if all(isinstance(i,(int, float)) for i in unknown_text_vector) and all(isinstance(e,(int, float))
+                                                                            for e in known_text_vector):
+        manhattan_distance = sum(fabs(j - k) for j, k in zip(unknown_text_vector, known_text_vector))
+        manhattan_distance = round(manhattan_distance, 5)
+        return manhattan_distance
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
