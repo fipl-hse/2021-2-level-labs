@@ -327,14 +327,12 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param k: the number of neighbors to choose label from
     """
     items_sparse = [unknown_text_vector, known_text_vectors, language_labels]
-    types_knn = [(int, float), list, str]
+    types_knn = [list, list, str]
     for element in enumerate(items_sparse):
         if not isinstance(element[1], list):
             return None
         if not elements_isinstance(element[1], types_knn[element[0]]):
             return None
-    if not isinstance(k,int):
-        return None
     if len(known_text_vectors) != len(language_labels):
         return None
     distance_of_vectors = []
