@@ -82,10 +82,11 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     features = get_language_features(language_profiles)
     vector_list = []
     for word in features:
+        word_list = []
         for lang_profile in language_profiles.values():
             if word in lang_profile:
-                vector_list.append(lang_profile.get(word) if word in original_text else 0)
-
+                word_list.append(lang_profile.get(word) if word in original_text else 0)
+        vector_list.append(sorted(word_list)[0])
     return vector_list
 
 
@@ -226,7 +227,17 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+
+    if not isinstance(original_text, list) \
+            or not isinstance(language_profiles, dict):
+        return None
+
+    vector_list = get_text_vector(original_text, language_profiles)
+    sparse_vector = []
+    for index, number in enumerate(vector_list):
+        if number > 0:
+            sparse_vector.append([index, number])
+    return sparse_vector
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
@@ -236,7 +247,29 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+
+    if not isinstance(unknown_text_vector, list) \
+        or not isinstance(known_text_vector, list):
+        return None
+    for i in unknown_text_vector:
+        if not isinstance(i, list):
+            return None
+    for i in known_text_vector:
+        if not isinstance(i, list):
+            return None
+
+    unknown_dict = dict(unknown_text_vector)
+    known_dict = dict(known_text_vector)
+    updated_dict = unknown_dict.copy()
+    updated_dict.update(known_dict)
+
+    for index in updated_dict:
+        if index in unknown_dict and index in known_dict:
+            unknown_dict[index] = unknown_dict[index] - known_dict[index]
+
+    distance = sum(value ** 2 for value in updated_dict.values())
+    return round(math.sqrt(distance), 5)
+
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
@@ -248,4 +281,33 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+
+    if not isinstance(unknown_text_vector, list) \
+        or not isinstance(known_text_vectors, list) \
+        or not isinstance(language_labels, list) \
+        or not isinstance(k, int) \
+        or len(known_text_vectors) != len(language_labels):
+        return None
+    for i in unknown_text_vector:
+        if not isinstance(i, list):
+            return None
+    for vector in known_text_vectors:
+        if not isinstance(vector, list):
+            return None
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+
+    distances = []
+    for vector in known_text_vectors:
+        distances.append(calculate_distance_sparse(unknown_text_vector, vector))
+    knn_distances = sorted(distances)[:k]
+    knn_language = [language_labels[distances.index(distance)] for distance in knn_distances]
+    predict_language = {}
+    for language in knn_language:
+        if language not in predict_language:
+            predict_language[language] = 0
+        predict_language[language] += 1
+
+    predict_language = max(predict_language, key=predict_language.get)
+    return [predict_language, knn_distances[0]]
