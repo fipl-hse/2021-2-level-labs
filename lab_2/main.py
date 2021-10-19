@@ -4,8 +4,6 @@ Language classification
 """
 from math import fabs
 
-from lab_1.main import tokenize, remove_stop_words
-
 
 # 4
 def elements_isinstance(list_with_elem: list, type_of_elem: type) -> True or False:
@@ -88,7 +86,7 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token1] += 1
         else:
             freq_dict[token1] = 1
-    for key in freq_dict():
+    for key in freq_dict:
         freq_dict[key] = round(freq_dict[key] / len(tokens), 5)
     return freq_dict
 
@@ -229,6 +227,18 @@ def min_distance_to_neighbour(elements: list, label: str) -> float:
     return min_distance
 
 
+def isinstance_predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
+                                    language_labels: list) -> True or False:
+    for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
+        if not isinstance(element[1], list):
+            return False
+        if not elements_isinstance(element[1], [(int, float), list, str][element[0]]):
+            return False
+    if len(known_text_vectors) != len(language_labels):
+        return False
+    return True
+
+
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
@@ -240,14 +250,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
-        if not isinstance(element[1], list):
-            return None
-        if not elements_isinstance(element[1], [(int, float), list, str][element[0]]):
-            return None
-    if not isinstance(k, int):
-        return None
-    if len(known_text_vectors) != len(language_labels):
+    if not isinstance_predict_language_knn(unknown_text_vector, known_text_vectors,
+                                    language_labels):
         return None
     distance_of_vectors = []
     elements = []
@@ -270,8 +274,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             labels_count[i['label']] += 1
         else:
             labels_count[i['label']] = 1
-    min_labels_dist = 0
-    super_label = ''
     super_label = super_label_detection(labels_count, elements)
     return [super_label, elements[0]['distance']]
 
@@ -338,11 +340,11 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     """
     for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
         if not isinstance(element[1], list):
-            return None
+            return False
         if not elements_isinstance(element[1], [list, list, str][element[0]]):
-            return None
+            return False
     if len(known_text_vectors) != len(language_labels):
-        return None
+        return False
     distance_of_vectors = []
     elements = []
     for vector in known_text_vectors:
