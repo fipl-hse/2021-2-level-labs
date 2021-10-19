@@ -3,6 +3,7 @@ Language detection starter
 """
 
 import os
+
 from main import tokenize
 from main import remove_stop_words
 from main import get_language_profiles
@@ -65,7 +66,8 @@ if __name__ == '__main__':
     for text in UNKNOWN_SAMPLES:
         unknown_text = remove_stop_words(tokenize(text), stop_words)
         unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
-        predict_language = predict_language_knn_sparse(unknown_text_vector, known_text_vectors, language_labels, k)
+        predict_language = predict_language_knn_sparse(unknown_text_vector, known_text_vectors,
+                                                       language_labels, k)
         RESULT.append(predict_language[0])
 
     print(RESULT)
