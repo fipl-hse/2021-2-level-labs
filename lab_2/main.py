@@ -28,10 +28,6 @@ def get_freq_dict(tokens: list) -> dict or None:
 
 
 
-
-    pass
-
-
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
     """
     Computes language profiles for a collection of texts
@@ -40,6 +36,12 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
+    if (not isinstance(texts_corpus, list) or not isinstance(language_labels, list)):
+        return None
+    laguage_profiles = {}
+    for i, label in enumerate(language_labels):
+        laguage_profiles [label] = texts_corpus[i]
+    return laguage_profiles
     pass
 
 
