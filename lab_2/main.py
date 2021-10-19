@@ -106,7 +106,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
 
     for unknown_vector in unknown_text_vector:
