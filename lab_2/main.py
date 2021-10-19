@@ -7,6 +7,12 @@ from lab_1.main import tokenize, remove_stop_words
 
 
 def list_elements_isinstance(this_list: list, this_type: type) -> bool:
+    """
+    Checks elements' types in a list - saves space
+    :param this_list: any list
+    :param this_type: any type
+    :return: true if the list contains elements of only this_type
+    """
     for element in this_list:
         if not isinstance(element, this_type):
             return False
@@ -36,7 +42,7 @@ def get_freq_dict(tokens: list) -> dict or None:
         else:
             freq_dict[token] = 1
 
-    for token in freq_dict.keys():
+    for token in freq_dict:
         freq_dict[token] = round(freq_dict[token] / len(tokens), 5)
 
     return freq_dict
@@ -118,11 +124,18 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     return text_vector
 
 
-def get_word_freq_value(word: str, language_profiles: dict) -> int:
+def get_word_freq_value(word: str, language_profiles: dict) -> float or int:
+    """
+    Returns word frequency from multiple given language profiles
+    :param word: given word
+    :param language_profiles: a dictionary of dictionaries - language profiles
+    :return: word frequency
+    """
+
     freq_value = 0
 
-    for language_profile in language_profiles.keys():
-        if word in language_profiles[language_profile].keys():
+    for language_profile in language_profiles:
+        if word in language_profiles[language_profile]:
             if language_profiles[language_profile][word] > freq_value:
                 freq_value = language_profiles[language_profile][word]
 
@@ -251,7 +264,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
 
     highest_results = []
 
-    for result_freq in results_freq_dict.keys():
+    for result_freq in results_freq_dict:
         if not highest_results:
             highest_results = [[result_freq, results_freq_dict[result_freq]]]
         elif results_freq_dict[result_freq] > highest_results[0][1]:
@@ -367,7 +380,7 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
 
     highest_results = []
 
-    for result_freq in results_freq_dict.keys():
+    for result_freq in results_freq_dict:
         if not highest_results:
             highest_results = [[result_freq, results_freq_dict[result_freq]]]
         elif results_freq_dict[result_freq] > highest_results[0][1]:
