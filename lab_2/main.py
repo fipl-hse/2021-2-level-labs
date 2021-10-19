@@ -22,38 +22,41 @@ def get_freq_dict(tokens):
         frequency_dict[key] = value
     return frequency_dict
 
-def get_language_profiles(texts_corpus, language_labels) -> dict or None:
+def get_language_profiles(texts_corpus, language_labels):
     if not isinstance(texts_corpus, list) and isinstance(language_labels, list):
         return None
-    if None in texts_corpus or None in language_labels:
+    if not texts_corpus or not language_labels:
         return None
     language_profiles = {}
     for label in range(len(language_labels)):
         language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
     return language_profiles
 
-def get_language_features(language_profiles) -> list or None:
-    if not isinstance(language_profiles, dict) or language_profiles == {}:
+def get_language_features(language_profiles):
+    if not (isinstance(language_profiles, dict) and language_profiles):
         return None
     unique_list = []
     for frequency_dict in language_profiles.values():
-        if None in frequency_dict \
-                or not isinstance(frequency_dict, dict):
-            return None
-        unique_list.extend(list(frequency_dict.keys()))
-    unique_list = list(set(unique_list))
-    unique_list = sorted(unique_list)
+        for token in frequency_dict:
+            if token not in unique_list:
+                unique_list.append(token)
+    unique_list.sort()
     return unique_list
 
-def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
-    """
-    Builds a vector representation of a given text
-        using dictionary with language profiles
-    :param original_text: any tokenized text
-    :param language_profiles: a dictionary of dictionaries - language profiles
-    """
-    pass
-
+def get_text_vector(original_text, language_profiles):
+    if not (isinstance(original_text, list) and isinstance(language_profiles, dict)
+            and original_text and language_profiles):
+        return None
+    text_vector = []
+    unique_words = get_language_features(language_profiles)
+    for word in unique_words:
+        if word not in original_text:
+            text_vector.append(0)
+        else:
+            for profile in language_profiles.values():
+                if word in profile.keys():
+                    text_vector.append(profile[word])
+    return text_vector
 
 # 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
