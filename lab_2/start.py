@@ -3,16 +3,8 @@ Language detection starter
 """
 
 import os
-from main import get_freq_dict
-from main import get_language_features
-from main import get_text_vector
 from main import get_sparse_vector
 from main import get_language_profiles
-from main import calculate_distance_sparse
-from main import calculate_distance
-from main import calculate_distance_manhattan
-from main import predict_language_score
-from main import predict_language_knn
 from main import predict_language_knn_sparse
 from main import tokenize
 from main import remove_stop_words
