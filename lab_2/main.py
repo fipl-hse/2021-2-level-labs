@@ -231,8 +231,9 @@ def calculate_distance_metric(unknown_text_vector: list,
     """
     if metric == 'manhattan':
         return calculate_distance_manhattan(unknown_text_vector, known_text_vector)
-    else:
-        return calculate_distance(unknown_text_vector, known_text_vector)
+
+    return calculate_distance(unknown_text_vector, known_text_vector)
+
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
