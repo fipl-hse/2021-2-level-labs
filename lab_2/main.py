@@ -20,8 +20,6 @@ def get_freq_dict(tokens: list) -> dict or None:
     for token in tokens:
         if token not in counted_words_dict.keys():
             counted_words_dict[token] = 1
-        elif token is None:
-            return None
         else:
             counted_words_dict[token] += 1
     for key, value in counted_words_dict.items():
@@ -41,8 +39,11 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
     laguage_profiles = {}
+    freq_lists = []
+    for text in texts_corpus:
+        freq_lists.append(get_freq_dict(text))
     for i, label in enumerate(language_labels):
-        laguage_profiles [label] = texts_corpus[i]
+        laguage_profiles [label] = freq_lists[i]
     return laguage_profiles
 
 
