@@ -291,7 +291,6 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     # we get max distances of unique words
     for profile in language_profiles.values():
         for key, value in profile.items():
-            print(max_scores[key], value)
             if value > max_scores[key] and key in original_text:
                 max_scores[key] = value
     # using unique words and their max distances we add [index, distance] to a sparse vector list
