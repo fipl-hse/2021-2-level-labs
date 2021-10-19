@@ -26,15 +26,10 @@ def get_language_profiles(texts_corpus, language_labels):
     if not (isinstance(texts_corpus, list) and isinstance(language_labels, list)
             and texts_corpus and language_labels):
         return None
-    for i in texts_corpus:
-        if not isinstance(i, str):
-            return None
-    for k in language_labels:
-        if not isinstance(k, str):
-            return None
-    language_profiles = {}
-    for label in range(len(language_labels)):
-        language_profiles[language_labels[label]] = get_freq_dict(texts_corpus[label])
+    language_profiles = {'key': 'value'}
+    for label in language_labels:
+        language_profiles['key'] = language_labels[label]
+    language_profiles['value'] = get_freq_dict(texts_corpus)
     return language_profiles
 
 def get_language_features(language_profiles):
