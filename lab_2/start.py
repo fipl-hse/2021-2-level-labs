@@ -47,9 +47,12 @@ if __name__ == '__main__':
     corpus = [en_tokens, de_tokens, lat_tokens]
 
     language_profiles = get_language_profiles(corpus, ['en', 'de', 'lat'])
-    unknown_text_vector_1 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[0]), language_profiles)
-    unknown_text_vector_2 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[1]), language_profiles)
-    unknown_text_vector_3 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[2]), language_profiles)
+    unknown_text_vector_1 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[0]),
+                                              language_profiles)
+    unknown_text_vector_2 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[1]),
+                                              language_profiles)
+    unknown_text_vector_3 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[2]),
+                                              language_profiles)
 
     known_samples = []
     known_text_vectors = []
