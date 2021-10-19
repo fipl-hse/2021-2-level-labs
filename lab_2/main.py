@@ -13,7 +13,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if not isinstance(tokens,list):
+    if not isinstance(tokens,list) or tokens ==[]:
         return None
     word_counter = len(tokens)
     counted_words_dict = {}
@@ -36,7 +36,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    if not (isinstance(texts_corpus, list) or isinstance(language_labels, list)):
+    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
     laguage_profiles = {}
     for i, label in enumerate(language_labels):
