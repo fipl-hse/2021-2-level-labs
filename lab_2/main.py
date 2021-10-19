@@ -203,12 +203,12 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
             or not isinstance(language_profiles, dict)):
         return None
     text_vector = []
-    for language_feature in get_language_features(language_profiles):
-        if language_feature in original_text:
+    for feature in get_language_features(language_profiles):
+        if feature in original_text:
             for freq_dictionary in language_profiles.values():
-                if language_feature in freq_dictionary:
-                    text_vector.append([(get_language_features(language_profiles)).index(language_feature),
-                                        freq_dictionary[language_feature]])
+                if feature in freq_dictionary:
+                    text_vector.append([(get_language_features(language_profiles)).index(feature),
+                                        freq_dictionary[feature]])
     return text_vector
 
 
