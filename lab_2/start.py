@@ -4,8 +4,8 @@ Language detection starter
 
 import os
 from lab_1.main import tokenize, remove_stop_words
-
-from lab_2.main import get_sparse_vector, get_language_profiles, predict_language_knn_sparse
+from lab_2.main import get_freq_dict, get_language_profiles, get_text_vector, get_sparse_vector, \
+    predict_language_knn_sparse
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -47,9 +47,12 @@ if __name__ == '__main__':
     corpus = [en_tokens, de_tokens, lat_tokens]
 
     language_profiles = get_language_profiles(corpus, ['en', 'de', 'lat'])
-    unknown_text_vector_1 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[0]), language_profiles)
-    unknown_text_vector_2 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[1]), language_profiles)
-    unknown_text_vector_3 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[2]), language_profiles)
+    unknown_text_vector_1 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[0]),
+                                              language_profiles)
+    unknown_text_vector_2 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[1]),
+                                              language_profiles)
+    unknown_text_vector_3 = get_sparse_vector(tokenize(UNKNOWN_SAMPLES[2]),
+                                              language_profiles)
 
     known_samples = []
     known_text_vectors = []
