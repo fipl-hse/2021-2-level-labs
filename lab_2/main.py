@@ -55,6 +55,25 @@ def vectorization_sparse(language_profiles: dict, list_of_features: list, word: 
     return list_of_features
 
 
+def super_label_detection(labels_count: dict, elements: list) -> str:
+    """
+    Detects the most frequent label in labels_count
+    :param labels_count: dict with label:count
+    :param elements: list with dict
+    """
+    min_labels_dist = 0
+    super_label = ''
+    for key in labels_count:
+        if labels_count[key] > min_labels_dist:
+            min_labels_dist = labels_count[key]
+            super_label = key
+        if labels_count[key] == min_labels_dist:
+            if min_distance_to_neighbour(elements, key) \
+                    < min_distance_to_neighbour(elements, super_label):
+                super_label = key
+    return super_label
+
+
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
@@ -69,7 +88,7 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token1] += 1
         else:
             freq_dict[token1] = 1
-    for key in freq_dict.keys():
+    for key in freq_dict():
         freq_dict[key] = round(freq_dict[key] / len(tokens), 5)
     return freq_dict
 
@@ -221,12 +240,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    items = [unknown_text_vector, known_text_vectors, language_labels]
-    types_knn = [(int, float), list, str]
-    for element in enumerate(items):
+    for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
         if not isinstance(element[1], list):
             return None
-        if not elements_isinstance(element[1], types_knn[element[0]]):
+        if not elements_isinstance(element[1], [(int, float), list, str][element[0]]):
             return None
     if not isinstance(k, int):
         return None
@@ -255,14 +272,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             labels_count[i['label']] = 1
     min_labels_dist = 0
     super_label = ''
-    for key in labels_count.keys():
-        if labels_count[key] > min_labels_dist:
-            min_labels_dist = labels_count[key]
-            super_label = key
-        if labels_count[key] == min_labels_dist:
-            if min_distance_to_neighbour(elements, key) \
-                    < min_distance_to_neighbour(elements, super_label):
-                super_label = key
+    super_label = super_label_detection(labels_count, elements)
     return [super_label, elements[0]['distance']]
 
 
@@ -326,12 +336,10 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    items_sparse = [unknown_text_vector, known_text_vectors, language_labels]
-    types_knn = [list, list, str]
-    for element in enumerate(items_sparse):
+    for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
         if not isinstance(element[1], list):
             return None
-        if not elements_isinstance(element[1], types_knn[element[0]]):
+        if not elements_isinstance(element[1], [list, list, str][element[0]]):
             return None
     if len(known_text_vectors) != len(language_labels):
         return None
@@ -350,14 +358,5 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
             labels_count[i['label']] += 1
         else:
             labels_count[i['label']] = 1
-    min_labels_dist = 0
-    super_label = ''
-    for key in labels_count.keys():
-        if labels_count[key] > min_labels_dist:
-            min_labels_dist = labels_count[key]
-            super_label = key
-        if labels_count[key] == min_labels_dist:
-            if min_distance_to_neighbour(elements, key) \
-                    < min_distance_to_neighbour(elements, super_label):
-                super_label = key
+    super_label = super_label_detection(labels_count, elements)
     return [super_label, elements[0]['distance']]
