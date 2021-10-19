@@ -114,13 +114,13 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, dict):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
     for num in unknown_text_vector:
-        if not isinstance(num, int) and not isinstance(num, float):
+        if not isinstance(num, int) or not isinstance(num, float):
             return None
     for num in known_text_vector:
-        if not isinstance(num, int) and not isinstance(num, float):
+        if not isinstance(num, int) or not isinstance(num, float):
             return None
 
     distance_counter = 0
