@@ -3,8 +3,8 @@ Lab 2
 Language classification
 """
 
-from lab_1.main import tokenize, remove_stop_words
 import math
+from lab_1.main import tokenize, remove_stop_words
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
