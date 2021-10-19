@@ -321,23 +321,22 @@ def calculate_distance_sparse(unknown_text_vector: list,
         if element is None:
             return None
 
-    distance = 0
+    # convert vectors into dictionaries
+    # with indices - keys for easier work
+    unknown_text_dict = dict(unknown_text_vector)
+    known_text_dict = dict(known_text_vector)
+    # mix both dictionaries in one
+    # this is needed to find (0 - known_index) or (unknown_index - 0) types of differences
+    merged = {**unknown_text_dict, **known_text_dict}
+    # now searching (unknown_index - known_index) when none are 0
+    # if index found in both dictionaries the value is updated to their difference
+    for index in merged:
+        if index in unknown_text_dict and index in known_text_dict:
+            merged[index] = unknown_text_dict[index] - known_text_dict[index]
 
-    # helps with the fact that one lists can be longer than the other
-    # creates [-1, 0] if the list has ended and the other list didn't
-    for unknown, known in zip_longest(unknown_text_vector, known_text_vector,
-                                      fillvalue=[-1, 0]):
-
-        if unknown[0] == known[0]:
-            distance += (unknown[1] - known[1])**2
-        else:
-            if known[0] >= 0:
-                distance += known[1]**2
-            if unknown[0] >= 0:
-                distance += unknown[1]**2
-
-    return round(sqrt(distance), 5)
-
+    # the formula - square root of difference**2
+    distance = sqrt(sum(d ** 2 for d in merged.values()))
+    return round(float(distance), 5)
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
