@@ -84,19 +84,14 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         and all(isinstance(d, dict) for d in language_profiles.values())
         ):
         return None
-    lang_profiles_mix = {}
-    for freq_dict in language_profiles.values():
-        for index, token in freq_dict.items():
-            if token > lang_profiles_mix.get(index, 0):
-                lang_profiles_mix[index] = token
     lang_features = get_language_features(language_profiles)
-    text_vector = []
-    for feature in lang_features:
-        if feature in original_text:
-            text_vector.append(lang_profiles_mix[feature])
-        else:
-            text_vector.append(0)
-    return text_vector
+    lang_profiles_mix = dict.fromkeys(lang_features, 0)
+    for freq_dict in language_profiles.values():
+        for token, freq in freq_dict.items():
+            if token in original_text:
+                if freq > lang_profiles_mix.get(token, 0):
+                    lang_profiles_mix[token] = freq
+    return list(lang_profiles_mix.values())
 
 
 # 6
@@ -223,16 +218,18 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
         and all(isinstance(d, dict) for d in language_profiles.values())
         ):
         return None
-    lang_profiles_mix = {}
-    for freq_dict in language_profiles.values():
-        for index, token in freq_dict.items():
-            if token > lang_profiles_mix.get(index, 0):
-                lang_profiles_mix[index] = token
     lang_features = get_language_features(language_profiles)
+    lang_profiles_mix = dict.fromkeys(lang_features, 0)
+    for freq_dict in language_profiles.values():
+        for token, freq in freq_dict.items():
+            if token in original_text:
+                if freq > lang_profiles_mix.get(token, 0):
+                    lang_profiles_mix[token] = freq
+    text_vector = list(lang_profiles_mix.values())
     text_vector_sparse = []
-    for index, feature in enumerate(lang_features):
-        if feature in original_text:
-            text_vector_sparse.append([index, lang_profiles_mix[feature]])
+    for index, dist in enumerate(text_vector):
+        if dist:
+            text_vector_sparse.append([index, dist])
     return text_vector_sparse
 
 
