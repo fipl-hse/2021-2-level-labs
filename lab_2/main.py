@@ -142,6 +142,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
                                  in zip(unknown_text_vector, known_text_vector))
         manhattan_distance = round(manhattan_distance, 5)
         return manhattan_distance
+    return None
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
