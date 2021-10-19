@@ -102,7 +102,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance(unknown_text_vector[vector_number], (int, float)) or not \
                 isinstance(known_text_vector[vector_number], (int, float)):
             return None
-        distance += (unknown_text_vector[vector_number] - known_text_vector[vector_number]) ** 2
+        distance += (vector - known_text_vector[vector_number]) ** 2
     return round(distance**0.5, 5)
 
 
