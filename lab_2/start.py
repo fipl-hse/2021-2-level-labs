@@ -64,7 +64,8 @@ if __name__ == '__main__':
     for text in UNKNOWN_SAMPLES:
         unknown_text = remove_stop_words(tokenize(text), stop_words)
         unknown_text_vector = get_text_vector(unknown_text, language_profiles)
-        prediction = predict_language_knn(unknown_text_vector, known_text_vectors, language_labels, k)
+        prediction = predict_language_knn(unknown_text_vector,
+                                          known_text_vectors, language_labels, k)
         RESULT.append(prediction[0])
 
     EXPECTED = ['de', 'eng', 'lat']
