@@ -314,4 +314,3 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     common_languages = max(dict_of_label_and_distances, key= dict_of_label_and_distances.get)
     result = [common_languages, round(float(min(distances)),5)]
     return result
-
