@@ -110,11 +110,11 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         return None
 
     for unknown_vector in unknown_text_vector:
-        if not isinstance(unknown_vector, (int, float)):
+        if not isinstance(unknown_vector, int) and not isinstance(unknown_vector, float):
             return None
 
     for known_vector in known_text_vector:
-        if not isinstance(known_vector, (int, float)):
+        if not isinstance(known_vector, int) and not isinstance(known_vector, float):
             return None
 
     dist = 0
