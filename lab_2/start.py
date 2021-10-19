@@ -3,7 +3,7 @@ Language detection starter
 """
 
 import os
-
+from lab_2.main import tokenize, remove_stop_words, get_language_profiles, get_sparse_vector, predict_language_knn_sparse
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 PATH_TO_DATASET_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'dataset')
@@ -39,5 +39,30 @@ if __name__ == '__main__':
 
     EXPECTED = ['de', 'eng', 'lat']
     RESULT = ''
+    RESULT = []
+    stop_words = []
+    texts_corpus = []
+    language_labels = []
+    known_text_vectors = []
+    k = 3
+    for de_text in DE_SAMPLES:
+        texts_corpus.append(remove_stop_words(tokenize(de_text), stop_words))
+        language_labels.append('de')
+    for en_text in EN_SAMPLES:
+        texts_corpus.append(remove_stop_words(tokenize(en_text), stop_words))
+        language_labels.append('eng')
+    for lat_text in LAT_SAMPLES:
+        texts_corpus.append(remove_stop_words(tokenize(lat_text), stop_words))
+        language_labels.append('lat')
+    language_profiles = get_language_profiles(texts_corpus, language_labels)
+    for text in texts_corpus:
+        known_text_vectors.append(get_sparse_vector(text, language_profiles))
+    for unknown_texts in UNKNOWN_SAMPLES:
+        unk_text = remove_stop_words(tokenize(unknown_texts), stop_words)
+        unknown_text_vector = get_sparse_vector(unk_text, language_profiles)
+        list_with_language_and_min_distance = predict_language_knn_sparse(unknown_text_vector,
+                                                                          known_text_vectors,
+                                                                          language_labels, k)
+        RESULT.append(list_with_language_and_min_distance[0])
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
