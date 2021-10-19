@@ -3,8 +3,8 @@ Lab 2
 Language classification
 """
 
-from lab_1.main import tokenize, remove_stop_words
 from math import sqrt, fabs
+from lab_1.main import tokenize, remove_stop_words
 
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
@@ -22,8 +22,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     freq_dict = {}
     for word in set_words:
         freq_of_tokens = tokens.count(word)
-        d = {word: round(freq_of_tokens / number_of_tokens, 5)}
-        freq_dict.update(d)
+        freq_dict.update({word: round(freq_of_tokens / number_of_tokens, 5)})
     return freq_dict
 
 
@@ -40,8 +39,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if not isinstance(texts_corpus[0], list):
         return None
     language_profiles = {language_labels[0]: get_freq_dict(texts_corpus[0])}
-    d = {language_labels[-1]: get_freq_dict(texts_corpus[-1])}
-    language_profiles.update(d)
+    language_profiles.update({language_labels[-1]: get_freq_dict(texts_corpus[-1])})
     return language_profiles
 
 
@@ -94,9 +92,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
-    if all(isinstance(i,(int, float)) for i in unknown_text_vector) and all(isinstance(e,(int, float))
-                                                                            for e in known_text_vector):
-        distance = sqrt(sum((j - k) ** 2 for j, k in zip(unknown_text_vector, known_text_vector)))
+    if all(isinstance(i,(int, float)) for i in unknown_text_vector) \
+            and all(isinstance(e,(int, float)) for e in known_text_vector):
+        distance = sqrt(sum((j - k) ** 2 for j, k
+                            in zip(unknown_text_vector, known_text_vector)))
         distance = round(distance, 5)
         return distance
 
@@ -109,8 +108,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not \
-            isinstance(language_labels, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list):
         return None
     if len(language_labels) < 3:
         return None
@@ -137,9 +136,10 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
-    if all(isinstance(i,(int, float)) for i in unknown_text_vector) and all(isinstance(e,(int, float))
-                                                                            for e in known_text_vector):
-        manhattan_distance = sum(fabs(j - k) for j, k in zip(unknown_text_vector, known_text_vector))
+    if all(isinstance(i,(int, float)) for i in unknown_text_vector) \
+            and all(isinstance(e,(int, float)) for e in known_text_vector):
+        manhattan_distance = sum(fabs(j - k) for j, k
+                                 in zip(unknown_text_vector, known_text_vector))
         manhattan_distance = round(manhattan_distance, 5)
         return manhattan_distance
 
