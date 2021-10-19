@@ -88,8 +88,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         freq_list = []
         for lang in language_profiles.values():
             if word in lang:
-                freq_list.append(lang.get(word) if word in original_text else 0)
-        text_vector.append(sorted(freq_list)[0])
+                freq_list.append(lang[word] if word in original_text else 0)
+        text_vector.append(max(freq_list))
     return text_vector
 
 
