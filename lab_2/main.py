@@ -91,7 +91,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(original_text, list) or not (language_profiles, dict):
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
         return None
 
     vector = []
