@@ -133,7 +133,15 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
+        return None
+
+    for element in unknown_text_vector:
+        if not isinstance(element, (float, int)):
+            return None
+
+    lang_score = list(calculate_distance(unknown_text_vector, unknown_vector) for unknown_vector in known_text_vectors)
+    return list(min(zip(language_labels, lang_score)))
 
 
 # 8
