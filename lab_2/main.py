@@ -100,7 +100,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     if language_profiles == {}:
         return None
 
-    text_vector = {}
     unique_words = get_language_features(language_profiles)
     # a dict of type unique word:0
     vector_freq = dict.fromkeys(unique_words, 0)
@@ -282,17 +281,23 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     unique_words = get_language_features(language_profiles)
 
     text_vector_sparse = []
-
-    # going through the unique words
-    # if we can find the word and its value in profiles
-    # we change it to the one stored in the profile
-
+    # setting 0 distance for unique words in the form of dict
+    max_scores = {word: float(0) for word in unique_words}
+    # elimination of possible repeats in original text to save time
+    original_text = set(original_text)
+    # if the distance of the unique_words word is lower
+    # than the one found in language profile it's updated
+    # it's always changed from 0
+    # we get max distances of unique words
+    for profile in language_profiles.values():
+        for key, value in profile.items():
+            print(max_scores[key], value)
+            if value > max_scores[key] and key in original_text:
+                max_scores[key] = value
+    # using unique words and their max distances we add [index, distance] to a sparse vector list
     for i, word in enumerate(unique_words):
         if word in original_text:
-            for profile in language_profiles.values():
-                for key in profile.keys():
-                    if key == word:
-                        text_vector_sparse.append([i, profile[word]])
+            text_vector_sparse.append([i, max_scores[word]])
 
     return text_vector_sparse
 
