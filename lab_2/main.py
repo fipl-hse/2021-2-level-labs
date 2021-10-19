@@ -172,9 +172,12 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param language_labels: language labels for each known text
     """
 
-    if not isinstance(unknown_text_vector, list) or not isinstance(unknown_text_vector, list)\
-            or not isinstance(language_labels, list) \
-            or not list_elements_isinstance(unknown_text_vector, (int, float))\
+    if not isinstance(unknown_text_vector, list)\
+            or not isinstance(unknown_text_vector, list)\
+            or not isinstance(language_labels, list):
+        return None
+
+    if not list_elements_isinstance(unknown_text_vector, (int, float))\
             or not list_elements_isinstance(known_text_vectors, list)\
             or not list_elements_isinstance(language_labels, str):
         return None
@@ -211,8 +214,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
 
     distance = 0
 
-    for index in range(len(unknown_text_vector)):
-        distance += abs(unknown_text_vector[index] - known_text_vector[index])
+    for index, unknown_text_vector in enumerate(unknown_text_vector):
+        distance += abs(unknown_text_vector - known_text_vector[index])
 
     return round(distance, 5)
 
@@ -232,8 +235,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if not isinstance(unknown_text_vector, list) or not isinstance(unknown_text_vector, list)\
             or not isinstance(language_labels, list)\
             or not isinstance(k, int)\
-            or not isinstance(metric, str)\
-            or not list_elements_isinstance(unknown_text_vector, (int, float))\
+            or not isinstance(metric, str):
+        return None
+
+    if not list_elements_isinstance(unknown_text_vector, (int, float))\
             or not list_elements_isinstance(known_text_vectors, list)\
             or not list_elements_isinstance(language_labels, str):
         return None
@@ -246,10 +251,12 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for index, known_text_vector in enumerate(known_text_vectors):
         if metric == 'manhattan':
             nearest_language_distances.append(
-                [language_labels[index], calculate_distance_manhattan(unknown_text_vector, known_text_vector)])
+                [language_labels[index],
+                 calculate_distance_manhattan(unknown_text_vector, known_text_vector)])
         else:
             nearest_language_distances.append(
-                [language_labels[index], calculate_distance(unknown_text_vector, known_text_vector)])
+                [language_labels[index],
+                 calculate_distance(unknown_text_vector, known_text_vector)])
 
     nearest_language_distances.sort(key=lambda x: x[1])
     nearest_language_distances = nearest_language_distances[:k]
@@ -264,13 +271,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
 
     highest_results = []
 
-    for result_freq in results_freq_dict:
+    for result_freq in results_freq_dict.items():
         if not highest_results:
-            highest_results = [[result_freq, results_freq_dict[result_freq]]]
-        elif results_freq_dict[result_freq] > highest_results[0][1]:
-            highest_results = [[result_freq, results_freq_dict[result_freq]]]
-        elif results_freq_dict[result_freq] == highest_results[0][1]:
-            highest_results.append([result_freq, results_freq_dict[result_freq]])
+            highest_results = [result_freq]
+        elif results_freq_dict[result_freq[0]] > highest_results[0][1]:
+            highest_results = [result_freq]
+        elif results_freq_dict[result_freq[0]] == highest_results[0][1]:
+            highest_results.append(result_freq)
 
     highest_results_labels = [highest_result[0] for highest_result in highest_results]
 
@@ -352,9 +359,11 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
 
     if not isinstance(unknown_text_vector, list) or not isinstance(unknown_text_vector, list)\
             or not isinstance(language_labels, list)\
-            or not isinstance(k, int)\
-            or not list_elements_isinstance(unknown_text_vector, list)\
-            or not list_elements_isinstance(known_text_vectors, list)\
+            or not isinstance(k, int):
+        return None
+
+    if not list_elements_isinstance(unknown_text_vector, list) \
+            or not list_elements_isinstance(known_text_vectors, list) \
             or not list_elements_isinstance(language_labels, str):
         return None
 
@@ -365,7 +374,8 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
 
     for index, known_text_vector in enumerate(known_text_vectors):
         nearest_language_distances.append(
-            [language_labels[index], calculate_distance_sparse(unknown_text_vector, known_text_vector)])
+            [language_labels[index],
+             calculate_distance_sparse(unknown_text_vector, known_text_vector)])
 
     nearest_language_distances.sort(key=lambda x: x[1])
     nearest_language_distances = nearest_language_distances[:k]
@@ -380,13 +390,13 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
 
     highest_results = []
 
-    for result_freq in results_freq_dict:
+    for result_freq in results_freq_dict.items():
         if not highest_results:
-            highest_results = [[result_freq, results_freq_dict[result_freq]]]
-        elif results_freq_dict[result_freq] > highest_results[0][1]:
-            highest_results = [[result_freq, results_freq_dict[result_freq]]]
-        elif results_freq_dict[result_freq] == highest_results[0][1]:
-            highest_results.append([result_freq, results_freq_dict[result_freq]])
+            highest_results = [result_freq]
+        elif results_freq_dict[result_freq[0]] > highest_results[0][1]:
+            highest_results = [result_freq]
+        elif results_freq_dict[result_freq[0]] == highest_results[0][1]:
+            highest_results.append(result_freq)
 
     highest_results_labels = [highest_result[0] for highest_result in highest_results]
 
