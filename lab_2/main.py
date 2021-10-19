@@ -20,6 +20,8 @@ def get_freq_dict(tokens: list) -> dict or None:
     for token in tokens:
         if token not in counted_words_dict.keys():
             counted_words_dict[token] = 1
+        elif token is None:
+            return None
         else:
             counted_words_dict[token] += 1
     for key, value in counted_words_dict.items():
