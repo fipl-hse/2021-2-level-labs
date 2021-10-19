@@ -157,8 +157,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
 
     distance = 0
 
-    for index in range(len(unknown_text_vector)):
-        distance += pow(unknown_text_vector[index] - known_text_vector[index], 2)
+    for index, unknown_text_vector_value in enumerate(unknown_text_vector):
+        distance += pow(unknown_text_vector_value - known_text_vector[index], 2)
 
     return round(pow(distance, 1/2), 5)
 
@@ -214,8 +214,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
 
     distance = 0
 
-    for index, unknown_text_vector in enumerate(unknown_text_vector):
-        distance += abs(unknown_text_vector - known_text_vector[index])
+    for index, unknown_text_vector_value in enumerate(unknown_text_vector):
+        distance += abs(unknown_text_vector_value - known_text_vector[index])
 
     return round(distance, 5)
 
@@ -240,10 +240,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
 
     if not list_elements_isinstance(unknown_text_vector, (int, float))\
             or not list_elements_isinstance(known_text_vectors, list)\
-            or not list_elements_isinstance(language_labels, str):
-        return None
-
-    if len(language_labels) != len(known_text_vectors):
+            or not list_elements_isinstance(language_labels, str)\
+            or len(language_labels) != len(known_text_vectors):
         return None
 
     nearest_language_distances = []
@@ -274,9 +272,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for result_freq in results_freq_dict.items():
         if not highest_results:
             highest_results = [result_freq]
-        elif results_freq_dict[result_freq[0]] > highest_results[0][1]:
+        elif result_freq[1] > highest_results[0][1]:
             highest_results = [result_freq]
-        elif results_freq_dict[result_freq[0]] == highest_results[0][1]:
+        elif result_freq[1] == highest_results[0][1]:
             highest_results.append(result_freq)
 
     highest_results_labels = [highest_result[0] for highest_result in highest_results]
@@ -284,6 +282,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for nearest_language_distance in nearest_language_distances:
         if nearest_language_distance[0] in highest_results_labels:
             return [nearest_language_distance[0], nearest_language_distances[0][1]]
+
+    return None
 
 
 # 10 implementation
@@ -364,10 +364,8 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
 
     if not list_elements_isinstance(unknown_text_vector, list) \
             or not list_elements_isinstance(known_text_vectors, list) \
-            or not list_elements_isinstance(language_labels, str):
-        return None
-
-    if len(language_labels) != len(known_text_vectors):
+            or not list_elements_isinstance(language_labels, str)\
+            or len(language_labels) != len(known_text_vectors):
         return None
 
     nearest_language_distances = []
@@ -393,9 +391,9 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     for result_freq in results_freq_dict.items():
         if not highest_results:
             highest_results = [result_freq]
-        elif results_freq_dict[result_freq[0]] > highest_results[0][1]:
+        elif result_freq[1] > highest_results[0][1]:
             highest_results = [result_freq]
-        elif results_freq_dict[result_freq[0]] == highest_results[0][1]:
+        elif result_freq[1] == highest_results[0][1]:
             highest_results.append(result_freq)
 
     highest_results_labels = [highest_result[0] for highest_result in highest_results]
@@ -403,3 +401,5 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     for nearest_language_distance in nearest_language_distances:
         if nearest_language_distance[0] in highest_results_labels:
             return [nearest_language_distance[0], nearest_language_distances[0][1]]
+
+    return None
