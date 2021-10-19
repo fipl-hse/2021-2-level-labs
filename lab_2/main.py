@@ -4,6 +4,62 @@ Language classification
 """
 
 from lab_1.main import tokenize, remove_stop_words
+import json
+
+
+def tokenize(text: str) -> list or None:
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
+    if not isinstance(text, str):
+        return None
+    text = text.lower()
+    preprocessed = ''
+    for symbol in text:
+        if symbol.isalnum() or symbol == ' ':
+            preprocessed += symbol
+    tokens = preprocessed.split()
+    return tokens
+
+
+def remove_stop_words(tokens: list, stop_words: list) -> list or None:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    """
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
+        return None
+    tokens = [token for token in tokens if token not in stop_words]
+    return tokens
+
+
+def get_freq_dict(tokens: list) -> dict or None:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens
+    :return: a dictionary with frequencies
+    """
+    if not isinstance(tokens, list):
+        return None
+    for word in tokens:
+        if not isinstance(word, str):
+            return None
+    freq_dict = {}
+    for token in tokens:
+        if token in freq_dict:
+            freq_dict[token] += 1/len(tokens)
+        else:
+            freq_dict[token] = 1/len(tokens)
+    return freq_dict
+
+
+def create_corpus():
+    pass
 
 
 # 4
