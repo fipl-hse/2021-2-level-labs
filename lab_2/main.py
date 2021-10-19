@@ -117,13 +117,12 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not isinstance(known_vector, int) and not isinstance(known_vector, float):
             return None
 
-    #dist = 0
+    dist = 0
 
     for index, number in enumerate(unknown_text_vector):
-        dist = 0
         dist += (number - known_text_vector[index]) ** 2
-        distance = round(math.sqrt(dist), 5)
-        return distance
+    distance = round(math.sqrt(dist), 5)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
