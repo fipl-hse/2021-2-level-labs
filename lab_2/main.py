@@ -229,6 +229,13 @@ def min_distance_to_neighbour(elements: list, label: str) -> float:
 
 def isinstance_predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                                     language_labels: list) -> True or False:
+    """
+    Checks isinstance in predict_language_knn with isinstance()
+    :param unknown_text_vector: list with int or float
+    :param known_text_vectors: list with lists
+    :param language_labels: string
+    :return: True
+    """
     for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
         if not isinstance(element[1], list):
             return False
@@ -340,11 +347,11 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     """
     for element in enumerate([unknown_text_vector, known_text_vectors, language_labels]):
         if not isinstance(element[1], list):
-            return False
+            return None
         if not elements_isinstance(element[1], [list, list, str][element[0]]):
-            return False
+            return None
     if len(known_text_vectors) != len(language_labels):
-        return False
+        return None
     distance_of_vectors = []
     elements = []
     for vector in known_text_vectors:
