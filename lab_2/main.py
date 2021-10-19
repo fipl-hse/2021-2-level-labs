@@ -220,6 +220,21 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     return round(distance, 5)
 
 
+def calculate_distance_metric(unknown_text_vector: list,
+                              known_text_vector: list,
+                              metric: str) -> float or None:
+    """
+    Calculates distance based on given metric
+    :param unknown_text_vector: vector for unknown text
+    :param known_text_vector: vector for known text
+    :param metric: specific metric to use while calculating distance
+    """
+    if metric == 'manhattan':
+        return calculate_distance_manhattan(unknown_text_vector, known_text_vector)
+    else:
+        return calculate_distance(unknown_text_vector, known_text_vector)
+
+
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
@@ -247,14 +262,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     nearest_language_distances = []
 
     for index, known_text_vector in enumerate(known_text_vectors):
-        if metric == 'manhattan':
-            nearest_language_distances.append(
-                [language_labels[index],
-                 calculate_distance_manhattan(unknown_text_vector, known_text_vector)])
-        else:
-            nearest_language_distances.append(
-                [language_labels[index],
-                 calculate_distance(unknown_text_vector, known_text_vector)])
+        nearest_language_distances.append([language_labels[index],
+                                          calculate_distance_metric(unknown_text_vector,
+                                                                    known_text_vector,
+                                                                    metric)])
 
     nearest_language_distances.sort(key=lambda x: x[1])
     nearest_language_distances = nearest_language_distances[:k]
