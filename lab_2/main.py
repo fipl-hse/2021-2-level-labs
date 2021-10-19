@@ -84,7 +84,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
 
 
 # 6
-def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
+def calculate_distance(unknown_text_vector: list, known_text_vector: list):
     """
     Calculates distance between two vectors using euclid metric
     :param unknown_text_vector: vector for unknown text
@@ -128,7 +128,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
-                                 known_text_vector: list) -> float or None:
+                                 known_text_vector: list):
     """
     Calculates distance between two vectors using manhattan metric
     :param unknown_text_vector: vector for unknown text
