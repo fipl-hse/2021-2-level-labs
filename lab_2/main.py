@@ -37,7 +37,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :return: a dictionary of dictionaries - language profiles
     """
 
-    if not (isinstance(texts_corpus, list) and (language_labels, list)):
+    if not (isinstance(texts_corpus, list) and isinstance(language_labels, list)):
         return None
 
     for language in language_labels:
@@ -80,9 +80,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
 
-    if not (isinstance(original_text, list) and (language_profiles, dict)):
-        return None
-    if not language_profiles or original_text:
+    if not (isinstance(original_text, list) and isinstance(language_profiles, dict)) or not language_profiles:
         return None
 
     features = get_language_features(language_profiles)
@@ -106,7 +104,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param known_text_vector: vector for known text
     """
 
-    if not (isinstance(unknown_text_vector, list) and (known_text_vector, list)):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list)):
         return None
 
     for num in unknown_text_vector:
@@ -118,10 +116,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
 
     dist = 0
 
-    for num in range(len(unknown_text_vector)):
-        dist += math.sqrt((unknown_text_vector[num] - known_text_vector[num])**2)
-        dist = round(dist, 5)
-    return dist
+    for index, number in enumerate(unknown_text_vector):
+        dist += (number - known_text_vector[index])**2
+        distance = round(math.sqrt(dist), 5)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -133,8 +131,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param language_labels: language labels for each known text
     """
 
-    if not (isinstance(unknown_text_vector, list) and (known_text_vectors, list)
-            and (language_labels, list)):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list)
+            and isinstance(language_labels, list)) or len(language_labels) != len(known_text_vectors):
         return None
 
     for num in unknown_text_vector:
@@ -149,69 +147,12 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
     comp = {}
 
-    for vector in range(len(unknown_text_vector)):
+    for vector, number in enumerate(known_text_vectors):
         comp[language_labels[vector]] = calculate_distance(unknown_text_vector, known_text_vectors[vector])
 
     for key, value in comp.items():
         if value == min(comp.values()):
             result = [key, value]
-            return result
+    print(result)
+    return result
 
-
-# 8
-def calculate_distance_manhattan(unknown_text_vector: list,
-                                 known_text_vector: list) -> float or None:
-    """
-    Calculates distance between two vectors using manhattan metric
-    :param unknown_text_vector: vector for unknown text
-    :param known_text_vector: vector for known text
-    """
-    pass
-
-
-def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
-                         language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
-    """
-    Predicts unknown text label and its distance to the closest known text
-        using knn based algorithm and specific metric
-    :param unknown_text_vector: vector for unknown text
-    :param known_text_vectors: a list of vectors for known texts
-    :param language_labels: language labels for each known text
-    :param k: the number of neighbors to choose label from
-    :param metric: specific metric to use while calculating distance
-    """
-    pass
-
-
-# 10 implementation
-def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
-    """
-    Builds a sparse vector representation of a given text
-        using dictionary with language profiles
-    :param original_text: any tokenized text
-    :param language_profiles: a dictionary of dictionaries - language profiles
-    """
-    pass
-
-
-def calculate_distance_sparse(unknown_text_vector: list,
-                              known_text_vector: list) -> float or None:
-    """
-    Calculates distance between two vectors using euclid metric
-    :param unknown_text_vector: sparse vector for unknown text
-    :param known_text_vector: sparse vector for known text
-    """
-    pass
-
-
-def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
-                                language_labels: list, k=1) -> [str, int] or None:
-    """
-    Predicts unknown text label and its distance to the closest known text
-        using knn based algorithm
-    :param unknown_text_vector: sparse vector for unknown text
-    :param known_text_vectors: a list of sparse vectors for known texts
-    :param language_labels: language labels for each known text
-    :param k: the number of neighbors to choose label from
-    """
-    pass
