@@ -75,11 +75,14 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         return None
 
     text_vector = []
+    frequencies = []
     for word in get_language_features(language_profiles):
         if word in original_text:
-            for dictionary in language_profiles:
-                if word in language_profiles[dictionary]:
-                    text_vector.append(language_profiles[dictionary][word])
+            for dictionary in language_profiles.values():
+                if word in dictionary.keys():
+                    frequencies.append(dictionary[word])
+            text_vector.append(max(frequencies))
+            frequencies = []
         else:
             text_vector.append(0)
     return text_vector
@@ -216,16 +219,19 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
         return None
 
     text_vector = []
+    frequencies = []
     for word in get_language_features(language_profiles):
         if word in original_text:
-            for dictionary in language_profiles:
-                if word in language_profiles[dictionary]:
-                    text_vector.append(language_profiles[dictionary][word])
+            for dictionary in language_profiles.values():
+                if word in dictionary.keys():
+                    frequencies.append(dictionary[word])
+            text_vector.append(max(frequencies))
+            frequencies = []
         else:
             text_vector.append(0)
     updated_vector = []
     for i, number in enumerate(text_vector):
-        if number > 0:
+        if number != 0:
             updated_vector.append([i, number])
     return updated_vector
 

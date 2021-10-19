@@ -39,9 +39,12 @@ if __name__ == '__main__':
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
+    EXPECTED = ['de', 'eng', 'lat']
+    RESULT = []
     text_corpus = []
     stop_words = []
     language_labels = []
+
     for text in DE_SAMPLES:
         text_corpus.append(remove_stop_words(tokenize(text), stop_words))
         language_labels.append('de')
@@ -55,7 +58,6 @@ if __name__ == '__main__':
     language_profiles = get_language_profiles(text_corpus, language_labels)
     known_text_vectors = [get_sparse_vector(text, language_profiles) for text in text_corpus]
     k = 3
-    RESULT = []
     for text in UNKNOWN_SAMPLES:
         unknown_text = remove_stop_words(tokenize(text), stop_words)
         unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
@@ -63,6 +65,6 @@ if __name__ == '__main__':
                                                  language_labels, k)
         RESULT.append(prediction[0])
 
-    EXPECTED = ['de', 'eng', 'lat']
+    print(f'Possible languages are: {RESULT}')
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == EXPECTED, 'Detection not working'
