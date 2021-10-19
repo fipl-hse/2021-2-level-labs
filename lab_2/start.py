@@ -62,10 +62,14 @@ if __name__ == '__main__':
     for element in known_samples:
         known_text_vectors.append(get_sparse_vector(tokenize(element), language_profiles))
 
-    language_labels = ['en', 'en', 'en', 'en', 'en', 'de', 'de', 'de', 'de', 'de', 'lat', 'lat', 'lat', 'lat', 'lat']
-    first_language = predict_language_knn_sparse(unknown_text_vector_1, known_text_vectors, language_labels, k=1)
-    second_language = predict_language_knn_sparse(unknown_text_vector_2, known_text_vectors, language_labels, k=1)
-    third_language = predict_language_knn_sparse(unknown_text_vector_3, known_text_vectors, language_labels, k=1)
+    language_labels = ['en', 'en', 'en', 'en', 'en', 'de',
+                       'de', 'de', 'de', 'de', 'lat', 'lat', 'lat', 'lat', 'lat']
+    first_language = predict_language_knn_sparse(unknown_text_vector_1,
+                                                 known_text_vectors, language_labels, k=1)
+    second_language = predict_language_knn_sparse(unknown_text_vector_2,
+                                                  known_text_vectors, language_labels, k=1)
+    third_language = predict_language_knn_sparse(unknown_text_vector_3,
+                                                 known_text_vectors, language_labels, k=1)
 
     EXPECTED = ['de', 'eng', 'lat']
     RESULT = [first_language[0], second_language[0], third_language[0]]

@@ -240,7 +240,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     else:
         return None
     for distance_of_vector in enumerate(distance_of_vectors):
-        elements.append({'distance': distance_of_vector[1], 'label': language_labels[distance_of_vector[0]]})
+        elements.append({'distance': distance_of_vector[1],
+                         'label': language_labels[distance_of_vector[0]]})
     elements = sorted(elements, key=lambda x: x['distance'])
     elements = elements[:k]
     labels_count = {}
@@ -256,7 +257,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             min_labels_dist = labels_count[key]
             super_label = key
         if labels_count[key] == min_labels_dist:
-            if min_distance_to_neighbour(elements, key) < min_distance_to_neighbour(elements, super_label):
+            if min_distance_to_neighbour(elements, key) \
+                    < min_distance_to_neighbour(elements, super_label):
                 super_label = key
     return [super_label, elements[0]['distance']]
 
@@ -335,7 +337,8 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     for vector in known_text_vectors:
         distance_of_vectors.append(calculate_distance_sparse(unknown_text_vector, vector))
     for distance_of_vector in enumerate(distance_of_vectors):
-        elements.append({'distance': distance_of_vector[1], 'label': language_labels[distance_of_vector[0]]})
+        elements.append({'distance': distance_of_vector[1],
+                         'label': language_labels[distance_of_vector[0]]})
     elements = sorted(elements, key=lambda x: x['distance'])
     elements = elements[:k]
     labels_count = {}
@@ -351,6 +354,7 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
             min_labels_dist = labels_count[key]
             super_label = key
         if labels_count[key] == min_labels_dist:
-            if min_distance_to_neighbour(elements, key) < min_distance_to_neighbour(elements, super_label):
+            if min_distance_to_neighbour(elements, key) \
+                    < min_distance_to_neighbour(elements, super_label):
                 super_label = key
     return [super_label, elements[0]['distance']]
