@@ -62,8 +62,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     for tokens_and_frequencies in language_profiles.values():
         for token in tokens_and_frequencies:
             features.append(token)
-            features = sorted(features)
-    return features
+    return sorted(features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -105,8 +104,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     for ind_and_value in enumerate(unknown_text_vector):
         distance += ((unknown_text_vector[ind_and_value[0]]
                       - known_text_vector[ind_and_value[0]]) ** 2)
-    distance = round(distance ** 0.5, 5)
-    return distance
+    return round(distance ** 0.5, 5)
 
 
 
@@ -191,7 +189,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     list_of_lang_and_dist = sorted(list_of_lang_and_dist, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
     for language_and_dist in list_of_lang_and_dist:
-        if language_and_dist[0] in dict_of_tuples_and_counts.keys():
+        if language_and_dist[0] in dict_of_tuples_and_counts:
             dict_of_tuples_and_counts[language_and_dist[0]] += 1
         else:
             dict_of_tuples_and_counts[language_and_dist[0]] = 1
@@ -284,7 +282,7 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     list_of_lang_and_dist = sorted(list_of_lang_and_dist, key=lambda i: i[1])
     dict_of_tuples_and_counts = {}
     for language_and_dist in list_of_lang_and_dist:
-        if language_and_dist[0] in dict_of_tuples_and_counts.keys():
+        if language_and_dist[0] in dict_of_tuples_and_counts:
             dict_of_tuples_and_counts[language_and_dist[0]] += 1
         else:
             dict_of_tuples_and_counts[language_and_dist[0]] = 1
