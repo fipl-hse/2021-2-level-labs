@@ -13,7 +13,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if not isinstance(tokens,list) or tokens ==[]:
+    if not isinstance(tokens,list) or tokens == [None]:
         return None
     word_counter = len(tokens)
     counted_words_dict = {}
@@ -116,7 +116,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         vectors_results.append(calculate_distance(unknown_text_vector,vector))
     min_score = min(vectors_results)
     predicted_and_score =[language_labels[vectors_results.index(min_score)],round(min_score,5)]
-    if not (isinstance(predicted_and_score[0],str) and isinstance(predicted_and_score[1],int)):
+    if not (isinstance(predicted_and_score[0],str) and isinstance(predicted_and_score[1],float)):
         return None
     return predicted_and_score
 
