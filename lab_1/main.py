@@ -264,3 +264,5 @@ def save_profile(profile: dict) -> int:
     with open(path_to_file, "w", encoding="utf-8") as file:
         json.dump(profile, file)
     return 0
+
+
