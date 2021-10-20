@@ -141,6 +141,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
         return None
+    if len(known_text_vectors) != len(language_labels):
+        return None
     for num in unknown_text_vector:
         if not isinstance(num, int) and not isinstance(num, float):
             return None
