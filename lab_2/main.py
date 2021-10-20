@@ -59,6 +59,8 @@ def get_language_features(language_profiles: dict) -> list or None:
         return None
     features = []
     for value in language_profiles.values():
+        if (None in value.keys()) or value.keys() == []:
+            return None
         features.extend(value.keys())
     features.sort()
     return features
@@ -91,11 +93,13 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vector,list)):
+    if (not (isinstance(unknown_text_vector,list) and isinstance(known_text_vector,list))):
         return None
     future_result = 0
-    for i, not_i in enumerate(unknown_text_vector):
-        future_result += (unknown_text_vector[i] - known_text_vector[i])**2
+    for i, coordinate in enumerate(unknown_text_vector):
+        if not isinstance(coordinate,float):
+            return None
+        future_result += (coordinate - known_text_vector[i])**2
     result = round(future_result**0.5,5)
     return result
 
