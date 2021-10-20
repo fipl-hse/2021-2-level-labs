@@ -5,7 +5,6 @@ Language classification
 
 from lab_1.main import tokenize, remove_stop_words
 
-
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -87,7 +86,17 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vector, list) \
+            or not all(isinstance(i, (int, float)) for i in unknown_text_vector) \
+            or not all(isinstance(i, (int, float)) for i in known_text_vector):
+        return None
+
+    distance1 = 0
+    for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
+        distance1 += (unknown_vector - known_vector) ** 2
+        distance = round(distance1 ** 0.5, 5)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -98,7 +107,20 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or not all(isinstance(i,(int, float)) for i in unknown_text_vector) \
+            or not all(isinstance(v, list) for v in known_text_vectors) \
+            or not all(isinstance(l, str) for l in language_labels) \
+            or len(known_text_vectors) != len(language_labels):
+        return None
+    language_score = ['', 1]
+    for language, text_vector in enumerate(known_text_vectors):
+        distance = calculate_distance(unknown_text_vector, text_vector)
+        if language_score[1] > distance:
+            language_score = [language_labels[language], distance]
+    return language_score
 
 
 # 8
