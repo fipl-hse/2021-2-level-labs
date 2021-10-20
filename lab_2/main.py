@@ -95,7 +95,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         return None
     future_result = 0
     for i, coordinate in enumerate(unknown_text_vector):
-        if not (type(coordinate) == float or type(coordinate) == int):
+        if not isinstance(coordinate,(float,int)):
             return None
         future_result += (coordinate - known_text_vector[i])**2
     result = round(future_result**0.5,5)
@@ -138,7 +138,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         return None
     future_result = 0
     for i, coordinate in enumerate(unknown_text_vector):
-        if not (isinstance(coordinate, float) or isinstance(coordinate,int)):
+        if not isinstance(coordinate, (float,int)):
             return None
         future_result += abs(coordinate - known_text_vector[i])
     return round(future_result, 5)
@@ -156,32 +156,37 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param metric: specific metric to use while calculating distance
     """
     if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vectors,list)
-            and isinstance(language_labels, list) and isinstance(k,int) and isinstance(metric, str))\
-            or len(language_labels) != len(known_text_vectors):
+            and isinstance(language_labels, list) and isinstance(k,int)
+            and isinstance(metric, str)) or len(language_labels) != len(known_text_vectors):
         return None
     results_list = []
-    top_languages = []
-    used_lang = []
-    lang_frequency = []
+    top_languages = {}
+    max_quantity = 0
+    predicted_l = ''
     for i, vector in enumerate(known_text_vectors):
         if metric =='manhattan':
-            result_n_lang = (calculate_distance_manhattan(unknown_text_vector, vector),language_labels[i])
+            re_lang = (calculate_distance_manhattan(unknown_text_vector, vector),language_labels[i])
         elif metric == 'euclid':
-            result_n_lang = (calculate_distance(unknown_text_vector, vector),language_labels[i])
+            re_lang = (calculate_distance(unknown_text_vector, vector),language_labels[i])
         else:
             return None
-        if (result_n_lang[0] is None) or  not isinstance(result_n_lang[1],str):
+        if (re_lang[0] is None) or not isinstance(re_lang[1],str):
             return None
-        results_list. append(result_n_lang)
+        results_list. append(re_lang)
     results_list.sort()
     for i in range(k):
-        top_languages.append(results_list[i][1])
-    for language in top_languages:
-        if language not in used_lang:
-            used_lang.append(language)
-            lang_frequency.append((top_languages.count(language),language))
-    lang_frequency.sort(reverse = True)
-    return [lang_frequency[0][1],lang_frequency[0][0]]
+        if results_list[i][1] not in top_languages.keys():
+            top_languages[results_list[i][1]] = list(results_list[i][0])
+        else:
+           top_languages[results_list[i][1]].append(results_list[i][0])
+    for language in top_languages.keys():
+        if len(top_languages[language]) > max_quantity:
+            predicted_l = language
+            max_quantity = len(top_languages[language])
+        elif len(top_languages[language]) == max_quantity:
+            if min(top_languages[language]) < min(top_languages[predicted_l]):
+                predicted_l = language
+    return [predicted_l, min(top_languages[predicted_l])]
 
 
 # 10 implementation
