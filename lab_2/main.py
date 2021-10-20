@@ -19,6 +19,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     for token in tokens:
         if not isinstance(token, str):
             tokens.remove(token)
+            return None
         else:
             if token not in freq_dict:
                 freq_dict[token] = round(tokens.count(token) / len(tokens), 5)
@@ -39,11 +40,11 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if not isinstance(texts_corpus, list) or \
             not isinstance(language_labels, list):
         return None
-    for label in language_labels:
-        if not isinstance(label, str):
+    for i in range(len(language_labels)):
+        if not isinstance(language_labels[i], str):
             return None
         else:
-            language_profiles[label] = get_freq_dict(texts_corpus[language_labels.index(label)])
+            language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
     return language_profiles
 
 
@@ -57,7 +58,7 @@ def get_language_features(language_profiles: dict) -> list or None:
         return None
     features = []
     for val in language_profiles.values():
-        for word in dict(val):
+        for word in val:
             if isinstance(word, str):
                 features.append(word)
     features = sorted(features)
@@ -77,8 +78,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
             not isinstance(language_profiles, dict):
         return None
     text_vector = []
+    base = get_language_features(language_profiles)
     profiles = list(language_profiles.values())
-    for word in get_language_features(language_profiles):
+    for word in base:
         if word in original_text:
             for profile in profiles:
                 if word in profile:
@@ -95,7 +97,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
