@@ -139,7 +139,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list)\
+            or not isinstance(language_labels, list):
         return None
     if len(known_text_vectors) != len(language_labels):
         return None
