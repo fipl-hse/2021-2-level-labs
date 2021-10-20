@@ -143,7 +143,6 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         future_result += abs(coordinate - known_text_vector[i])
     return round(future_result, 5)
 
-
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
@@ -178,13 +177,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         if results_list[i][1] not in top_languages.keys():
             top_languages[results_list[i][1]] = [results_list[i][0]]
         else:
-           top_languages[results_list[i][1]].append(results_list[i][0])
-    for language in top_languages.keys():
-        if len(top_languages[language]) > max_quantity:
+            top_languages[results_list[i][1]].append(results_list[i][0])
+    for language, vectors in top_languages.items():
+        if len(vectors) > max_quantity:
             predicted_l = language
-            max_quantity = len(top_languages[language])
-        elif len(top_languages[language]) == max_quantity:
-            if min(top_languages[language]) < min(top_languages[predicted_l]):
+            max_quantity = len(vectors)
+        elif len(vectors) == max_quantity:
+            if min(vectors) < min(top_languages[predicted_l]):
                 predicted_l = language
     return [predicted_l, min(top_languages[predicted_l])]
 
