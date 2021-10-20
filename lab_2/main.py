@@ -152,6 +152,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
+    global re_lang
     if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list)
             and isinstance(language_labels, list) and isinstance(k, int)
             and isinstance(metric, str)) or len(language_labels) != len(known_text_vectors):
@@ -162,11 +163,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     predicted_l = ''
     for i, vector in enumerate(known_text_vectors):
         if metric == 'manhattan':
-            re_lang = (calculate_distance_manhattan(unknown_text_vector, vector), language_labels[i])
+            re_lang = (calculate_distance_manhattan(unknown_text_vector, vector),
+                       language_labels[i])
         elif metric == 'euclid':
             re_lang = (calculate_distance(unknown_text_vector, vector), language_labels[i])
-        else:
-            return None
         if (re_lang[0] is None) or not isinstance(re_lang[1], str):
             return None
         results_list.append(re_lang)
