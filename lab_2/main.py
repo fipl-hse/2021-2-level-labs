@@ -160,6 +160,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     top_languages = {}
     max_quantity = 0
     predicted_l = ''
+    absolute_minimum = 100
     re_lang = ()
     for i, vector in enumerate(known_text_vectors):
         if metric == 'manhattan':
@@ -177,13 +178,15 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         else:
             top_languages[results_list[i][1]].append(results_list[i][0])
     for language, vectors in top_languages.items():
+        if min(vectors) < absolute_minimum:
+            absolute_minimum = min(vectors)
         if len(vectors) > max_quantity:
             predicted_l = language
             max_quantity = len(vectors)
         elif len(vectors) == max_quantity:
             if min(vectors) < min(top_languages[predicted_l]):
                 predicted_l = language
-    return [predicted_l, min(top_languages[predicted_l])]
+    return [predicted_l, absolute_minimum]
 
 
 # 10 implementation
