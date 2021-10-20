@@ -91,7 +91,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if (not (isinstance(unknown_text_vector,list) and isinstance(known_text_vector,list))):
+    if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vector,list)):
         return None
     future_result = 0
     for i, coordinate in enumerate(unknown_text_vector):
@@ -134,11 +134,11 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if (not (isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list))):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list)):
         return None
     future_result = 0
     for i, coordinate in enumerate(unknown_text_vector):
-        if not (type(coordinate) == float or type(coordinate) == int):
+        if not (isinstance(coordinate, float) or isinstance(coordinate,int)):
             return None
         future_result += abs(coordinate - known_text_vector[i])
     return round(future_result, 5)
@@ -179,7 +179,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for language in top_languages:
         if language not in used_lang:
             used_lang.append(language)
-            lang_frequency = (top_languages.count(language),language)
+            lang_frequency.append((top_languages.count(language),language))
     lang_frequency.sort(reverse = True)
     return [lang_frequency[0][1],lang_frequency[0][0]]
 
