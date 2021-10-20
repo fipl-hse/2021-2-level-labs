@@ -37,8 +37,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             and all(isinstance(i, str) for i in language_labels)):
         return None
     language_profiles = {}
-    for i, j in enumerate(language_labels):
-        language_profiles[j] = get_freq_dict(texts_corpus[i])
+    for index, label in enumerate(language_labels):
+        language_profiles[label] = get_freq_dict(texts_corpus[index])
     return language_profiles
 
 
@@ -76,9 +76,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
             continue
         for freq_dict in language_profiles.values():
             for key, value in freq_dict.items():
-                if key != word:
-                    continue
-                if value <= vector_freq_dict[key]:
+                if key != word or value <= vector_freq_dict[key]:
                     continue
                 vector_freq_dict[key] = value
     text_vector = list(vector_freq_dict.values())
@@ -98,8 +96,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             and all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     distance = 0
-    for i, j in zip(unknown_text_vector, known_text_vector):
-        distance += (i - j) ** 2
+    for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
+        distance += (unknown_vector - known_vector) ** 2
     distance = round(sqrt(distance), 5)
     return distance
 
@@ -125,12 +123,12 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     while True:
         if k == len(known_text_vectors):
             break
-        distance = calculate_distance(unknown_text_vector, known_text_vectors[k])
-        list_of_scores[k].append(distance)
+        list_of_scores[k].append(calculate_distance(unknown_text_vector, known_text_vectors[k]))
         list_of_scores[k].append(language_labels[k])
         k += 1
     list_of_scores.sort()
     list_of_scores[0][0], list_of_scores[0][1] = list_of_scores[0][1], list_of_scores[0][0]
+    print(list_of_scores[0])
     return list_of_scores[0]
 
 
@@ -148,8 +146,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             and all(isinstance(i, (float, int)) for i in known_text_vector)):
         return None
     distance = 0
-    for i, j in zip(unknown_text_vector, known_text_vector):
-        distance += abs(i - j)
+    for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
+        distance += abs(unknown_vector - known_vector)
     distance = round(distance, 5)
     return distance
 
