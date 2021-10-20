@@ -94,14 +94,14 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     future_result = 0
     for i, not_i in enumerate(unknown_text_vector):
         future_result += (unknown_text_vector[i] - known_text_vector[i])**2
-    result = future_result**0.5
+    result = round(future_result**0.5,5)
     return result
 
 
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
-                           language_labels: list) -> [str, int] or None:
+                           language_labels: list) -> [str, int] or None:    ##not float?
     """
     Predicts unknown text label and its distance to the closest known text
     :param unknown_text_vector: vector for unknown text
@@ -116,6 +116,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         vectors_results.append(calculate_distance(unknown_text_vector,vector))
     min_score = min(vectors_results)
     predicted_and_score =[language_labels[vectors_results.index(min_score)],round(min_score,5)]
+    if not (isinstance(predicted_and_score[0],str) and isinstance(predicted_and_score[1],int)):
+        return None
     return predicted_and_score
 
 
