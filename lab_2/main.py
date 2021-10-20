@@ -76,7 +76,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     for feature in language_features:
         if not isinstance(feature, str):
             return None
-        return sorted(language_features)
+    return sorted(language_features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -157,6 +157,20 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
+    #if not isinstance((known_text_vector,unknown_text_vector), list):
+        #return None
+
+    #for unknown_vector in unknown_text_vector:
+        #if not isinstance(unknown_vector, (float, int)):
+            #return None
+
+    #for known_vector in known_text_vector:
+        #if not isinstance(known_vector, (float, int)):
+            #return None
+
+    #dist = 0
+
+    #for index, value in enumerate(unknown_text_vector):
     pass
 
 
