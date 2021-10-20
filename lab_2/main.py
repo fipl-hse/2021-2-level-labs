@@ -113,15 +113,18 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param language_labels: language labels for each known text
     """
     if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vectors,list) and
-            isinstance(language_labels,list)):
+            isinstance(language_labels,list)) or len(known_text_vectors) != len(language_labels):
         return None
     vectors_results = []
     for vector in known_text_vectors:
-        vectors_results.append(calculate_distance(unknown_text_vector,vector))
+        result_vect = calculate_distance(unknown_text_vector,vector)
+        if result_vect is None:
+            return None
+        vectors_results.append(result_vect)
     min_score = min(vectors_results)
     predicted_and_score =[language_labels[vectors_results.index(min_score)],round(min_score,5)]
-    if not (isinstance(predicted_and_score[0],str) and isinstance(predicted_and_score[1],float)):
-        return None
+    #if not (isinstance(predicted_and_score[0],str) and isinstance(predicted_and_score[1],float)):
+        #return None
     return predicted_and_score
 
 
