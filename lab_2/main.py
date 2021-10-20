@@ -78,16 +78,27 @@ def calculate_distance(unknown_text_vector, known_text_vector):
     distance_btw_vectors = round(math.sqrt(distance_btw_vectors), 5)
     return distance_btw_vectors
 
-def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
-                           language_labels: list) -> [str, int] or None:
-    """
-    Predicts unknown text label and its distance to the closest known text
-    :param unknown_text_vector: vector for unknown text
-    :param known_text_vectors: a list of vectors for known texts
-    :param language_labels: language labels for each known text
-    """
-    pass
-
+def predict_language_score(unknown_text_vector, known_text_vectors, language_labels):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list)
+            and isinstance(language_labels, list)):
+        return None
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+    for number in unknown_text_vector:
+        if not (isinstance(number, int) and isinstance(number, float)):
+            return None
+    dist_list = []
+    for elements in known_text_vectors:
+        if not isinstance(elements, list):
+            return None
+        for i in elements:
+            if not (isinstance(i, int) or isinstance(i, float)):
+                return None
+        dist_list = dist_list.append(calculate_distance(unknown_text_vector, elements))
+    min_function = min(dist_list)
+    min_dist_list = [language_labels[dist_list.index(min_function)], min_function]
+    return min_dist_list
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
