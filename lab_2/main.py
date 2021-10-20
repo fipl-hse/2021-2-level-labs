@@ -20,7 +20,7 @@ def get_freq_dict(tokens: list) -> dict or None:
                 result[token] = 1
         else:
             return None
-    for word in result:
+    for word in result:  # нахождение частоты встречаемости каждого слова в токенах и округление до 5 знаков после запятой 
         result[word] = round(result[word] / len(tokens), 5)
     return result
 
@@ -40,7 +40,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for i in range(len(texts_corpus)):
         if not isinstance(texts_corpus[i], list) or not isinstance(language_labels[i], str):
             return None
-        else:
+        else:  # возвращает словарь где ключ метка языка, а значение словарь частот
             result[language_labels[i]] = get_freq_dict(texts_corpus[i])
     return result
 
@@ -76,7 +76,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         if not isinstance(elem, str):
             return None
     features = get_language_features(language_profiles)
-    # original_text = set(original_text)
     text_vector = []
     for feature in features:
         if feature not in original_text:
