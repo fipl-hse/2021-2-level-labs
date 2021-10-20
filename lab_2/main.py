@@ -24,8 +24,9 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token] += 1
         else:
             freq_dict[token] = 1
+    length = len(tokens)
     for key, value in freq_dict.items():
-        value = round(value / len(tokens), 5)
+        value = round(value / length, 5)
         freq_dict[key] = value
     return freq_dict
 
@@ -86,7 +87,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     for word in unique_words:
         if word not in original_text:
             text_vector.append(0)
-        elif word in original_text:
+        else:
             for profile in language_profiles.values():
                 for k in profile.keys():
                     if k == word:
