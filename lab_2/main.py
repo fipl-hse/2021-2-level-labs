@@ -82,22 +82,13 @@ def predict_language_score(unknown_text_vector, known_text_vectors, language_lab
     if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list)
             and isinstance(language_labels, list) and len(language_labels) != len(known_text_vectors)):
         return None
-    for label in language_labels:
-        if not isinstance(label, str):
-            return None
-    for number in unknown_text_vector:
-        if not (isinstance(number, int) and isinstance(number, float)):
-            return None
     dist_list = []
     for element in known_text_vectors:
-        if not isinstance(element, list):
-            return None
-        for i in element:
-            if not (isinstance(i, int) and isinstance(i, float)):
-                return None
         dist_list.append(calculate_distance(unknown_text_vector, element))
+        if None in dist_list:
+            return None
     min_function = min(dist_list)
-    min_dist_list = [language_labels[dist_list.index(min_function)], min_function]
+    min_dist_list = [language_labels[dist_list.index(min_function)], round(min_function, 5)]
     return min_dist_list
 
 # 8
