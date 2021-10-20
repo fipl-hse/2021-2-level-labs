@@ -123,8 +123,6 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         vectors_results.append(result_vect)
     min_score = min(vectors_results)
     predicted_and_score =[language_labels[vectors_results.index(min_score)],round(min_score,5)]
-    #if not (isinstance(predicted_and_score[0],str) and isinstance(predicted_and_score[1],float)):
-        #return None
     return predicted_and_score
 
 
@@ -136,7 +134,14 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if (not (isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list))):
+        return None
+    future_result = 0
+    for i, coordinate in enumerate(unknown_text_vector):
+        if not (type(coordinate) == float or type(coordinate) == int):
+            return None
+        future_result += abs(coordinate - known_text_vector[i])
+    return round(future_result, 5)
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -150,7 +155,33 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vectors,list)
+            and isinstance(language_labels, list) and isinstance(k,int) and isinstance(metric, str))\
+            or len(language_labels) != len(known_text_vectors):
+        return None
+    results_list = []
+    top_languages = []
+    used_lang = []
+    lang_frequency = []
+    for i, vector in enumerate(known_text_vectors):
+        if metric =='manhattan':
+            result_n_lang = (calculate_distance_manhattan(unknown_text_vector, vector),language_labels[i])
+        elif metric == 'euclid':
+            result_n_lang = (calculate_distance(unknown_text_vector, vector),language_labels[i])
+        else:
+            return None
+        if (result_n_lang[0] is None) or  not isinstance(result_n_lang[1],str):
+            return None
+        results_list. append(result_n_lang)
+    results_list.sort()
+    for i in range(k):
+        top_languages.append(results_list[i][1])
+    for language in top_languages:
+        if language not in used_lang:
+            used_lang.append(language)
+            lang_frequency = (top_languages.count(language),language)
+    lang_frequency.sort(reverse = True)
+    return [lang_frequency[0][1],lang_frequency[0][0]]
 
 
 # 10 implementation
