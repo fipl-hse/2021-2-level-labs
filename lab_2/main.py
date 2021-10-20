@@ -79,18 +79,18 @@ def calculate_distance(unknown_text_vector, known_text_vector):
     return distance_btw_vectors
 
 def predict_language_score(unknown_text_vector, known_text_vectors, language_labels):
-    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vectors, list)
-            and isinstance(language_labels, list) and len(language_labels) != len(known_text_vectors)):
+    if not (isinstance(unknown_text_vector, list) or isinstance(known_text_vectors, list)
+            or isinstance(language_labels, list) or len(language_labels) == len(known_text_vectors)):
         return None
     dist_list = []
-    for element in known_text_vectors:
-        result = calculate_distance(unknown_text_vector, element)
-        if not result:
+    min_dist = []
+    for known_text_vector in known_text_vectors:
+        if not isinstance(known_text_vector, list):
             return None
-        dist_list.append(result)
-    min_function = min(dist_list)
-    min_dist_list = [language_labels[dist_list.index(min_function)], round(min_function, 5)]
-    return min_dist_list
+        dist_list.append(calculate_distance(unknown_text_vector, known_text_vector))
+    min_dist_v = min(dist_list)
+    min_dist.extend([language_labels[dist_list.index(min_dist_v)], min_dist_v])
+    return min_dist
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
