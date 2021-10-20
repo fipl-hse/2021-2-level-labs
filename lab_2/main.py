@@ -80,7 +80,7 @@ def calculate_distance(unknown_text_vector, known_text_vector):
 
 def predict_language_score(unknown_text_vector, known_text_vectors, language_labels):
     if not (isinstance(unknown_text_vector, list) or isinstance(known_text_vectors, list)
-            or isinstance(language_labels, list) or len(language_labels) == len(known_text_vectors)):
+            or isinstance(language_labels, list)):
         return None
     dist_list = []
     min_dist = []
