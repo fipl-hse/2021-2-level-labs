@@ -64,7 +64,7 @@ if __name__ == '__main__':
     LANGUAGE_PROFILES = get_language_profiles([DE_SAMPLES_TOKENS,
                                                ENG_SAMPLES_TOKENS,
                                                LAT_SAMPLES_TOKENS],
-                                               ['de', 'eng', 'lat'])
+                                              ['de', 'eng', 'lat'])
     # Get texts vectors
     FIRST_UNKNOWN_TEXT_VECTORS = get_sparse_vector(UNKNOWN_TOKENS_FIRST_TEXT, LANGUAGE_PROFILES)
     SECOND_UNKNOWN_TEXT_VECTORS = get_sparse_vector(UNKNOWN_TOKENS_SECOND_TEXT, LANGUAGE_PROFILES)
@@ -77,17 +77,17 @@ if __name__ == '__main__':
                                               [DE_TEXT_VECTORS,
                                                ENG_TEXT_VECTORS,
                                                LAT_TEXT_VECTORS],
-                                               ['de', 'eng', 'lat'])[0])
+                                              ['de', 'eng', 'lat'])[0])
     RESULT.append(predict_language_knn_sparse(SECOND_UNKNOWN_TEXT_VECTORS,
                                               [DE_TEXT_VECTORS,
                                                ENG_TEXT_VECTORS,
                                                LAT_TEXT_VECTORS],
-                                               ['de', 'eng', 'lat'])[0])
+                                              ['de', 'eng', 'lat'])[0])
     RESULT.append(predict_language_knn_sparse(THIRD_UNKNOWN_TEXT_VECTORS,
                                               [DE_TEXT_VECTORS,
                                                ENG_TEXT_VECTORS,
                                                LAT_TEXT_VECTORS],
-                                               ['de', 'eng', 'lat'])[0])
+                                              ['de', 'eng', 'lat'])[0])
     # print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert EXPECTED == RESULT, 'Detection not working'
