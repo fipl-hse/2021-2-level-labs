@@ -95,7 +95,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         return None
     future_result = 0
     for i, coordinate in enumerate(unknown_text_vector):
-        if not isinstance(coordinate,float):
+        if not (type(coordinate) == float or type(coordinate) == int):
             return None
         future_result += (coordinate - known_text_vector[i])**2
     result = round(future_result**0.5,5)
