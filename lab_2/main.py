@@ -2,8 +2,10 @@
 Lab 2
 Language classification
 """
+import math
 
 from lab_1.main import tokenize, remove_stop_words
+
 
 # 4
 def get_freq_dict(tokens):
@@ -60,14 +62,21 @@ def get_text_vector(original_text, language_profiles):
     return text_vector
 
 # 6
-def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
-    """
-    Calculates distance between two vectors using euclid metric
-    :param unknown_text_vector: vector for unknown text
-    :param known_text_vector: vector for known text
-    """
-    pass
-
+def calculate_distance(unknown_text_vector, known_text_vector):
+    if not (isinstance(unknown_text_vector, list) and isinstance(known_text_vector, list) and unknown_text_vector
+            and known_text_vector):
+        return None
+    for number in unknown_text_vector:
+        if not (isinstance(number, int) or isinstance(number, float)):
+            return None
+    for number in known_text_vector:
+        if not (isinstance(number, int) or isinstance(number, float)):
+            return None
+    distance_btw_vectors = 0
+    for number in range(len(unknown_text_vector)):
+        distance_btw_vectors += (unknown_text_vector[number]-known_text_vector[number]) ** 2
+    distance_btw_vectors = round(math.sqrt(distance_btw_vectors), 5)
+    return distance_btw_vectors
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
                            language_labels: list) -> [str, int] or None:
