@@ -36,7 +36,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+    if not (isinstance(texts_corpus, list) and isinstance(language_labels, list)):
         return None
     laguage_profiles = {}
     freq_lists = []
@@ -69,7 +69,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(original_text,list) or not isinstance(language_profiles,dict):
+    if not (isinstance(original_text,list) and isinstance(language_profiles,dict)):
         return None
     vector = []
     for word in get_language_features(language_profiles):
@@ -89,7 +89,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not isinstance(unknown_text_vector,list) or not isinstance(known_text_vector,list):
+    if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vector,list)):
         return None
     future_result = 0
     for i, not_i in enumerate(unknown_text_vector):
@@ -108,7 +108,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not (isinstance(unknown_text_vector,list) or isinstance(known_text_vectors,list) or
+    if not (isinstance(unknown_text_vector,list) and isinstance(known_text_vectors,list) and
             isinstance(language_labels,list)):
         return None
     vectors_results = []
