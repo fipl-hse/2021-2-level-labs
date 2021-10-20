@@ -176,7 +176,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     results_list.sort()
     for i in range(k):
         if results_list[i][1] not in top_languages.keys():
-            top_languages[results_list[i][1]] = list(results_list[i][0])
+            top_languages[results_list[i][1]] = [results_list[i][0]]
         else:
            top_languages[results_list[i][1]].append(results_list[i][0])
     for language in top_languages.keys():
