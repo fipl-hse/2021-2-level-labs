@@ -13,7 +13,7 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if not isinstance(tokens,list) or tokens == [None]:
+    if (not isinstance(tokens,list)) or tokens == [None]:
         return None
     word_counter = len(tokens)
     counted_words_dict = {}
@@ -42,6 +42,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     freq_lists = []
     for text in texts_corpus:
         freq_lists.append(get_freq_dict(text))
+        if text is None:
+            return None
     for i, label in enumerate(language_labels):
         laguage_profiles [label] = freq_lists[i]
     return laguage_profiles
