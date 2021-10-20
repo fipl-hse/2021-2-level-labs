@@ -76,7 +76,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     for feature in language_features:
         if not isinstance(feature, str):
             return None
-    return sorted(language_features)
+        return sorted(language_features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
