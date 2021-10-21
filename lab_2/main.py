@@ -112,14 +112,14 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             isinstance(language_labels, list) or not \
             len(known_text_vectors) == len(language_labels):
         return None
-    vectors_distances = []
+    distances = []
     min_distance = []
     for known_text_vector in known_text_vectors:
         if not isinstance(known_text_vector, list):
             return None
-        vectors_distances.append(calculate_distance(unknown_text_vector, known_text_vector))
-    min_distance_vector = min(vectors_distances)
-    min_distance.extend([language_labels[vectors_distances.index(min_distance_vector)], min_distance_vector])
+        distances.append(calculate_distance(unknown_text_vector, known_text_vector))
+    min_distance_vector = min(distances)
+    min_distance.extend([language_labels[distances.index(min_distance_vector)],min_distance_vector])
     return min_distance
 
 
