@@ -40,8 +40,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             return None
         frequency_dictionary = get_freq_dict(text)
         index_of_language = texts_corpus.index(text)
-        language_profiles[language_labels[index_of_language]] = frequency_dictionary 
-    return language_profiles 
+        language_profiles[language_labels[index_of_language]] = frequency_dictionary
+    return language_profiles
 
 def get_language_features(language_profiles: dict) -> list or None:
     """
@@ -57,7 +57,7 @@ def get_language_features(language_profiles: dict) -> list or None:
         unique_tokens.extend(list(frequency_dictionary.keys()))
     unique_tokens = sorted(unique_tokens)
     return unique_tokens
-        
+
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
     """
     Builds a vector representation of a given text
@@ -92,7 +92,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     for number in unknown_text_vector:
         if not isinstance(number, (int, float)):
             return None
-    distance = 0 
+    distance = 0
     for index, coordinate in enumerate(unknown_text_vector):
         distance += (coordinate - known_text_vector[index]) ** 2
     return round(distance ** 0.5, 5)
@@ -126,7 +126,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     for key, value in label_vector.items():
         if value == min(label_vector.values()):
             result = [key, value]
-    return result 
+    return result
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
@@ -162,7 +162,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list)\
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list)\
+    or not isinstance(language_labels, list)\
     or not isinstance(k, int) or not isinstance(metric, str):
         return None
     if len(language_labels) != len(known_text_vectors):
@@ -193,8 +194,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             dictionary_of_labels[label] = 1
     possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
     possible_result = [possible_label, round(min(distances), 5)]
-    return possible_result 
-       
+    return possible_result
+
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
