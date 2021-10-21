@@ -20,9 +20,8 @@ def get_freq_dict(tokens: list) -> dict or None:
         if not isinstance(token, str):
             tokens.remove(token)
             return None
-        else:
-            if token not in freq_dict:
-                freq_dict[token] = round(tokens.count(token) / len(tokens), 5)
+        if token not in freq_dict:
+            freq_dict[token] = round(tokens.count(token) / len(tokens), 5)
     if len(freq_dict) == 0:
         return None
     return freq_dict
@@ -43,8 +42,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for i in range(len(language_labels)):
         if not isinstance(language_labels[i], str):
             return None
-        else:
-            language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
+        language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
     return language_profiles
 
 
@@ -201,8 +199,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             distances.append(calculate_distance_manhattan(unknown_text_vector, text))
         elif metric == "euclid":
             distances.append(calculate_distance(unknown_text_vector, text))
-        else:
-            return None
     norm_distances = sorted(distances)[:k]
     norm_labels = []
     unique_labels = []
@@ -223,9 +219,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if len(closest_labels) > 1:
         result = [norm_labels[norm_distances.index(min(norm_distances))], min(norm_distances)]
     else:
-        result = [closest_labels[0], norm_distances[norm_labels.index(closest_labels[0])]]
+        result = [closest_labels[0], min(norm_distances)]
     return result
-
 
 
 # 10 implementation
