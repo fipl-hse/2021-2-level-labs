@@ -319,4 +319,3 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
             closest_labels[label] = 0
         closest_labels[label] += 1
     return [max(closest_labels, key=closest_labels.get), min(norm_distances)]
-
