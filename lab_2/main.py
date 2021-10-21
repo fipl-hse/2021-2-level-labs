@@ -55,10 +55,15 @@ def get_language_features(language_profiles: dict) -> list or None:
     if not isinstance(language_profiles, dict):
         return None
     features = []
-    for val in language_profiles.values():
-        for word in val:
-            if isinstance(word, str):
-                features.append(word)
+    for key, val in language_profiles.items():
+        if not isinstance(key, str) or\
+                not isinstance(val, dict):
+            return None
+        for word, freq in val.items():
+            if not isinstance(word, str) or\
+                    not isinstance(freq, (int, float)):
+                return None
+            features.append(word)
     features = sorted(features)
     if len(features) == 0:
         return None
@@ -220,7 +225,22 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or\
+            not isinstance(language_profiles, dict) or\
+            not (isinstance(word, str) for word in original_text):
+        return None
+    features = get_language_features(language_profiles)
+    if not isinstance(features, list):
+        return None
+    text_vector = []
+    profiles = language_profiles.values()
+    for word in features:
+        if word in original_text:
+            for profile in profiles:
+                if word in profile:
+                    text_vector.append([features.index(word), profile.get(word)])
+    return text_vector
+
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
