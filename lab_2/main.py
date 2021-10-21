@@ -185,9 +185,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     """
     pass
 
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
             or not isinstance(language_labels, list) \
-            or not isinstance(k, int) or not isinstance(metric, str):
+            or not isinstance(k, int) \
+            or not isinstance(metric, str):
         return None
     if len(language_labels) != len(known_text_vectors):
         return None
@@ -216,7 +218,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         else:
             dictionary_of_labels[label] = 1
 
-    if len(dictionary_of_labels) > 0:
-        possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
-        possible_result = [possible_label, round(min(distances), 5)]
-        return possible_result
+    possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
+    possible_result = [possible_label, round(min(distances), 5)]
+    return possible_result
