@@ -82,7 +82,7 @@ class DetectLanguageTest(unittest.TestCase):
         Bad input scenario
         """
 
-        unknown_profile = {}
+        unknown_profile = []
 
         en_profile = {'name': 'en',
                       'freq': {'happy': 2, 'he': 1, 'man': 1},
@@ -95,7 +95,6 @@ class DetectLanguageTest(unittest.TestCase):
 
         expected = None
         actual = detect_language(unknown_profile, en_profile, de_profile, 2)
-
         self.assertEqual(expected, actual)
 
     def test_detect_language_bad_input_profile(self):
