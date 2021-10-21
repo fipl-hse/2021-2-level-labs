@@ -237,8 +237,7 @@ def calculate_distance_sparse(unknown_text_vector: list,
         distance = sqrt(sum(elem ** 2 for elem in dict_unknown_text_vector.values()))
         distance = round(distance, 5)
         return distance
-    else:
-        return None
+    return None
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
