@@ -3,6 +3,7 @@ Language detection starter
 """
 
 import os
+from main import tokenize, get_language_profiles, get_text_vector, predict_language_knn
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -37,7 +38,39 @@ if __name__ == '__main__':
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
+    INIT_LABELS = ['eng', 'de', 'lat']
+
+    CORPUS = list()
+    CORPUS.append(tokenize(EN_TEXT))
+    CORPUS.append(tokenize(DE_TEXT))
+    CORPUS.append(tokenize(LAT_TEXT))
+
+    PROFILES = get_language_profiles(CORPUS, INIT_LABELS)
+
+    UNK_VECTORS = list()
+    for i in UNKNOWN_SAMPLES:
+        UNK_VECTORS.append(get_text_vector(tokenize(i), PROFILES))
+
+    KNOWN_VECTORS = list()
+    ADD_LABELS = list()
+    for j in EN_SAMPLES:
+        KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
+        ADD_LABELS.append('eng')
+    for j in DE_SAMPLES:
+        KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
+        ADD_LABELS.append('de')
+    for j in LAT_SAMPLES:
+        KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
+        ADD_LABELS.append('lat')
+
+    PREDICTIONS = list()
+    for k in UNK_VECTORS:
+        PREDICTIONS.append(predict_language_knn(k, KNOWN_VECTORS, ADD_LABELS))
+
     EXPECTED = ['de', 'eng', 'lat']
-    RESULT = ''
+    RESULT = list()
+    for k in PREDICTIONS:
+        RESULT.append(k[0])
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
