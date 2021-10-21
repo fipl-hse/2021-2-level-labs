@@ -6,6 +6,7 @@ Language classification
 from math import sqrt, fabs
 from lab_1.main import tokenize, remove_stop_words
 
+
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -92,13 +93,14 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list):
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
-    if all(isinstance(i,(int, float)) for i in unknown_text_vector) \
-            and all(isinstance(e,(int, float)) for e in known_text_vector):
+    if all(isinstance(i, (int, float)) for i in unknown_text_vector) \
+            and all(isinstance(e, (int, float)) for e in known_text_vector):
         distance = sqrt(sum((j - k) ** 2 for j, k
                             in zip(unknown_text_vector, known_text_vector)))
         distance = round(distance, 5)
         return distance
     return None
+
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
                            language_labels: list) -> [str, int] or None:
@@ -126,6 +128,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     language_score.append(min_value)
     return language_score
 
+
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
                                  known_text_vector: list):
@@ -136,13 +139,14 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
-    if all(isinstance(i,(int, float)) for i in unknown_text_vector) \
-            and all(isinstance(e,(int, float)) for e in known_text_vector):
+    if all(isinstance(i, (int, float)) for i in unknown_text_vector) \
+            and all(isinstance(e, (int, float)) for e in known_text_vector):
         manhattan_distance = sum(fabs(j - k) for j, k
                                  in zip(unknown_text_vector, known_text_vector))
         manhattan_distance = round(manhattan_distance, 5)
         return manhattan_distance
     return None
+
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -156,7 +160,35 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) or not isinstance(k, int) or not isinstance(metric, str):
+        return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    score_list = []
+    if metric == 'manhattan':
+        for i in known_text_vectors:
+            score_list.append(calculate_distance_manhattan(unknown_text_vector, i))
+    elif metric == 'euclid':
+        for i in known_text_vectors:
+            score_list.append(calculate_distance(unknown_text_vector, i))
+    else:
+        return None
+    knn_score = sorted(score_list)[:k]
+    closest_lang = []
+    for i in knn_score:
+        position = score_list.index(i)
+        label = language_labels[position]
+        closest_lang.append(label)
+    predict_label = {}
+    for lang in closest_lang:
+        if lang not in predict_label:
+            predict_label[lang] = 1
+        else:
+            predict_label[lang] += 1
+    predict_lang = max(predict_label, key=predict_label.get)
+    prediction = [predict_lang, min(score_list)]
+    return prediction
 
 
 # 10 implementation
@@ -167,7 +199,20 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    pass
+    if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
+        return None
+    text_vector_sparse = []
+    uni_tokens = get_language_features(language_profiles)
+    for word in uni_tokens:
+        if word in original_text:
+            for lang in language_profiles:
+                for key in language_profiles[lang]:
+                    if key == word:
+                        mini_list = [uni_tokens.index(word), language_profiles[lang][key]]
+                        text_vector_sparse.append(mini_list)
+        else:
+            continue
+    return text_vector_sparse
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
@@ -177,7 +222,18 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+    """
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        return None
+    unknown_list, known_list = [], []
+    for elem in enumerate(unknown_text_vector):
+        unknown_list.append(elem[1])
+    for elem in enumerate(known_text_vector):
+        known_list.append(elem[1])
+    distance = sqrt(sum((j - k) ** 2 for j, k in zip(unknown_list, known_list)))
+    distance = round(distance, 5)
+    return distance
+    """
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
