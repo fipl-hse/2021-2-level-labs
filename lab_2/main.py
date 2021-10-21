@@ -178,15 +178,17 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) or\
-            not isinstance(known_text_vectors, list) or\
-            not isinstance(language_labels, list) or\
-            not isinstance(k, int) or\
-            not isinstance(metric, str):
+    if not (isinstance(unknown_text_vector, list) and
+            isinstance(known_text_vectors, list) and
+            isinstance(language_labels, list) and
+            isinstance(k, int) and
+            isinstance(metric, str) and
+            len(known_text_vectors) == len(language_labels)):
         return None
     for unk_num in unknown_text_vector:
         if not isinstance(unk_num, (int, float)):
             return None
+    distances = []
     for text in known_text_vectors:
         if not isinstance(text, list):
             return None
@@ -194,18 +196,19 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             if not isinstance(kn_num, (int, float)):
                 return None
         if metric == "manhattan":
-            distances = [calculate_distance_manhattan(unknown_text_vector, text) for text in known_text_vectors]
+            distances.append(calculate_distance_manhattan(unknown_text_vector, text))
         elif metric == "euclid":
-            distances = [calculate_distance(unknown_text_vector, text) for text in known_text_vectors]
+            distances.append(calculate_distance(unknown_text_vector, text))
     norm_distances = sorted(distances)[:k]
+    norm_labels = []
     unique_labels = []
     for label in language_labels:
-        if not isinstance(label, str) or\
-                len(known_text_vectors) != len(language_labels):
+        if not isinstance(label, str):
             return None
         if label not in unique_labels:
             unique_labels.append(label)
-    norm_labels = [language_labels[distances.index(distance)] for distance in norm_distances]
+    for distance in norm_distances:
+        norm_labels.append(language_labels[distances.index(distance)])
     statistics_labels = {}
     for unique_label in unique_labels:
         statistics_labels[unique_label] = norm_labels.count(unique_label)
