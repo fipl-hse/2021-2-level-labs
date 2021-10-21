@@ -193,8 +193,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         else:
             dictionary_of_labels[label] = 1
 
-    possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get, default=0)
-    possible_result = [possible_label, round(min(distances, default=0), 5)]
+    possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get, default=1)
+    possible_result = [possible_label, round(min(distances, default=1), 5)]
     return possible_result
 
 # 10 implementation
