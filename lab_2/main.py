@@ -88,9 +88,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
 
     for word in features:
         if word in original_text:
-            for vals in language_profiles.values():
-                if word in vals.keys():
-                    vector.append(vals[word])
+            for value in language_profiles.values():
+                if word in value.keys():
+                    vector.append(value[word])
         else:
             vector.append(0)
     return vector
@@ -115,10 +115,17 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             return None
 
     dist = 0
+    counter = 0
 
     for index, number in enumerate(unknown_text_vector):
-        dist += (number - known_text_vector[index])**2
-        distance = round(math.sqrt(dist), 5)
+        if counter != len(known_text_vector):
+            dist += (number - known_text_vector[index])**2
+            distance = round(math.sqrt(dist), 5)
+            counter += 1
+        else:
+            dist += (number) ** 2
+            distance = round(math.sqrt(dist), 5)
+
     return distance
 
 
@@ -147,12 +154,10 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
     comp = {}
 
-    for vector, number in enumerate(known_text_vectors):
+    for vector in range(len(known_text_vectors)):
         comp[language_labels[vector]] = calculate_distance(unknown_text_vector, known_text_vectors[vector])
 
     for key, value in comp.items():
         if value == min(comp.values()):
             result = [key, value]
-    print(result)
     return result
-
