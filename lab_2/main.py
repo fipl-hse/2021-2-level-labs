@@ -180,7 +180,52 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or\
+            not isinstance(known_text_vectors, list) or\
+            not isinstance(language_labels, list) or\
+            not isinstance(k, int) or\
+            not isinstance(metric, str) or\
+            len(known_text_vectors) != len(language_labels):
+        return None
+    for unk_num in unknown_text_vector:
+        if not isinstance(unk_num, (int, float)):
+            return None
+    distances = []
+    for text in known_text_vectors:
+        if not isinstance(text, list):
+            return None
+        for kn_num in text:
+            if not isinstance(kn_num, (int, float)):
+                return None
+        if metric == "manhattan":
+            distances.append(calculate_distance_manhattan(unknown_text_vector, text))
+        elif metric == "euclid":
+            distances.append(calculate_distance(unknown_text_vector, text))
+        else:
+            return None
+    norm_distances = sorted(distances)[:k]
+    norm_labels = []
+    unique_labels = []
+    for label in language_labels:
+        if not isinstance(label, str):
+            return None
+        if label not in unique_labels:
+            unique_labels.append(label)
+    for distance in norm_distances:
+        norm_labels.append(language_labels[distances.index(distance)])
+    statistics_labels = {}
+    for unique_label in unique_labels:
+        statistics_labels[unique_label] = norm_labels.count(unique_label)
+    closest_labels = []
+    for k, v in statistics_labels.items():
+        if v == max(statistics_labels.values()):
+            closest_labels.append(k)
+    if len(closest_labels) > 1:
+        result = [norm_labels[norm_distances.index(min(norm_distances))], min(norm_distances)]
+    else:
+        result = [closest_labels[0], norm_distances[norm_labels.index(closest_labels[0])]]
+    return result
+
 
 
 # 10 implementation
