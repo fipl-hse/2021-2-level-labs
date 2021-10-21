@@ -121,7 +121,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         if not isinstance(number, (int, float)):
             return None
     for vector in known_text_vectors:
-        if not isintance(vector, list):
+        if not isinstance(vector, list):
             return None
     for label in language_labels:
         if not isinstance(label, str):
@@ -151,7 +151,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         if not isinstance(number, (int, float)):
             return None
     for number in known_text_vector:
-        if not isintance(number, (int, float)):
+        if not isinstance(number, (int, float)):
             return None
     distance = 0
     for index, coordinate in enumerate(unknown_text_vector):
