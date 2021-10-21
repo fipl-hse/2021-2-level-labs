@@ -61,7 +61,8 @@ if __name__ == '__main__':
     for text in UNKNOWN_SAMPLES:
         unknown_text = remove_stop_words(tokenize(text), stop_words)
         unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
-        pre_result = predict_language_knn_sparse(unknown_text_vector, known_text_vectors, language_labels, k)
+        pre_result = \
+            predict_language_knn_sparse(unknown_text_vector, known_text_vectors, language_labels, k)
         RESULT.append(pre_result[0])
     print(RESULT)
 
