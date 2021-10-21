@@ -39,10 +39,10 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     if not isinstance(texts_corpus, list) or \
             not isinstance(language_labels, list):
         return None
-    for i in range(len(language_labels)):
-        if not isinstance(language_labels[i], str):
+    for num, label in enumerate(language_labels):
+        if not isinstance(label, str):
             return None
-        language_profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
+        language_profiles[label] = get_freq_dict(texts_corpus[num])
     return language_profiles
 
 
@@ -101,12 +101,12 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     for unk in unknown_text_vector:
         if not isinstance(unk, (int, float)):
             return None
-    for kn in known_text_vector:
-        if not isinstance(kn, (int, float)):
+    for knwn in known_text_vector:
+        if not isinstance(knwn, (int, float)):
             return None
     distance = 0
-    for i in range(len(unknown_text_vector)):
-        distance += (unknown_text_vector[i] - known_text_vector[i]) ** 2
+    for num, text in enumerate(unknown_text_vector):
+        distance += (text - known_text_vector[num]) ** 2
     distance = round(distance ** 0.5, 5)
     return distance
 
@@ -124,8 +124,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             not isinstance(language_labels, list) or\
             len(language_labels) != len(known_text_vectors):
         return None
-    for t in unknown_text_vector:
-        if not isinstance(t, (int, float)):
+    for unk in unknown_text_vector:
+        if not isinstance(unk, (int, float)):
             return None
     for label in language_labels:
         if not isinstance(label, str):
@@ -154,15 +154,15 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     if not isinstance(unknown_text_vector, list) or\
             not isinstance(known_text_vector, list):
         return None
-    for nk_num in known_text_vector:
-        if not isinstance(nk_num, (int, float)):
+    for kn_num in known_text_vector:
+        if not isinstance(kn_num, (int, float)):
             return None
     for unk_num in unknown_text_vector:
         if not isinstance(unk_num, (int, float)):
             return None
     manhattan_distance = 0
-    for i in range(len(unknown_text_vector)):
-        manhattan_distance += abs(unknown_text_vector[i] - known_text_vector[i])
+    for num, unk_text in enumerate(unknown_text_vector):
+        manhattan_distance += abs(unk_text - known_text_vector[num])
     manhattan_distance = round(manhattan_distance, 5)
     return manhattan_distance
 
@@ -182,8 +182,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             not isinstance(known_text_vectors, list) or\
             not isinstance(language_labels, list) or\
             not isinstance(k, int) or\
-            not isinstance(metric, str) or\
-            len(known_text_vectors) != len(language_labels):
+            not isinstance(metric, str):
         return None
     for unk_num in unknown_text_vector:
         if not isinstance(unk_num, (int, float)):
@@ -208,14 +207,16 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         if label not in unique_labels:
             unique_labels.append(label)
     for distance in norm_distances:
+        if len(known_text_vectors) != len(language_labels):
+            return None
         norm_labels.append(language_labels[distances.index(distance)])
     statistics_labels = {}
     for unique_label in unique_labels:
         statistics_labels[unique_label] = norm_labels.count(unique_label)
     closest_labels = []
-    for k, v in statistics_labels.items():
-        if v == max(statistics_labels.values()):
-            closest_labels.append(k)
+    for key, val in statistics_labels.items():
+        if val == max(statistics_labels.values()):
+            closest_labels.append(key)
     if len(closest_labels) > 1:
         result = [norm_labels[norm_distances.index(min(norm_distances))], min(norm_distances)]
     else:
