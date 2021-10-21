@@ -243,9 +243,12 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     if not isinstance(profile, dict) or \
-        "name" not in profile.keys() or \
-        "freq" not in profile.keys() or \
-        "n_words" not in profile.keys():
+        not isinstance(profile.get("name"), str) or \
+        not isinstance(profile.get("freq"), dict) or \
+        not isinstance(profile.get("n_words"), int) or\
+            "name" not in profile.keys() or \
+            "freq" not in profile.keys() or \
+            "n_words" not in profile.keys():
         return 1
     path = "{}.json".format(profile["name"])
     with open(path, "w", encoding="utf-8") as new_profile:
