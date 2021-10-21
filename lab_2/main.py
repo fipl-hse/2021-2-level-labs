@@ -160,8 +160,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list) or not isinstance(k, int) or not isinstance(metric, str):
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list) \
+            or not isinstance(k, int) \
+            or not isinstance(metric, str):
         return None
     if len(language_labels) != len(known_text_vectors):
         return None
@@ -222,18 +225,16 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
-        return None
-    unknown_list, known_list = [], []
-    for elem in enumerate(unknown_text_vector):
-        unknown_list.append(elem[1])
-    for elem in enumerate(known_text_vector):
-        known_list.append(elem[1])
-    distance = sqrt(sum((j - k) ** 2 for j, k in zip(unknown_list, known_list)))
-    distance = round(distance, 5)
-    return distance
-    """
+    #if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+        #return None
+    #unknown_list, known_list = [], []
+    #for elem in enumerate(unknown_text_vector):
+        #unknown_list.append(elem[1])
+    #for elem in enumerate(known_text_vector):
+        #known_list.append(elem[1])
+    #distance = sqrt(sum((j - k) ** 2 for j, k in zip(unknown_list, known_list)))
+    #distance = round(distance, 5)
+    #return distance
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
