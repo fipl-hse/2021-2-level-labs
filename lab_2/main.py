@@ -203,14 +203,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     norm_labels = []
     for distance in norm_distances:
         norm_labels.append(language_labels[distances.index(distance)])
-    statistics_labels = sorted(zip(norm_labels, norm_distances), key=lambda x: x[1])
+    norm_labels = sorted(zip(norm_labels, norm_distances), key=lambda x: x[1])
     closest_labels = {}
-    for label, _ in statistics_labels:
+    for label, _ in norm_labels:
         if label not in closest_labels:
             closest_labels[label] = 0
         closest_labels[label] += 1
-    result = [max(closest_labels, key=closest_labels.get), min(norm_distances)]
-    return result
+    return [max(closest_labels, key=closest_labels.get), min(norm_distances)]
 
 
 # 10 implementation
