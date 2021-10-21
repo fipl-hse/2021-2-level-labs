@@ -130,13 +130,12 @@ def detect_language(unknown_profile: dict, profile_1: dict, profile_2: dict, top
         return None
     compare_with_1 = compare_profiles(unknown_profile, profile_1, top_n)
     compare_with_2 = compare_profiles(unknown_profile, profile_2, top_n)
-    lang = []
     if compare_with_1 > compare_with_2:
-        lang.append(profile_1["name"])
+        lang = [profile_1["name"]]
     elif compare_with_1 < compare_with_2:
-        lang.append(profile_2["name"])
+        lang = [profile_2["name"]]
     elif compare_with_1 == compare_with_2:
-        lang.append(profile_1["name"], profile_2["name"]).sort()
+        lang = sorted([profile_1["name"], profile_2["name"]])
     return lang[0]
 
 
