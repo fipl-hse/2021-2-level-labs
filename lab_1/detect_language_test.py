@@ -73,8 +73,8 @@ class DetectLanguageTest(unittest.TestCase):
                       'freq': {'sie': 3, 'haben': 1, 'viel': 1, 'computer': 2},
                       'n_words': 4}
 
-        expected = '' #de_profile['name']
-        actual = '' #detect_language(unknown_profile, en_profile, de_profile, 2)
+        expected = de_profile['name']
+        actual = detect_language(unknown_profile, en_profile, de_profile, 2)
         self.assertEqual(expected, actual)
 
     def test_detect_language_bad_input(self):
