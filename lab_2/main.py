@@ -187,7 +187,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for unk_num in unknown_text_vector:
         if not isinstance(unk_num, (int, float)):
             return None
-    distances = []
     for text in known_text_vectors:
         if not isinstance(text, list):
             return None
@@ -195,21 +194,18 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             if not isinstance(kn_num, (int, float)):
                 return None
         if metric == "manhattan":
-            distances.append(calculate_distance_manhattan(unknown_text_vector, text))
+            distances = [calculate_distance_manhattan(unknown_text_vector, text) for text in known_text_vectors]
         elif metric == "euclid":
-            distances.append(calculate_distance(unknown_text_vector, text))
+            distances = [calculate_distance(unknown_text_vector, text) for text in known_text_vectors]
     norm_distances = sorted(distances)[:k]
-    norm_labels = []
     unique_labels = []
     for label in language_labels:
-        if not isinstance(label, str):
+        if not isinstance(label, str) or\
+                len(known_text_vectors) != len(language_labels):
             return None
         if label not in unique_labels:
             unique_labels.append(label)
-    for distance in norm_distances:
-        if len(known_text_vectors) != len(language_labels):
-            return None
-        norm_labels.append(language_labels[distances.index(distance)])
+    norm_labels = [language_labels[distances.index(distance)] for distance in norm_distances]
     statistics_labels = {}
     for unique_label in unique_labels:
         statistics_labels[unique_label] = norm_labels.count(unique_label)
