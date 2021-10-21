@@ -42,8 +42,10 @@ def get_freq_dict(tokens: list) -> dict or None:
         else:
             freq_dict[token] = 1
 
+    tokens_length = len(tokens)
+
     for token in freq_dict:
-        freq_dict[token] = round(freq_dict[token] / len(tokens), 5)
+        freq_dict[token] = round(freq_dict[token] / tokens_length, 5)
 
     return freq_dict
 
@@ -83,8 +85,8 @@ def get_language_features(language_profiles: dict) -> list or None:
 
     all_words = []
 
-    for language_profile in language_profiles.keys():
-        for word in language_profiles[language_profile].keys():
+    for language_profile in language_profiles:
+        for word in language_profiles[language_profile]:
             if word in all_words:
                 all_words.remove(word)
             else:
