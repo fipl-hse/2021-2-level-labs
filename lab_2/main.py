@@ -106,6 +106,9 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     for number in unknown_text_vector:
         if not isinstance(number, (int, float)):
             return None
+    for number in known_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
     distance = 0
     for index, coordinate in enumerate(unknown_text_vector):
         distance += (coordinate - known_text_vector[index]) ** 2
@@ -160,9 +163,6 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             or not isinstance(known_text_vector, list):
         return None
     for number in unknown_text_vector:
-        if not isinstance(number, (int, float)):
-            return None
-    for number in known_text_vector:
         if not isinstance(number, (int, float)):
             return None
     distance = 0
