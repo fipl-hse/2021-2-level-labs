@@ -19,9 +19,10 @@ def get_freq_dict(tokens: list) -> dict or None:
     ):
         return None
     freq_dict = {}
+    length = len(tokens)
     for token in tokens:
         if token not in freq_dict:
-            freq_dict[token] = round(tokens.count(token) / len(tokens), 5)
+            freq_dict[token] = round(tokens.count(token) / length, 5)
     return freq_dict
 
 
@@ -105,8 +106,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if not (isinstance(num, (int, float))):
             return None
     distance = 0
-    for index, _ in enumerate(unknown_text_vector):
-        distance += ((unknown_text_vector[index] - known_text_vector[index]) ** 2)
+    for index, coordinate in enumerate(unknown_text_vector):
+        distance += ((coordinate - known_text_vector[index]) ** 2)
     distance = round(distance ** 0.5, 5)
     return distance
 
@@ -119,15 +120,14 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not (
-            isinstance(unknown_text_vector, list)
-            and all(isinstance(n, (int, float)) for n in unknown_text_vector)
-            and isinstance(known_text_vectors, list)
-            and all(isinstance(m, list) for m in known_text_vectors)
-            and isinstance(language_labels, list)
-            and all(isinstance(s, str) for s in language_labels)
-            and len(known_text_vectors) == len(language_labels)
-    ):
+    if not isinstance(unknown_text_vector, list) \
+            or not isinstance(known_text_vectors, list) \
+            or not isinstance(language_labels, list):
+        return None
+    for vector in known_text_vectors:
+        if not isinstance(vector, list):
+            return None
+    if len(language_labels) != len(known_text_vectors):
         return None
     distances = []
     for known_text_vector in known_text_vectors:
@@ -154,8 +154,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     ):
         return None
     distance = 0
-    for index, _ in enumerate(unknown_text_vector):
-        distance += abs(unknown_text_vector[index] - known_text_vector[index])
+    for index, coordinate in enumerate(unknown_text_vector):
+        distance += abs(coordinate - known_text_vector[index])
     distance = round(distance, 5)
     return distance
 
@@ -184,7 +184,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if metric == 'manhattan':
         for known_text_vector in known_text_vectors:
             distances.append(calculate_distance_manhattan(unknown_text_vector, known_text_vector))
-    if metric == 'euclid':
+    elif metric == 'euclid':
         for known_text_vector in known_text_vectors:
             distances.append(calculate_distance(unknown_text_vector, known_text_vector))
     nearest_languages = sorted(list(zip(language_labels, distances)))[:k]
