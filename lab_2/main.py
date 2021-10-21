@@ -242,7 +242,6 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     return text_vector
 
 
-
 def calculate_distance_sparse(unknown_text_vector: list,
                               known_text_vector: list) -> float or None:
     """
@@ -250,7 +249,32 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list) or\
+            not isinstance(known_text_vector, list):
+        return None
+    dict_unk = {}
+    dict_knwn = {}
+    for unk in unknown_text_vector:
+        if not isinstance(unk, list) or\
+                len(unk) != 2:
+            return None
+        dict_unk[unk[0]] = unk[1]
+    for knwn in known_text_vector:
+        if not isinstance(knwn, list) or\
+                len(knwn) != 2:
+            return None
+        dict_knwn[knwn[0]] = knwn[1]
+    max_len = len(dict_knwn) + len(dict_unk)
+    distance = 0
+    for num in range(max_len):
+        if num in dict_unk and num in dict_knwn:
+            distance += (dict_unk.get(num) - dict_knwn.get(num)) ** 2
+        elif num in dict_unk and num not in dict_knwn:
+            distance += dict_unk.get(num) ** 2
+        elif num not in dict_unk and num in dict_knwn:
+            distance += dict_knwn.get(num) ** 2
+    distance = round(distance ** 0.5, 5)
+    return distance
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -263,4 +287,36 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-    pass
+    if not (isinstance(unknown_text_vector, list) and
+            isinstance(known_text_vectors, list) and
+            isinstance(language_labels, list) and
+            isinstance(k, int) and
+            len(known_text_vectors) == len(language_labels)):
+        return None
+    for unk in unknown_text_vector:
+        if not isinstance(unk, list) or\
+                not isinstance(unk[0], int) or\
+                not isinstance(unk[1], (int, float)):
+            return None
+    distances = []
+    for knwn_text in known_text_vectors:
+        if not isinstance(knwn_text, list):
+            return None
+        for knwn in knwn_text:
+            if not isinstance(knwn, list) or\
+                    not isinstance(knwn[0], int) or\
+                    not isinstance(knwn[1], (int, float)):
+                return None
+        distances.append(calculate_distance_sparse(unknown_text_vector, knwn_text))
+    norm_distances = sorted(distances)[:k]
+    norm_labels = []
+    for distance in norm_distances:
+        norm_labels.append(language_labels[distances.index(distance)])
+    norm_labels = sorted(zip(norm_labels, norm_distances), key=lambda x: x[1])
+    closest_labels = {}
+    for label, _ in norm_labels:
+        if label not in closest_labels:
+            closest_labels[label] = 0
+        closest_labels[label] += 1
+    return [max(closest_labels, key=closest_labels.get), min(norm_distances)]
+
