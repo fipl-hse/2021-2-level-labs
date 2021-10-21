@@ -176,7 +176,16 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         elif metric == 'manhattam':
             distance = calculate_distance_manhattan(unknown_text_vector, vector)
             distances.append(distance)
+    sorted_distances = sorted(distances)
+    sorted_distances = sorted_distances[:k]
     labels = []
+    for distance in sorted_distances:
+        index_of_distance = distances.index(distance)
+        if len(language_labels) == len(known_text_vectors):
+            label = language_labels[index_of_distance]
+            labels.append(label)
+        else:
+            return None
     dictionary_of_labels = {}
     for label in labels:
         if label in dictionary_of_labels:
@@ -184,7 +193,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         else:
             dictionary_of_labels[label] = 1
 
-    possible_label = max(dictionary_of_labels)
+    possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
     possible_result = [possible_label, round(min(distances), 5)]
     return possible_result
 
