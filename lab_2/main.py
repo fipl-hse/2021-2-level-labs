@@ -71,7 +71,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     """
     if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
         return None
-    features = get_language_features(language_profiles)
     vector = []
     unique_words = get_language_features(language_profiles)
     max_word_freq = {}
@@ -100,10 +99,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         return None
 
     for num in unknown_text_vector:
-        if not (isinstance(num, (int, float))):
+        if not isinstance(num, (int, float)):
             return None
     for num in known_text_vector:
-        if not (isinstance(num, (int, float))):
+        if not isinstance(num, (int, float)):
             return None
     distance = 0
     for index, coordinate in enumerate(unknown_text_vector):
