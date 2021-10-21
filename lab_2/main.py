@@ -97,10 +97,14 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if (not isinstance(unknown_text_vector, list)
             or not isinstance(known_text_vector, list)):
         return None
+    for known_n in known_text_vector:
+        if not isinstance(known_n, (int, float)):
+            return None
+    for unknown_n in unknown_text_vector:
+        if not isinstance(unknown_n, (int, float)):
+            return None
     distance = 0
     for unknown, known in zip(unknown_text_vector, known_text_vector):
-        if known is None or unknown is None:
-            return None
         distance += (unknown - known)**2
     distance = round(sqrt(distance), 5)
     return distance
@@ -174,7 +178,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if metric == 'manhattan':
         for known_text_vector in known_text_vectors:
             distances.append(calculate_distance_manhattan(unknown_text_vector, known_text_vector))
-    if metric == 'euclid':
+    elif metric == 'euclid':
         for known_text_vector in known_text_vectors:
             distances.append(calculate_distance(unknown_text_vector, known_text_vector))
     nearest_languages = sorted(list(zip(language_labels, distances)))[:k]
