@@ -201,25 +201,15 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             distances.append(calculate_distance(unknown_text_vector, text))
     norm_distances = sorted(distances)[:k]
     norm_labels = []
-    unique_labels = []
-    for label in language_labels:
-        if not isinstance(label, str):
-            return None
-        if label not in unique_labels:
-            unique_labels.append(label)
     for distance in norm_distances:
         norm_labels.append(language_labels[distances.index(distance)])
-    statistics_labels = {}
-    for unique_label in unique_labels:
-        statistics_labels[unique_label] = norm_labels.count(unique_label)
-    closest_labels = []
-    for key, val in statistics_labels.items():
-        if val == max(statistics_labels.values()):
-            closest_labels.append(key)
-    if len(closest_labels) > 1:
-        result = [norm_labels[norm_distances.index(min(norm_distances))], min(norm_distances)]
-    else:
-        result = [closest_labels[0], min(norm_distances)]
+    statistics_labels = sorted(zip(norm_labels, norm_distances), key=lambda x: x[1])
+    closest_labels = {}
+    for label, _ in statistics_labels:
+        if label not in closest_labels:
+            closest_labels[label] = 0
+        closest_labels[label] += 1
+    result = [max(closest_labels, key=closest_labels.get), min(norm_distances)]
     return result
 
 
