@@ -49,8 +49,8 @@ if __name__ == '__main__':
     eng_tokens = remove_stop_words(tokenize(EN_TEXT), stop_words)
     de_tokens = remove_stop_words(tokenize(DE_TEXT), stop_words)
     lat_tokens = remove_stop_words(tokenize(LAT_TEXT), stop_words)
-    unknown_str = ''.join(UNKNOWN_SAMPLES)
-    unknown_tokens = remove_stop_words(tokenize(unknown_str), stop_words)
+    UNKNOWN_STR = ''.join(UNKNOWN_SAMPLES)
+    unknown_tokens = remove_stop_words(tokenize(UNKNOWN_STR), stop_words)
 
     # get_freq_dict
     for text in EN_SAMPLES:
@@ -90,7 +90,8 @@ if __name__ == '__main__':
 
     # predict_language_score
     known_text_vectors = [eng_vector, de_vector, lat_vector]
-    predict_language_score = predict_language_score(unknown_vector, known_text_vectors, language_labels)
+    predict_language_score = predict_language_score(unknown_vector, known_text_vectors,
+                                                    language_labels)
 
     # calculate_distance_manhattan
     eng_distance_m = calculate_distance_manhattan(unknown_vector, eng_vector)
@@ -117,8 +118,8 @@ if __name__ == '__main__':
     for text in UNKNOWN_SAMPLES:
         unknown_text = remove_stop_words(tokenize(text), stop_words)
         unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
-        predict_language = predict_language_knn_sparse(unknown_text_vector, known_text_vectors_sparse,
-                                                       language_labels, k)
+        predict_language = predict_language_knn_sparse(unknown_text_vector,
+                                                       known_text_vectors_sparse, language_labels, k)
         RESULT.append(predict_language[0])
     print(RESULT)
     EXPECTED = ['de', 'eng', 'lat']
