@@ -117,7 +117,8 @@ if __name__ == '__main__':
         unknown_text_vectors_sparse.append(get_sparse_vector(element, language_profiles))
 
     # calculate_distance_sparse
-    distance_sparse = calculate_distance_sparse(unknown_text_vectors_sparse[0], known_text_vectors_sparse[0])
+    distance_sparse = calculate_distance_sparse(unknown_text_vectors_sparse[0],
+                                                known_text_vectors_sparse[0])
 
     # predict_language_knn_sparse
     k = 3
