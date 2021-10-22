@@ -83,10 +83,13 @@ if __name__ == '__main__':
     # проходимся по остальным функциям
     print(get_freq_dict(eng_tokens))
     print(get_language_features(language_profiles))
-    example_unk = get_text_vector(remove_stop_words(tokenize(UNKNOWN_SAMPLES[1]), []), language_profiles)
-    example_kn = get_text_vector(remove_stop_words(tokenize(DE_SAMPLES[1]), []), language_profiles)
+    example_unk = get_text_vector(remove_stop_words(tokenize(UNKNOWN_SAMPLES[1]), []),
+                                  language_profiles)
+    example_kn = get_text_vector(remove_stop_words(tokenize(DE_SAMPLES[1]), []),
+                                 language_profiles)
     print(example_unk)
-    example_kns_n = [example_kn, (get_text_vector(remove_stop_words(tokenize(LAT_SAMPLES[1]), []), language_profiles))]
+    example_kns_n = [example_kn, (get_text_vector(remove_stop_words(tokenize(LAT_SAMPLES[1]), []),
+                                                  language_profiles))]
     example_kns = []
     minimum = len(min(example_kns_n, key=len))
     for i in example_kns_n:
