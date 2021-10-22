@@ -3,9 +3,9 @@ Lab 2
 Language classification
 """
 
+import math
 from lab_1.main import tokenize, remove_stop_words
 
-import math
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -213,13 +213,13 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for i in range(len(list_of_distances) - 1):
         for j in range(i, len(list_of_distances)):
             if list_of_distances[i] > list_of_distances[j]:
-                ch = list_of_distances[i]
+                changing = list_of_distances[i]
                 list_of_distances[i] = list_of_distances[j]
-                list_of_distances[j] = ch
+                list_of_distances[j] = changing
 
-                ch = language_labels[i]
+                changing = language_labels[i]
                 language_labels[i] = language_labels[j]
-                language_labels[j] = ch
+                language_labels[j] = changing
     srez_of_distances = list_of_distances[:k]
     srez_of_labels = language_labels[:k]
     count = 0
