@@ -43,7 +43,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         return None
 
     language_profiles = {}
-    for i in enumerate(language_labels):
+    for i in range(len(language_labels)):
         language_profiles[language_labels[i]] = texts_corpus[i]
 
     for key in language_profiles:
@@ -119,7 +119,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
 
     distance = 0.0
 
-    for i in enumerate(a):
+    for i in range(len(a)):
         temp = a[i] - b[i]
         temp = temp ** 2
         distance += temp
@@ -156,7 +156,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     prediction.append(language_labels[0])
     prediction.append(distances[0])
 
-    for j in enumerate(distances):
+    for j in range(len(distances)):
         if distances[j] < prediction[1]:
             prediction[0] = language_labels[j]
             prediction[1] = distances[j]
@@ -182,7 +182,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
 
     distance = 0.0
 
-    for i in enumerate(a):
+    for i in range(len(a)):
         temp = a[i] - b[i]
         if temp < 0:
             temp *= (-1)
