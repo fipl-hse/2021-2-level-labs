@@ -4,6 +4,9 @@ Language detection starter
 
 import os
 
+from lab_1.main import remove_stop_words, tokenize
+from lab_2.main import get_language_profiles, get_sparse_vector, predict_language_knn_sparse
+
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 PATH_TO_DATASET_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'dataset')
