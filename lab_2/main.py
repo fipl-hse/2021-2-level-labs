@@ -67,6 +67,7 @@ def get_language_features(language_profiles: dict) -> list or None:
         temp = language_profiles[lang]
         a = list(temp.keys())
         lang_feats += a
+        print(lang_feats)
 
     lang_feats = sorted(lang_feats)
 
@@ -83,9 +84,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
         return None
 
-    vector = list()
+    vector = []
     feats = get_language_features(language_profiles)
-    feats_dict = list()
+    feats_dict = {}
 
     for l in language_profiles:
         prof = language_profiles[l]
@@ -136,9 +137,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list):
-        return None
-    if not isinstance(language_labels, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
         return None
     if unknown_text_vector == [None] or known_text_vectors == [None] or language_labels == [None]:
         return None
@@ -203,9 +202,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list):
-        return None
-    if not isinstance(language_labels, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
         return None
     if unknown_text_vector == [None] or known_text_vectors == [None] or language_labels == [None]:
         return None
