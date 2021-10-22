@@ -81,8 +81,7 @@ if __name__ == '__main__':
         lat_tokens_samples = remove_stop_words(tokenize(text), stop_words)
         known_text_vectors.append(get_text_vector(lat_tokens_samples, language_profiles))
     for element in unknown_tokens:
-        unknown_tokens_samples = remove_stop_words(tokenize(element), stop_words)
-        unknown_text_vectors.append(get_text_vector(unknown_tokens_samples, language_profiles))
+        unknown_text_vectors.append(get_text_vector(element, language_profiles))
 
     # calculate_distance
     distance = calculate_distance(unknown_text_vectors[0], known_text_vectors[0])
@@ -95,7 +94,8 @@ if __name__ == '__main__':
     distance_m = calculate_distance_manhattan(unknown_text_vectors[0], known_text_vectors[0])
 
     # predict_language_knn
-    predict_language_knn(unknown_text_vectors[0], known_text_vectors, language_labels, 1, 'manhattan')
+    predict_language_knn(unknown_text_vectors[0],
+                         known_text_vectors, language_labels, 1, 'manhattan')
 
     # get_sparse_vector
     known_text_vectors_sparse = []
@@ -114,8 +114,7 @@ if __name__ == '__main__':
         known_text_vectors_sparse.append(get_sparse_vector(lat_tokens_samples, language_profiles))
         language_labels_sparse.append('lat')
     for element in unknown_tokens:
-        unknown_tokens_samples = remove_stop_words(tokenize(element), stop_words)
-        unknown_text_vectors_sparse.append(get_sparse_vector(unknown_tokens_samples, language_profiles))
+        unknown_text_vectors_sparse.append(get_sparse_vector(element, language_profiles))
 
     # calculate_distance_sparse
     distance_sparse = calculate_distance_sparse(unknown_text_vectors_sparse[0], known_text_vectors_sparse[0])
