@@ -4,7 +4,12 @@ Language detection starter
 
 import os
 from lab_1.main import tokenize, remove_stop_words
-from lab_2.main import get_sparse_vector, get_language_profiles, predict_language_knn_sparse
+from lab_2.main import (get_sparse_vector, get_language_profiles,
+                        predict_language_knn_sparse, get_freq_dict,
+                        get_text_vector, get_language_features,
+                        calculate_distance, calculate_distance_manhattan,
+                        calculate_distance_sparse, predict_language_knn,
+                        predict_language_score)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -54,6 +59,7 @@ if __name__ == '__main__':
     for text in DE_SAMPLES:
         tokens = remove_stop_words(tokenize(text), [])
         known_tet_vectors.append(get_sparse_vector(tokens, language_profiles))
+        print(len(get_text_vector(tokens, language_profiles)))
         language_labels.append('de')
     for text in EN_SAMPLES:
         tokens = remove_stop_words(tokenize(text), [])
@@ -74,5 +80,23 @@ if __name__ == '__main__':
         result.append(predict_language_knn_sparse(vector, known_tet_vectors, language_labels, 3)[0])
     print(result)
     print(EXPECTED)
+    # проходимся по остальным функциям
+    print(get_freq_dict(eng_tokens))
+    print(get_language_features(language_profiles))
+    example_unk = get_text_vector(remove_stop_words(tokenize(UNKNOWN_SAMPLES[1]), []), language_profiles)
+    example_kn = get_text_vector(remove_stop_words(tokenize(DE_SAMPLES[1]), []), language_profiles)
+    print(example_unk)
+    example_kns_n = [example_kn, (get_text_vector(remove_stop_words(tokenize(LAT_SAMPLES[1]), []), language_profiles))]
+    example_kns = []
+    minimum = len(min(example_kns_n, key=len))
+    for i in example_kns_n:
+        example_kns.append(i[:minimum])
+    example_unk = example_unk[:minimum]
+    example_labels = ['de', 'lat']
+    print(calculate_distance(example_unk, example_kn))
+    print(calculate_distance_manhattan(example_unk, example_kn))
+    print(calculate_distance_sparse(unknown_text_vectors[0], known_tet_vectors[1]))
+    print(predict_language_score(example_unk, example_kns, example_labels))
+    print(predict_language_knn(example_unk, example_kns, example_labels))
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert result, EXPECTED
