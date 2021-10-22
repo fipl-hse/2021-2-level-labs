@@ -40,19 +40,19 @@ if __name__ == '__main__':
 
     INIT_LABELS = ['eng', 'de', 'lat']
 
-    CORPUS = list()
+    CORPUS = []
     CORPUS.append(tokenize(EN_TEXT))
     CORPUS.append(tokenize(DE_TEXT))
     CORPUS.append(tokenize(LAT_TEXT))
 
     PROFILES = get_language_profiles(CORPUS, INIT_LABELS)
 
-    UNK_VECTORS = list()
+    UNK_VECTORS = []
     for i in UNKNOWN_SAMPLES:
         UNK_VECTORS.append(get_text_vector(tokenize(i), PROFILES))
 
-    KNOWN_VECTORS = list()
-    ADD_LABELS = list()
+    KNOWN_VECTORS = []
+    ADD_LABELS = []
     for j in EN_SAMPLES:
         KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
         ADD_LABELS.append('eng')
@@ -63,12 +63,12 @@ if __name__ == '__main__':
         KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
         ADD_LABELS.append('lat')
 
-    PREDICTIONS = list()
+    PREDICTIONS = []
     for k in UNK_VECTORS:
         PREDICTIONS.append(predict_language_knn(k, KNOWN_VECTORS, ADD_LABELS))
 
     EXPECTED = ['de', 'eng', 'lat']
-    RESULT = list()
+    RESULT = []
     for k in PREDICTIONS:
         RESULT.append(k[0])
 
