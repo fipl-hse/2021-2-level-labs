@@ -83,9 +83,9 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     if not isinstance(original_text, list) or not isinstance(language_profiles, dict):
         return None
 
-    vector = []
+    vector = list()
     feats = get_language_features(language_profiles)
-    feats_dict = []
+    feats_dict = list()
 
     for l in language_profiles:
         prof = language_profiles[l]
