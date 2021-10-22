@@ -119,8 +119,11 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
 
     for index, number in enumerate(unknown_text_vector):
         if counter < len(known_text_vector):
-            dist += ((number - known_text_vector[index])**2)
-            counter += 1
+            number_2 = known_text_vector[index]
+        else:
+            number_2 = 0
+        dist += ((number - number_2)**2)
+        counter += 1
         distance = round(math.sqrt(dist), 5)
     return distance
 
