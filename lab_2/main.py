@@ -268,9 +268,9 @@ def calculate_distance_sparse(unknown_text_vector: list,
     known_text_dict = dict(known_text_vector)
     mixed_dict = {**unknown_text_dict, **known_text_dict}
 
-    for k, v in unknown_text_dict.items():
-        if k in known_text_dict:
-            mixed_dict[k] = v - known_text_dict[k]
+    for key, value in unknown_text_dict.items():
+        if key in known_text_dict:
+            mixed_dict[key] = value - known_text_dict[key]
     euclidean_distance = 0
     for v in mixed_dict.values():
         euclidean_distance += v ** 2
