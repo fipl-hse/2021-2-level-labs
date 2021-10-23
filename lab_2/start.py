@@ -68,7 +68,8 @@ if __name__ == '__main__':
     for text in UNKNOWN_SAMPLES:
         unknown_text = (remove_stop_words(tokenize(text),stop_words))
         unknown_text_vectors.append(get_text_vector(unknown_text, language_profiles))
-    ##print(predict_language_knn(unknown_text_vectors[0], known_text_vectors,language_labels, 1, 'manhattan'))
+    ##print(predict_language_knn(unknown_text_vectors[0],
+    # known_text_vectors,language_labels, 1, 'manhattan'))
 
 
     EXPECTED = ['de', 'eng', 'lat']
