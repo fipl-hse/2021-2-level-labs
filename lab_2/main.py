@@ -81,6 +81,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
             for language in language_profiles:
                 if word in language_profiles[language]:
                     vector.append(language_profiles[language][word])
+                    break
         else:
             vector.append(0)
     return vector
