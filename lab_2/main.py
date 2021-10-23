@@ -37,15 +37,18 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     """
     if not (isinstance(texts_corpus, list) and isinstance(language_labels, list)):
         return None
-    laguage_profiles = {}
+    language_profiles = {}
     freq_lists = []
     for text in texts_corpus:
         freq_lists.append(get_freq_dict(text))
         if text is None:
             return None
     for i, label in enumerate(language_labels):
-        laguage_profiles[label] = freq_lists[i]
-    return laguage_profiles
+        if label not in language_profiles.keys():
+            language_profiles[label] = freq_lists[i]
+        else:
+            language_profiles[label].update(freq_lists[i])
+    return language_profiles
 
 
 def get_language_features(language_profiles: dict) -> list or None:
@@ -75,8 +78,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     vector = []
     for word in get_language_features(language_profiles):
         if word in original_text:
-            for language in language_profiles.keys():
-                if word in language_profiles[language].keys():
+            for language in language_profiles:
+                if word in language_profiles[language]:
                     vector.append(language_profiles[language][word])
         else:
             vector.append(0)
