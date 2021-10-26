@@ -117,7 +117,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
             return None
     vector_distance = 0
     for i, frequency in enumerate(unknown_text_vector):
-        vector_distance += ((unknown_text_vector[i] - known_text_vector[i]) ** 2)
+        vector_distance += ((frequency - known_text_vector[i]) ** 2)
     return round(vector_distance ** 0.5, 5)
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -163,7 +163,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vector, list)):
         return None
     for bad_input in unknown_text_vector:
         if not isinstance(bad_input, float) and not isinstance(bad_input, int):
@@ -173,7 +174,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
             return None
     manhattan_distance = 0
     for i, frequency in enumerate(unknown_text_vector):
-        manhattan_distance += abs(unknown_text_vector[i] - known_text_vector[i])
+        manhattan_distance += abs(frequency - known_text_vector[i])
     return round(manhattan_distance, 5)
 
 
@@ -188,9 +189,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list)or not \
-        isinstance(language_labels, list) or not isinstance(k, int) \
-            or not isinstance(metric, str):
+    if (not isinstance(unknown_text_vector, list)
+            or not isinstance(known_text_vectors, list)
+            or not isinstance(language_labels, list)
+            or not isinstance(k, int)
+            or not isinstance(metric, str)):
         return None
     for bad_input in unknown_text_vector:
         if not isinstance(bad_input, int) and not isinstance(bad_input, float):
@@ -208,9 +211,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if metric == 'euclid':
         for all_vectors in known_text_vectors:
             all_distances.append(calculate_distance(unknown_text_vector, all_vectors))
-    if metric == 'manhattan':
-        for all_vectors_manhattan in known_text_vectors:
-            all_distances.append(calculate_distance_manhattan(unknown_text_vector, all_vectors_manhattan))
+    else:
+        for all_vectors in known_text_vectors:
+            all_distances.append(calculate_distance_manhattan
+                                 (unknown_text_vector, all_vectors))
     k_distances = sorted(zip(language_labels, all_distances), key=lambda x: x[1])[:k]
     language_k_frequency = {}
     for knn in k_distances:
