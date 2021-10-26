@@ -188,8 +188,37 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
-
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list)or not \
+        isinstance(language_labels, list) or not isinstance(k, int) \
+            or not isinstance(metric, str):
+        return None
+    for bad_input in unknown_text_vector:
+        if not isinstance(bad_input, int) and not isinstance(bad_input, float):
+            return None
+    for bad_input1 in known_text_vectors:
+        for bad_vectors in bad_input1:
+            if not isinstance(bad_vectors, int) and not isinstance(bad_vectors, float):
+                return None
+    for bad_input2 in language_labels:
+        if not isinstance(bad_input2, str):
+            return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    all_distances = []
+    if metric == 'euclid':
+        for all_vectors in known_text_vectors:
+            all_distances.append(calculate_distance(unknown_text_vector, all_vectors))
+    if metric == 'manhattan':
+        for all_vectors_manhattan in known_text_vectors:
+            all_distances.append(calculate_distance_manhattan(unknown_text_vector, all_vectors_manhattan))
+    k_distances = sorted(zip(language_labels, all_distances), key=lambda x: x[1])[:k]
+    language_k_frequency = {}
+    for knn in k_distances:
+        if knn[0] not in language_k_frequency:
+            language_k_frequency[knn[0]] = 1
+        language_k_frequency[knn[0]] += 1
+    final_result = [max(language_k_frequency, key=language_k_frequency.get), min(all_distances)]
+    return final_result
 
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
