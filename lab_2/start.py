@@ -46,7 +46,7 @@ if __name__ == '__main__':
     language_labels = []
     stop_words = []
     k = 3
-    metric = 'manhattan'
+    METRIC = 'manhattan'
 
     for text in DE_SAMPLES:
         text_corpus.append(remove_stop_words(tokenize(text), stop_words))
