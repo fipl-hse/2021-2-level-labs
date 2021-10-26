@@ -68,7 +68,7 @@ if __name__ == '__main__':
         unknown_whole_text = remove_stop_words(tokenize(text), stop_words)
         vector_for_unknown_text = get_text_vector(unknown_whole_text, language_profiles)
         final_prediction = predict_language_knn(vector_for_unknown_text, known_text_vectors,
-                                                language_labels, k, metric)
+                                                language_labels, k, METRIC)
         RESULT.append(final_prediction[0])
 
     EXPECTED = ['de', 'eng', 'lat']
