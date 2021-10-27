@@ -42,12 +42,13 @@ if __name__ == '__main__':
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
     EXPECTED = ['de', 'eng', 'lat']
-    RESULT = ''
+    # RESULT = ''
     stop_words = []
     lang_corpus = []
     lang_labels = []
+    RESULT = []
     known_text_vectors = []
-    k = 1
+    k = 3
     for en_text in EN_SAMPLES:
         lang_corpus.append(remove_stop_words(tokenize(en_text), stop_words))
         lang_labels.append('en')
@@ -66,6 +67,7 @@ if __name__ == '__main__':
         predicted_language = predict_language_knn_sparse(unknown_vector,
                                                          known_text_vectors,
                                                          lang_labels, k)
-        RESULT += predicted_language[0]
+        RESULT.append(predicted_language[0])
+    print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
