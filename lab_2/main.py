@@ -54,21 +54,19 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     return language_profiles
     
 
-
-
 def get_language_features(language_profiles: dict) -> list or None:
     """
     Gets all unique words from language profiles
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not isinstance(language_profiles, list):
+    if not isinstance(language_profiles, dict) or len(language_profiles) == 0:
         return None
     unique_words = []
     for freq_dict in language_profiles.values():
         unique_words.extend(list(freq_dict.keys()))
     unique_words = sorted(unique_words)
-    return  unique_words
+    return unique_words
 
 
 

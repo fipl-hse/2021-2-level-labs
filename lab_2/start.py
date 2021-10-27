@@ -47,7 +47,7 @@ if __name__ == '__main__':
     language_profiles = main.get_language_profiles(texts_corpus, language_labels)
     known_text_vectors = []
     for text in texts_corpus:
-        known_text_vectors.append(main.get_text_vector(texts_corpus, language_labels))
+        known_text_vectors.append(main.get_text_vector(texts_corpus, language_profiles))
 
     for text in EN_SAMPLES:
         texts_corpus.append(main.remove_stop_words(main.tokenize(text), stop_words))
