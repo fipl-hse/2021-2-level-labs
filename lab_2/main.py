@@ -94,10 +94,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     return text_vector
 
 
-
-
-
-
 # 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
     """
@@ -113,10 +109,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     for element in known_text_vector:
         if not isinstance(element, (float, int)):
             return None
-    distance = 0
+    summary = 0
     for index, number in enumerate(unknown_text_vector):
-        distance += (number - known_text_vector[index])**2
-        distance = round(math.sqrt(distance), 5)
+        summary += (known_text_vector[index] - number)**2
+    distance = round(math.sqrt(summary), 5)
     return distance
 
 
