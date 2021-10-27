@@ -52,7 +52,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     for index in range(len(language_labels)):
         language_profiles[language_labels[index]] = get_freq_dict(texts_corpus[index])
     return language_profiles
-    
+
 
 def get_language_features(language_profiles: dict) -> list or None:
     """
@@ -69,9 +69,6 @@ def get_language_features(language_profiles: dict) -> list or None:
     return unique_words
 
 
-
-
-
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
     """
     Builds a vector representation of a given text
@@ -79,7 +76,12 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-    if not (isinstance(original_text, list) or isinstance(language_profiles, list)):
+    language_features = get_language_features(language_profiles)
+    language_features_is_valid_list = isinstance(language_features, list)
+    original_text_is_valid = isinstance(original_text, list)
+    language_profiles_are_valid = isinstance(language_profiles, dict)
+
+    if not original_text_is_valid or not language_profiles_are_valid or not language_features_is_valid_list:
         return None
     text_vector = []
     for unique_words in get_language_features(language_profiles):
