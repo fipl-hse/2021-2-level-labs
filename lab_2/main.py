@@ -276,3 +276,37 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             labels_count[i['label']] = 1
     freq_label = find_freq_label(labels_count, dicts)
     return [freq_label, dicts[0]['distance']]
+
+
+# 10 implementation
+def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
+    """
+    Builds a sparse vector representation of a given text
+        using dictionary with language profiles
+    :param original_text: any tokenized text
+    :param language_profiles: a dictionary of dictionaries - language profiles
+    """
+    pass
+
+
+def calculate_distance_sparse(unknown_text_vector: list,
+                              known_text_vector: list) -> float or None:
+    """
+    Calculates distance between two vectors using euclid metric
+    :param unknown_text_vector: sparse vector for unknown text
+    :param known_text_vector: sparse vector for known text
+    """
+    pass
+
+
+def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
+                                language_labels: list, k=1) -> [str, int] or None:
+    """
+    Predicts unknown text label and its distance to the closest known text
+        using knn based algorithm
+    :param unknown_text_vector: sparse vector for unknown text
+    :param known_text_vectors: a list of sparse vectors for known texts
+    :param language_labels: language labels for each known text
+    :param k: the number of neighbors to choose label from
+    """
+    pass
