@@ -1,9 +1,4 @@
-"""
-Lab 2
-Language classification
-"""
-import json
-
+# 2
 
 def tokenize(text: str) -> list or None:
     """
@@ -53,12 +48,29 @@ def get_freq_dict(tokens: list) -> dict or None:
             freq_dict[token] += 1/len(tokens)
         else:
             freq_dict[token] = 1/len(tokens)
+
+    for i in freq_dict:
+        freq_dict[i] = round(freq_dict[i], 5)
+
     return freq_dict
 
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
     if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
+
+    for i in texts_corpus:
+        if i is None:
+            return None
+
+        for j in i:
+            if not isinstance(j, str):
+                return None
+
+    for i in language_labels:
+        if not isinstance(i, str):
+            return None
+
     profiles = dict()
     for i in range(len(language_labels)):
         profiles[language_labels[i]] = get_freq_dict(texts_corpus[i])
@@ -66,7 +78,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
 
 
 def get_language_features(language_profiles: dict) -> list or None:
-    if not isinstance(language_profiles, dict):
+    if not isinstance(language_profiles, dict) or len(language_profiles) == 0:
         return None
     features = list()
     for profile in language_profiles:
@@ -74,7 +86,7 @@ def get_language_features(language_profiles: dict) -> list or None:
     return sorted(features)
 
 
-def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
+def get_text_vector1(original_text: list, language_profiles: dict) -> list or None:
     if not isinstance(language_profiles, dict) or not isinstance(original_text, list):
         return None
 
@@ -90,7 +102,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     return text_vector
 
 
-def get_text_vector1(original_text: list, language_profiles: dict) -> list or None:
+def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
     if not isinstance(language_profiles, dict) or not isinstance(original_text, list):
         return None
 
@@ -108,17 +120,40 @@ def get_text_vector1(original_text: list, language_profiles: dict) -> list or No
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
     if not isinstance(known_text_vector, list) or not isinstance(unknown_text_vector, list):
         return None
+
+    for i in unknown_text_vector:
+        if i != 0:
+            if not isinstance(i, float):
+                return None
+
+    for i in known_text_vector:
+        if i != 0:
+            if not isinstance(i, float):
+                return None
     s = 0
     for i in range(len(unknown_text_vector)):
         s += (unknown_text_vector[i] - known_text_vector[i]) ** 2
-    return s ** 0.5
+    return round(s ** 0.5, 5)
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list, language_labels: list) -> [str, int]\
                                                                                                           or None:
     if not isinstance(known_text_vectors, list) or not isinstance(unknown_text_vector, list) or\
-            not isinstance(language_labels, list):
+            not isinstance(language_labels, list) or len(language_labels) != len(known_text_vectors):
         return None
+    for i in unknown_text_vector:
+        if i != 0:
+            if not isinstance(i, float):
+                return None
+    for i in known_text_vectors:
+        for j in i:
+            if j != 0:
+                if not isinstance(j, float):
+                    return None
+    for i in language_labels:
+        if not isinstance(i, str):
+            return None
+
     best_result = 0
     label = ""
     for i in range(len(known_text_vectors)):
@@ -135,16 +170,35 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list, 
 def calculate_distance_manhattan(unknown_text_vector: list, known_text_vector: list) -> float or None:
     if not isinstance(known_text_vector, list) or not isinstance(unknown_text_vector, list):
         return None
+    for i in unknown_text_vector:
+        if i != 0:
+            if not isinstance(i, float):
+                return None
+    for i in known_text_vector:
+        if i != 0:
+            if not isinstance(i, float):
+                return None
     s = 0
-    for i in range(len(unknown_text_vector)):
+    #print(len(known_text_vector), len(unknown_text_vector))
+    for i in range(min(len(known_text_vector), len(unknown_text_vector))):
         s += abs(unknown_text_vector[i] - known_text_vector[i])
     return s
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     if not isinstance(known_text_vectors, list) or not isinstance(unknown_text_vector, list) or \
-            not isinstance(language_labels, list):
+            not isinstance(language_labels, list) or len(known_text_vectors) != len(language_labels):
         return None
+    for i in unknown_text_vector:
+        if i != 0:
+            if not isinstance(i, float):
+                return None
+    for j in known_text_vectors:
+        for i in j:
+            if i != 0:
+                if not isinstance(i, float):
+                    return None
+
     res = list()
     for i in range(len(known_text_vectors)):
         if metric == 'manhattan':
@@ -152,9 +206,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
         else:
             calc = calculate_distance(unknown_text_vector, known_text_vectors[i])
         res.append([calc, language_labels[i]])
-    print(res)
+        #print([calc, language_labels[i]], i)
+    #print(res)
     res = sorted(res, key=lambda x: x[0])[:k]
-    print(res)
+    #print(res)
 
     scores = dict()
     for i in res:
@@ -162,11 +217,14 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
             scores[i[1]] += 1
         else:
             scores[i[1]] = 1
-    print(scores)
+
     for i in scores:
         if scores[i] == max(scores.values()):
             lbl = i
             break
+
+    return [lbl, res[0][0]]
+
     for i in res:
         if i[1] == lbl:
             return [lbl, i[0]]
