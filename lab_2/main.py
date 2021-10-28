@@ -3,8 +3,8 @@ Lab 2
 Language classification
 """
 
-from lab_1.main import tokenize, remove_stop_words
 from math import fabs
+from lab_1.main import tokenize, remove_stop_words
 
 # 4
 def type_elements(elements_list: list, type_of_elements: type) -> True or False:
@@ -276,4 +276,3 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             labels_count[i['label']] = 1
     freq_label = find_freq_label(labels_count, dicts)
     return [freq_label, dicts[0]['distance']]
-

@@ -1,10 +1,10 @@
 """
 Language detection starter
 """
+import os
 from lab_1.main import tokenize, remove_stop_words
 from lab_2.main import get_freq_dict, get_language_profiles, get_text_vector, \
     predict_language_knn
-import os
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
