@@ -100,7 +100,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         return None
     distance = 0
     for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
-        if not isinstance(unknown_vector, (int, float)) or not isinstance(known_vector, (int, float)):
+        if not isinstance(unknown_vector, (int, float))\
+                or not isinstance(known_vector, (int, float)):
             return None
         distance += (unknown_vector - known_vector) ** 2
     return round(sqrt(distance), 5)
@@ -140,7 +141,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         return None
     distance = 0
     for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
-        if not isinstance(unknown_vector, (int, float)) or not isinstance(unknown_vector, (int, float)):
+        if not isinstance(unknown_vector, (int, float))\
+                or not isinstance(unknown_vector, (int, float)):
             return None
         distance += abs(unknown_vector - known_vector)
     return round(distance, 5)
@@ -171,7 +173,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
             distances.append(calculate_distance(unknown_text_vector, known_text_vector))
     sorted_labels_distances = sorted(list(zip(language_labels, distances)))[:k]
     freq_labels = {}
-    for label, distance in sorted_labels_distances:
+    for label, _ in sorted_labels_distances:
         if label not in freq_labels:
             freq_labels[label] = 1
         else:
