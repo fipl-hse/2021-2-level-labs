@@ -4,8 +4,10 @@ Language detection starter
 
 import os
 from lab_1.main import tokenize, remove_stop_words
-from lab_2.main import get_freq_dict, get_language_profiles, get_language_features, get_text_vector, \
-    calculate_distance, predict_language_score, calculate_distance_manhattan, predict_language_knn
+from lab_2.main import get_freq_dict, get_language_profiles, \
+    get_language_features, get_text_vector, \
+    calculate_distance, predict_language_score, \
+    calculate_distance_manhattan, predict_language_knn
 
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -90,14 +92,17 @@ if __name__ == '__main__':
 
     distance = calculate_distance(new_unknown_text_vectors[0], new_vectors[0])
 
-    distance_manhattan = calculate_distance_manhattan(new_unknown_text_vectors[0], new_vectors[0])
+    distance_manhattan = calculate_distance_manhattan(new_unknown_text_vectors[0],
+                                                      new_vectors[0])
 
-    predict_language_score = predict_language_score(new_unknown_text_vectors[0], new_vectors, language_labels)
+    predict_language_score = predict_language_score(new_unknown_text_vectors[0],
+                                                    new_vectors, language_labels)
     print(predict_language_score)
 
     RESULT = []
     for vector in new_unknown_text_vectors:
-        RESULT.append(predict_language_knn(vector, new_vectors, language_labels, 3)[0])
+        RESULT.append(predict_language_knn(vector, new_vectors,
+                                           language_labels, 3)[0])
     print(RESULT)
     print(EXPECTED)
 
