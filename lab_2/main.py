@@ -3,8 +3,8 @@ Lab 2
 Language classification
 """
 
-from lab_1.main import tokenize, remove_stop_words
 from math import sqrt
+from lab_1.main import tokenize, remove_stop_words
 
 
 # 4
@@ -99,10 +99,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
     distance = 0
-    for a, b in zip(unknown_text_vector, known_text_vector):
-        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+    for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
+        if not isinstance(unknown_vector, (int, float)) or not isinstance(known_vector, (int, float)):
             return None
-        distance += (a - b) ** 2
+        distance += (unknown_vector - known_vector) ** 2
     return round(sqrt(distance), 5)
 
 
@@ -139,10 +139,10 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list):
         return None
     distance = 0
-    for a, b in zip(unknown_text_vector, known_text_vector):
-        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+    for unknown_vector, known_vector in zip(unknown_text_vector, known_text_vector):
+        if not isinstance(unknown_vector, (int, float)) or not isinstance(unknown_vector, (int, float)):
             return None
-        distance += abs(a - b)
+        distance += abs(unknown_vector - known_vector)
     return round(distance, 5)
 
 
@@ -159,20 +159,19 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
             or not isinstance(language_labels, list) \
-            or not isinstance(k, int) or not isinstance(metric, str) \
-            or not len(language_labels) == len(known_text_vectors):
+            or not isinstance(k, int) or not isinstance(metric, str):
+        return None
+    if not len(language_labels) == len(known_text_vectors):
         return None
     distances = []
     for known_text_vector in known_text_vectors:
         if metric == 'manhattan':
-            distance = calculate_distance_manhattan(unknown_text_vector, known_text_vector)
-            distances.append(distance)
+            distances.append(calculate_distance_manhattan(unknown_text_vector, known_text_vector))
         elif metric == 'euclid':
-            distance = calculate_distance(unknown_text_vector, known_text_vector)
-            distances.append(distance)
+            distances.append(calculate_distance(unknown_text_vector, known_text_vector))
     sorted_labels_distances = sorted(list(zip(language_labels, distances)))[:k]
     freq_labels = {}
-    for label, dist in sorted_labels_distances:
+    for label, distance in sorted_labels_distances:
         if label not in freq_labels:
             freq_labels[label] = 1
         else:
