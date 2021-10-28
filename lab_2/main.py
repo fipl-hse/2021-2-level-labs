@@ -1,4 +1,4 @@
-# 2
+import json
 
 def tokenize(text: str) -> list or None:
     """
@@ -125,12 +125,12 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if i != 0:
             if not isinstance(i, float):
                 return None
-
     for i in known_text_vector:
         if i != 0:
             if not isinstance(i, float):
                 return None
     s = 0
+
     for i in range(len(unknown_text_vector)):
         s += (unknown_text_vector[i] - known_text_vector[i]) ** 2
     return round(s ** 0.5, 5)
@@ -217,14 +217,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
             scores[i[1]] += 1
         else:
             scores[i[1]] = 1
-
+    #print(scores)
     for i in scores:
         if scores[i] == max(scores.values()):
             lbl = i
             break
-
-    return [lbl, res[0][0]]
-
     for i in res:
         if i[1] == lbl:
             return [lbl, i[0]]
