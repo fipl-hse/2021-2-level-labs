@@ -65,8 +65,8 @@ def get_language_features(language_profiles: dict) -> list or None:
 
     for lang in language_profiles:
         temp = language_profiles[lang]
-        a = list(temp.keys())
-        lang_feats += a
+        new_keys = list(temp.keys())
+        lang_feats += new_keys
         print(lang_feats)
 
     lang_feats = sorted(lang_feats)
@@ -88,8 +88,8 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     feats = get_language_features(language_profiles)
     feats_dict = {}
 
-    for l in language_profiles:
-        prof = language_profiles[l]
+    for i in language_profiles:
+        prof = language_profiles[i]
         for key in prof:
             if key in feats:
                 feats_dict[key] = prof[key]
@@ -115,13 +115,10 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if unknown_text_vector == [None] or known_text_vector == [None]:
         return None
 
-    a = unknown_text_vector.copy()
-    b = known_text_vector.copy()  # для краткости записи
-
     distance = 0.0
 
-    for i in range(len(a)):
-        temp = a[i] - b[i]
+    for i in range(len(unknown_text_vector)):
+        temp = unknown_text_vector[i] - known_text_vector[i]
         temp = temp ** 2
         distance += temp
 
@@ -137,7 +134,9 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list):
+        return None
+    if not isinstance(language_labels, list):
         return None
     if unknown_text_vector == [None] or known_text_vectors == [None] or language_labels == [None]:
         return None
@@ -149,8 +148,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
 
     for i in known_text_vectors:
         temp = i.copy()
-        d = calculate_distance(unknown_text_vector, temp)
-        distances.append(d)
+        new_dst = calculate_distance(unknown_text_vector, temp)
+        distances.append(new_dst)
 
     prediction.append(language_labels[0])
     prediction.append(distances[0])
@@ -176,13 +175,10 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     if unknown_text_vector == [None] or known_text_vector == [None]:
         return None
 
-    a = unknown_text_vector.copy()
-    b = known_text_vector.copy()  # для краткости записи
-
     distance = 0.0
 
-    for i in range(len(a)):
-        temp = a[i] - b[i]
+    for i in range(len(unknown_text_vector)):
+        temp = unknown_text_vector[i] - known_text_vector[i]
         if temp < 0:
             temp *= (-1)
         distance += temp
@@ -202,7 +198,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) or not isinstance(language_labels, list):
+    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list):
+        return None
+    if not isinstance(language_labels, list):
         return None
     if unknown_text_vector == [None] or known_text_vectors == [None] or language_labels == [None]:
         return None
@@ -215,11 +213,11 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for i in known_text_vectors:
         temp = i.copy()
         if metric == 'manhattan':
-            d = calculate_distance_manhattan(unknown_text_vector, temp)
-            distances.append(d)
+            new_dst = calculate_distance_manhattan(unknown_text_vector, temp)
+            distances.append(new_dst)
         elif metric == 'euclid':
-            d = calculate_distance(unknown_text_vector, temp)
-            distances.append(d)
+            new_dst = calculate_distance(unknown_text_vector, temp)
+            distances.append(new_dst)
 
     labels_sorted = language_labels.copy()
     temp = dict(zip(labels_sorted, distances))
