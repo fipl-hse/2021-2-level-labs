@@ -193,43 +193,39 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list):
+    if (not isinstance(unknown_text_vector, list)) or (not isinstance(known_text_vectors, list)) \
+            or (not isinstance(language_labels, list)) or (not isinstance(k, int)) \
+            or not isinstance(metric, str):
         return None
-    if not isinstance(known_text_vectors, list):
-        return None
-    if not isinstance(language_labels, list):
-        return None
-    if not isinstance(k, int):
-        return None
-    if not isinstance(metric, str):
-        return None
-    lst = []
-    for i in known_text_vectors:
+    distances = []
+    for vector in known_text_vectors:
         if metric == 'manhattan':
-            dist = calculate_distance_manhattan(unknown_text_vector, i)
-            lst.append(dist)
+            dist = calculate_distance_manhattan(unknown_text_vector, vector)
+            distances.append(dist)
         elif metric == 'euclid':
-            dist = calculate_distance(unknown_text_vector, i)
-            lst.append(dist)
-    k_lst = sorted(lst)
-    kn_lst = k_lst[:(k+1)]
+            dist = calculate_distance(unknown_text_vector, vector)
+            distances.append(dist)
+    k_distances = sorted(distances)
+    k_distances = k_distances[:(k+1)]
     labels = []
-    for i in kn_lst:
-        ind = lst.index(i)
-        if len(language_labels) != len(known_text_vectors):
+    for dist in k_distances:
+        ind = distances.index(dist)
+        if len(language_labels) == len(known_text_vectors):
+            label = language_labels[ind]
+            labels.append(label)
+        else:
             return None
-        label = language_labels[ind]
-        labels.append(label)
     labels_dict = {}
     for label in labels:
-        if not isinstance(label, str):
-            return None
-        if label in labels_dict:
-            labels_dict[label] += 1
+        if isinstance(label, str):
+            if label in labels_dict:
+                labels_dict[label] += 1
+            else:
+                labels_dict[label] = 1
         else:
-            labels_dict[label] = 1
+            return None
     predict_label = max(labels_dict, key=labels_dict.get)
-    predict_result = [predict_label, round(min(lst), 5)]
+    predict_result = [predict_label, round(min(distances), 5)]
     return predict_result
 
 
