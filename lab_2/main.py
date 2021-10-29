@@ -43,7 +43,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         return None
 
     language_profiles = {}
-    for i in range(len(language_labels)):
+    count = len(language_labels)
+    for i in range(count):
         language_profiles[language_labels[i]] = texts_corpus[i]
 
     for key in language_profiles:
