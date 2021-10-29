@@ -2,8 +2,6 @@
 Language detection starter
 """
 
-main/__init__.py
-
 import os
 from main import tokenize, get_language_profiles, get_text_vector, predict_language_knn
 
