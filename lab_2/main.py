@@ -151,7 +151,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     if len(known_text_vectors) != len(language_labels):
         return None
     for element in lang_score:
-        if not isinstance(element, str):
+        if not isinstance(element, (str, float)):
             return None
     return lang_score
 
@@ -182,8 +182,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     return dist
 
 
-def predict_language_knn(unknown_text_vector, known_text_vectors, language_labels: list,
-                         k=1, metric='manhattan') -> [str, int] or None:
+def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
+                         language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
     Predicts unknown text label and its distance to the closest known text
         using knn based algorithm and specific metric
@@ -257,21 +257,24 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     return text_vector
 
 
-#def calculate_distance_sparse(unknown_text_vector: list, known_text_vector: list) -> float or None:
-#    """
-#    Calculates distance between two vectors using euclid metric
-#    :param unknown_text_vector: sparse vector for unknown text
-#    :param known_text_vector: sparse vector for known text
-#    """
+def calculate_distance_sparse(unknown_text_vector: list,
+                              known_text_vector: list) -> float or None:
+    """
+    Calculates distance between two vectors using euclid metric
+    :param unknown_text_vector: sparse vector for unknown text
+    :param known_text_vector: sparse vector for known text
+    """
+    pass
 
 
-
-#def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list, language_labels: list, k=1) -> [str, int] or None:
-#    """
-#    Predicts unknown text label and its distance to the closest known text
-#        using knn based algorithm
-#    :param unknown_text_vector: sparse vector for unknown text
-#    :param known_text_vectors: a list of sparse vectors for known texts
-#    :param language_labels: language labels for each known text
-#    :param k: the number of neighbors to choose label from
-#    """
+def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
+                                language_labels: list, k=1) -> [str, int] or None:
+    """
+    Predicts unknown text label and its distance to the closest known text
+        using knn based algorithm
+    :param unknown_text_vector: sparse vector for unknown text
+    :param known_text_vectors: a list of sparse vectors for known texts
+    :param language_labels: language labels for each known text
+    :param k: the number of neighbors to choose label from
+    """
+    pass
