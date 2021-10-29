@@ -202,6 +202,9 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
+    
+    # pylint: disable-msg=too-many-locals
+    
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list):
         return None
     if not isinstance(language_labels, list):
