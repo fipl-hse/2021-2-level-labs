@@ -118,7 +118,8 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
 
     distance = 0.0
 
-    for i in range(len(unknown_text_vector)):
+    count = len(unknown_text_vector)
+    for i in range(count):
         temp = unknown_text_vector[i] - known_text_vector[i]
         temp = temp ** 2
         distance += temp
@@ -155,7 +156,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     prediction.append(language_labels[0])
     prediction.append(distances[0])
 
-    for j in range(len(distances)):
+    count = len(distances)
+    for j in range(count):
         if distances[j] < prediction[1]:
             prediction[0] = language_labels[j]
             prediction[1] = distances[j]
@@ -178,7 +180,8 @@ def calculate_distance_manhattan(unknown_text_vector: list,
 
     distance = 0.0
 
-    for i in range(len(unknown_text_vector)):
+    count = len(unknown_text_vector)
+    for i in range(count):
         temp = unknown_text_vector[i] - known_text_vector[i]
         if temp < 0:
             temp *= (-1)
