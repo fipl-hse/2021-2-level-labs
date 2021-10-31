@@ -15,6 +15,18 @@ if __name__ == '__main__':
     # score 6, params: k = 5, trie_level = 2
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
+    # score 8, k = 5, trie_level = 3
+    # print(detector.detect_scores(profile_unk, 5, 3))
+    # EXPECTED_SCORE = {'en': 24, 'de': 25}
+
+    # score 10, k = 1000, trie_levels = (2,)
+    # print(detector.detect(unknown_profile, 1000, 2))
+    # print(detector.detect_scores(unknown_profile, 1000, 2))
+    # text = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
+    #     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
+    # EXPECTED_LANGUAGE = ?
+    # EXPECTED_MIN_DISTANCE = ?
+
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
