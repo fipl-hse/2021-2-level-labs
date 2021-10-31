@@ -11,7 +11,6 @@ if __name__ == '__main__':
     GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
 
-
     # score 6, params: k = 5, trie_level = 2
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
@@ -26,7 +25,6 @@ if __name__ == '__main__':
     #     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
-
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
