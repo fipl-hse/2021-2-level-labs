@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # EXPECTED_SCORE = {'en': 24, 'de': 25}
 
     # score 10, k = 1000, trie_levels = (2,)
-    # print(detector.detect(unknown_profile, 1000, 2))
+    # print(detector.detect(unknown_profile, 1000, (2,)))
     # text = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     #     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
     # EXPECTED_LANGUAGE = ?
