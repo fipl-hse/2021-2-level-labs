@@ -3,7 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 
-from typing import Dict
+from typing import Dict, Tuple
 
 
 # 4
@@ -286,7 +286,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         """
         pass
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
