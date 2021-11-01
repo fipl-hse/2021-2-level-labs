@@ -909,7 +909,7 @@ print(output)  # {
 ```py
 class ProbabilityLanguageDetector(LanguageDetector):
   ... 
-  def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[str, int] or int:
+  def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
       pass
 ```
 
