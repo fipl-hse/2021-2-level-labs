@@ -574,7 +574,8 @@ class LanguageDetector:
 
 Метод принимает на вход языковой профиль класса `LanguageProfile` для неизвестного языка `unknown_profile`, 
 а также параметр `k`, который означает количество частотных N-грамм для сравнения
-и параметр `trie_level`, который обозначает размерность N-грамм, участвующих в сравнении.
+и параметр `trie_levels` - кортеж с одним элементом числом, 
+который обозначает размерность N-грамм, участвующих в сравнении.
 
 Метод возвращает словарь, где ключом является язык, а значением – расстояние.
 
@@ -594,7 +595,7 @@ class LanguageDetector:
 ```py
 class LanguageDetector:
   ...
-  def detect(self, unknown_profile: LanguageProfile, k: int, trie_level: int) -> Dict[str, int] or int:
+  def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: int) -> Dict[str, int] or int:
       pass
 ```
 
