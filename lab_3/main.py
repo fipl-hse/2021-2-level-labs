@@ -274,12 +274,12 @@ class LanguageDetector:
         """
         pass
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_level: int) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
-        :param trie_level: N-gram size
+        :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
         pass
