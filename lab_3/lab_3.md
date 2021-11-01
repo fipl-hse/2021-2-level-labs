@@ -603,7 +603,7 @@ class LanguageDetector:
 en_profile = LanguageProfile(letter_storage_object, 'en')
 print(en_profile.language)  # en
 print(en_profile.tries)  # [<__main__.NGramTrie object at 0x09B37E50>, <__main__.NGramTrie object at 0x09B37EB0>]
-print(en_profile.n_words)  # [69, 71]
+print(en_profile.n_words)  # [9, 12]
 ```
 И следующими частотами (униграмм и бирамм):
 ```py
@@ -693,11 +693,11 @@ N-граммами и их частотами, вызвав написанный
 ```py
 {
   "freq": {
-     "_p": 1, "am": 1, "g_": 1, "in": 1,
-    "gr": 1, "mi": 1, "mm": 1, "ng": 1,
-    "og": 1, "pr": 1, "ra": 1, "ro": 1,
     "a": 1, "g": 2, "_": 2, "i": 1,
-    "m": 2, "n": 1, "o": 1, "p": 1, "r": 2
+    "m": 2, "n": 1, "o": 1, "p": 1, "r": 2,
+    "_p": 1, "am": 1, "g_": 1, "in": 1,
+    "gr": 1, "mi": 1, "mm": 1, "ng": 1,
+    "og": 1, "pr": 1, "ra": 1, "ro": 1
   },
   "n_words": [
     9,
@@ -711,7 +711,7 @@ N-граммами и их частотами, вызвав написанный
 en_profile = LanguageProfile(letter_storage_object, 'en')
 print(en_profile.language)  # en
 print(en_profile.tries)  # [<__main__.NGramTrie object at 0x09B37E50>, <__main__.NGramTrie object at 0x09B37EB0>]
-print(en_profile.n_words)  # [69, 71]
+print(en_profile.n_words)  # [9, 12]
 ```
 Каждый экземпляр класса `NGramTrie` из поля `self.tries` должен
 иметь следующие униграммы и биграммы в полях `self.n_gram_frequencies`:
