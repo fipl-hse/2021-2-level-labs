@@ -25,6 +25,9 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 # 4
 class LetterStorage:
+    """
+    Stores and manages letters
+    """
 
     def __init__(self):
         self.storage = {}
@@ -86,6 +89,10 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
 # 6
 class NGramTrie:
+    """
+    Stores and manages ngrams
+    """
+    
     def __init__(self, n: int, letter_storage: LetterStorage):
         pass
 
@@ -156,6 +163,10 @@ class NGramTrie:
 
 # 6
 class LanguageProfile:
+    """
+    Stores and manages language profile information
+    """
+    
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         pass
 
@@ -247,6 +258,10 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
 
 # 8
 class LanguageDetector:
+    """
+    Detects profile language using distance
+    """
+    
     def __init__(self):
         pass
 
@@ -285,6 +300,9 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
+    """
+    Detects profile language using probabilities
+    """
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
         """
