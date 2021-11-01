@@ -629,10 +629,12 @@ print(new_en_profile.tries[1].n_gram_frequencies)  # {(1, 2): 1, (2, 3): 1, (3, 
 }
 ```
 
+Чтобы воспользоваться функцией `json.dump` или `json.dumps`, нужно передать туда словарь. 
+То есть нужно по существующему профилю построить словарь заданного формата.
 Шаблон для открытия и записи в файл с использованием модуля `json`:
 ```py
-with open(name, 'w') as file:
-    json_string = json.dumps(profile_to_save)
+with open('name_of_profile_to_save', 'w') as file:
+    json_string = json.dumps(profile_as_dict)
     file.write(json_string)
 ```
 
