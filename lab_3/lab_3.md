@@ -550,52 +550,6 @@ class LanguageDetector:
 ### Шаг 7.2. Определить язык текста
 
 Метод принимает на вход языковой профиль класса `LanguageProfile` для неизвестного языка `unknown_profile`, 
-а также параметр `k`, который означает количество частотных N-грамм для сравнения и
-параметр `trie_level`, который обозначает размерность N-грамм, учавствующих в сравнении.
-
-Метод возвращает строку - метку языка, которая была предсказана для неизвестного языкового профиля.
-
-Язык определяется по расстоянию между `k` N-грамм языковых профилей.
-Чем меньше расстояние, тем вероятнее тот или иной язык.
-
-Находятся расстояния между `k` N-грамм для известных языковых профилей из словаря `language_profiles`
-и `k` N-грамм из языкового профиля на неизвестном языке.
-
-Если расстояние между `k` N-грамм из английского и неизвестного профилей равно `12`,
-а расстояние между `k` N-грамм из немецкого и неизвестного профилей равно `7`,
-то метод вернет `'de'`.
-
-Если на вход подаются некорректные значения, возвращается `-1`.
-
-Например, для заданных трех текстов, которые мы закодируем, добавим в хранилище,
-создадим для них языковые профили и попробуем предсказать язык третьего текста:
-```py
-print(text_en)  # 'Helium is the byproduct of millennia of radioactive decay from the elements thorium and uranium.'
-print(text_de)  # 'Zwei Begriffe, die nicht unbedingt zueinander passen, am Arbeitsplatz schon mal gar nicht.'
-print(text_unk)  # 'This is English text.'
-```
-При добавлении английского и немецкого языковых профилей в детектор
-и вызове метода `detect` на третьем тексте с параметами `k` = 5 и `trie_level` = 2, 
-мы получим метку:
-```py
-print(output_label)  # 'en'
-``` 
-
-**Дополнительные требования:**
-
-- Метод `detect` должен вызывать функцию `calculate_distance` при детектировании.
-
-**Интерфейс**:
-```py
-class LanguageDetector:
-  ...
-  def detect(self, unknown_profile: LanguageProfile, k: int, trie_level: int) -> str or int:
-      pass
-```
-
-### Шаг 7.3. Определить язык текста (расширенный)
-
-Метод принимает на вход языковой профиль класса `LanguageProfile` для неизвестного языка `unknown_profile`, 
 а также параметр `k`, который означает количество частотных N-грамм для сравнения
 и параметр `trie_level`, который обозначает размерность N-грамм, учавствующих в сравнении.
 
@@ -617,7 +571,7 @@ class LanguageDetector:
 ```py
 class LanguageDetector:
   ...
-  def detect_scores(self, unknown_profile: LanguageProfile, k: int, trie_level: int) -> Dict[str, int] or int:
+  def detect(self, unknown_profile: LanguageProfile, k: int, trie_level: int) -> Dict[str, int] or int:
       pass
 ```
 
@@ -952,7 +906,7 @@ print(output)  # {
 ```py
 class ProbabilityLanguageDetector(LanguageDetector):
   ... 
-  def detect_scores(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[str, int] or int:
+  def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[str, int] or int:
       pass
 ```
 
