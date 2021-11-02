@@ -3,7 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 
-from typing import Dict
+from typing import Dict, Tuple
 
 
 # 4
@@ -25,6 +25,9 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 # 4
 class LetterStorage:
+    """
+    Stores and manages letters
+    """
 
     def __init__(self):
         self.storage = {}
@@ -86,6 +89,10 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
 # 6
 class NGramTrie:
+    """
+    Stores and manages ngrams
+    """
+    
     def __init__(self, n: int, letter_storage: LetterStorage):
         pass
 
@@ -129,9 +136,37 @@ class NGramTrie:
         """
         pass
 
+    # 8
+    def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
+        """
+        Extracts n_grams frequencies from given dictionary.
+        Fills self.n_gram_frequency field.
+        """
+        pass
+
+    # 10
+    def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
+        """
+        Extracts n_grams log-probabilities from given dictionary.
+        Fills self.n_gram_log_probabilities field.
+        """
+        pass
+
+    # 10
+    def calculate_log_probabilities(self) -> int:
+        """
+        Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
+        :return: 0 if succeeds, 1 if not
+        """
+        pass
+
 
 # 6
 class LanguageProfile:
+    """
+    Stores and manages language profile information
+    """
+    
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         pass
 
@@ -180,12 +215,33 @@ class LanguageProfile:
         """
         pass
 
+    # 8
+    def save(self, name: str) -> int:
+        """
+        Saves language profile into json file
+        :param name: name of the json file with .json format
+        :return: 0 if profile saves, 1 if any errors occurred
+        """
+        pass
+
+    # 8
+    def open(self, file_name: str) -> int:
+        """
+        Opens language profile from json file and writes output to
+            self.language,
+            self.tries,
+            self.n_words fields.
+        :param file_name: name of the json file with .json format
+        :return: 0 if profile is opened, 1 if any errors occurred
+        """
+        pass
+
 
 # 6
 def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
-    Calculates distance between top_k n-grams
+    Calculates distance between top_k n-grams of unknown profile and known profile
     :param unknown_profile: LanguageProfile class instance
     :param known_profile: LanguageProfile class instance
     :param k: number of frequent N-grams to take into consideration
@@ -198,3 +254,62 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Соответственно расстояние между наборами равно 2.
     """
     pass
+
+
+# 8
+class LanguageDetector:
+    """
+    Detects profile language using distance
+    """
+    
+    def __init__(self):
+        pass
+
+    def register_language(self, language_profile: LanguageProfile) -> int:
+        """
+        Adds a new language profile to the storage,
+        where the storage is a dictionary like {language: language_profile}
+        :param language_profile: a language profile
+        :return: 0 if succeeds, 1 if not
+        """
+        pass
+
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+        """
+        Detects the language of an unknown profile and its score
+        :param unknown_profile: a dictionary
+        :param k: a number of the most common n-grams
+        :param trie_levels: N-gram size - tuple with one int for score 8
+        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        """
+        pass
+
+
+def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
+                               k: int, trie_level: int) -> float or int:
+    """
+    Calculates probability of unknown_profile top_k ngrams in relation to known_profile
+    :param unknown_profile: an instance of unknown profile
+    :param known_profile: an instance of known profile
+    :param k: number of most frequent ngrams
+    :param trie_level: the size of ngrams
+    :return: a probability of unknown top k ngrams
+    """
+    pass
+
+
+# 10
+class ProbabilityLanguageDetector(LanguageDetector):
+    """
+    Detects profile language using probabilities
+    """
+
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+        """
+        Detects the language of an unknown profile and its probability score
+        :param unknown_profile: an instance of LanguageDetector
+        :param k: a number of the most common n-grams
+        :param trie_levels: N-gram size
+        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        """
+        pass
