@@ -112,6 +112,27 @@ class LetterStorageTest(unittest.TestCase):
         actual = letter_storage.get_id_by_letter('a')
         self.assertEqual(expected, actual)
 
+    def test_letter_storage_get_letter_by_id(self):
+        letter_storage = LetterStorage()
+        letter_storage.storage = {'w': 1}
+        expected = 'w'
+        actual = letter_storage.get_letter_by_id(1)
+        self.assertEqual(expected, actual)
+
+    def test_letter_storage_get_letter_by_id_bad_input(self):
+        letter_storage = LetterStorage()
+        letter_storage.storage = {'w': 1}
+        expected = -1
+        actual = letter_storage.get_letter_by_id(None)
+        self.assertEqual(expected, actual)
+
+    def test_letter_storage_get_letter_by_id_not_existent(self):
+        letter_storage = LetterStorage()
+        letter_storage.storage = {'w': 1}
+        expected = -1
+        actual = letter_storage.get_letter_by_id(3)
+        self.assertEqual(expected, actual)
+
     # -----------------------------------------------------------
 
     def test_letter_storage_update_ideal(self):

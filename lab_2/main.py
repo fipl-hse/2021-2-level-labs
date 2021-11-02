@@ -197,7 +197,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     if metric == 'euclid':
         for i in known_text_vectors:
             distances.append(calculate_distance(unknown_text_vector, i))
-    elif metric == 'manhattan':
+    else:
         for i in known_text_vectors:
             distances.append(calculate_distance_manhattan(unknown_text_vector, i))
 
@@ -241,8 +241,7 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     vector = dict.fromkeys(features, 0)
     for language_profile in language_profiles.values():
         for word, freq in language_profile.items():
-            if freq > vector.get(word):
-                vector[word] = freq
+            vector[word] = freq
     for index, feature in enumerate(features):
         if feature in original_text:
             sparse_vector.append([index, vector[feature]])

@@ -21,29 +21,26 @@ class CalculateDistanceTest(unittest.TestCase):
         """
         Calculate distance ideal test
         """
-        eng = "Helium is the byproduct of millennia of radioactive decay from the elements thorium and uranium."
-        de = "Zwei Begriffe, die nicht unbedingt zueinander passen, am Arbeitsplatz schon mal gar nicht."
-        unk = "Helium is material."
+        eng = "Helium is the byproduct of millennia of radioactive decay from the elements thorium and uranium"
+        de = "Zwei Begriffe die nicht unbedingt zueinander passen am Arbeitsplatz schon mal gar nicht"
+        unk = "Helium is material"
 
         tokenized_eng = tokenize_by_sentence(eng)
         tokenized_de = tokenize_by_sentence(de)
         tokenized_unk = tokenize_by_sentence(unk)
 
-        storage_eng = LetterStorage()
-        storage_eng.update(tokenized_eng)
-        encoded_eng = encode_corpus(storage_eng, tokenized_eng)
+        storage = LetterStorage()
+        storage.update(tokenized_eng)
+        storage.update(tokenized_de)
+        storage.update(tokenized_unk)
 
-        storage_de = LetterStorage()
-        storage_de.update(tokenized_de)
-        encoded_de = encode_corpus(storage_de, tokenized_de)
+        encoded_eng = encode_corpus(storage, tokenized_eng)
+        encoded_de = encode_corpus(storage, tokenized_de)
+        encoded_unk = encode_corpus(storage, tokenized_unk)
 
-        storage_unk = LetterStorage()
-        storage_unk.update(tokenized_unk)
-        encoded_unk = encode_corpus(storage_unk, tokenized_unk)
-
-        profile_eng = LanguageProfile(letter_storage=storage_eng, language_name='en')
-        profile_de = LanguageProfile(letter_storage=storage_de, language_name='en')
-        profile_unk = LanguageProfile(letter_storage=storage_unk, language_name='en')
+        profile_eng = LanguageProfile(letter_storage=storage, language_name='en')
+        profile_de = LanguageProfile(letter_storage=storage, language_name='en')
+        profile_unk = LanguageProfile(letter_storage=storage, language_name='en')
 
         profile_eng.create_from_tokens(encoded_eng, (2,))
         profile_de.create_from_tokens(encoded_de, (2,))
@@ -52,8 +49,8 @@ class CalculateDistanceTest(unittest.TestCase):
         distance_eng_unk = calculate_distance(profile_unk, profile_eng, 5, 2)
         distance_de_unk = calculate_distance(profile_unk, profile_de, 5, 2)
 
-        self.assertEqual(distance_eng_unk, 19)
-        self.assertEqual(distance_de_unk, 21)
+        self.assertEqual(distance_eng_unk, 17)
+        self.assertEqual(distance_de_unk, 25)
 
     def test_calculate_distance_bad_inputs(self):
         """

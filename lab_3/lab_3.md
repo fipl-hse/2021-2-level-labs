@@ -998,7 +998,7 @@ https://drive.google.com/drive/folders/1ZwZeYUNdk7H9-hORlmqih82rT_0drd6Q?usp=sha
     |-- main.py
     |-- start.py
     |-- *_test.py
-    |-- profile_sample.json
+    |-- sample_profile.json
     |-- lab_3.md
 ```
 
