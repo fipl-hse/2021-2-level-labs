@@ -59,4 +59,4 @@ if __name__ == '__main__':
                                                   language_labels, 3)[0])
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
