@@ -64,7 +64,8 @@ def get_language_features(language_profiles: dict) -> list or None:
             if not isinstance(word, str):
                 return None
             features.append(word)
-    return sorted(features)
+    features = sorted(features)
+    return features
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -119,13 +120,15 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             or not isinstance(language_labels, list) \
             or not len(language_labels) == len(known_text_vectors):
         return None
-    distances = []
-    for known_text_vector in known_text_vectors:
-        if not isinstance(known_text_vector, list) or not isinstance(unknown_text_vector, list):
+    labels_distances = []
+    for language_label, known_text_vector in zip(language_labels, known_text_vectors):
+        if not isinstance(known_text_vector, list) or not isinstance(unknown_text_vector, list) \
+                or not isinstance(language_label, str):
             return None
         distance = calculate_distance(unknown_text_vector, known_text_vector)
-        distances.append(distance)
-    prediction = [language_labels[distances.index(min(distances))], min(distances)]
+        labels_distances.append(tuple((language_label, distance)))
+    sorted_labels_distances = sorted(labels_distances, key=lambda x: x[1])
+    prediction = list(sorted_labels_distances[0])
     return prediction
 
 
@@ -165,21 +168,26 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         return None
     if not len(language_labels) == len(known_text_vectors):
         return None
-    distances = []
-    for known_text_vector in known_text_vectors:
+    labels_distances = []
+    for language_label, known_text_vector in zip(language_labels, known_text_vectors):
+        if not isinstance(known_text_vector, list) or not isinstance(unknown_text_vector, list) \
+                or not isinstance(language_label, str):
+            return None
         if metric == 'manhattan':
-            distances.append(calculate_distance_manhattan(unknown_text_vector, known_text_vector))
+            distance = calculate_distance_manhattan(unknown_text_vector, known_text_vector)
+            labels_distances.append(tuple((language_label, distance)))
         elif metric == 'euclid':
-            distances.append(calculate_distance(unknown_text_vector, known_text_vector))
-    sorted_labels_distances = sorted(list(zip(language_labels, distances)))[:k]
-    freq_labels = {}
-    for label, _ in sorted_labels_distances:
-        if label not in freq_labels:
-            freq_labels[label] = 1
-        else:
-            freq_labels[label] += 1
-    predicted = [max(freq_labels, key=freq_labels.get), min(distances)]
-    return predicted
+            distance = calculate_distance(unknown_text_vector, known_text_vector)
+            labels_distances.append(tuple((language_label, distance)))
+    sorted_labels_distances = sorted(labels_distances, key=lambda x: x[1])[:k]
+    labels_frequency = {}
+    for label, distance in sorted_labels_distances:
+        if label not in labels_frequency:
+            labels_frequency[label] = 1
+        elif label in labels_frequency:
+            labels_frequency[label] += 1
+    prediction = [max(labels_frequency, key=labels_frequency.get), sorted_labels_distances[0][1]]
+    return prediction
 
 
 # 10 implementation
