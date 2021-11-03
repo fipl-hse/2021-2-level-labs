@@ -5,6 +5,7 @@ Language classification
 from math import sqrt, fabs
 from lab_1.main import tokenize, remove_stop_words
 
+
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -145,21 +146,6 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     closest_label = language_labels[closest_distance]
     prediction = [closest_label, min(distances)]
     return prediction
-
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list) \
-            or len(language_labels) != len(known_text_vectors):
-        return None
-    all_distance = []
-    for vectors in known_text_vectors:
-        if not isinstance(vectors, list):
-            return None
-        distance = calculate_distance(unknown_text_vector, vectors)
-        all_distance.append(distance)
-    min_distance = min(all_distance)
-    language_score = [language_labels[all_distance.index(min_distance)], min_distance]
-    return language_score
-
 
 
 # 8
