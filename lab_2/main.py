@@ -147,8 +147,6 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     prediction = [closest_label, min(distances)]
     return prediction
 
-    for num in range(unknown_len):
-        distance_counter += ((unknown_text_vector[num])-(known_text_vector[num]))**2
 
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
@@ -172,10 +170,11 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     return round(manhattan_distance, 5)
 
 
-def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
-                           language_labels: list) -> [str, int] or None:
+def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
+                         language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
     Predicts unknown text label and its distance to the closest known text
+        using knn based algorithm and specific metric
     :param unknown_text_vector: vector for unknown text
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text

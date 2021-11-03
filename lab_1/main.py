@@ -2,8 +2,6 @@
 Lab 1
 Language detection
 """
-
-
 import json
 from os.path import exists
 
@@ -51,14 +49,6 @@ def calculate_frequencies(tokens: list) -> dict or None:
     """
     if not isinstance(tokens, list):
         return None
-
-    freq_dict = {}
-    for token in tokens:
-        if not isinstance(token, str):
-            return None
-        if token not in freq_dict:
-            freq_dict[token] = 1
-
     frequency_dictionary = {}
     for word in tokens:
         if isinstance(word, str):
@@ -66,7 +56,6 @@ def calculate_frequencies(tokens: list) -> dict or None:
                 frequency_dictionary[word] += 1
             else:
                 frequency_dictionary[word] = 1
-
         else:
             return None
     return frequency_dictionary
