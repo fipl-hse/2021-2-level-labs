@@ -7,7 +7,6 @@ from lab_1.main import tokenize, remove_stop_words
 
 
 # 4
-
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
