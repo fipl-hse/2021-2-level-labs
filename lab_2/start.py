@@ -3,8 +3,9 @@ Language detection starter
 """
 
 import os
-from lab_2.main import (tokenize, remove_stop_words, get_language_profiles,
-                        get_language_features, get_sparse_vector, predict_language_knn_sparse)
+from lab_2.main import (tokenize, remove_stop_words,
+                        get_language_profiles, get_sparse_vector,
+                        predict_language_knn_sparse)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -42,41 +43,30 @@ if __name__ == '__main__':
 
     RESULT = []
     EXPECTED = ['de', 'eng', 'lat']
-
-    corpus = []
-    labels = []
     stop_words = []
-    k = 3
-    # creating corpus of German, English and Latin
-    # usual tokenization of the text to get the corpus
-    # appending the language name in labels
+    corpus = []
+    language_labels = []
     for text in DE_SAMPLES:
         corpus.append(remove_stop_words(tokenize(text), stop_words))
-        labels.append('de')
+        language_labels.append('de')
     for text in EN_SAMPLES:
         corpus.append(remove_stop_words(tokenize(text), stop_words))
-        labels.append('eng')
+        language_labels.append('eng')
     for text in LAT_SAMPLES:
         corpus.append(remove_stop_words(tokenize(text), stop_words))
-        labels.append('lat')
-
-    # creating the labels but using numeration instead of names
-    # used for calculating the unique variable and vectors from all known texts
-    index_labels = [str(i) for i in range(len(corpus))]
-    # getting profiles with their indexes {0: "first_text_freqs", 1: "second_text_freqs" etc.}
-    # and unique words thorough all of them
-    index_label_profiles = get_language_profiles(corpus, index_labels)
-    unique = get_language_features(index_label_profiles)
-    # using these profiles to create a bunch of known vectors
-    vectors = [get_sparse_vector(text, index_label_profiles) for text in corpus]
-
-    # tokenizing the unknown text
-    # guessing the language of each sample
+        language_labels.append('lat')
+    language_profiles = get_language_profiles(corpus, language_labels)
+    known_text_vectors = []
+    for text in corpus:
+        known_text_vectors.append(get_sparse_vector(text, language_profiles))
+    k = 3
+    RESULT = []
     for text in UNKNOWN_SAMPLES:
         unknown_text = remove_stop_words(tokenize(text), stop_words)
-        unknown_vector = get_sparse_vector(unknown_text, index_label_profiles)
-        guess = predict_language_knn_sparse(unknown_vector, vectors, labels, k)
-        RESULT.append(guess[0])
-
+        unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
+        predicted_lang = predict_language_knn_sparse(unknown_text_vector, known_text_vectors,
+                                                     language_labels, k)
+        RESULT.append(predicted_lang[0])
+    print(f"{RESULT} are possible languages")
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == EXPECTED, 'Detection not working'
