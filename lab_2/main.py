@@ -99,6 +99,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     return text_vector
 
 
+# 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
     """
     Calculates distance between two vectors using euclid metric
@@ -147,6 +148,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     return prediction
 
 
+# 8
 def calculate_distance_manhattan(unknown_text_vector: list,
                                  known_text_vector: list) -> float or None:
     """
@@ -217,6 +219,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     return prediction
 
 
+# 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
     Builds a sparse vector representation of a given text
