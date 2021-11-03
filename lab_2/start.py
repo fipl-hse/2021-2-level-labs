@@ -12,7 +12,6 @@ PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 PATH_TO_DATASET_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'dataset')
 
 if __name__ == '__main__':
-
     with open(os.path.join(PATH_TO_PROFILES_FOLDER, 'eng.txt'),
               'r', encoding='utf-8') as file_to_read:
         EN_TEXT = file_to_read.read()
@@ -41,7 +40,6 @@ if __name__ == '__main__':
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
-    RESULT = []
     EXPECTED = ['de', 'eng', 'lat']
     stop_words = []
     corpus = []

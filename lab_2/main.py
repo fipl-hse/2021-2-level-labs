@@ -6,6 +6,7 @@ from math import sqrt, fabs
 from lab_1.main import tokenize, remove_stop_words
 
 
+# 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
@@ -274,22 +275,6 @@ def calculate_distance_sparse(unknown_text_vector: list,
         euclidean_distance += value ** 2
     return round(sqrt(euclidean_distance), 5)
 
-    # convert vectors into dictionaries
-    # with indices - keys for easier work
-    unknown_text_dict = dict(unknown_text_vector)
-    known_text_dict = dict(known_text_vector)
-    # mix both dictionaries in one
-    # this is needed to find (0 - known_index) or (unknown_index - 0) types of differences
-    merged = {**unknown_text_dict, **known_text_dict}
-    # now searching (unknown_index - known_index) when none are 0
-    # if index found in both dictionaries the value is updated to their difference
-    for index in merged:
-        if index in unknown_text_dict and index in known_text_dict:
-            merged[index] = unknown_text_dict[index] - known_text_dict[index]
-
-    # the formula - square root of difference**2
-    distance = sqrt(sum(d ** 2 for d in merged.values()))
-    return round(float(distance), 5)
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
