@@ -192,3 +192,6 @@ class DetectLanguageAdvancedTest(unittest.TestCase):
         expected = None
         actual = detect_language_advanced(unknown_profile, profiles, ['de_austria'], 2)
         self.assertEqual(expected, actual)
+
+        actual = detect_language_advanced(unknown_profile, profiles, [], 2)
+        self.assertEqual(actual, 'de')
