@@ -40,33 +40,6 @@ if __name__ == '__main__':
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
-    known_texts = []
-    known_text_vectors = []
-    language_labels = []
-    stop_words = []
-    RESULT = []
-    k = 3
-
-    for text in DE_SAMPLES:
-        known_texts.append(remove_stop_words(tokenize(text), stop_words))
-        language_labels.append("de")
-    for text in EN_SAMPLES:
-        known_texts.append(remove_stop_words(tokenize(text), stop_words))
-        language_labels.append("eng")
-    for text in LAT_SAMPLES:
-        known_texts.append(remove_stop_words(tokenize(text), stop_words))
-        language_labels.append("lat")
-    language_profiles = get_language_profiles(known_texts, language_labels)
-    for text in known_texts:
-        known_text_vectors.append(get_sparse_vector(text, language_profiles))
-    for text in UNKNOWN_SAMPLES:
-        unknown_text = remove_stop_words(tokenize(text), stop_words)
-        unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
-        pre_result = \
-            predict_language_knn_sparse(unknown_text_vector, known_text_vectors, language_labels, k)
-        RESULT.append(pre_result[0])
-    print(RESULT)
-
     EXPECTED = ['de', 'eng', 'lat']
     stop_words = []
     corpus = []
