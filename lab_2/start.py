@@ -71,4 +71,4 @@ if __name__ == '__main__':
     EXPECTED = ['de', 'eng', 'lat']
     print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
