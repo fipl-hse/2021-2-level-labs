@@ -184,7 +184,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     for label, distance in sorted_labels_distances:
         if label not in labels_frequency:
             labels_frequency[label] = 1
-        elif label in labels_frequency:
+        else:
             labels_frequency[label] += 1
     prediction = [max(labels_frequency, key=labels_frequency.get), sorted_labels_distances[0][1]]
     return prediction
