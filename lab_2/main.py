@@ -29,15 +29,6 @@ def get_freq_dict(tokens: list) -> dict or None:
         freq_dict[token] = round(freq_dict[token] / len(tokens), 5)
     return freq_dict
 
-    if not isinstance(tokens, list):
-        return None
-    freq_dict = {}
-    for token in tokens:
-        if not isinstance(token, str):
-            return None
-        if token in tokens:
-            freq_dict[token] = round(tokens.count(token)/len(tokens), 5)
-    return freq_dict
 
 def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or None:
     """
@@ -177,8 +168,6 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     for index, vector in enumerate(unknown_text_vector):
         manhattan_distance += fabs(vector - known_text_vector[index])
     return round(manhattan_distance, 5)
-
-
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
