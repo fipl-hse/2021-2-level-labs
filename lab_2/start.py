@@ -3,8 +3,6 @@ Language detection starter
 """
 
 import os
-from lab_1.main import tokenize, remove_stop_words
-from lab_2.main import get_language_profiles, get_text_vector, predict_language_knn
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -41,6 +39,5 @@ if __name__ == '__main__':
 
     EXPECTED = ['de', 'eng', 'lat']
     RESULT = ''
-
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
