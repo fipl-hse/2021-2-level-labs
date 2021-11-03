@@ -5,6 +5,7 @@ Language classification
 from math import sqrt, fabs
 from lab_1.main import tokenize, remove_stop_words
 
+
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -97,15 +98,6 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
                     text_vector.append(profile[i])
     return text_vector
 
-    features = get_language_features(language_profiles)
-    text_vector = dict.fromkeys(features, 0)
-
-    for language_profile in language_profiles.values():
-        for feature, value_score in language_profile.items():
-            if value_score > text_vector[feature] and feature in original_text:
-                text_vector[feature] = value_score
-    vector = list(text_vector.values())
-    return vector
 
 # 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
