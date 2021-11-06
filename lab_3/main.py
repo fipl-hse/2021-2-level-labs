@@ -170,8 +170,6 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-    print("storage", storage.storage)
-    print("reverse", storage._reverse_storage)
     # Create a tuple structure identical to corpus, with letters instead of ids.
     return tuple(tuple(tuple(storage.get_letter_by_id(i) for i in t) for t in s) for s in corpus)
 
