@@ -77,9 +77,21 @@ class LetterStorage:
     """
 
     def __init__(self):
-        self.storage = {}
-        self._reverse_storage = {}
         self._counter = 0
+        self._letter_to_id = {}
+        self._id_to_letter = {}
+
+    # The reason I am using a getter/setter here is to reduce complexity
+    # for get_letter_by_id from O(n) to O(1) by keeping a pair of dictionaries.
+    @property
+    def storage(self):
+        return self._letter_to_id
+    
+    @storage.setter
+    def storage(self, value):
+        self._letter_to_id = value
+        for k, v in self._letter_to_id.items():
+            self._id_to_letter[v] = k
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -90,8 +102,8 @@ class LetterStorage:
         if not isinstance(letter, str) or not letter:
             return -1
         if letter not in self.storage:
-            self.storage[letter] = self._counter
-            self._reverse_storage[self._counter] = letter
+            self._letter_to_id[letter] = self._counter
+            self._id_to_letter[self._counter] = letter
             self._counter += 1
         return 0
 
@@ -101,9 +113,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if not isinstance(letter, str) or letter not in self.storage:
+        if not isinstance(letter, str) or letter not in self._letter_to_id:
             return -1
-        return self.storage[letter]
+        return self._letter_to_id[letter]
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
         """
@@ -111,9 +123,9 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        if not isinstance(letter_id, int) or letter_id not in self._reverse_storage:
+        if not isinstance(letter_id, int) or letter_id not in self._id_to_letter:
             return -1
-        return self._reverse_storage[letter_id]
+        return self._id_to_letter[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -122,7 +134,7 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         if not isinstance(corpus, tuple):
-            return 0
+            return -1
         for sentence in corpus:
             for token in sentence:
                 for letter in token:
