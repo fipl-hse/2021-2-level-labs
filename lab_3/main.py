@@ -4,6 +4,43 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
+import re
+
+def _split_into_letters(token: str) -> tuple:
+    """
+    Splits a token into letters, framed with '_'
+    :param token: a token
+    :return: a token split into letters
+    """
+    ascii_replacement = {"ä": "ae",
+                         "ö": "oe",
+                         "ü": "ue",
+                         "ß": "ss"}
+    # replace specified non-ascii letters
+    for key in ascii_replacement:
+        token.replace(key, ascii_replacement[key])
+    # split into letters, remove punctuation
+    token = [char for char in token if char.isalpha()]
+    # append framing characters
+    if token:
+        token.insert(0, "_")
+        token.append("_")
+    return tuple(token)
+
+
+def _tokenize(text: str) -> tuple:
+    """
+    Splits a text into tokens, tokens into letters
+    Tokens are framed with '_'
+    :param text: a text
+    :return: a list of tokens split into letters
+    """
+    tokens = []
+    for token in text.lower().split():
+        token = _split_into_letters(token)
+        if token:
+            tokens.append(token)
+    return tuple(tokens)
 
 
 # 4
@@ -20,7 +57,17 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    sentences = []
+    # The pattern matches a whitespace
+    # preceded by sentence-ending punctuation and
+    # followed by an uppercase letter
+    for sentence in re.split(r"(?<=[\!\?\.])\W(?=[A-Z])", text):
+        tokens = _tokenize(sentence)
+        if tokens:
+            sentences.append(tokens)
+    return tuple(sentences)
 
 
 # 4
@@ -31,6 +78,8 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self._reverse_storage = {}
+        self._counter = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -38,7 +87,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self._counter
+            self._reverse_storage[self._counter] = letter
+            self._counter += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -46,15 +101,19 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int) or letter_id not in self._reverse_storage:
+            return -1
+        return self._reverse_storage[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -62,7 +121,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 0
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    if self._put_letter(letter) == -1:
+                        return -1
+        return 0
 
 
 # 4
@@ -73,7 +139,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    # Create a tuple structure identical to corpus, with ids instead of letters.
+    # Using single-letter names for letter, token and sentence because i can't think of a way
+    # to break this line in a way that doesn't hurt readability
+    return tuple(tuple(tuple(storage.get_id_by_letter(l) for l in t) for t in s) for s in corpus)
 
 
 # 4
@@ -84,7 +156,12 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    print("storage", storage.storage)
+    print("reverse", storage._reverse_storage)
+    # Create a tuple structure identical to corpus, with letters instead of ids.
+    return tuple(tuple(tuple(storage.get_letter_by_id(i) for i in t) for t in s) for s in corpus)
 
 
 # 6
