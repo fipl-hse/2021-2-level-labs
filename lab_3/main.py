@@ -20,7 +20,9 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    puhovichok = text.split()
+    parichok = puhovichok[0]
+    return parichok
 
 
 # 4
