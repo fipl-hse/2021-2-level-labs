@@ -3,7 +3,7 @@ Lab 2
 Language classification
 """
 from math import fabs
-
+from typing import Union
 
 # 4
 def elements_isinstance(list_with_elem: list, type_of_elem: type) -> True or False:
@@ -159,7 +159,7 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     """
     if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list) \
             or not elements_isinstance(unknown_text_vector, (int, float)) \
-            or not elements_isinstance(known_text_vector, (int, float)):
+            or not elements_isinstance(known_text_vector, Union[int, float]):
         return None
     distance = 0
     for element in enumerate(unknown_text_vector):
@@ -258,7 +258,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param metric: specific metric to use while calculating distance
     """
     if not isinstance_predict_language_knn(unknown_text_vector, known_text_vectors,
-                                    language_labels):
+                                           language_labels):
         return None
     distance_of_vectors = []
     elements = []
