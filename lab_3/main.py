@@ -21,6 +21,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          )
     """
     # test comment
+    # one more test comment
 
 
 # 4
