@@ -136,7 +136,20 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-    pass
+    if not isinstance(unknown_text_vector, list)\
+            or not isinstance(known_text_vector, list):
+        return None
+    for number in unknown_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    for number in known_text_vector:
+        if not isinstance(number, (int, float)):
+            return None
+    distance = 0
+    for index, coordinate in enumerate(unknown_text_vector):
+        distance += abs(coordinate - known_text_vector[index])
+    distance = round(distance, 5)
+    return distance
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
@@ -149,8 +162,39 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    pass
-
+   if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vectors, list)\
+   or not isinstance(language_labels, list)\
+   or not isinstance(k, int) or not isinstance(metric, str):
+        return None
+    if len(language_labels) != len(known_text_vectors):
+        return None
+    distances = []
+    for vector in known_text_vectors:
+        if metric == 'euclid':
+            distance = calculate_distance(unknown_text_vector, vector)
+            distances.append(distance)
+        elif metric == 'manhattan':
+            distance = calculate_distance_manhattan(unknown_text_vector, vector)
+            distances.append(distance)
+    sorted_distances = sorted(distances)
+    sorted_distances = sorted_distances[:k]
+    labels = []
+    for distance in sorted_distances:
+        index_of_distance = distances.index(distance)
+        if len(language_labels) == len(known_text_vectors):
+            label = language_labels[index_of_distance]
+            labels.append(label)
+        else:
+            return None
+    dictionary_of_labels = {}
+    for label in labels:
+        if label in dictionary_of_labels:
+            dictionary_of_labels[label] += 1
+        else:
+            dictionary_of_labels[label] = 1
+    possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
+    possible_result = [possible_label, round(min(distances), 5)]
+    return possible_result
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
