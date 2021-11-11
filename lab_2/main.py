@@ -129,6 +129,27 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     return result
 
 # 8
+def calculate_distance_manhattan(unknown_text_vector: list,
+                                 known_text_vector: list) -> float or None:
+    """
+    Calculates distance between two vectors using manhattan metric
+    :param unknown_text_vector: vector for unknown text
+    :param known_text_vector: vector for known text
+    """
+    pass
+
+def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
+                         language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
+    """
+    Predicts unknown text label and its distance to the closest known text
+        using knn based algorithm and specific metric
+    :param unknown_text_vector: vector for unknown text
+    :param known_text_vectors: a list of vectors for known texts
+    :param language_labels: language labels for each known text
+    :param k: the number of neighbors to choose label from
+    :param metric: specific metric to use while calculating distance
+    """
+    pass
 
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
