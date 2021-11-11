@@ -1,7 +1,6 @@
 """
 Language detection starter
 """
-
 import os
 import main
 
