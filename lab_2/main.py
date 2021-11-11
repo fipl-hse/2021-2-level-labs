@@ -216,7 +216,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
             scores[i[1]] += 1
         else:
             scores[i[1]] = 1
-
+    lbl = 0
     for i in scores:
         if scores[i] == max(scores.values()):
             lbl = i
@@ -224,6 +224,6 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
 
     return [lbl, res[0][0]]
 
-    for i in res:
-        if i[1] == lbl:
-            return [lbl, i[0]]
+    # for i in res:
+    #    if i[1] == lbl:
+    #        return [lbl, i[0]]
