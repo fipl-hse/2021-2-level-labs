@@ -162,7 +162,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list)\ 
+    if not isinstance(unknown_text_vector, list)\
     or not isinstance(known_text_vectors, list)\
     or not isinstance(language_labels, list)\
     or not isinstance(k, int) or not isinstance(metric, str):
