@@ -1,4 +1,4 @@
-import json
+# 2
 
 def tokenize(text: str) -> list or None:
     """
@@ -125,12 +125,12 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
         if i != 0:
             if not isinstance(i, float):
                 return None
+
     for i in known_text_vector:
         if i != 0:
             if not isinstance(i, float):
                 return None
     s = 0
-
     for i in range(len(unknown_text_vector)):
         s += (unknown_text_vector[i] - known_text_vector[i]) ** 2
     return round(s ** 0.5, 5)
@@ -179,13 +179,14 @@ def calculate_distance_manhattan(unknown_text_vector: list, known_text_vector: l
             if not isinstance(i, float):
                 return None
     s = 0
-    #print(len(known_text_vector), len(unknown_text_vector))
+    # print(len(known_text_vector), len(unknown_text_vector))
     for i in range(min(len(known_text_vector), len(unknown_text_vector))):
         s += abs(unknown_text_vector[i] - known_text_vector[i])
-    return s
+    return round(s, 5)
 
 
-def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
+def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, language_labels: list, k=1,
+                         metric='manhattan') -> [str, int] or None:
     if not isinstance(known_text_vectors, list) or not isinstance(unknown_text_vector, list) or \
             not isinstance(language_labels, list) or len(known_text_vectors) != len(language_labels):
         return None
@@ -206,10 +207,10 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
         else:
             calc = calculate_distance(unknown_text_vector, known_text_vectors[i])
         res.append([calc, language_labels[i]])
-        #print([calc, language_labels[i]], i)
-    #print(res)
+        # print([calc, language_labels[i]], i)
+    # print(res)
     res = sorted(res, key=lambda x: x[0])[:k]
-    #print(res)
+    # print(res)
 
     scores = dict()
     for i in res:
@@ -217,11 +218,14 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list, la
             scores[i[1]] += 1
         else:
             scores[i[1]] = 1
-    #print(scores)
+
     for i in scores:
         if scores[i] == max(scores.values()):
             lbl = i
             break
+
+    return [lbl, res[0][0]]
+
     for i in res:
         if i[1] == lbl:
             return [lbl, i[0]]
