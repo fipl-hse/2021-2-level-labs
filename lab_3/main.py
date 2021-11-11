@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -20,7 +20,35 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    deutsch_replacement = {'ö': 'oe',
+                           'ü': 'ue',
+                           'ä': 'ae',
+                           'ß': 'ss'}
+    text_raw = text
+    sentences_raw = re.split(r"[\!\.\?]\W(?=[A-ZÜÖÄß])", text_raw)
+    sentences_raw = [sentence_raw.lower().strip() for sentence_raw in sentences_raw if sentence_raw]
+    text_tuple = []
+    for sentence_raw in sentences_raw:
+        # print('sentence_raw', sentence_raw)
+        words_raw = sentence_raw.split()
+        # здесь будет следующий уровень
+        sentence_tuple = []
+        for word_raw in words_raw:
+            for key, value in deutsch_replacement.items():
+                word_raw = word_raw.replace(key, value)
+            word_tuple = [letter for letter in word_raw if letter.isalpha()]
+            if word_tuple:
+                word_tuple.append('_')
+                word_tuple.insert(0, '_')
+            word_tuple = tuple(word_tuple)
+            sentence_tuple.append(word_tuple)
+            # на данный момент есть sentence_tuple
+        sentence_tuple = tuple(word_tuple for word_tuple in sentence_tuple if word_tuple)
+        text_tuple.append(sentence_tuple)
+    text_tuple = tuple(sentence_tuple for sentence_tuple in text_tuple if sentence_tuple)
+    return text_tuple
 
 
 # 4
@@ -48,7 +76,7 @@ class LetterStorage:
         """
         pass
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -92,7 +120,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         pass
 
@@ -166,7 +194,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         pass
 
@@ -261,7 +289,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         pass
 
@@ -274,7 +302,8 @@ class LanguageDetector:
         """
         pass
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[
+                                                                                               str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
@@ -286,7 +315,7 @@ class LanguageDetector:
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                               k: int, trie_level: int) -> float or int:
+                          k: int, trie_level: int) -> float or int:
     """
     Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
@@ -304,7 +333,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
+                                                                                               str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
