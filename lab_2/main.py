@@ -196,6 +196,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     possible_label = max(dictionary_of_labels, key=dictionary_of_labels.get)
     possible_result = [possible_label, round(min(distances), 5)]
     return possible_result
+
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
