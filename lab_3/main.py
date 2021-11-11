@@ -20,7 +20,30 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    t = text.split()
+    output_text = []
+    start_sentence = 0
+    for i, word in enumerate(t):
+        sentence_list = []
+        if word[-1] in "!?." and (t[-1] == word or t[i + 1][0].isupper() is True or t[i + 1][0].isdigit() is True):
+            sentence = t[start_sentence:i + 1]
+            start_sentence = i + 1
+            for token in sentence:
+                standard_word = ['_']
+                token = token.lower()
+                token = token.replace('ö', 'oe')
+                token = token.replace('ü', 'ue')
+                token = token.replace('ä', 'ae')
+                token = token.replace('ß', 'ss')
+                for symbol in "1234567890?!@#$%^&*()_-+=~`\"':;\\|/.,><{}[]":
+                    token = token.replace(symbol, '')
+                for symbol in token:
+                    standard_word.append(symbol)
+                standard_word.append('_')
+                if standard_word != ['_', '_']:
+                    sentence_list.append(tuple(standard_word))
+            output_text.append(tuple(sentence_list))
+    return tuple(output_text)
 
 
 # 4
