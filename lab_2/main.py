@@ -46,6 +46,8 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
             return None
     freq_dictionary = [get_freq_dict(elem) for elem in texts_corpus]
     language_profiles = dict(zip(language_labels, freq_dictionary))
+    # создает итератор, который объединяет
+    # элементы из нескольких источников данных.
     return language_profiles
 
 
@@ -126,6 +128,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
         return None
     predicted_language = ['', 1]
     for language, known_text_vector in enumerate(known_text_vectors):
+        #  enumerate() позволяет перебирать элементов,
+        #  отслеживая индекс текущего элемента.
         if known_text_vector is None:
             return None
         distance = calculate_distance(unknown_text_vector, known_text_vector)
@@ -151,6 +155,10 @@ def calculate_distance_manhattan(unknown_text_vector: list,
         if known is None or unknown is None:
             return None
         distance += round(abs(unknown - known), 5)
+    #     Встроенная функция abs(x) в Python возвращает
+    #     абсолютное значение аргумента x,
+    #     который может быть целым или числом с плавающей точкой
+    #     (нам нужно получить неотрицательное число)
     return distance
 
 
@@ -191,6 +199,8 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         else:
             count_languages[language] += 1
     biggest_value = max(count_languages, key=count_languages.get)
+    # key - уточняет по какому критерию идет сортировка
+    # get возвращает значение
     predicted_language = [biggest_value[0], round(min(distances), 5)]
     return predicted_language
 
@@ -233,6 +243,7 @@ def calculate_distance_sparse(unknown_text_vector: list,
         if not isinstance(element, list):
             return None
     dictionary = dict(unknown_text_vector)
+    # если значение в обоих словарях, нужное нам значение - разность значений
     for key in known_text_vector:
         if key[0] in dictionary:
             dictionary[key[0]] -= key[1]
