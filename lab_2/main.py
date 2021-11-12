@@ -18,9 +18,8 @@ def get_freq_dict(tokens: list) -> dict or None:
     if not isinstance(tokens, list) or None in tokens:
         return None
     frequency_dictionary = {}
-    length = len(tokens)
     for word in tokens:
-        frequency_dictionary[word] = round(tokens.count(word)/length, 5)
+        frequency_dictionary[word] = round(tokens.count(word)/len(tokens), 5)
     return frequency_dictionary
 
 
@@ -34,18 +33,19 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     """
     pass
 
-    if not isinstance(texts_corpus, list) \
-            or not isinstance(language_labels, list) \
-            or None in texts_corpus \
-            or None in language_labels:
+    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
         return None
+    if texts_corpus == [None] or language_labels == [None]:
+        return None
+
     language_profiles = {}
-    for text in texts_corpus:
-        if None in text or not isinstance(text, list):
-            return None
-        frequency_dictionary = get_freq_dict(text)
-        index_of_language = texts_corpus.index(text)
-        language_profiles[language_labels[index_of_language]] = frequency_dictionary
+    score = len(language_labels)
+    for i in range(score):
+        language_profiles[language_labels[i]] = texts_corpus[i]
+
+    for key in language_profiles:
+        language_profiles[key] = get_freq_dict(language_profiles[key])
+
     return language_profiles
 
 
@@ -60,10 +60,10 @@ def get_language_features(language_profiles: dict) -> list or None:
     if not isinstance(language_profiles, dict) \
             or language_profiles == {}:
         return None
-    unique_tokens = []
-    for frequency_dictionary in language_profiles.values():
-        unique_tokens.extend(list(frequency_dictionary.keys()))
-    unique_tokens = sorted(unique_tokens)
+    uni_tok = []
+    for freq_dict in language_profiles.values():
+        uni_tok.extend(list(freq_dict.keys()))
+    unique_tokens = sorted(uni_tok)
     return unique_tokens
 
 
@@ -81,11 +81,11 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
         return None
     text_vector = []
     text_features = get_language_features(language_profiles)
-    for word in text_features:
-        if word in original_text:
+    for w in text_features:
+        if w in original_text:
             for dictionary in language_profiles.values():
-                if word in dictionary:
-                    text_vector.append(dictionary[word])
+                if w in dictionary:
+                    text_vector.append(dictionary[w])
         else:
             text_vector.append(0)
     return text_vector
@@ -103,16 +103,22 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     if not isinstance(unknown_text_vector, list) \
             or not isinstance(known_text_vector, list):
         return None
-    for number in unknown_text_vector:
-        if not isinstance(number, (int, float)):
+    for num in unknown_text_vector:
+        if not isinstance(num, (int, float)):
             return None
-    for number in known_text_vector:
-        if not isinstance(number, (int, float)):
+    for num in known_text_vector:
+        if not isinstance(num, (int, float)):
             return None
+
     distance = 0
-    for index, coordinate in enumerate(unknown_text_vector):
-        distance += (coordinate - known_text_vector[index]) ** 2
-    return round(distance ** 0.5, 5)
+    score = len(unknown_text_vector)
+    for i in range(score):
+        step = unknown_text_vector[i] - known_text_vector[i]
+        step = step ** 2
+        distance += step
+
+    distance = round(distance ** 0.5, 5)
+    return distance
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -130,8 +136,8 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             or not isinstance(language_labels, list) \
             or len(language_labels) != len(known_text_vectors):
         return None
-    for number in unknown_text_vector:
-        if not isinstance(number, (int, float)):
+    for num in unknown_text_vector:
+        if not isinstance(num, (int, float)):
             return None
     for vector in known_text_vectors:
         if not isinstance(vector, list):
