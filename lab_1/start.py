@@ -17,12 +17,12 @@ if __name__ == '__main__':
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'de.txt'), 'r', encoding='utf-8') as file_to_read_deutsch:
         de_text = file_to_read.read()
 
-    with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'la.txt'), 'r', encoding='utf-8') as file_to_read:
-        la_text = file_to_read.read()
+    with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'la.txt'), 'r', encoding='utf-8') as file_to_read_la:
+        la_text = file_to_read_la.read()
 
     with open(os.path.join(PATH_TO_TEXTS_FOLDER, 'unknown.txt'), 'r', encoding='utf-8') as \
-            file_to_read:
-        unknown_text = file_to_read.read()
+            file_to_read_unk:
+        unknown_text = file_to_read_unk.read()
 
     EXPECTED = 'en'
     RESULT = ''
