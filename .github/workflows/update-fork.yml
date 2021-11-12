@@ -8,7 +8,7 @@ jobs:
   sync:
 
     name: Update PR Fork on PR Comment
-    if: github.event.issue.pull_request != '' && (contains(github.event.comment.body, '/update')
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/update')
     runs-on: ubuntu-latest
 
     steps:
