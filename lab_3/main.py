@@ -3,6 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 
+import re
 from typing import Dict, Tuple
 
 
@@ -20,8 +21,31 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    # test comment
-    # one more test comment
+
+    if not isinstance(text, str) or not text:
+        return ()
+
+    sentences = re.split('[!?.] ', text)
+    letters = []
+
+    invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+
+    for sentence in sentences:
+        sentence = sentence.lower()
+        for symbols in invaluable_trash:
+            sentence = sentence.replace(symbols, '')
+        tokens = sentence.split()
+        for word in tokens:
+            for letter in word:
+                letter.replace('ö', 'oe')
+                letter.replace('ü', 'ue')
+                letter.replace('ä', 'ae')
+                letter.replace('ß', 'ss')
+        for token in tokens:
+            letters.append(tuple(['_'] + list(token) + ['_']))
+    return tuple(letters)
 
 
 # 4
