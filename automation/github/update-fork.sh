@@ -38,6 +38,8 @@ FORKED_URL="https://x-access-token:${AUTH_TOKEN}@${FORKED_URL}"
 git remote add upstream "${FORKED_URL}"
 git fetch upstream
 
+git remote -v
+
 git checkout upstream/main
 
 LABS_TO_UPDATE=$(cat automation/labs.txt)
