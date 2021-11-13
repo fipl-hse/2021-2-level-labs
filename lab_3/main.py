@@ -6,6 +6,7 @@ Language classification using n-grams
 from typing import Dict, Tuple
 import re
 
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -26,16 +27,17 @@ def tokenize_by_sentence(text: str) -> tuple:
                            'ü': 'ue',
                            'ä': 'ae',
                            'ß': 'ss'}
-    text_raw = text
-    sentences_raw = re.split(r"[\!\.\?]\W(?=[A-ZÜÖÄß])", text_raw)
+    # start level - 'sentences'
+    sentences_raw = re.split(r"[!.?]\W(?=[A-ZÜÖÄß])", text)
+    # delete empty strings
     sentences_raw = [sentence_raw.lower().strip() for sentence_raw in sentences_raw if sentence_raw]
     text_tuple = []
     for sentence_raw in sentences_raw:
-        # print('sentence_raw', sentence_raw)
+        # start level - 'words'
         words_raw = sentence_raw.split()
-        # здесь будет следующий уровень
         sentence_tuple = []
         for word_raw in words_raw:
+            # start level - 'letters'
             for key, value in deutsch_replacement.items():
                 word_raw = word_raw.replace(key, value)
             word_tuple = [letter for letter in word_raw if letter.isalpha()]
@@ -43,10 +45,14 @@ def tokenize_by_sentence(text: str) -> tuple:
                 word_tuple.append('_')
                 word_tuple.insert(0, '_')
             word_tuple = tuple(word_tuple)
+            # end level - 'letters'
             sentence_tuple.append(word_tuple)
-            # на данный момент есть sentence_tuple
+        # end level - 'words'
+        # delete empty tuples
         sentence_tuple = tuple(word_tuple for word_tuple in sentence_tuple if word_tuple)
         text_tuple.append(sentence_tuple)
+    # end level - 'sentences'
+    # delete empty tuples
     text_tuple = tuple(sentence_tuple for sentence_tuple in text_tuple if sentence_tuple)
     return text_tuple
 
@@ -58,6 +64,7 @@ class LetterStorage:
     """
 
     def __init__(self):
+        self.counter = 0
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
@@ -66,7 +73,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.counter
+            self.counter += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -74,7 +86,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
         """
@@ -82,7 +96,10 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        storage_upside_down = dict(zip(self.storage.values(), self.storage.keys()))
+        if not isinstance(letter_id, int) or letter_id not in storage_upside_down:
+            return -1
+        return storage_upside_down[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -90,7 +107,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    if self._put_letter(letter) == -1:
+                        return -1
+        return 0
 
 
 # 4
