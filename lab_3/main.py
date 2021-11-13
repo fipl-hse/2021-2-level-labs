@@ -38,7 +38,7 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        return
 
     def get_id_by_letter(self, letter: str) -> int:
         """
