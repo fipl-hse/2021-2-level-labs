@@ -21,7 +21,44 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+    if not isinstance(text, str) or not text:
+        return ()
+
+    # split text by sentence
     text = text.lower()
+    text = re.split(r'[.!?] ', text)
+
+    # tokenization of sentence
+    deutsch_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    clean_text = []
+    clean_sentence = ''
+    for sentence in text:
+        for symbol in sentence:
+            if symbol in deutsch_letters:  # replace umlauts and ß
+                clean_sentence += deutsch_letters[symbol]
+            elif symbol.isalpha() or symbol.isspace():
+                clean_sentence += symbol
+        clean_text.append(clean_sentence.split())
+        clean_sentence = ''
+
+    split_tokens = []  # list for sentence consisted of split tokens
+    token = []  # list for split word
+    ready_text = []
+
+    # split words by letters
+    for sentence in clean_text:
+        for word in sentence:
+            token += '_'
+            for letter in word:
+                token += letter
+            token += '_'
+            split_tokens.append(tuple(token))
+            token = []  # clean the list for the next word
+        if split_tokens:  # check for not creating tuple with empty tuples
+            ready_text.append(tuple(split_tokens))
+        split_tokens = []  # clean the list for the next sentence
+
+    return tuple(ready_text)
 
 
 # 4
@@ -31,6 +68,7 @@ class LetterStorage:
     """
 
     def __init__(self):
+        self.counter = 0
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
@@ -39,7 +77,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.counter
+            self.counter += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -47,7 +90,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -55,7 +100,10 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        inverted_storage = {value: key for key, value in self.storage.items()}
+        if not isinstance(letter_id, int) or letter_id not in inverted_storage:
+            return -1
+        return inverted_storage[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
