@@ -43,7 +43,7 @@ if __name__ == '__main__':
     text_corpus = []
     stop_words = []
     language_labels = []
-    k = 3
+    k = 5
 
     for text in DE_SAMPLES:
         text_corpus.append(remove_stop_words(tokenize(text), stop_words))
