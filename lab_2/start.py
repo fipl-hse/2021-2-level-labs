@@ -3,7 +3,9 @@ Language detection starter
 """
 
 import os
-from lab_2.main import tokenize, get_language_profiles, get_text_vector, predict_language_knn
+from lab_2.main import (tokenize, remove_stop_words,
+                        get_language_profiles, get_sparse_vector,
+                        predict_language_knn_sparse)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -38,39 +40,31 @@ if __name__ == '__main__':
               'r', encoding='utf-8') as file_to_read:
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
-    INIT_LABELS = ['eng', 'de', 'lat']
-
-    CORPUS = []
-    CORPUS.append(tokenize(EN_TEXT))
-    CORPUS.append(tokenize(DE_TEXT))
-    CORPUS.append(tokenize(LAT_TEXT))
-
-    PROFILES = get_language_profiles(CORPUS, INIT_LABELS)
-
-    UNK_VECTORS = []
-    for i in UNKNOWN_SAMPLES:
-        UNK_VECTORS.append(get_text_vector(tokenize(i), PROFILES))
-
-    KNOWN_VECTORS = []
-    ADD_LABELS = []
-    for j in EN_SAMPLES:
-        KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
-        ADD_LABELS.append('eng')
-    for j in DE_SAMPLES:
-        KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
-        ADD_LABELS.append('de')
-    for j in LAT_SAMPLES:
-        KNOWN_VECTORS.append(get_text_vector(tokenize(j), PROFILES))
-        ADD_LABELS.append('lat')
-
-    PREDICTIONS = []
-    for k in UNK_VECTORS:
-        PREDICTIONS.append(predict_language_knn(k, KNOWN_VECTORS, ADD_LABELS))
-
     EXPECTED = ['de', 'eng', 'lat']
+    stop_words = []
+    corpus = []
+    language_labels = []
+    for text in DE_SAMPLES:
+        corpus.append(remove_stop_words(tokenize(text), stop_words))
+        language_labels.append('de')
+    for text in EN_SAMPLES:
+        corpus.append(remove_stop_words(tokenize(text), stop_words))
+        language_labels.append('eng')
+    for text in LAT_SAMPLES:
+        corpus.append(remove_stop_words(tokenize(text), stop_words))
+        language_labels.append('lat')
+    language_profiles = get_language_profiles(corpus, language_labels)
+    known_text_vectors = []
+    for text in corpus:
+        known_text_vectors.append(get_sparse_vector(text, language_profiles))
+    k = 3
     RESULT = []
-    for k in PREDICTIONS:
-        RESULT.append(k[0])
-
+    for text in UNKNOWN_SAMPLES:
+        unknown_text = remove_stop_words(tokenize(text), stop_words)
+        unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
+        predicted_lang = predict_language_knn_sparse(unknown_text_vector, known_text_vectors,
+                                                     language_labels, k)
+        RESULT.append(predicted_lang[0])
+    print(f"{RESULT} are possible languages")
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
