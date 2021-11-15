@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -20,7 +20,42 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    invaluable_trash = ['`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '[', ']', '}', '|',
+                        '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    text = text.lower()
+    for symbols in invaluable_trash:
+        text = text.replace(symbols, '')
+    for letter in text:
+        if letter == 'ü':
+            text = text.replace(letter, 'ue')
+        elif letter == 'ö':
+            text = text.replace(letter, 'oe')
+        elif letter == 'ä':
+            text = text.replace(letter, 'ae')
+        elif letter == 'ß':
+            text = text.replace(letter, 'ss')
+    regexp = re.compile('[.!?] ?')
+    sents = re.split(regexp, text)
+    cleaned_sents = []
+    for sent in sents:
+        cleaned_sent = sent.strip()
+        if cleaned_sent:
+            cleaned_sents.append([cleaned_sent])
+    for ind, sent in enumerate(cleaned_sents):
+        for words in sent:
+            tokens = words.split()
+            for i, token in enumerate(tokens):
+                token = list(token)
+                token.insert(0, '_')
+                token.append('_')
+                tokens[i] = tuple(token)
+                cleaned_sents[ind] = tokens
+    tuple_tokens = tuple((tuple(i) for i in cleaned_sents))
+    return tuple_tokens
+
 
 
 # 4
@@ -33,46 +68,97 @@ class LetterStorage:
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
+        if not isinstance(letter, str):
+            return -1
         """
         Puts a letter into storage, assigns a unique id
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
+        count = 1
+        list_of_letters = []
+        list_of_letters.append(letter)
+        for let in list_of_letters:
+            if let not in self.storage:
+                self.storage[let] = count
+                count += 1
+        if letter in self.storage:
+            return 0
         pass
 
     def get_id_by_letter(self, letter: str) -> int:
+        if not isinstance(letter, str):
+            return -1
         """
         Gets a unique id by a letter
         :param letter: a letter
         :return: an id
         """
+        if letter in self.storage:
+            id = self.storage[letter]
+            return id
+        return -1
         pass
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
+        if not isinstance(letter_id, int):
+            return -1
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
         :return: letter
         """
+        for k, v in self.storage.items():
+            if v == letter_id:
+                return k
+            else:
+                return -1
         pass
 
     def update(self, corpus: tuple) -> int:
+        if not isinstance(corpus, tuple):
+            return -1
         """
         Fills a storage by letters from the corpus
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
+        count = 1
+        if len(corpus) == 0:
+            return 0
+        list_of_letters = []
+        for sent in corpus:
+            for word in sent:
+                for letter in word:
+                    if (letter.isalpha()) and (letter not in self.storage):
+                        list_of_letters.append(letter)
+                        self._put_letter(letter)
+        if list_of_letters == list(self.storage):
+            return 0
         pass
 
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
+    if not isinstance(corpus, tuple):
+        return ()
     """
     Encodes sentences by replacing letters with their ids
     :param storage: an instance of the LetterStorage class
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
+    storage = LetterStorage()
+    for sent in corpus:
+        if not isinstance(sent, tuple):
+            return ()
+        for word in sent:
+            if not isinstance(word, tuple):
+                return ()
+            for letter in word:
+                letter = storage.update(corpus)
+                letter = storage.get_id_by_letter(letter)
+    return corpus
     pass
 
 
