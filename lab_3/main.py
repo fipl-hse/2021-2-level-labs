@@ -4,6 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
+import string
 
 
 # 4
@@ -20,8 +21,15 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    str_split = []
+    text_tmp = text.split(".")
+    for i, sentence in enumerate(text_tmp):
+        str_split[i] = []
+        for ii, letter in sentence:
+            if letter not in string.punctuation:
+                str_split[i][ii] = letter
 
+    return tuple(str_split)
 
 # 4
 class LetterStorage:
