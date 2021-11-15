@@ -23,11 +23,14 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     str_split = []
     text_tmp = text.split(".")
-    for i, sentence in enumerate(text_tmp):
-        str_split[i] = []
-        for ii, letter in sentence:
-            if letter not in string.punctuation:
-                str_split[i][ii] = letter
+    for sentence in text_tmp:
+        tmp = []
+        for letter in sentence:
+            if letter == " ":
+                tmp.append("_")
+            elif letter not in string.punctuation:
+                tmp.append(letter)
+        str_split.append(tuple([tmp]))
 
     return tuple(str_split)
 
