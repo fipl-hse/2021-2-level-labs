@@ -2,7 +2,7 @@
 Lab 3
 Language classification using n-grams
 """
-
+import re
 from typing import Dict, Tuple
 
 
@@ -21,8 +21,29 @@ def tokenize_by_sentence(text: str) -> tuple:
          )
     """
     if not isinstance(text, str):
-        return None
-    return text
+        return ()
+    text = text.lower()
+    sentences = re.split(r'[.!?]', text)
+    if '' in sentences:
+        sentences.remove('')
+    framed_letters = []
+    for sentence in sentences:
+        sentence = sentence.split()
+        list_of_letters_new = []
+        for word in sentence:
+            word.replace('ö', 'oe')
+            word.replace('ü', 'ue')
+            word.replace('ä', 'ae')
+            word.replace('ß', 'ss')
+            list_of_letters = [letter for letter in word if letter.isalpha()]
+            if len(list_of_letters) != 0:
+                list_of_letters.insert(0, '_')
+                list_of_letters.append('_')
+                list_of_letters_new.append(tuple(list_of_letters))
+            if len(list_of_letters_new) == 0:
+                return ()
+        framed_letters.append(tuple(list_of_letters_new))
+    return tuple(framed_letters)
 
 
 # 4
@@ -33,6 +54,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self.counter = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -40,7 +62,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.counter
+            self.counter += 1
+        else:
+            return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -48,7 +76,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -56,7 +86,10 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+
+        return
 
     def update(self, corpus: tuple) -> int:
         """
