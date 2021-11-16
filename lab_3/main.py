@@ -123,20 +123,19 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        count = 1
         if len(corpus) == 0:
             return 0
         list_of_letters = []
         for sent in corpus:
             for word in sent:
-                for letter in word:
-                    if (letter.isalpha()) and (letter not in self.storage):
+                for letter in list(word):
+                    if letter not in self.storage:
                         list_of_letters.append(letter)
                         self._put_letter(letter)
         if list_of_letters == list(self.storage):
             return 0
-        pass
-
+        else:
+            return 1
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -148,18 +147,17 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    storage = LetterStorage()
-    for sent in corpus:
-        if not isinstance(sent, tuple):
-            return ()
-        for word in sent:
-            if not isinstance(word, tuple):
-                return ()
-            for letter in word:
-                letter = storage.update(corpus)
-                letter = storage.get_id_by_letter(letter)
-    return corpus
-    pass
+    corpus = list(corpus)
+    for ind_sent, sent in enumerate(corpus):
+        corpus[ind_sent] = list(sent)
+        sent = list(sent)
+        for index_word, word in enumerate(sent):
+            sent[index_word] = list(word)
+            word = list(word)
+            for index, letter in enumerate(word):
+                word[index] = LetterStorage.get_id_by_letter(letter)
+    return tuple(corpus)
+
 
 
 # 4
