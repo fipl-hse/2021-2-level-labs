@@ -26,7 +26,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
 
     sentences = re.split('[!?.] ', text)
-    letters = []
+    result = []
 
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
@@ -43,9 +43,14 @@ def tokenize_by_sentence(text: str) -> tuple:
                 letter.replace('ü', 'ue')
                 letter.replace('ä', 'ae')
                 letter.replace('ß', 'ss')
+        sents = []
         for token in tokens:
-            letters.append(tuple(['_'] + list(token) + ['_']))
-    return tuple(letters)
+            sents.append(tuple(['_'] + list(token) + ['_']))
+        if sents == [] or len(sentence) == 1:
+            return tuple(sents)
+        result.append(tuple(sents))
+
+    return tuple(result)
 
 
 # 4
