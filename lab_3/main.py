@@ -55,8 +55,9 @@ class LetterStorage:
     Stores and manages letters
     """
 
-    def __init__(self):
+    def __init__(self, count=0):
         self.storage = {}
+        self.count = count
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -64,7 +65,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.count
+            self.count += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -72,6 +78,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
+        if not isinstance(letter, str) or (letter not in self.storage.keys()):
+            return -1
+        return self.storage[letter]
         pass
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
@@ -80,6 +89,11 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
+        if not isinstance(letter_id, int) or (letter_id not in self.storage.values()):
+            return -1
+        for letter, new_letter_id in self.storage.items():
+            if new_letter_id == letter_id:
+                return letter
         pass
 
     def update(self, corpus: tuple) -> int:
@@ -88,6 +102,16 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    if self._put_letter(letter) == -1:
+                        return -1
+                    else:
+                        self._put_letter(letter)
+            return 0
         pass
 
 
