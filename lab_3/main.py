@@ -4,7 +4,6 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-import string
 
 
 # 4
@@ -21,16 +20,31 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    str_split = []
+
+    punctuation = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '.', '?', '/']
+    text = text.lower()
+    text = text.replace("ö", "oe")
+    text = text.replace("ü", "ue")
+    text = text.replace("ä", "ae")
+    text = text.replace("ß", "ss")
+
+    for symbols in punctuation:
+        text = text.replace(symbols, '')
+
+    str_split_s = []
     text_tmp = text.split(".")
     for sentence in text_tmp:
         tmp = []
         for letter in sentence:
             if letter == " ":
                 tmp.append("_")
-            elif letter not in string.punctuation:
+                str_split_w.append(tuple(tmp))
+                tmp = ["_"]
+            elif letter not in punctuation:
                 tmp.append(letter)
-        str_split.append(tuple([tmp]))
+        str_split_s.append(tuple(str_split_w))
 
     return tuple(str_split)
 
