@@ -22,31 +22,36 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
 
     punctuation = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
-                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
-                        '.', '?', '/']
-    text = text.lower()
-    text = text.replace("ö", "oe")
-    text = text.replace("ü", "ue")
-    text = text.replace("ä", "ae")
-    text = text.replace("ß", "ss")
+                   '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '?', '/']
 
+    text_tmp = text.lower()
+    text_tmp = text_tmp.replace("ö", "oe")
+    text_tmp = text_tmp.replace("ü", "ue")
+    text_tmp = text_tmp.replace("ä", "ae")
+    text_tmp = text_tmp.replace("ß", "ss")
     for symbols in punctuation:
-        text = text.replace(symbols, '')
+        text_tmp = text_tmp.replace(symbols, '')
+    text_tmp = text_tmp.replace(" ", "_")
 
-    str_split_s = []
-    text_tmp = text.split(".")
-    for sentence in text_tmp:
-        tmp = []
-        for letter in sentence:
-            if letter == " ":
-                tmp.append("_")
-                str_split_w.append(tuple(tmp))
-                tmp = ["_"]
-            elif letter not in punctuation:
-                tmp.append(letter)
-        str_split_s.append(tuple(str_split_w))
+    text_tokenized = []
+    sentence = []
+    word = ["_"]
+    for i, symbol in enumerate(text_tmp):
+        if symbol == ".":
+            word.append("_")
+            sentence.append(tuple(word))
+            text_tokenized.append(tuple(sentence))
+            sentence = []
+            word = ["_"]
+        if symbol == "_":
+            word.append("_")
+            sentence.append(tuple(word))
+            word = ["_"]
+        else:
+            word.append(symbol)
 
-    return tuple(str_split)
+    return tuple(text_tokenized)
+
 
 # 4
 class LetterStorage:
@@ -73,7 +78,7 @@ class LetterStorage:
         """
         pass
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -117,7 +122,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         pass
 
@@ -191,7 +196,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         pass
 
@@ -286,7 +291,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         pass
 
@@ -311,7 +316,7 @@ class LanguageDetector:
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                               k: int, trie_level: int) -> float or int:
+                          k: int, trie_level: int) -> float or int:
     """
     Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
@@ -329,7 +334,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
+                                                                                               str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
