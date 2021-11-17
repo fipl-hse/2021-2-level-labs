@@ -46,7 +46,6 @@ def tokenize_by_sentence(text: str) -> tuple:
             split_sentence.append(tuple(word))
         for i in split_sentence:
             new_text.append(tuple(split_sentence))
-
     return tuple(new_text)
 
 # 4
