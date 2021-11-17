@@ -157,10 +157,9 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :return: a tuple of the decoded sentences
     """
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
-        return()
+        return ()
     last_tuple = tuple(tuple(tuple(storage.get_letter_by_id(q) for q in b) for b in c) for c in corpus)
     return last_tuple
-
 
 
 # 6
@@ -204,7 +203,7 @@ class NGramTrie:
                 seq = [a[q:] for q in range(self.size)]
                 n_gramm = tuple(zip(*seq))
                 list_n_gramms.append(n_gramm)
-        tuple(list_n_gramms)
+        self.n_grams = tuple(list_n_gramms)
         return 0
 
     def get_n_grams_frequencies(self) -> int:
@@ -230,7 +229,6 @@ class NGramTrie:
                 else:
                     self.n_gram_frequencies[n_gramm] = 1
         return 0
-
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -264,7 +262,10 @@ class LanguageProfile:
     """
 
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -283,7 +284,21 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        for size in ngram_sizes:
+            n_gram = NGramTrie(size, self.storage)
+            a = n_gram.extract_n_grams(encoded_corpus)
+            resultat = 0
+            for element in n_gram.n_grams:
+                for b in element:
+                    resultat += 1
+            self.n_words.append(resultat)
+            self.tries.append(n_gram)
+        return 0
+
+
+
+
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
