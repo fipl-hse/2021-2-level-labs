@@ -4,6 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
+import re
 
 
 # 4
@@ -20,8 +21,33 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    print('Third lab')
+    if not isinstance(text, str) or not text:
+        return ()
 
+    text_low = text.lower()
+    split_text = re.split(r'[.?!]', text_low)
+    tokenized_sentence = ''
+    new_text = []
+    split_sentence = []
+    underscore = '_'
+
+    for sentence in split_text:
+        for word in sentence:
+            word = word.replace('ö', 'oe')
+            word = word.replace('ü', 'ue')
+            word = word.replace('ä', 'ae')
+            word = word.replace('ß', 'ss')
+            if word.isspace() or word.isalpha():
+                tokenized_sentence += word
+            word += underscore
+            for i in word:
+                word += i
+            word += underscore
+            split_sentence.append(tuple(word))
+        for i in split_sentence:
+            new_text.append(tuple(split_sentence))
+
+    return tuple(new_text)
 
 # 4
 class LetterStorage:
