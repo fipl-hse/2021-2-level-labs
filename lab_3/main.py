@@ -21,14 +21,16 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str) or not text:
+    if not isinstance(text, str):
         return ()
 
     text_low = text.lower()
-    split_text = re.split(r'[.?!]', text_low)
+    split_text = re.split(r'[.?!] ', text_low)
     tokenized_sentence = ''
     new_text = []
+    final_text = []
     split_sentence = []
+    split_word = []
     underscore = '_'
 
     for sentence in split_text:
@@ -39,14 +41,18 @@ def tokenize_by_sentence(text: str) -> tuple:
             word = word.replace('ß', 'ss')
             if word.isspace() or word.isalpha():
                 tokenized_sentence += word
+            new_text.append(tokenized_sentence.split())
+
+    for sentence in new_text:
+        for word in sentence:
             word += underscore
             for i in word:
                 word += i
             word += underscore
             split_sentence.append(tuple(word))
-        for i in split_sentence:
-            new_text.append(tuple(split_sentence))
-    return tuple(new_text)
+        for x in split_sentence:
+            final_text.append(tuple(split_sentence))
+    return tuple(final_text)
 
 # 4
 class LetterStorage:
