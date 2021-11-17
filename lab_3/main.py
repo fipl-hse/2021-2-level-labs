@@ -25,7 +25,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
 
     text_low = text.lower()
-    split_text = re.split(r'[.?!]', text_low)
+    split_text = re.split(r'[.?!] ', text_low)
     new_text = []
     tokenized_sentence = ''
 
@@ -43,12 +43,12 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokenized_sentence += word
             if word.isspace() or word.isalpha():
                 tokenized_sentence += word
-            new_text.append(tokenized_sentence.split())
-            tokenized_sentence = ''
+        new_text.append(tokenized_sentence.split())
+        tokenized_sentence = ''
 
     for sentence in new_text:
         for word in sentence:
-            word += underscore
+            split_word += underscore
             for i in word:
                 split_word += i
             split_word += underscore
