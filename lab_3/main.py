@@ -33,15 +33,17 @@ def tokenize_by_sentence(text: str) -> tuple:
     split_sentence = []
     split_word = []
     underscore = '_'
+    umlauts = ['ö', 'ü', 'ä', 'ß']
 
     for sentence in split_text:
         for word in sentence:
-            word = word.replace('ö', 'oe')
-            word = word.replace('ü', 'ue')
-            word = word.replace('ä', 'ae')
-            word = word.replace('ß', 'ss')
-            tokenized_sentence += word
             if word.isspace() or word.isalpha():
+                tokenized_sentence += word
+            elif word in umlauts:
+                word = word.replace('ö', 'oe')
+                word = word.replace('ü', 'ue')
+                word = word.replace('ä', 'ae')
+                word = word.replace('ß', 'ss')
                 tokenized_sentence += word
         new_text.append(tokenized_sentence.split())
         tokenized_sentence = ''
