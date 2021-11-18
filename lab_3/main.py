@@ -27,13 +27,13 @@ def tokenize_by_sentence(text: str) -> tuple:
     text_low = text.lower()
     split_text = re.split(r'[.?!] ', text_low)
     new_text = []
+    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
     tokenized_sentence = ''
 
     final_text = []
+    split_words = []
     split_sentence = []
-    split_word = []
     underscore = '_'
-    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
     for sentence in split_text:
         for word in sentence:
@@ -41,17 +41,16 @@ def tokenize_by_sentence(text: str) -> tuple:
                 tokenized_sentence += word
             elif word in umlauts:
                 tokenized_sentence += umlauts[word]
-                tokenized_sentence += word
         new_text.append(tokenized_sentence.split())
         tokenized_sentence = ''
 
     for sentence in new_text:
         for word in sentence:
-            split_word += underscore
+            split_words += underscore
             for i in word:
-                split_word += i
-            split_word += underscore
-            split_sentence.append(tuple(split_word))
+                split_words += i
+            split_words += underscore
+            split_sentence.append(tuple(split_words))
         if split_sentence:
             final_text.append(tuple(split_sentence))
         split_sentence = []
