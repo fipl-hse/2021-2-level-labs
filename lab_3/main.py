@@ -125,8 +125,18 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
-
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    decoded_corpus = ()
+    for sen in corpus:
+        word_tuple = ()
+        for word in sen:
+            letter_tuple = ()
+            for letter_id in word:
+                letter_tuple += (storage.get_letter_by_id(letter_id),)
+            word_tuple += (letter_tuple,)
+        decoded_corpus += (word_tuple,)
+    return decoded_corpus
 
 # 6
 class NGramTrie:
