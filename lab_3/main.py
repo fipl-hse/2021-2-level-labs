@@ -42,7 +42,7 @@ class LetterStorage:
     """
 
     def __init__(self):
-        self.count = 0
+        self.count = 1
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
@@ -103,7 +103,18 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    encoded_corpus = ()
+    for sen in corpus:
+        word_tuple = ()
+        for word in sen:
+            id_tuple = ()
+            for letter in word:
+                id_tuple += (storage.get_id_by_letter(letter),)
+            word_tuple += (id_tuple,)
+        encoded_corpus += (word_tuple,)
+    return encoded_corpus
 
 
 # 4
