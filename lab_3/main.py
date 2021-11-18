@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -21,36 +21,38 @@ def tokenize_by_sentence(text: str) -> tuple:
          )
     """
 
-    punctuation = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
-                   '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '?', '/']
+    if not isinstance(text, str) or not text:
+        return ()
 
-    text_tmp = text.lower()
-    text_tmp = text_tmp.replace("ö", "oe")
-    text_tmp = text_tmp.replace("ü", "ue")
-    text_tmp = text_tmp.replace("ä", "ae")
-    text_tmp = text_tmp.replace("ß", "ss")
-    for symbols in punctuation:
-        text_tmp = text_tmp.replace(symbols, '')
-    text_tmp = text_tmp.replace(" ", "_")
+    # creating phrases with regex split
+    # regex = any number of sets ending by . or ? or brackets
+    # followed by at least a space with possible spaces before and after
+    phrases = re.split(r" *[.?!]['\")\]]* +", text)
 
-    text_tokenized = []
-    sentence = []
-    word = ["_"]
-    for i, symbol in enumerate(text_tmp):
-        if symbol == ".":
-            word.append("_")
-            sentence.append(tuple(word))
-            text_tokenized.append(tuple(sentence))
-            sentence = []
-            word = ["_"]
-        if symbol == "_":
-            word.append("_")
-            sentence.append(tuple(word))
-            word = ["_"]
-        else:
-            word.append(symbol)
+    # for future removal of irregularities
+    irregular_symbols = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    punctuation = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890"""
 
-    return tuple(text_tokenized)
+    for i, phrase in enumerate(phrases):
+        # correcting the phrase - replacing case, umlauts etc
+        tmp_phrase = phrase.lower()
+        for symbol in phrase:
+            if symbol in punctuation:
+                tmp_phrase = tmp_phrase.replace(symbol, '')
+            if symbol in irregular_symbols:
+                tmp_phrase = tmp_phrase.replace(symbol, irregular_symbols.get(symbol))
+        # dividing the phrase into words
+        tmp_phrase = tmp_phrase.split()
+        if not tmp_phrase:
+            return ()
+        # going through a phrase word by word
+        # adding _ and rewriting it back into tmp_phrase
+        for ii, word in enumerate(tmp_phrase):
+            tmp_word = '_' + word + '_'
+            tmp_phrase[ii] = tuple(tmp_word)
+        # adding an updated phrase into phrases
+        phrases[i] = tuple(tmp_phrase)
+    return tuple(phrases)
 
 
 # 4
