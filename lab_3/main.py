@@ -5,6 +5,7 @@ Language classification using n-grams
 
 from typing import Dict, Tuple
 import re
+import random
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -70,7 +71,18 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+
+        id_number = 1
+        while True:
+            if letter in self.storage.keys():
+                return 0
+            if id_number in self.storage.values():
+                id_number += 1
+            else:
+                self.storage[letter] = id_number
+                return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -78,7 +90,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage.keys():
+            return -1
+        else:
+            return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
         """
@@ -86,7 +101,12 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if letter_id not in self.storage.values():
+            return -1
+        else:
+            for key, value in self.storage.items():
+                if value == letter_id:
+                    return key
 
     def update(self, corpus: tuple) -> int:
         """
@@ -94,8 +114,15 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
-
+        if not isinstance(corpus, tuple):
+            return -1
+        if corpus == ():
+            return 0
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    if letter != "_":
+                        self._put_letter(letter)
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
