@@ -77,7 +77,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.counter = 0
+        self.counter = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -222,6 +222,8 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
+        if not self.n_grams:
+            return 1
         for i in self.n_grams:
             for n_gramm in i:
                 if n_gramm in self.n_gram_frequencies:
@@ -284,9 +286,11 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
         for size in ngram_sizes:
             n_gram = NGramTrie(size, self.storage)
-            a = n_gram.extract_n_grams(encoded_corpus)
+            n_gram.extract_n_grams(encoded_corpus)
             resultat = 0
             for element in n_gram.n_grams:
                 for b in element:
@@ -294,11 +298,6 @@ class LanguageProfile:
             self.n_words.append(resultat)
             self.tries.append(n_gram)
         return 0
-
-
-
-
-
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -324,7 +323,20 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int):
+            return ()
+        n_gram = 0
+        
+        for element in self.tries:
+            element.get_n_grams_frequencies()
+            for i in element.n_gram_frequencies:
+                if len(i) == trie_level:
+                    n_gram = list(element.n_gram_frequencies())
+
+        return n_gram
+
+
+
 
     # 8
     def save(self, name: str) -> int:
