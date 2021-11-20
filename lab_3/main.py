@@ -51,6 +51,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self.letter_id = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -60,9 +61,9 @@ class LetterStorage:
         """
         if not letter or not isinstance(letter, str):
             return -1
-        letter_id = 0
         if letter not in self.storage:
-            self.storage[letter] = letter_id
+            self.storage[letter] = self.letter_id
+            self.letter_id += 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -96,7 +97,7 @@ class LetterStorage:
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
-                    self.storage[letter] = self._put_letter(letter)
+                    self._put_letter(letter)
         return 0
 
 
@@ -108,7 +109,21 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    corpus_id = []
+    for sentence in corpus:
+        sentence_id = []
+        for word in sentence:
+            word_id = []
+            for letter in word:
+                if letter in storage.storage:
+                    word_id.append(storage.get_id_by_letter(letter))
+            sentence_id.append(tuple(word_id))
+        corpus_id.append(tuple(sentence_id))
+        print(tuple(corpus_id))
+    return tuple(corpus_id)
 
 
 # 4
