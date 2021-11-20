@@ -31,9 +31,12 @@ def tokenize_by_sentence(text: str) -> tuple:
         text = text.replace(key, value)
     sentence = ''
     all_sentences = []
-    for symbol in text:
-        if symbol not in ['.', '?', '!', '…']:
+    for number, symbol in enumerate(text):
+        if symbol not in ['.', '?', '!', '…'] and number + 1 != len(text):
             sentence += symbol
+        elif number + 1 == len(text):
+            sentence += symbol
+            all_sentences.append(sentence.lower())
         else:
             all_sentences.append(sentence.lower())
             sentence = ''
@@ -61,7 +64,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.id = 0
+        self.id = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -106,10 +109,11 @@ class LetterStorage:
         """
         if not isinstance(corpus, tuple):
             return -1
-        for sentence in corpus:
-            for word in sentence:
-                for letter in word:
-                    self._put_letter(letter)
+        for text in corpus:
+            for sentence in text:
+                for word in sentence:
+                    for letter in word:
+                        self._put_letter(letter)
         return 0
 
 
@@ -153,11 +157,15 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
+
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
@@ -175,7 +183,22 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or encoded_corpus == ():
+            return 1
+        word = []
+        sentence = []
+        all_sentences = []
+        for sentence_tuple in encoded_corpus:
+            for word_tuple in sentence_tuple:
+                for i in range(len(word_tuple)-1):
+                    word.append(tuple([word_tuple[i], word_tuple[i+1]]))
+                sentence.append(tuple(word))
+                word = []
+            all_sentences.append(tuple(sentence))
+            sentence = []
+        self.n_grams.append(all_sentences)
+        self.n_grams = tuple(self.n_grams)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -193,7 +216,18 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not isinstance(self.n_grams, tuple):
+            return 1
+        for text in self.n_grams:
+            for sentence in text:
+                for word in sentence:
+                    for bigram in word:
+                        if bigram not in self.n_gram_frequencies.keys():
+                            self.n_gram_frequencies[bigram] = 1
+                        else:
+                            self.n_gram_frequencies[bigram] += 1
+        return 0
+
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
