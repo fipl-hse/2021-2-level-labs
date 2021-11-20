@@ -76,7 +76,7 @@ class LetterStorage:
 
         id_number = 1
         while True:
-            if letter in self.storage.keys():
+            if letter in self.storage:
                 return 0
             if id_number in self.storage.values():
                 id_number += 1
@@ -132,8 +132,16 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
-
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    encoded_corpus = []
+    for sentence in corpus:
+        tmp_storage = []
+        for word in sentence:
+            for letter in word:
+                tmp_storage.append(storage.get_id_by_letter(letter))
+        encoded_corpus.append(tuple(tmp_storage))
+    return tuple(encoded_corpus)
 
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -143,8 +151,16 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
-
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    decoded_corpus = []
+    for sentence in corpus:
+        tmp_storage = []
+        for word in sentence:
+            for letter in word:
+                tmp_storage.append(storage.get_letter_by_id(letter))
+        decoded_corpus.append(tuple(tmp_storage))
+    return tuple(decoded_corpus)
 
 # 6
 class NGramTrie:
