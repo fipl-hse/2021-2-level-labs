@@ -43,12 +43,12 @@ def tokenize_by_sentence(text: str) -> tuple:
                 letter.replace('ü', 'ue')
                 letter.replace('ä', 'ae')
                 letter.replace('ß', 'ss')
-        sents = []
+        list_of_sentences = []
         for token in tokens:
-            sents.append(tuple(['_'] + list(token) + ['_']))
-        if sents == [] or len(sentence) == 1:
-            return tuple(sents)
-        result.append(tuple(sents))
+            list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
+        if list_of_sentences == [] or len(sentence) == 1:
+            return tuple(list_of_sentences)
+        result.append(tuple(list_of_sentences))
 
     return tuple(result)
 
@@ -68,7 +68,11 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = len(self.storage) + 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -76,15 +80,22 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+        for key, value in self.storage.items():
+            if value == letter_id:
+                return key
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -92,7 +103,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 
 # 4
@@ -103,7 +120,17 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) \
+            or not isinstance(corpus, tuple):
+        return ()
+    encoded_corpus_sentence = []
+    for sentence in corpus:
+        for token in sentence:
+            for letter in token:
+                list_sentence = [tuple([storage.get_id_by_letter(letter)])]
+                encoded_corpus_sentence.append(tuple(list_sentence))
+
+    return tuple(encoded_corpus_sentence)
 
 
 # 4
