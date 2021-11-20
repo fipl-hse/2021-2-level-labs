@@ -26,8 +26,8 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
 
     # creating phrases with regex split
-    # regex = any number of sets ending by . or ? or brackets
-    # followed by at least a space with possible spaces before and after
+    # regex = anything ending from the .?!'" sequence
+    # ended by any break (\n included in \s)
     phrases = re.split(r" *[.?!]['\")]*\s", text)
 
     # for future removal of irregularities
@@ -90,7 +90,7 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if letter not in self.storage.keys():
+        if letter not in self.storage:
             return -1
         else:
             return self.storage[letter]
@@ -121,8 +121,8 @@ class LetterStorage:
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
-                    if letter != "_":
-                        self._put_letter(letter)
+                    self._put_letter(letter)
+        return 0
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
