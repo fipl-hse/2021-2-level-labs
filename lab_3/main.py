@@ -134,14 +134,16 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-    encoded_corpus = []
+    encoded_corpus = ()
     for sentence in corpus:
-        tmp_storage = []
+        word_tuple = ()
         for word in sentence:
+            id_letter = ()
             for letter in word:
-                tmp_storage.append(storage.get_id_by_letter(letter))
-        encoded_corpus.append(tuple(tmp_storage))
-    return tuple(encoded_corpus)
+                id_letter += (storage.get_id_by_letter(letter),)
+            word_tuple += (id_letter,)
+        encoded_corpus += (word_tuple,)
+    return encoded_corpus
 
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -153,14 +155,17 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-    decoded_corpus = []
+    decoded_corpus = ()
     for sentence in corpus:
-        tmp_storage = []
+        word_tuple = ()
         for word in sentence:
+            id_letter = ()
             for letter in word:
-                tmp_storage.append(storage.get_letter_by_id(letter))
-        decoded_corpus.append(tuple(tmp_storage))
-    return tuple(decoded_corpus)
+                id_letter += (storage.get_letter_by_id(letter),)
+            word_tuple += (id_letter,)
+        decoded_corpus += (word_tuple,)
+    return decoded_corpus
+
 
 # 6
 class NGramTrie:
