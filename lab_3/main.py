@@ -4,6 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
+import re
 
 
 # 4
@@ -20,12 +21,59 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    text = text.lower()
+    dict_for_replace = {"ö": "oe", "ü": "ue", "ä": "ae", "ß": "ss"}
+    for umlaut, diphthong in dict_for_replace.items():
+        text = text.replace(umlaut, diphthong)
+    symbols = ['`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+               '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+               '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+
+    for i in text:
+        if i in symbols:
+            text = text.replace(i, '')
+    text_list = re.split(r"[.?!]", text)
+    for i in text_list:
+        if i == '':
+            text_list.remove(i)
+    ready_tuple = []
+
+    for sentence in text_list:
+        ready_words = []
+        sentence = sentence.strip()
+        sentence = sentence + ' '
+        tokenized_word = ['_']
+        for word in sentence:
+            if word != ' ':
+                tokenized_word.append(word)
+            if word == ' ':
+                tokenized_word.append('_')
+                ready_words.append(tokenized_word)
+                tokenized_word = ['_']
+                continue
+        ready_tuple.append(ready_words)
+
+    for tup_one in ready_tuple:
+        for tup_two in tup_one:
+            if tup_two[1] == '_':
+                tup_one.remove(tup_two)
+            else:
+                continue
+    for i, sentence in enumerate(ready_tuple):
+        for j, word in enumerate(sentence):
+            sentence[j] = tuple(word)
+        ready_tuple[i] = tuple(sentence)
+    return tuple(ready_tuple)
+
+
 
 
 # 4
 class LetterStorage:
     """
+
     Stores and manages letters
     """
 
@@ -48,7 +96,7 @@ class LetterStorage:
         """
         pass
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -92,7 +140,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         pass
 
@@ -166,7 +214,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         pass
 
@@ -261,7 +309,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         pass
 
@@ -286,7 +334,7 @@ class LanguageDetector:
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                               k: int, trie_level: int) -> float or int:
+                          k: int, trie_level: int) -> float or int:
     """
     Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
@@ -304,7 +352,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
+                                                                                               str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
