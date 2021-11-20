@@ -42,7 +42,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         if symbol.isspace() or symbol.isalpha():
             tokenized_sentence += symbol
         else:
-            tokenized_sentences.append(tokenized_sentence())
+            tokenized_sentences.append(tokenized_sentence)
             tokenized_sentences = ''
 
     for x, tokenized_sentence in enumerate(tokenized_sentences):
