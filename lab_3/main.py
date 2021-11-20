@@ -54,7 +54,7 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokenized_sentence[i] = tuple(word)
         tokenized_sentences[i] = tuple(tokenized_sentence)
 
-    return tokenized_sentence
+    return tuple(tokenized_sentence)
 
 
 # 4
