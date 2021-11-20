@@ -24,26 +24,28 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    de_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
     tokenized_sentence = ''
     tokenized_sentences = []
     underscore = ['_']
 
-    for sentence in text:
-        for symbol in sentence:
-            if symbol in de_letters:
-                tokenized_sentence += de_letters[symbol]
-        tokenized_sentences = ''
+    for symbol in text:
+        if symbol == 'ö':
+            text = text.replace(symbol, 'oe')
+        elif symbol == 'ü':
+            text = text.replace(symbol, 'ue')
+        elif symbol == 'ä':
+            text = text.replace(symbol, 'ae')
+        elif symbol == 'ß':
+            text = text.replace(symbol, 'ss')
 
     split_text = re.split(r'[.?!] ', text)
 
-    for sentence in split_text:
-        for symbol in sentence:
-            if symbol.isspace() or symbol.isalpha():
-                tokenized_sentence += symbol
-            else:
-                tokenized_sentences.append(tokenized_sentence.lower())
-                tokenized_sentence = ''
+    for symbol in split_text:
+        if symbol.isspace() or symbol.isalpha():
+            tokenized_sentence += symbol
+        else:
+            tokenized_sentences.append(tokenized_sentence.lower())
+            tokenized_sentence = ''
 
     for x, tokenized_sentence in enumerate(tokenized_sentences):
         tokenized_sentences[x] = tokenized_sentence.split()
