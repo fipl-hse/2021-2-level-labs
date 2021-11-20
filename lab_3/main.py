@@ -38,6 +38,8 @@ def tokenize_by_sentence(text: str) -> tuple:
                 tokenized_sentence += de_letters[symbol]
             elif symbol.isspace() or symbol.isalpha():
                 tokenized_sentence += symbol
+        tokenized_sentences.append(tokenized_sentence.split())
+        tokenized_sentence = []
 
     for x, tokenized_sentence in enumerate(tokenized_sentence):
         tokenized_sentences[x] = tokenized_sentence.split
