@@ -206,7 +206,6 @@ class NGramTrie:
             for word in sen:
                 if word not in self.n_gram_frequencies:
                     self.n_gram_frequencies[word] = 1
-                    print(self.n_gram_frequencies)
                 else:
                     self.n_gram_frequencies[word] += 1
         return 0
@@ -300,7 +299,6 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
 
     # 8
     def save(self, name: str) -> int:
