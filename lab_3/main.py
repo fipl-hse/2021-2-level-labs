@@ -23,7 +23,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str) or not text:
         return ()
-    sentences = re.split(r'[.!?]\s(?=[А-ЯA-ZЁÜÖÄ])', text)
+    sentences = re.split(r'[.!?]\s', text)
     umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
     symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890"""
     for index, sentence in enumerate(sentences):
@@ -43,7 +43,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(sentences)
 
 
-
 # 4
 class LetterStorage:
     """
@@ -59,7 +58,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not letter or not isinstance(letter, str):
+            return -1
+        letter_id = 0
+        if letter not in self.storage:
+            self.storage[letter] = letter_id
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
