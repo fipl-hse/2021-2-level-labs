@@ -39,7 +39,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     for symbol in text:
         if symbol in ['~', '`', '@', '"', '#', '№', '$', ';', '%', '^', ':', '&', '*', '(', ')', '-', '_'
-                      '=', '+', "'",  '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '/', '1', '2',
+                      '=', '+', "'", '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '/', '1', '2',
                       '3', '4', '5', '6', '7', '8', '9', '0']:
             text = text.replace(symbol, '')
 
@@ -76,6 +76,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self.counter = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -83,7 +84,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.counter
+            self.counter += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
