@@ -25,7 +25,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or not text:
         return ()
 
-    sentences = re.split('[!?.] ', text)
+    sentences = re.compile(r'[.|!|?]')
+    sentences = filter(lambda t: t, [t.strip() for t in sentences.split(text)])
     result = []
 
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
