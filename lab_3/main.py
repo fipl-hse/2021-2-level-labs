@@ -64,9 +64,12 @@ class LetterStorage:
         """
         if not isinstance(letter, str):
             return -1
-        if letter not in self.storage:
+        list_of_letters = []
+        list_of_letters.append(letter)
+        for letter in list_of_letters:
             self.storage[letter] = self.counter
-            self.counter += 1
+            if letter not in self.storage:
+                self.counter += 1
         else:
             return 0
 
@@ -78,7 +81,11 @@ class LetterStorage:
         """
         if not isinstance(letter, str):
             return -1
-        return self.storage[letter]
+        if letter in self.storage:
+            letter_id = self.storage[letter]
+            return letter_id
+        else:
+            return -1
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -88,8 +95,11 @@ class LetterStorage:
         """
         if not isinstance(letter_id, int):
             return -1
-
-        return
+        for key, value in self.storage.items():
+            if value == letter_id:
+                return key
+            else:
+                return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -97,7 +107,19 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        list_of_letters = []
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    if letter not in self.storage:
+                        list_of_letters.append(letter)
+                        self._put_letter(letter)
+        if list_of_letters == list(self.storage):
+            return 0
+        else:
+            return -1
 
 
 # 4
@@ -108,8 +130,15 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
-
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for sentence in corpus:
+        sentences = [tuple([storage.get_id_by_letter(letter) for letter in word])
+                     for word in sentence]
+        encoded_corpus.append(sentences)
+    return tuple(encoded_corpus)
 
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -119,8 +148,15 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
-
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    decoded_corpus = []
+    for sentence in corpus:
+        sentences = [tuple([storage.get_letter_by_id(letter_id) for letter_id in word])
+                     for word in sentence]
+        decoded_corpus.append(sentences)
+    return tuple(decoded_corpus)
 
 # 6
 class NGramTrie:
@@ -129,7 +165,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = LetterStorage()
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -151,7 +190,19 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        list_n_grams = []
+        for sentence in encoded_corpus:
+            n_grams_sentence = []
+            for word in sentence:
+                n_gram_word = []
+                for ind in range(len(word) - self.size + 1):
+                    n_gram_word.append(tuple(word[ind:ind + self.size]))
+                n_grams_sentence.append(tuple(n_gram_word))
+            list_n_grams.append(tuple(n_grams_sentence))
+        self.n_grams = tuple(list_n_grams)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -169,7 +220,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        for sentence in self.n_grams:
+            for word in sentence:
+                for freq in word:
+                    if freq not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[freq] = 1
+                    else:
+                        self.n_gram_frequencies[freq] += 1
+        if len(self.n_gram_frequencies) == 0:
+            return 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
