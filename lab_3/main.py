@@ -4,87 +4,117 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
+import re
 
 
 # 4
-def tokenize_by_sentence(text: str) -> tuple:
-    """
-    Splits a text into sentences, sentences into tokens, tokens into letters
-    Tokens are framed with '_'
-    :param text: a text
-    :return: a list of sentence with lists of tokens split into letters
-    e.g.
-    text = 'She is happy. He is happy.'
-    -->  (
-         (('_', 's', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_')),
-         (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
-         )
-    """
-    pass
+def tokenize_by_sentence(text: str):
+    if not isinstance(text, str):
+        return ()
+    useless_symbols = ['`', '~', '@', '*', '#', '$', '%', '^', '&', '(', ')', '_', '-', '+',
+                       '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                       '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    patterns = ('ö', 'ü', 'ä', 'ß')
+    replacements = ('oe', 'ue', 'ae', 'ss')
+    if text:
+        last_letter = text[-1]
+        if last_letter == '.' or last_letter == '!' or last_letter == '?':
+            text = text[:-1]
+    for symbol in useless_symbols:
+        text = text.replace(symbol, '')
+    if not text:
+        return ()
+    sentences = re.split(r'[.!?] ?', text.lower())
+    text_output = []
+    for sentence in sentences:
+        new_tokens = []
+        tokens = sentence.split()
+        for token in tokens:
+            for pattern, replacement in zip(patterns, replacements):
+                token.replace(pattern, replacement)
+            letters = []
+            letters.insert(0, '_')
+            for letter in token:
+                letters.append(letter)
+            letters.append('_')
+            new_tokens.append(tuple(letters))
+        text_output.append(tuple(new_tokens))
+    return tuple(text_output)
 
 
 # 4
 class LetterStorage:
-    """
-    Stores and manages letters
-    """
-
     def __init__(self):
         self.storage = {}
+        self.count = 0
 
     def _put_letter(self, letter: str) -> int:
-        """
-        Puts a letter into storage, assigns a unique id
-        :param letter: a letter
-        :return: 0 if succeeds, 1 if not
-        """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.count += 1
+            self.storage[letter] = self.count
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
-        """
-        Gets a unique id by a letter
-        :param letter: a letter
-        :return: an id
-        """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage.keys():
+            return -1
+        letter_id = self.storage[letter]
+        return letter_id
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
-        """
-        Gets a letter by a unique id
-        :param letter_id: a unique id
-        :return: letter
-        """
-        pass
+    def get_letter_by_id(self, letter_id: int) -> str or int:
+        if not isinstance(letter_id, int):
+            return -1
+        if letter_id not in self.storage.values():
+            return -1
+        for letter, id_letter in self.storage.items():
+            if id_letter == letter_id:
+                return letter
 
     def update(self, corpus: tuple) -> int:
-        """
-        Fills a storage by letters from the corpus
-        :param corpus: a tuple of sentences
-        :return: 0 if succeeds, 1 if not
-        """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
-    """
-    Encodes sentences by replacing letters with their ids
-    :param storage: an instance of the LetterStorage class
-    :param corpus: a tuple of sentences
-    :return: a tuple of the encoded sentences
-    """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for sentence in corpus:
+        encoded_sentences = []
+        for token in sentence:
+            encoded_tokens = []
+            for letter in token:
+                encoded_tokens.append(storage.get_id_by_letter(letter))
+            encoded_sentences.append(tuple(encoded_tokens))
+        encoded_corpus.append(tuple(encoded_sentences))
+    return tuple(encoded_corpus)
 
 
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
-    """
-    Decodes sentences by replacing letters with their ids
-    :param storage: an instance of the LetterStorage class
-    :param corpus: an encoded tuple of sentences
-    :return: a tuple of the decoded sentences
-    """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for sentence in corpus:
+        encoded_sentences = []
+        for token in sentence:
+            encoded_tokens = []
+            for letter in token:
+                encoded_tokens.append(storage.get_letter_by_id(letter))
+            encoded_sentences.append(tuple(encoded_tokens))
+        encoded_corpus.append(tuple(encoded_sentences))
+    return tuple(encoded_corpus)
 
 
 # 6
@@ -92,7 +122,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         pass
 
@@ -166,7 +196,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         pass
 
@@ -261,7 +291,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         pass
 
@@ -286,7 +316,7 @@ class LanguageDetector:
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                               k: int, trie_level: int) -> float or int:
+                          k: int, trie_level: int) -> float or int:
     """
     Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
@@ -304,7 +334,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
+                                                                                               str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
