@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -20,9 +20,32 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    puhovichok = text.split()
-    parichok = puhovichok[0]
-    return parichok
+    if not isinstance(text, str) \
+            or not text:
+        return ()
+    text = re.split('[!?.] ', text)
+    letters_result = []
+    shitty_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    deutsch_buchstabe = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'ß': 'ss'}
+    for sentence in text:
+        sentence = sentence.lower()
+        for symbols in shitty_symbols:
+            sentence = sentence.replace(symbols, '')
+        tokens = sentence.split()
+        for word in tokens:
+            for letter in word:
+                if letter in deutsch_buchstabe.keys():
+                    letter.replace(letter, deutsch_buchstabe[letter])
+        letters = []
+        for token in tokens:
+            letters.append(tuple(['_'] + list(token) + ['_']))
+        if letters == [] or len(sentence) == 1:
+            return tuple(letters)
+        letters_result.append(tuple(letters))
+    return tuple(letters_result)
+
 
 
 # 4
