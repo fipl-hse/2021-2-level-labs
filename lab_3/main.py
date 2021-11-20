@@ -26,36 +26,36 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     text_low = text.lower()
     split_text = re.split(r'[.?!] ', text_low)
-    new_text = []
-    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
-    tokenized_sentence = ''
 
-    final_text = []
-    split_words = []
-    split_sentence = []
-    underscore = '_'
+    de_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    tokenized_sentence = ''
+    tokenized_sentences = []
+    underscore = ['_']
 
     for sentence in split_text:
-        for word in sentence:
-            if word.isspace() or word.isalpha():
-                tokenized_sentence += word
-            elif word in umlauts:
-                tokenized_sentence += umlauts[word]
-        new_text.append(tokenized_sentence.split())
-        tokenized_sentence = ''
+        for symbol in sentence:
+            if symbol.isspace() or symbol.isalpha():
+                tokenized_sentences.append(tokenized_sentence)
 
-    for sentence in new_text:
-        for word in sentence:
-            split_words += underscore
-            for i in word:
-                split_words += i
-            split_words += underscore
-            split_sentence.append(tuple(split_words))
-        if split_sentence:
-            final_text.append(tuple(split_sentence))
-        split_sentence = []
+    for k, v in de_letters.items():
+        split_text = split_text.replace(k, v)
 
-    return tuple(final_text)
+    for x, tokenized_sentence in enumerate(tokenized_sentence):
+        tokenized_sentences[x] = tokenized_sentence.split
+
+    for tokenized_sentence in tokenized_sentences:
+        for x, word in enumerate(tokenized_sentence):
+            underscore.extend(word)
+            underscore.append(underscore)
+            tokenized_sentence[x] = underscore
+            underscore = ['_']
+
+    for x, tokenized_sentence in enumerate(tokenized_sentence):
+        for i, word in enumerate(tokenized_sentence):
+            tokenized_sentence[i] = tuple(word)
+        tokenized_sentences[i] = tuple(tokenized_sentence)
+
+    return tokenized_sentence
 
 
 # 4
