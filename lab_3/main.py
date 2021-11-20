@@ -23,7 +23,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) \
             or not text:
         return ()
-    text = re.split('[!?.] ', text)
+    text = re.split('[!?.\n] ', text)
     letters_result = []
     shitty_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
@@ -118,14 +118,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     storage.update(corpus)
     encoded_corpus = []
     for tuple_sentence in corpus:
-        tokens = []
+        sentence = []
         for tuple_token in tuple_sentence:
             characters = []
             for tuple_character in tuple_token:
-                if storage.get_id_by_letter(tuple_character) != -1:
-                    characters.append(storage.get_id_by_letter(tuple_character))
-            tokens.append(tuple(characters))
-        encoded_corpus.append(tuple(tokens))
+                characters.append(storage.get_id_by_letter(tuple_character))
+            sentence.append(tuple(characters))
+        encoded_corpus.append(tuple(sentence))
     return tuple(encoded_corpus)
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -135,7 +134,21 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+
+    if not isinstance(storage, LetterStorage) \
+            or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    decoded_corpus = []
+    for tuple_sentence in corpus:
+        tokens = []
+        for tuple_token in tuple_sentence:
+            characters = []
+            for tuple_character in tuple_token:
+                characters.append(storage.get_letter_by_id(tuple_character))
+            tokens.append(tuple(characters))
+        decoded_corpus.append(tuple(tokens))
+    return tuple(decoded_corpus)
 
 
 # 6
