@@ -41,8 +41,8 @@ def tokenize_by_sentence(text: str) -> tuple:
         tokenized_sentences.append(tokenized_sentence.split())
         tokenized_sentence = ''
 
-    for x, tokenized_sentence in enumerate(tokenized_sentence):
-        tokenized_sentences[x] = tokenized_sentence.split
+    for x, tokenized_sentence in enumerate(tokenized_sentences):
+        tokenized_sentences[x] = tokenized_sentence.split()
 
     for tokenized_sentence in tokenized_sentences:
         for x, word in enumerate(tokenized_sentence):
@@ -51,7 +51,7 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokenized_sentence[x] = underscore
             underscore = ['_']
 
-    for x, tokenized_sentence in enumerate(tokenized_sentence):
+    for x, tokenized_sentence in enumerate(tokenized_sentences):
         for i, word in enumerate(tokenized_sentence):
             tokenized_sentence[i] = tuple(word)
         tokenized_sentences[i] = tuple(tokenized_sentence)
@@ -297,7 +297,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         pass
 
@@ -322,7 +322,7 @@ class LanguageDetector:
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                               k: int, trie_level: int) -> float or int:
+                          k: int, trie_level: int) -> float or int:
     """
     Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
@@ -340,7 +340,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
+                                                                                               str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
