@@ -78,6 +78,7 @@ class LetterStorage:
     """
 
     def __init__(self):
+        self.id = 0
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
@@ -86,7 +87,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        return
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.id
+            self.id += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -94,7 +100,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
         """
@@ -102,7 +110,12 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+        for key, value in self.storage.items():
+            if value == letter_id:
+                return key
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -110,7 +123,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    self._put_letter(letter)
+        return 0
 
 
 # 4
@@ -121,6 +140,21 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
+    if not isinstance(storage, LetterStorage) \
+            or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encode_corpus = []
+    for sentence in corpus:
+        encoded_sentences = []
+        for token in sentence:
+            encoded_tokens = []
+            for letter in token:
+                encoded_tokens.append(storage.get_id_by_letter(letter))
+            encoded_sentences.append(tuple(encoded_tokens))
+        encode_corpus.append(tuple(encoded_sentences))
+
+    return tuple(encode_corpus)
     pass
 
 
