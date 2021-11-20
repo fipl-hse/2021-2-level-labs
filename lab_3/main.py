@@ -28,7 +28,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     # creating phrases with regex split
     # regex = any number of sets ending by . or ? or brackets
     # followed by at least a space with possible spaces before and after
-    phrases = re.split(r" *[.?!]['\")\]]* +", text)
+    phrases = re.split(r" *[.?!]['\")]*\s", text)
 
     # for future removal of irregularities
     irregular_symbols = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
@@ -190,7 +190,6 @@ class NGramTrie:
                 (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
             )
         )
-        -
         """
         pass
 
