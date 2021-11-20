@@ -4,7 +4,6 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-import re
 
 
 # 4
@@ -38,9 +37,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         elif symbol == 'ß':
             text = text.replace(symbol, 'ss')
 
-    split_text = re.split(r'[.?!] ', text)
-
-    for symbol in split_text:
+    for symbol in text:
         if symbol.isspace() or symbol.isalpha():
             tokenized_sentence += symbol
         else:
