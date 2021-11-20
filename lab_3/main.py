@@ -23,7 +23,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) \
             or not text:
         return ()
-    text = re.split('[!?.\n] ', text)
+    split_regex = re.compile(r'[.|!|?|…]')
+    text = filter(lambda t: t, [t.strip() for t in split_regex.split(text)])
     letters_result = []
     shitty_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
@@ -35,9 +36,8 @@ def tokenize_by_sentence(text: str) -> tuple:
             sentence = sentence.replace(symbols, '')
         tokens = sentence.split()
         for word in tokens:
-            for letter in word:
-                if letter in deutsch_buchstabe.keys():
-                    letter.replace(letter, deutsch_buchstabe[letter])
+            for letter, trans in deutsch_buchstabe.items():
+                word.replace(letter, trans)
         letters = []
         for token in tokens:
             letters.append(tuple(['_'] + list(token) + ['_']))
@@ -138,7 +138,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) \
             or not isinstance(corpus, tuple):
         return ()
-    storage.update(corpus)
+   # storage.update(corpus)
     decoded_corpus = []
     for tuple_sentence in corpus:
         tokens = []
