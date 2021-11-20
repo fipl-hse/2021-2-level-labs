@@ -71,7 +71,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:
+            return -1
+        return self.storage.get(letter)
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
