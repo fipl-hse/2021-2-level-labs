@@ -45,16 +45,16 @@ def tokenize_by_sentence(text: str) -> tuple:
         tokenized_sentences[x] = tokenized_sentence.split()
 
     for tokenized_sentence in tokenized_sentences:
-        for x, word in enumerate(tokenized_sentence):
+        for y, word in enumerate(tokenized_sentence):
             underscore.extend(word)
             underscore.append('_')
-            tokenized_sentence[x] = underscore
+            tokenized_sentence[y] = underscore
             underscore = ['_']
 
     for x, tokenized_sentence in enumerate(tokenized_sentences):
-        for i, word in enumerate(tokenized_sentence):
-            tokenized_sentence[i] = tuple(word)
-        tokenized_sentences[i] = tuple(tokenized_sentence)
+        for j, word in enumerate(tokenized_sentence):
+            tokenized_sentence[j] = tuple(word)
+        tokenized_sentences[j] = tuple(tokenized_sentence)
 
     return tuple(tokenized_sentences)
 
