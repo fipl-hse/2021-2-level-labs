@@ -81,7 +81,9 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if letter_id not in self.storage.values():
+            return -1
+        return [key for key, value in self.storage.items() if letter_id == value][0]
 
     def update(self, corpus: tuple) -> int:
         """
