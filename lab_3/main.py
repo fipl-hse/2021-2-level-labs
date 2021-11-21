@@ -299,6 +299,15 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
+        if not isinstance(k, int) or not isinstance(trie_level, int) or k <= 0:
+            return ()
+        for n_gram in self.tries:
+            if n_gram.size == trie_level:
+                n_gram.get_n_grams_frequencies()
+                freq_dict = n_gram.n_gram_frequencies
+                sorted_n_grams = sorted(freq_dict, key=freq_dict.get, reverse=True)[:k]
+                return tuple(sorted_n_grams)
+        return ()
 
     # 8
     def save(self, name: str) -> int:
