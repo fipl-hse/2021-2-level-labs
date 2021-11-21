@@ -332,11 +332,12 @@ class LanguageProfile:
         if not isinstance(k, int) or not isinstance(trie_level, int) or k < 1 or trie_level < 1:
             return ()
 
-        for instance in self.trie:
+        for instance in self.tries:
             instance.get_n_grams_frequencies()
             if instance.size == trie_level:
-                sorted_frequences = sorted(instance.n_gram_frequencies, key=instance.n_gram_frequencies.get)[:k]
+                sorted_frequences = sorted(instance.n_gram_frequencies, key=instance.n_gram_frequencies.get,reverse=True)[:k]
                 return tuple(sorted_frequences)
+        return ()
 
     # 8
     def save(self, name: str) -> int:
@@ -361,7 +362,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -376,8 +377,20 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
-
+    if not (isinstance(unknown_profile, LanguageProfile)
+            and isinstance(known_profile, LanguageProfile)
+            and isinstance(k, int)
+            and isinstance(trie_level, int)):
+        return -1
+    unknown_freq = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_freq = known_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    for index, tuple in enumerate(unknown_freq):
+        if tuple in known_freq:
+            distance += abs(index - known_freq.index(tuple))
+        else:
+            distance += len(known_freq)
+    return distance
 
 # 8
 class LanguageDetector:
