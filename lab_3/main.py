@@ -427,7 +427,6 @@ class LanguageDetector:
             return 1
         if language_profile not in self.language_profiles:
             self.language_profiles[language_profile.language] = language_profile
-        print(self.language_profiles)
         return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> \
