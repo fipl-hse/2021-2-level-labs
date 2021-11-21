@@ -201,12 +201,20 @@ class NGramTrie:
         if not isinstance(encoded_corpus, tuple):
             return 1
         list_n_gramms = []
+        final_list = []
         for i in encoded_corpus:
             for a in i:
                 seq = [a[q:] for q in range(self.size)]
                 n_gramm = tuple(zip(*seq))
                 list_n_gramms.append(n_gramm)
-        self.n_grams = tuple(list_n_gramms)
+        while () in list_n_gramms:
+            for i in list_n_gramms:
+                if i == ():
+                    list_n_gramms.remove(i)
+        final_list.append(tuple(list_n_gramms))
+        self.n_grams = tuple(final_list)
+        if self.n_grams[0] == ():
+            self.n_grams = []
         return 0
 
     def get_n_grams_frequencies(self) -> int:
@@ -314,13 +322,12 @@ class LanguageProfile:
         if not isinstance(encoded_corpus, tuple) or not isinstance(_sizes, tuple):
             return 1
         for size in _sizes:
-            n_gram = NGramTrie(size, self.storage)
-            n_gram.extract_n_grams(encoded_corpus)
-            resultat = 0
-            for element in n_gram.n_grams:
-                resultat += len(element)
-            self.n_words.append(resultat)
-            self.tries.append(n_gram)
+            self.tries.append(NGramTrie(size, self.storage))
+        for trie in self.tries:
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.n_words.append(len(trie.n_gram_frequencies))
+
         return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
