@@ -340,7 +340,6 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        print('save')
         if not isinstance(name, str):
             return 1
         '''{
@@ -360,13 +359,12 @@ class LanguageProfile:
         freq = {}
         profile_as_dict = {}
         for n_gram_trie in self.tries:
-            print(n_gram_trie)
-            freq += {''.join(map(self.storage.get_letter_by_id, k)): v
-                    for k, v in n_gram_trie.n_gram_frequencies.items()}
-        profile_as_dict['freq'] = freq
-        profile_as_dict['n_words'] = self.n_words
-        profile_as_dict['name'] = self.language
-        with open(name, 'w') as file:
+            freq.update(((''.join(map(self.storage.get_letter_by_id, k)), v)
+                         for k, v in n_gram_trie.n_gram_frequencies.items()))
+        profile_as_dict["freq"] = freq
+        profile_as_dict["n_words"] = self.n_words
+        profile_as_dict["name"] = self.language
+        with open(name, "w") as file:
             json_string = json.dumps(profile_as_dict)
             file.write(json_string)
         return 0
@@ -386,9 +384,15 @@ class LanguageProfile:
             return 1
         with open(file_name) as file:
             profile = json.load(file)
-        # self.language = profile[]
-        # self.tries =
-        # self.n_words =
+        self.language = profile["name"]
+        self.tries =
+        # создать LetterStorage и заполнить с помощью ключей конкатенированных frequency
+        # сначала берём frequency и разбиваем на несколько словарей в зависимости от длины ключа
+        # {2: {"ab: 1", "bd": 2},
+        # 3: {"abc": 5, "cde": 6}} ->
+        # создать для каждого элемента создать соответствующий n_gram_trie
+        # положить все n_gram_trie списком
+        self.n_words = profile["n_words"]
         return 0
 
 
