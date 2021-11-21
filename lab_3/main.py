@@ -206,9 +206,9 @@ class NGramTrie:
                 else:
                     i = 0
                     while i <= (len(token) - self.size):
-                        n_grams_token.append(token[i:(i + self.size)])
+                        n_grams_token.append(tuple(token[i:(i + self.size)]))
                         i += 1
-                    n_grams_sentence.append(n_grams_token)
+                    n_grams_sentence.append(tuple(n_grams_token))
             list_n_grams.append(tuple(n_grams_sentence))
             self.n_grams = tuple(list_n_grams)
         return 0
