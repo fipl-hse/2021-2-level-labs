@@ -333,20 +333,6 @@ class LanguageProfile:
         """
         if not isinstance(name, str):
             return 1
-        '''{
-            "freq": {
-                "a": 1, "g": 2, "_": 2, "i": 1,
-                "m": 2, "n": 1, "o": 1, "p": 1, "r": 2,
-                "_p": 1, "am": 1, "g_": 1, "in": 1,
-                "gr": 1, "mi": 1, "mm": 1, "ng": 1,
-                "og": 1, "pr": 1, "ra": 1, "ro": 1
-            },
-            "n_words": [
-                9,
-                12
-            ],
-            "name": "en"
-        }'''
         freq = {}
         profile_as_dict = {}
         for n_gram_trie in self.tries:
@@ -355,7 +341,7 @@ class LanguageProfile:
         profile_as_dict["freq"] = freq
         profile_as_dict["n_words"] = self.n_words
         profile_as_dict["name"] = self.language
-        with open(name, "w") as file:
+        with open(name, "w", encoding="utf-8") as file:
             json_string = json.dumps(profile_as_dict)
             file.write(json_string)
         return 0
@@ -373,7 +359,7 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-        with open(file_name) as file:
+        with open(file_name, encoding="utf-8") as file:
             profile = json.load(file)
         self.language = profile["name"]
         self.tries = []
@@ -493,6 +479,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding ngram size and their prob scores
+        if input is correct, otherwise -1
         """
         pass
