@@ -86,6 +86,7 @@ class LetterStorage:
         """
         if not isinstance(letter, str):
             return -1
+
         if letter not in self.storage:
             self.storage[letter] = self.counter
             self.counter += 1
@@ -97,7 +98,7 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if not isinstance(letter, str):
+        if not isinstance(letter, str) or letter not in self.storage:
             return -1
         return self.storage[letter]
 
@@ -107,7 +108,12 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int) or (letter_id not in self.storage.values()):
+            return -1
+
+        new_storage = {v: k for k, v in self.storage.items()}
+
+        return new_storage[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
