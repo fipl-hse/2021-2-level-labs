@@ -300,7 +300,7 @@ class LanguageProfile:
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         if (not isinstance(encoded_corpus, tuple)) or (not isinstance(ngram_sizes, tuple)):
-            return ()
+            return 1
         """
         Creates a language profile
         :param letters: a tuple of encoded letters
@@ -322,10 +322,8 @@ class LanguageProfile:
             trie.extract_n_grams(encoded_corpus)
             trie.get_n_grams_frequencies()
             self.tries.append(trie)
-            n = 0
-            for v in trie.n_gram_frequencies.values():
-                n += v
-                self.n_words.append(n)
+        for trie in self.tries:
+            self.n_words.append(len(trie.n_gram_frequencies))
         return 0
 
 
