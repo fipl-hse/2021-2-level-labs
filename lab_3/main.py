@@ -365,17 +365,14 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-        with open(file_name, encoding="utf-8") as file:
-            profile = json.load(file)
-        self.language = profile["name"]
+        with open(file_name, encoding="utf-8") as lang_profile_file:
+            profile_dict = json.load(lang_profile_file)
+        self.language = profile_dict["name"]
+        self.n_words = profile_dict["n_words"]
         self.tries = []
-        # создать LetterStorage и заполнить с помощью ключей конкатенированных frequency
-        # сначала берём frequency и разбиваем на несколько словарей в зависимости от длины ключа
-        # {2: {"ab: 1", "bd": 2},
-        # 3: {"abc": 5, "cde": 6}} ->
-        # создать для каждого элемента создать соответствующий n_gram_trie
-        # положить все n_gram_trie списком
-        self.n_words = profile["n_words"]
+        # for freq in profile_dict["freq"]
+            # for n_gram, frequency in freq:
+                # if len(n_gram) == .size:
         return 0
 
 
