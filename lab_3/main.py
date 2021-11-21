@@ -230,6 +230,17 @@ class NGramTrie:
         }
         """
 
+        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
+            return 1
+        for sentence in self.n_grams:
+            for token in sentence:
+                for gram in token:
+                    if gram not in self.n_gram_frequencies.keys():
+                        self.n_gram_frequencies[gram] = 1
+                    else:
+                        self.n_gram_frequencies[gram] += 1
+        return 0
+
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
         """
