@@ -267,13 +267,12 @@ class LanguageProfile:
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
         for index, size in enumerate(ngram_sizes):
-            profile = NGramTrie(size, self.storage)
-            profile.extract_n_grams(encoded_corpus)
-            self.tries.append(profile)
-            count = 0
-            for sen in self.tries[index].n_grams:
-                count += len(sen)
-            self.n_words.append(count)
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.tries.append(trie)
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
