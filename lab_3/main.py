@@ -5,6 +5,7 @@ Language classification using n-grams
 
 from typing import Dict, Tuple
 import re
+import json
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -333,7 +334,9 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        if not isinstance(name, str):
+            return 1
+
 
     # 8
     def open(self, file_name: str) -> int:
@@ -385,7 +388,7 @@ class LanguageDetector:
     """
     
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -394,7 +397,10 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        self.language_profiles[language_profile.language] = language_profile
+        return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
@@ -404,8 +410,14 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
-
+        if not isinstance(unknown_profile, LanguageProfile) \
+                or not isinstance(k, int) \
+                or not isinstance(trie_levels, tuple):
+            return -1
+        language_distnce = {}
+        for language, profile in self.language_profiles.items():
+            language_distnce[language] = calculate_distance(unknown_profile, profile, k, trie_levels[0])
+        return language_distnce
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                                k: int, trie_level: int) -> float or int:
