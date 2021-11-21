@@ -215,7 +215,7 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        if not isinstance(self.n_grams, tuple):
+        if not isinstance(self.n_grams, tuple) or not self.n_grams:
             return 1
         for sentence in self.n_grams:
             for token in sentence:
