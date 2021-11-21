@@ -160,6 +160,11 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
 
+    decoded = tuple(tuple(tuple(storage.get_letter_by_id(letter_id) for letter_id in encoded_word)
+                          for encoded_word in encoded_sentence)
+                    for encoded_sentence in corpus)
+
+    return decoded
 
 
 # 6
