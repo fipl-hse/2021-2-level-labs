@@ -143,11 +143,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
 
-    for sentence in corpus:
-        for word in sentence:
-            for letter in word:
-                encoded_text = tuple(storage.get_letter_by_id(letter))
-    return encoded_text
+    encoded = tuple(tuple(tuple(storage.get_id_by_letter(letter) for letter in word) for word in sentence)
+                    for sentence in corpus)
+
+    return encoded
 
 
 # 4
@@ -158,7 +157,9 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+
 
 
 # 6
