@@ -217,8 +217,6 @@ class NGramTrie:
         """
         if not isinstance(self.n_grams, tuple) or self.n_grams == ():
             return 1
-        #self.n_grams = tuple([self.n_grams])
-        #for text in self.n_grams:
         for sentence in self.n_grams:
             for word in sentence:
                 for ngram in word:
@@ -291,10 +289,6 @@ class LanguageProfile:
             trie.extract_n_grams(encoded_corpus)
             trie.get_n_grams_frequencies()
             self.tries.append(trie)
-            summa = 0
-            for value in trie.n_gram_frequencies.values():
-                summa += value
-            #self.n_words.append(summa)
             self.n_words.append(len(trie.n_gram_frequencies))
         return 0
 
