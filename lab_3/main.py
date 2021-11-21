@@ -182,9 +182,9 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-        self.n_grams = tuple(tuple(
-            tuple(tuple([word[index], word[index + 1]]) for index in range(0, len(word) - 1)) for word in sentence) for
-                            sentence in encoded_corpus)
+        self.n_grams = tuple(tuple(tuple(tuple(word[i:i + self.size])
+                                         for i in range(len(word) - (self.size - 1)))
+                                   for word in sentence) for sentence in encoded_corpus)
         return 0
         pass
 
@@ -307,14 +307,13 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        if not isinstance(k, int) or isinstance(trie_level, int):
+        if not (isinstance(k, int) and isinstance(trie_level, int)):
             return ()
-        if k <= 0 or trie_level <= 0:
+        if k < 1:
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
                 frequency = trie.n_gram_frequencies
-                print(frequency)
                 top_k_ngrams = tuple([key for key, value in sorted(frequency.items(), key=lambda i: -i[1])][:k])
                 return top_k_ngrams
         return ()
@@ -368,8 +367,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
         for second_index, second_n_grams in enumerate(frequency_known_profile):
             if first_n_grams == second_n_grams:
                 distance += abs(first_index - second_index)
-            else:
-                distance += len(frequency_known_profile)
+        if first_n_grams not in frequency_known_profile:
+            distance += len(frequency_known_profile)
     return distance
     pass
 
