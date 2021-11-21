@@ -5,7 +5,7 @@ Language classification using n-grams
 
 from typing import Dict, Tuple
 import re
-
+import json
 
 # 4
 
@@ -247,7 +247,12 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not (isinstance(n_grams_dictionary, dict)):
+            return 1
+        for n_gram, freq in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple):
+                self.n_gram_frequencies[n_gram] = freq
+        return 0
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -335,8 +340,8 @@ class LanguageProfile:
         for instance in self.tries:
             instance.get_n_grams_frequencies()
             if instance.size == trie_level:
-                sorted_frequences = sorted(instance.n_gram_frequencies, key=instance.n_gram_frequencies.get,reverse=True)[:k]
-                return tuple(sorted_frequences)
+                sorted_frequencies = sorted(instance.n_gram_frequencies, key=instance.n_gram_frequencies.get,reverse=True)[:k]
+                return tuple(sorted_frequencies)
         return ()
 
     # 8
@@ -346,7 +351,24 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        if not isinstance(name, str):
+            return 1
+        profile_as_dict = {}
+        freq = {}
+        word = ''
+        for instance in self.tries:
+            for n_gram, freq in instance.n_gram_frequencies.items():
+                for integer in n_gram:
+                    word += self.storage.get_letter_by_id(integer)
+                freq[word] = freq
+                word = ''
+        profile_as_dict['freq'] = freq
+        profile_as_dict['n_words'] = self.n_words
+        profile_as_dict['name'] = self.language
+        with open(name, 'w') as file:
+            json_string = json.dumps(profile_as_dict)
+            file.write(json_string)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
@@ -358,7 +380,9 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+
 
 
 # 6
