@@ -8,7 +8,6 @@ import re
 
 
 # 4
-import self as self
 
 
 def tokenize_by_sentence(text: str) -> tuple:
