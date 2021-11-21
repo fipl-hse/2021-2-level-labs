@@ -22,7 +22,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          )
     """
 
-    if not isinstance(text, str):
+    if not isinstance(text, str) or not text or not any(letter.isalpha() for letter in text):
         return ()
     end_punct = ['.', '?', '!']
     text_list = re.findall(r'([^.!?]*[.!?])\s*', text)
