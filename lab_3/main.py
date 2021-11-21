@@ -183,11 +183,6 @@ class NGramTrie:
                 n_gram = tuple(zip(*[word[i:] for i in range(self.size)]))
                 word_tuple += (n_gram,)
             self.n_grams += (word_tuple,)
-        # n_grams = tuple(tuple(tuple(zip(*[word[i:] for i in range(self.size)]))
-        #                       for word in sen if word)
-        #                 for sen in encoded_corpus if sen)
-        # n_grams = tuple(tuple(word for word in sen if word)
-        #                 for sen in n_grams if sen)
         return 0
 
     def get_n_grams_frequencies(self) -> int:
