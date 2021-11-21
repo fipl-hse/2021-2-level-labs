@@ -203,7 +203,6 @@ class NGramTrie:
         """
         if not self.n_grams or not isinstance(self.n_grams, tuple):
             return 1
-        print(self.n_grams)
         for sen in self.n_grams:
             for word in sen:
                 for n_gram in word:
@@ -355,7 +354,6 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
         return -1
     unknown_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
-    print(unknown_n_grams, known_n_grams)
     distance = 0
     for unk_index, unk_n_gram in enumerate(unknown_n_grams):
         if unk_n_gram not in known_n_grams:
@@ -373,7 +371,7 @@ class LanguageDetector:
     """
 
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -382,7 +380,11 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        if language_profile not in self.language_profiles:
+            self.language_profiles[language_profile.language] = language_profile
+        return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
@@ -392,7 +394,16 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
+        if (not isinstance(unknown_profile, LanguageProfile)
+                or not isinstance(k, int)
+                or not isinstance(trie_levels, tuple)
+                or not all(isinstance(i, int) for i in trie_levels)):
+            return -1
+        lang_distance = {}
+        for lang_name, lang_profile in self.language_profiles.items():
+            distance = calculate_distance(unknown_profile, lang_profile, k, trie_levels[0])
+            lang_distance[lang_name] = distance
+        return lang_distance
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
