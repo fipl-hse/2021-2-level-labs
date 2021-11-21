@@ -86,9 +86,7 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if not isinstance(letter, str) or not letter:
-            return -1
-        if letter not in self.storage:
+        if not isinstance(letter, str) or not letter or letter not in self.storage:
             return -1
         else:
             return self.storage[letter]
@@ -153,7 +151,6 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
 
@@ -163,7 +160,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         for word in sentence:
             letter_tuple = ()
             for letter_id in word:
-                letter_tuple += (storage.get_id_by_letter(letter_id),)
+                letter_tuple += (storage.get_letter_by_id(letter_id),)
             word_tuple += (letter_tuple,)
         decoded_text += (word_tuple,)
     return decoded_text
