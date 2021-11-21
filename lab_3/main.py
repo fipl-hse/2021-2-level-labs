@@ -188,7 +188,13 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
         pass
+
+
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -210,6 +216,26 @@ class NGramTrie:
             )
         )
         """
+        if not isinstance(encoded_corpus,tuple):
+            return 1
+        bigramms_corpus = []
+        # print(self.size)
+        for sentence in encoded_corpus:
+            bigramms_sentence = []
+            for token in sentence:
+                bigramms_token = []
+                first_index = 0
+
+                last_index = first_index + self.size
+                while last_index <= len(token):
+                    bigramm = token[first_index:last_index]
+                    first_index +=1
+                    last_index +=1
+                    bigramms_token.append(tuple(bigramm))
+                bigramms_sentence.append(tuple(bigramms_token))
+            bigramms_corpus.append(tuple(bigramms_sentence))
+        self.n_grams = tuple(bigramms_corpus)
+        return 0
         pass
 
     def get_n_grams_frequencies(self) -> int:
@@ -228,6 +254,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
+        if not self.n_grams:
+            return 1
+        for bigramms_sentence in self.n_grams:
+            for bigramms_token in bigramms_sentence:
+                for bigramm in bigramms_token:
+                    if bigramm not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[bigramm] = 1
+                    else:
+                        self.n_gram_frequencies[bigramm] +=1
+        return 0
         pass
 
     # 8
@@ -262,6 +298,11 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
+        self.storage = letter_storage
+        self.language = language_name
+        # self.tries = NGramTrie.n_grams
+        self.tries = []
+        self.n_words = []
         pass
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
@@ -281,6 +322,15 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+        for size in ngram_sizes:
+            self.tries.append(NGramTrie(size, self.storage))
+        for trie in self.tries:
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
         pass
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
@@ -307,6 +357,20 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
+        if not isinstance(k, int) or not isinstance(trie_level,int):
+            return ()
+        if trie_level < 1 or k < 1:
+            return()
+        for trie in self.tries:
+            if trie.size == trie_level:
+                dict_n_grams = sorted(trie.n_gram_frequencies.items(), key = lambda x: -x[1])
+                top_common_n_grams = []
+                for element in dict_n_grams:
+                    top_common_n_grams.append(element[0])
+                top_common_n_grams = tuple(top_common_n_grams[:k])
+                return top_common_n_grams
+
+        return()
         pass
 
     # 8
@@ -347,6 +411,19 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
+    if not isinstance(unknwon_profile, LanguageProfile) \
+            or not isinstance(known_profile, LanguageProfile) \
+            or not isinstance(k, int) or not isinstance(trie_level, int):
+        return -1
+    unknown_top_k_n_grams = unknwon_profile.get_top_k_n_grams(k, trie_level)
+    known_top_k_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    for index, value in enumerate(unknown_top_k_n_grams):
+        if value in known_top_k_n_grams:
+            distance += abs(index - known_top_k_n_grams.index(value))
+        else:
+            distance += len(known_top_k_n_grams)
+    return distance
     pass
 
 
