@@ -354,7 +354,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -369,7 +369,20 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not (isinstance(unknown_profile, LanguageProfile)
+            and isinstance(known_profile, LanguageProfile)
+            and isinstance(k, int)
+            and isinstance(trie_level, int)):
+        return -1
+    frequency_unknown = unknown_profile.get_top_k_n_grams(k, trie_level)
+    frequency_known = known_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    for ind, element in enumerate(frequency_unknown):
+        if element in frequency_known:
+            distance += abs(ind-frequency_known.index(element))
+        else:
+            distance += len(frequency_known)
+    return distance
 
 
 # 8
