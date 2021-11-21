@@ -191,12 +191,11 @@ class NGramTrie:
                 for id_index, letter_id in enumerate(encoded_word):
                     if id_index + self.size <= len(encoded_word):
                         n_gram_word.append(tuple(encoded_word[id_index:id_index + self.size]))
-                n_gram_sentence.append(tuple(n_gram_word))
+                if n_gram_word:
+                    n_gram_sentence.append(tuple(n_gram_word))
             n_gram_corpus.append(tuple(n_gram_sentence))
         self.n_grams = tuple(n_gram_corpus)
         return 0
-
-
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -214,7 +213,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not self.n_grams:
+            return 1
+        for n_gram_sentence in self.n_grams:
+            for n_gram_word in n_gram_sentence:
+                for n_gram in n_gram_word:
+                    if n_gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] = 1
+                    else:
+                        self.n_gram_frequencies[n_gram] += 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
