@@ -127,7 +127,7 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         if not isinstance(corpus, tuple):
-            return 1
+            return -1
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
