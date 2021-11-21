@@ -68,7 +68,7 @@ class LetterStorage:
     """
 
     def __init__(self):
-        self.counter = 0
+        self.counter = 1
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
@@ -131,7 +131,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-
     encoded_text = tuple(tuple(tuple(storage.get_id_by_letter(letter)
                                      for letter in word)
                                for word in sentence)
@@ -164,7 +163,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -186,7 +188,27 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+
+        n_grams = []
+        n_grams_word = []
+        n_grams_sentence = []
+        counter = 0
+
+        for enc_sentence in encoded_corpus:
+            for word in enc_sentence:
+                while counter < len(word)-self.size+1:
+                    n_grams_word.append(tuple(word[counter:counter+self.size]))
+                    counter += 1
+                counter = 0
+                n_grams_sentence.append(tuple(n_grams_word))
+                n_grams_word = []
+            n_grams.append(tuple(n_grams_sentence))
+            n_grams_sentence = []
+
+        self.n_grams = tuple(n_grams)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -204,7 +226,17 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not self.n_grams:
+            return 1
+
+        for enc_sentence in self.n_grams:
+            for enc_word in enc_sentence:
+                for n_gram in enc_word:
+                    if n_gram in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] += 1
+                    else:
+                        self.n_gram_frequencies[n_gram] = 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
