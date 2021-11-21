@@ -230,8 +230,6 @@ class NGramTrie:
         for key, value in n_grams_dictionary.items():
             if isinstance(key, tuple) and isinstance(value, int):
                 self.n_gram_frequencies[key] = value
-        if not n_grams_dictionary:
-            return 0
         return 0
         # self.n_gram_frequencies.update(n_grams_dictionary)
 
