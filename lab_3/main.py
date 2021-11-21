@@ -41,22 +41,19 @@ def tokenize_by_sentence(text: str) -> tuple:
         clean_text.append(clean_sentence.split())
         clean_sentence = ''
 
-    split_tokens = []  # list for sentence consisted of split tokens
-    token = []  # list for split word
-    ready_text = []
-
     # split words by letters
+    ready_text = []
     for sentence in clean_text:
+        split_tokens = []  # list for sentence
         for word in sentence:
+            token = []  # list for word
             token += '_'
             for letter in word:
                 token += letter
             token += '_'
             split_tokens.append(tuple(token))
-            token = []  # clean the list for the next word
         if split_tokens:  # check for not creating tuple with empty tuples
             ready_text.append(tuple(split_tokens))
-        split_tokens = []  # clean the list for the next sentence
 
     return tuple(ready_text)
 
@@ -392,7 +389,6 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     return distance
 
 
-
 # 8
 class LanguageDetector:
     """
@@ -400,7 +396,7 @@ class LanguageDetector:
     """
     
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
