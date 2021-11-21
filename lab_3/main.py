@@ -215,8 +215,9 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        if not isinstance(self.n_grams, tuple):
+        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
             return 1
+        self.n_grams = tuple([self.n_grams])
         for text in self.n_grams:
             for sentence in text:
                 for word in sentence:
