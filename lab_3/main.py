@@ -26,7 +26,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     # split text by sentence
     text = text.lower()
-    text = re.split(r'[.!?] ', text)
+    text = re.split(r'[.!?] |\n', text)
 
     # tokenization of sentence
     deutsch_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
@@ -202,7 +202,8 @@ class NGramTrie:
                     n_grams_word.append(tuple(word[counter:counter+self.size]))
                     counter += 1
                 counter = 0
-                n_grams_sentence.append(tuple(n_grams_word))
+                if n_grams_word:  # check for not adding an empty tuple
+                    n_grams_sentence.append(tuple(n_grams_word))
                 n_grams_word = []
             n_grams.append(tuple(n_grams_sentence))
             n_grams_sentence = []
