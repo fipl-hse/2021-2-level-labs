@@ -121,7 +121,15 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+
+        for text in corpus:
+            for sentence in text:
+                for word in sentence:
+                    for letter in word:
+                        self._put_letter(letter)
+        return 0
 
 
 # 4
