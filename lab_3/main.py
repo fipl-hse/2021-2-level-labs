@@ -122,7 +122,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                     word_id.append(storage.get_id_by_letter(letter))
             sentence_id.append(tuple(word_id))
         corpus_id.append(tuple(sentence_id))
-        print(tuple(corpus_id))
     return tuple(corpus_id)
 
 
@@ -134,7 +133,20 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    text_corpus = []
+    for sentence_id in corpus:
+        sentence = []
+        for word_id in sentence_id:
+            word = []
+            for letter_id in word_id:
+                if letter_id in storage.storage.values():
+                    word.append(storage.get_letter_by_id(letter_id))
+            sentence.append(tuple(word))
+        text_corpus.append(tuple(sentence))
+    return tuple(text_corpus)
 
 
 # 6
@@ -144,7 +156,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage.storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -166,7 +181,22 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        n_gram_corpus = []
+        for encoded_sentence in encoded_corpus:
+            n_gram_sentence = []
+            for encoded_word in encoded_sentence:
+                n_gram_word = []
+                for id_index, letter_id in enumerate(encoded_word):
+                    if id_index + self.size <= len(encoded_word):
+                        n_gram_word.append(tuple(encoded_word[id_index:id_index + self.size]))
+                n_gram_sentence.append(tuple(n_gram_word))
+            n_gram_corpus.append(tuple(n_gram_sentence))
+        self.n_grams = tuple(n_gram_corpus)
+        return 0
+
+
 
     def get_n_grams_frequencies(self) -> int:
         """
