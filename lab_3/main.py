@@ -51,7 +51,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         for word in sentence:
             if word != ' ':
                 tokenized_word.append(word)
-            if word == ' ':
+            elif word == ' ':
                 tokenized_word.append('_')
                 ready_words.append(tokenized_word)
                 tokenized_word = ['_']
@@ -392,6 +392,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
             distance += len(known_freq)
     return distance
 
+
 # 8
 class LanguageDetector:
     """
@@ -399,7 +400,7 @@ class LanguageDetector:
     """
 
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -408,7 +409,10 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        self.language_profiles[language_profile.language] = language_profile
+        return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
@@ -418,7 +422,16 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
+        if not (isinstance(unknown_profile, LanguageProfile)
+                and isinstance(k, int)
+                and isinstance(trie_levels, tuple)
+                and isinstance(trie_levels[0], int)):
+            return -1
+        dict_distance = {}
+        for label, profile in self.language_profiles.items():
+            dict_distance[label] = calculate_distance(unknown_profile, profile, k, trie_levels[0])
+        return dict_distance
+
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
