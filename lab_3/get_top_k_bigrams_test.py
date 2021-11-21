@@ -42,6 +42,7 @@ I wish I thought What Jolly Fun'''.lower()
         self.assertEqual(profile.storage, storage)
 
         profile.create_from_tokens(encoded_text, (2,))
+
         actual = profile.get_top_k_n_grams(2, 2)
         self.assertEqual(len(actual), 2)
 
