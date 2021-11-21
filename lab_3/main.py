@@ -217,15 +217,15 @@ class NGramTrie:
         """
         if not isinstance(self.n_grams, tuple) or self.n_grams == ():
             return 1
-        self.n_grams = tuple([self.n_grams])
-        for text in self.n_grams:
-            for sentence in text:
-                for word in sentence:
-                    for ngram in word:
-                        if ngram not in self.n_gram_frequencies.keys():
-                            self.n_gram_frequencies[ngram] = 1
-                        else:
-                            self.n_gram_frequencies[ngram] += 1
+        #self.n_grams = tuple([self.n_grams])
+        #for text in self.n_grams:
+        for sentence in self.n_grams:
+            for word in sentence:
+                for ngram in word:
+                    if ngram not in self.n_gram_frequencies.keys():
+                        self.n_gram_frequencies[ngram] = 1
+                    else:
+                        self.n_gram_frequencies[ngram] += 1
         return 0
 
 
@@ -294,7 +294,8 @@ class LanguageProfile:
             summa = 0
             for value in trie.n_gram_frequencies.values():
                 summa += value
-            self.n_words.append(summa)
+            #self.n_words.append(summa)
+            self.n_words.append(len(trie.n_gram_frequencies))
         return 0
 
 
@@ -442,3 +443,4 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
         """
         pass
+
