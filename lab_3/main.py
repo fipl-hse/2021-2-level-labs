@@ -114,7 +114,7 @@ class LetterStorage:
         """
         if not isinstance(letter_id, int) or letter_id not in self.storage.values():
             return -1
-        for element in self.storage.keys():
+        for element in self.storage.items():
             if element[1] == letter_id:
                 return element[0]
 
@@ -283,9 +283,9 @@ def freq_dict_decoder(profile: NGramTrie, freq_dict: dict) -> dict:
     """
     for element in profile.n_gram_frequencies.items():
         string_for_dict = ''
-        for element in element[0]:
+        for freq in element[0]:
             for item in profile.storage.storage.items():
-                if item[1] == element:
+                if item[1] == freq:
                     string_for_dict += item[0]
         freq_dict[string_for_dict] = element[1]
     return freq_dict
