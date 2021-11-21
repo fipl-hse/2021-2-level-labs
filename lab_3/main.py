@@ -26,13 +26,13 @@ def tokenize_by_sentence(text: str) -> tuple:
     split_regex = re.compile(r'[.|!|?|…]')
     text = filter(lambda t: t, [t.strip() for t in split_regex.split(text)])
     letters_result = []
-    shitty_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+    wrong_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     deutsch_buchstabe = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'ß': 'ss'}
     for sentence in text:
         sentence = sentence.lower()
-        for symbols in shitty_symbols:
+        for symbols in wrong_symbols:
             sentence = sentence.replace(symbols, '')
         tokens = sentence.split()
         for word in tokens:
@@ -41,7 +41,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         letters = []
         for token in tokens:
             letters.append(tuple(['_'] + list(token) + ['_']))
-        if letters == []:
+        if not letters:
             return tuple(letters)
         letters_result.append(tuple(letters))
     return tuple(letters_result)
@@ -200,7 +200,7 @@ class NGramTrie:
                         index += 1
                     tokens.append(tuple(grams))
             result.append(tuple(tokens))
-            self.n_grams = tuple(result)
+        self.n_grams = tuple(result)
         return 0
 
     def get_n_grams_frequencies(self) -> int:
