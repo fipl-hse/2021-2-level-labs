@@ -108,10 +108,10 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        if not isinstance(letter_id, int) or (letter_id not in self.storage.values()):
-            return -1
-
         new_storage = {v: k for k, v in self.storage.items()}
+
+        if not isinstance(letter_id, int) or letter_id not in new_storage:
+            return -1
 
         return new_storage[letter_id]
 
