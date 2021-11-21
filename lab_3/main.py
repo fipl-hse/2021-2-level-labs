@@ -64,6 +64,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self.id_number = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -74,14 +75,13 @@ class LetterStorage:
         if not isinstance(letter, str):
             return -1
 
-        id_number = 1
         while True:
             if letter in self.storage:
                 return 0
-            if id_number in self.storage.values():
-                id_number += 1
+            if self.id_number in self.storage.values():
+                self.id_number += 1
             else:
-                self.storage[letter] = id_number
+                self.storage[letter] = self.id_number
                 return 0
 
     def get_id_by_letter(self, letter: str) -> int:
