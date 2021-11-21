@@ -71,8 +71,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(ready_tuple)
 
 
-
-
 # 4
 class LetterStorage:
     """
@@ -177,12 +175,11 @@ class NGramTrie:
     """
 
     def __init__(self, n: int, letter_storage: LetterStorage):
-        self.n = n
         self.size = n
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
-    
+
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
@@ -276,7 +273,10 @@ class LanguageProfile:
     """
 
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.tries = []
+        self.n_words = []
+        self.language = language_name
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -295,7 +295,15 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
+            return 1
+        for size in ngram_sizes:
+            instance = NGramTrie(size, self.storage)
+            self.tries.append(instance)
+            instance.extract_n_grams(encoded_corpus)
+            instance.get_n_grams_frequencies()
+            self.n_words.append(len(instance.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -321,7 +329,14 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int) or k < 1 or trie_level < 1:
+            return ()
+
+        for instance in self.trie:
+            instance.get_n_grams_frequencies()
+            if instance.size == trie_level:
+                sorted_frequences = sorted(instance.n_gram_frequencies, key=instance.n_gram_frequencies.get)[:k]
+                return tuple(sorted_frequences)
 
     # 8
     def save(self, name: str) -> int:
