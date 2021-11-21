@@ -177,12 +177,17 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return -1
-        n_grams = tuple(tuple(tuple(zip(*[word[i:] for i in range(self.size)]))
-                              for word in sen if word)
-                        for sen in encoded_corpus if sen)
-        n_grams = tuple(tuple(word for word in sen if word)
-                        for sen in n_grams if sen)
-        self.n_grams = n_grams
+        for sen in encoded_corpus:
+            word_tuple = ()
+            for word in sen:
+                n_gram = tuple(zip(*[word[i:] for i in range(self.size)]))
+                word_tuple += (n_gram,)
+            self.n_grams += (word_tuple,)
+        # n_grams = tuple(tuple(tuple(zip(*[word[i:] for i in range(self.size)]))
+        #                       for word in sen if word)
+        #                 for sen in encoded_corpus if sen)
+        # n_grams = tuple(tuple(word for word in sen if word)
+        #                 for sen in n_grams if sen)
         return 0
 
     def get_n_grams_frequencies(self) -> int:
@@ -203,12 +208,14 @@ class NGramTrie:
         """
         if not self.n_grams or not isinstance(self.n_grams, tuple):
             return 1
+        print(self.n_grams)
         for sen in self.n_grams:
             for word in sen:
-                if word not in self.n_gram_frequencies:
-                    self.n_gram_frequencies[word] = 1
-                else:
-                    self.n_gram_frequencies[word] += 1
+                for n_gram in word:
+                    if n_gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] = 1
+                    else:
+                        self.n_gram_frequencies[n_gram] += 1
         return 0
 
     # 8
@@ -353,14 +360,14 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
         return -1
     unknown_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
-    distance_list = []
+    print(unknown_n_grams, known_n_grams)
+    distance = 0
     for unk_index, unk_n_gram in enumerate(unknown_n_grams):
         if unk_n_gram not in known_n_grams:
-            distance_list.append(len(known_n_grams))
+            distance += len(known_n_grams)
         for k_index, k_n_gram in enumerate(known_n_grams):
             if unk_n_gram == k_n_gram:
-                distance_list.append(abs(unk_index-k_index))
-    distance = sum(distance_list)
+                distance += abs(unk_index-k_index)
     return distance
 
 
