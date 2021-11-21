@@ -2,7 +2,7 @@
 Lab 3
 Language classification using n-grams
 """
-
+import json
 from typing import Dict, Tuple
 import re
 
@@ -282,7 +282,6 @@ class LanguageProfile:
             if extraction_failure or frequencies_failure:
                 return 1
             self.tries.append(n_gram_trie)
-
             self.n_words.append(len(n_gram_trie.n_gram_frequencies))
         ''' 
         for ngram_size in ngram_sizes:
@@ -341,7 +340,37 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        print('save')
+        if not isinstance(name, str):
+            return 1
+        '''{
+            "freq": {
+                "a": 1, "g": 2, "_": 2, "i": 1,
+                "m": 2, "n": 1, "o": 1, "p": 1, "r": 2,
+                "_p": 1, "am": 1, "g_": 1, "in": 1,
+                "gr": 1, "mi": 1, "mm": 1, "ng": 1,
+                "og": 1, "pr": 1, "ra": 1, "ro": 1
+            },
+            "n_words": [
+                9,
+                12
+            ],
+            "name": "en"
+        }'''
+        freq = {}
+        profile_as_dict = {}
+        for n_gram_trie in self.tries:
+            print(n_gram_trie)
+            freq += {''.join(map(self.storage.get_letter_by_id, k)): v
+                    for k, v in n_gram_trie.n_gram_frequencies.items()}
+        profile_as_dict['freq'] = freq
+        profile_as_dict['n_words'] = self.n_words
+        profile_as_dict['name'] = self.language
+        with open(name, 'w') as file:
+            json_string = json.dumps(profile_as_dict)
+            file.write(json_string)
+        return 0
+
 
     # 8
     def open(self, file_name: str) -> int:
@@ -353,7 +382,14 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name) as file:
+            profile = json.load(file)
+        # self.language = profile[]
+        # self.tries =
+        # self.n_words =
+        return 0
 
 
 # 6
@@ -385,8 +421,9 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
             distance += len(frequency_kn)
         for index_kn, element_kn in enumerate(frequency_kn):
             if element_unk == element_kn:
-                distance += index_unk - index_kn
+                distance += abs(index_unk - index_kn)
     return distance
+
 
 # 8
 class LanguageDetector:
@@ -395,7 +432,7 @@ class LanguageDetector:
     """
 
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -404,10 +441,15 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        if language_profile not in self.language_profiles:
+            self.language_profiles[language_profile.language] = language_profile
+        print(self.language_profiles)
+        return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[
-                                                                                               str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> \
+            Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
@@ -415,7 +457,17 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
+        if not (isinstance(unknown_profile, LanguageProfile)
+                and isinstance(k, int)
+                and isinstance(trie_levels, tuple)):
+            return -1
+        dict_label_score = {}
+        for language, language_profile in self.language_profiles.items():
+            dict_label_score[language] = calculate_distance(unknown_profile,
+                                                            language_profile,
+                                                            k,
+                                                            trie_levels[0])
+        return dict_label_score
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
