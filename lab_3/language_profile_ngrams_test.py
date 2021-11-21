@@ -35,11 +35,9 @@ I wish I thought What Jolly Fun'''.lower()
         encoded_text = encode_corpus(storage, text)
         trie = NGramTrie(n=2, letter_storage=storage)
         trie.extract_n_grams(encoded_text)
-        print('в тесте', trie.n_grams)
 
         trie_threegrams = NGramTrie(n=3, letter_storage=storage)
         trie_threegrams.extract_n_grams(encoded_text)
-        print('в тесте', trie_threegrams.n_grams)
 
         profile = LanguageProfile(letter_storage=storage, language_name='en')
         self.assertEqual(profile.tries, [])
