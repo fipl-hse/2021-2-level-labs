@@ -2,6 +2,7 @@
 Lab 3
 Language classification using n-grams
 """
+import json
 from math import fabs
 
 from typing import Dict, Tuple
@@ -240,7 +241,12 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for i in n_grams_dictionary.items():
+            if isinstance(i[0], tuple) and isinstance(i[1], int):
+                self.n_gram_frequencies[i[0]] = i[1]
+        return 0
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -259,7 +265,24 @@ class NGramTrie:
         pass
 
 
+def freq_dict_decoder(profile: NGramTrie, freq_dict: dict) -> dict:
+    """
+    Decodes n_gram_freq in dict
+    :param freq_dict: dictionary with frequencies
+    :param profile: profile from tries
+    :return: 0 if profile saves, 1 if any errors occurred
+    """
+    for element in profile.n_gram_frequencies.items():
+        string_for_dict = ''
+        for q in element[0]:
+            for e in profile.storage.storage.items():
+                if e[1] == q:
+                    string_for_dict += e[0]
+        freq_dict[string_for_dict] = element[1]
+    return freq_dict
 # 6
+
+
 class LanguageProfile:
     """
     Stores and manages language profile information
@@ -274,7 +297,7 @@ class LanguageProfile:
     def create_from_tokens(self, encoded_corpus: tuple, _sizes: tuple) -> int:
         """
         Creates a language profile
-        :param letters: a tuple of encoded letters
+        :param encoded_corpus: a tuple of encoded letters
         :param _sizes: a tuple of  sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
@@ -345,9 +368,37 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        if not isinstance(name, str):
+            return 1
+        freq_dict = {}
+        for profile in self.tries:
+            profile.get_n_grams_frequencies()
+            freq_dict = freq_dict_decoder(profile, freq_dict)
+        profile_as_dict = {'freq': freq_dict, 'n_words': self.n_words, 'name': self.language}
+        with open(name, 'w') as file:
+            json_string = json.dumps(profile_as_dict)
+            file.write(json_string)
+        return 0
 
     # 8
+    def freq_dict_coder(self, profile_dict: dict, size: int) -> NGramTrie:
+        """
+        Decodes n_gram_freq in dict
+        :param size: size of n-gramm
+        :param profile_dict: dictionary with letters and their frequency
+        :return: 0 if profile saves, 1 if any errors occurred
+        """
+        n_gramm = NGramTrie(size, self.storage)
+        for pair in profile_dict['freq'].items():
+            if len(pair[0]) == size:
+                n_gramm.n_gram_frequencies[pair[0]] = pair[1]
+        for element in n_gramm.n_gram_frequencies:
+            if len(element) == size:
+                for letter in element:
+                    n_gramm.storage._put_letter(letter)
+        self.tries.append(n_gramm)
+        return n_gramm
+
     def open(self, file_name: str) -> int:
         """
         Opens language profile from json file and writes output to
@@ -357,7 +408,19 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name, 'r') as lang_profile_file:
+            profile_dict = json.load(lang_profile_file)
+        list_size = []
+        for i in profile_dict['freq']:
+            if len(i) not in list_size:
+                list_size.append(len(i))
+        for element in list_size:
+            self.freq_dict_coder(profile_dict, element)
+        self.language = profile_dict['name']
+        self.n_words = profile_dict['n_words']
+        return 0
 
 
 # 6
@@ -399,7 +462,7 @@ class LanguageDetector:
     """
 
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -408,7 +471,10 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        self.language_profiles[language_profile.language] = language_profile
+        return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
@@ -418,7 +484,14 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
+        if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int) or \
+                not isinstance(trie_levels, Tuple):
+            return -1
+        return_dict = {}
+        for i in self.language_profiles.values():
+            distance = calculate_distance(unknown_profile, i, k, trie_levels[0])
+            return_dict[i.language] = distance
+        return return_dict
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
@@ -440,7 +513,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, 
+    def detect(self, unknown_profile: LanguageProfile,
                k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
