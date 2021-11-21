@@ -385,7 +385,7 @@ class LanguageProfile:
         with open(file_name) as file:
             profile = json.load(file)
         self.language = profile["name"]
-        self.tries =
+        self.tries = []
         # создать LetterStorage и заполнить с помощью ключей конкатенированных frequency
         # сначала берём frequency и разбиваем на несколько словарей в зависимости от длины ключа
         # {2: {"ab: 1", "bd": 2},
