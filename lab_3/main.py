@@ -190,8 +190,8 @@ class NGramTrie:
         all_sentences = []
         for sentence_tuple in encoded_corpus:
             for word_tuple in sentence_tuple:
-                for i in range(len(word_tuple)-1):
-                    word.append(tuple([word_tuple[i], word_tuple[i+1]]))
+                for i in range(len(word_tuple)-self.size+1):
+                    word.append(tuple([word_tuple[i+j] for j in range(self.size)]))
                 sentence.append(tuple(word))
                 word = []
             all_sentences.append(tuple(sentence))
@@ -221,11 +221,11 @@ class NGramTrie:
         for text in self.n_grams:
             for sentence in text:
                 for word in sentence:
-                    for bigram in word:
-                        if bigram not in self.n_gram_frequencies.keys():
-                            self.n_gram_frequencies[bigram] = 1
+                    for ngram in word:
+                        if ngram not in self.n_gram_frequencies.keys():
+                            self.n_gram_frequencies[ngram] = 1
                         else:
-                            self.n_gram_frequencies[bigram] += 1
+                            self.n_gram_frequencies[ngram] += 1
         return 0
 
 
@@ -261,7 +261,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -280,7 +283,20 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.tries.append(trie)
+            summa = 0
+            for value in trie.n_gram_frequencies.values():
+                summa += value
+            self.n_words.append(summa)
+        return 0
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -306,7 +322,14 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int) or k < 1 or trie_level < 1:
+            return ()
+        for trie in self.tries:
+            if trie.size == trie_level:
+                sorted_keys = tuple(sorted(trie.n_gram_frequencies,
+                                 key=trie.n_gram_frequencies.get, reverse=True)[:k])
+                return sorted_keys
+        return ()
 
     # 8
     def save(self, name: str) -> int:
