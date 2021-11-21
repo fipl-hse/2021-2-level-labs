@@ -257,12 +257,15 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
-        :param letters: a tuple of encoded letters
+        :param encoded_corpus: a tuple of encoded letters
         :param ngram_sizes: a tuple of ngram sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
@@ -276,7 +279,17 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
+            return 1
+        for ngram_size in ngram_sizes:
+            trie = NGramTrie(ngram_size, self.storage)
+            extraction_failure = trie.extract_n_grams(encoded_corpus)
+            frequencies_failure = trie.get_n_grams_frequencies()
+            if extraction_failure or frequencies_failure:
+                return 1
+            self.tries.append(trie)
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -302,8 +315,17 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
-
+        if not isinstance(k, int) \
+                or not isinstance(trie_level, int)\
+                or k <= 0:
+            return ()
+        for trie in self.tries:
+            if trie.size == trie_level:
+                freq = trie.n_gram_frequencies
+                top = sorted(freq, key=freq.get, reverse=True)
+                top = top[:k]
+                return tuple(top)
+        return ()
     # 8
     def save(self, name: str) -> int:
         """
@@ -327,7 +349,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -342,9 +364,20 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
-
-
+    if not isinstance(unknown_profile, LanguageProfile) \
+            or not isinstance(known_profile, LanguageProfile) \
+            or not isinstance(k, int) \
+            or not isinstance(trie_level, int):
+        return -1
+    top_1 = unknown_profile.get_top_k_n_grams(k, trie_level)
+    top_2 = known_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    for gram in top_1:
+        if gram in top_2:
+            distance += abs(top_1.index(gram) - top_2.index(gram))
+        else:
+            distance += len(top_2)
+    return distance
 # 8
 class LanguageDetector:
     """
