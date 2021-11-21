@@ -34,7 +34,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     for number, symbol in enumerate(text):
         if symbol not in ['.', '?', '!', '…'] and number + 1 != len(text):
             sentence += symbol
-        elif number + 1 == len(text):
+        elif number + 1 == len(text) and symbol not in ['.', '?', '!', '…']:
             sentence += symbol
             all_sentences.append(sentence.lower())
         else:
