@@ -256,7 +256,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -275,7 +278,21 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+        for n_gram_size in ngram_sizes:
+            n_gram = NGramTrie(n_gram_size, self.storage)
+            n_gram.extract_n_grams(encoded_corpus)
+            self.tries.append(n_gram)
+            n_gram.get_n_grams_frequencies()
+        for n_gram_trie in self.tries:
+            n_gram_frequency = 0
+            for unique_n_gram in n_gram_trie.n_gram_frequencies:
+                n_gram_frequency += 1
+            self.n_words.append(n_gram_frequency)
+        return 0
+
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
