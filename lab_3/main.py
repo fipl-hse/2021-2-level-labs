@@ -22,12 +22,16 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     # if isinstance(text,str) is False:
     # return None
+    if not isinstance(text,str):
+        return None
     t = text.split()
     output_text = []
     start_sentence = 0
+    stop_symbols = "1234567890?!@#$%^&*()_-+=~`\"':;\\|/.,><{}[]"
+    end_symbols = "!?."
     for i, word in enumerate(t):
         sentence_list = []
-        if word[-1] in "!?." and (t[-1] == word or t[i + 1][0].isupper() is True or t[i + 1][0].isdigit() is True):
+        if word[-1] in end_symbols and (t[-1] == word or t[i + 1][0].isupper() is True or t[i + 1][0].isdigit() is True):
             sentence = t[start_sentence:i + 1]
             start_sentence = i + 1
             for token in sentence:
@@ -37,7 +41,7 @@ def tokenize_by_sentence(text: str) -> tuple:
                 token = token.replace('ü', 'ue')
                 token = token.replace('ä', 'ae')
                 token = token.replace('ß', 'ss')
-                for symbol in "1234567890?!@#$%^&*()_-+=~`\"':;\\|/.,><{}[]":
+                for symbol in stop_symbols:
                     token = token.replace(symbol, '')
                 for symbol in token:
                     standard_word.append(symbol)
@@ -64,6 +68,8 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
+        if not isinstance(letter,str):
+            return -1
         if letter.isalpha() is False and letter != '_':
             return -1
         if letter not in self.storage:
@@ -98,6 +104,8 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
+        if not isinstance(corpus,tuple):
+            return -1
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
@@ -116,6 +124,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
+    if not( isinstance(storage,LetterStorage) or isinstance(corpus,tuple)):
+        return()
     coded_corpus = []
     for sentence in corpus:
         coded_sentence = []
@@ -139,6 +149,8 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
+    if not (isinstance(corpus,tuple) or isinstance(storage,LetterStorage)):
+        return ()
     decoded_corpus = []
     for sentence in corpus:
         decoded_sentence = []
@@ -296,6 +308,8 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
+        if not (isinstance(encoded_corpus,tuple) or isinstance(ngram_sizes,tuple)):
+            return 1
         for n in ngram_sizes:
             summa = 0
             trie = NGramTrie(n, self.storage)
