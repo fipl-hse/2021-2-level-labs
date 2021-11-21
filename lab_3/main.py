@@ -17,8 +17,8 @@ def split_words(token: str) -> tuple:
     :return: a token split into letters
     """
     deutsch_letters = {"ä": "ae", "ü": "ue", "ß": "ss", "ö": "oe"}
-    for key in deutsch_letters:
-        token.replace(key, deutsch_letters[key])
+    for key in deutsch_letters.items():
+        token.replace(key[0], key[1])
     skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
     token_list = []
     for element in token:
@@ -114,9 +114,9 @@ class LetterStorage:
         """
         if not isinstance(letter_id, int) or letter_id not in self.storage.values():
             return -1
-        for element in self.storage:
-            if self.storage[element] == letter_id:
-                return element
+        for element in self.storage.keys():
+            if element[1] == letter_id:
+                return element[0]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -203,8 +203,8 @@ class NGramTrie:
         list_n_gramms = []
         final_list = []
         for i in encoded_corpus:
-            for a in i:
-                seq = [a[q:] for q in range(self.size)]
+            for element in i:
+                seq = [element[q:] for q in range(self.size)]
                 n_gramm = tuple(zip(*seq))
                 list_n_gramms.append(n_gramm)
         while () in list_n_gramms:
@@ -237,10 +237,11 @@ class NGramTrie:
             return 1
         for i in self.n_grams:
             for n_gramm in i:
-                if n_gramm in self.n_gram_frequencies:
-                    self.n_gram_frequencies[n_gramm] += 1
-                else:
-                    self.n_gram_frequencies[n_gramm] = 1
+                for n in n_gramm:
+                    if n in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n] += 1
+                    else:
+                        self.n_gram_frequencies[n] = 1
         return 0
 
     # 8
@@ -282,10 +283,10 @@ def freq_dict_decoder(profile: NGramTrie, freq_dict: dict) -> dict:
     """
     for element in profile.n_gram_frequencies.items():
         string_for_dict = ''
-        for q in element[0]:
-            for e in profile.storage.storage.items():
-                if e[1] == q:
-                    string_for_dict += e[0]
+        for element in element[0]:
+            for item in profile.storage.storage.items():
+                if item[1] == element:
+                    string_for_dict += item[0]
         freq_dict[string_for_dict] = element[1]
     return freq_dict
 # 6
@@ -453,12 +454,12 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     known_k_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
     distance = 0
     for i in enumerate(unknown_k_n_grams):
-        for e in enumerate(known_k_n_grams):
+        for element in enumerate(known_k_n_grams):
             if i[1] not in known_k_n_grams:
                 distance += len(known_k_n_grams)
                 break
-            if i[1] == e[1]:
-                distance += fabs(i[0] - e[0])
+            if i[1] == element[1]:
+                distance += fabs(i[0] - element[0])
     return int(distance)
 
 
