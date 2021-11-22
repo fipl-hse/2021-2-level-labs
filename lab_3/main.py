@@ -135,7 +135,7 @@ class LetterStorage:
                         return -1
                     else:
                         self._put_letter(letter)
-            return 0
+        return 0
 
 
 # 4
@@ -350,7 +350,7 @@ class LanguageProfile:
         for n_gram in self.tries:
             if n_gram.size == trie_level:
                 frequency = n_gram.n_gram_frequencies
-                top_k_ngrams = tuple(sorted(frequency))
+                top_k_ngrams = tuple(sorted(frequency, key=frequency.get, reverse=True)[:k])
                 return top_k_ngrams
         else:
             return ()
