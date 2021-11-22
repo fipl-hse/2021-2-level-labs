@@ -5,6 +5,7 @@ Language classification using n-grams
 
 from typing import Dict, Tuple
 import re
+import json
 
 
 # 4
@@ -317,7 +318,20 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        if not isinstance(name, str):
+            return 1
+        freq_dict = {}
+        profile_dict = {}
+        for trie in self.tries:
+            for n_gram, freq in trie.n_gram_frequencies.items():
+                decode_n_gram = ''.join([self.storage.get_letter_by_id(letter_id) for letter_id in n_gram])
+                freq_dict.update({decode_n_gram: freq})
+        profile_dict['freq'] = freq_dict
+        profile_dict['n_words'] = self.n_words
+        profile_dict['name'] = self.language
+        with open(name, 'w', encoding='utf-8') as profile:
+            json.dump(profile_dict, profile)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
@@ -329,7 +343,6 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
 
 
 # 6
