@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -20,6 +20,44 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+    if not isinstance(text, str):
+        return ()
+
+    text = text.lower()
+
+    change_umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+
+    for umlauts, changed_letters in change_umlauts.items():
+        text = text.replace(umlauts, changed_letters)
+
+    text_no_digits = re.split(r"[\d]", text)
+    text = ''.join(text_no_digits)
+    changed_text = re.split(r"[.!?] ", text)
+
+    if '' in changed_text:
+        changed_text.remove('')
+    framed_tokens = []
+
+    for sentence in changed_text:
+        sentence = sentence.split()
+
+        words = []
+
+        for word in sentence:
+            letters = [letter for letter in word if letter.isalpha()]
+            if len(letters)!= 0:
+                letters.insert(0, '_')
+                letters.append('_')
+                words.append(tuple(letters))
+            if len(words) == 0:
+                return ()
+
+        framed_tokens.append(tuple(words))
+    return tuple(framed_tokens)
+
+
+
+
     pass
 
 
