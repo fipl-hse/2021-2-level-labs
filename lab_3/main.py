@@ -45,7 +45,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         text = text.replace(symbol, '')
 
     for symbol in text:
-        if symbol.isspace() or symbol.isalpha():
+        if symbol not in ['.', '...', '?', '!']:
             tokenized_sentence += symbol
         else:
             tokenized_sentences.append(tokenized_sentence.lower())
