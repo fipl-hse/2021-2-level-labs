@@ -56,11 +56,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(framed_tokens)
 
 
-
-
-    pass
-
-
 # 4
 class LetterStorage:
     """
@@ -76,7 +71,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter,str):
+            return -1
+
+        if letter not in self.storage:
+            self.storage[letter] = len(self.storage) +1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -84,7 +84,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -92,7 +95,13 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+
+        for letters, ids in self.storage.items():
+            if ids == letter_id:
+                return letters
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -100,7 +109,19 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance (corpus, tuple):
+            return -1
+
+        letters = []
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    if letter not in self.storage:
+                        letters.append(letter)
+                    self._put_letter(letter)
+        if letters == list(self.storage):
+            return 0
+
 
 
 # 4
