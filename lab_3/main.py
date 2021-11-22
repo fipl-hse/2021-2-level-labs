@@ -26,48 +26,31 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
     text = text.lower()
-    text = text.replace('\n', ' ')
+    text = re.split(r'[.!?] |\n', text)
     dict_for_replace = {"ö": "oe", "ü": "ue", "ä": "ae", "ß": "ss"}
-    for umlaut, diphthong in dict_for_replace.items():
-        text = text.replace(umlaut, diphthong)
-    symbols = ['`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
-               '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
-               '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-    for i in text:
-        if i in symbols:
-            text = text.replace(i, '')
-    text_list = re.split(r"[.?!]", text)
-    for i in text_list:
-        if i == '':
-            text_list.remove(i)
-    ready_tuple = []
-
-    for sentence in text_list:
-        ready_words = []
-        sentence = sentence.strip()
-        sentence = sentence + ' '
-        tokenized_word = ['_']
+    list_text = []
+    new_sentence = ''
+    for sentence in text:
+        for symbol in sentence:
+            if symbol in dict_for_replace:
+                new_sentence += dict_for_replace[symbol]
+            elif symbol.isalpha() or symbol.isspace():
+                new_sentence += symbol
+        list_text.append(new_sentence.split())
+        new_sentence = ''
+    ready_text = []
+    for sentence in list_text:
+        list_sentence = []
         for word in sentence:
-            if word != ' ':
-                tokenized_word.append(word)
-            elif word == ' ':
-                tokenized_word.append('_')
-                ready_words.append(tokenized_word)
-                tokenized_word = ['_']
-                continue
-        ready_tuple.append(ready_words)
-
-    for tup_one in ready_tuple:
-        for tup_two in tup_one:
-            if tup_two[1] == '_':
-                tup_one.remove(tup_two)
-            else:
-                continue
-    for i, sentence in enumerate(ready_tuple):
-        for j, word in enumerate(sentence):
-            sentence[j] = tuple(word)
-        ready_tuple[i] = tuple(sentence)
-    return tuple(ready_tuple)
+            list_word = []
+            list_word += '_'
+            for letter in word:
+                list_word += letter
+            list_word += '_'
+            list_sentence.append(tuple(list_word))
+        if list_sentence:
+            ready_text.append(tuple(list_sentence))
+    return tuple(ready_text)
 
 
 # 4
