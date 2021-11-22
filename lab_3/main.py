@@ -109,12 +109,16 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        new_storage = {v: k for k, v in self.storage.items()}
 
-        if not isinstance(letter_id, int) or letter_id not in new_storage:
+        if not isinstance(letter_id, int):
             return -1
 
-        return new_storage[letter_id]
+        for k, v in self.storage.items():
+            if v == letter_id:
+                return k
+            else:
+                return -1
+
 
     def update(self, corpus: tuple) -> int:
         """
