@@ -66,7 +66,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.id = 0
+        self.id = 1
 
 
     def _put_letter(self, letter: str) -> int:
