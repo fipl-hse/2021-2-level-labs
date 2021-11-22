@@ -82,6 +82,14 @@ class LetterStorage:
             self.counter += 1
         return 0
 
+    def unprotected_put_letter(self, letter: str) -> int:
+        if not isinstance(letter, str) or not letter:
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.counter
+            self.counter += 1
+        return 0
+
     def get_id_by_letter(self, letter: str) -> int:
         """
         Gets a unique id by a letter
@@ -383,7 +391,7 @@ class LanguageProfile:
         self.n_words = profile_dict['n_words']
 
         for letter in ''.join(profile_dict['freq'].keys()):
-            self.storage._put_letter(letter)
+            self.storage.unprotected_put_letter(letter)
 
         n_grams = []
         frequencies = tuple(profile_dict['freq'].values())
