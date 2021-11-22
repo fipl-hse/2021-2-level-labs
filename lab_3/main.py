@@ -3,6 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 
+import re
 from typing import Dict, Tuple
 
 
@@ -20,8 +21,41 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
-
+    if not isinstance(text, str):
+        return ()
+    invaluable_trash = ['`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    text = text.lower()
+    for symbol in invaluable_trash:
+        text = text.replace(symbol, '')
+    for letter in text:
+        if letter == 'ö':
+            text = text.replace(letter, 'oe')
+        elif letter == 'ü':
+            text = text.replace(letter, 'ue')
+        elif letter == 'ä':
+            text = text.replace(letter, 'ae')
+        elif letter == 'ß':
+            text = text.replace(letter, 'ss')
+    regexp = re.compile('[.!?] ?')
+    sentences = re.split(regexp, text)
+    cleaned_sentences = []
+    for sentence in sentences:
+        cleaned_sentence = sentence.strip()
+        if cleaned_sentence:
+            cleaned_sentences.append([cleaned_sentence])
+    for ind, sentence in enumerate(cleaned_sentences):
+        for words in sentence:
+            tokens = words.split()
+            for i, token in enumerate(tokens):
+                token = list(token)
+                token.insert(0, '_')
+                token.append('_')
+                tokens[i] = tuple(token)
+                cleaned_sentences[ind] = tokens
+    tuple_tokens = tuple((tuple(i) for i in cleaned_sentences))
+    return tuple_tokens
 
 # 4
 class LetterStorage:
@@ -31,6 +65,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self.id = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -38,7 +73,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.id
+            self.id += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -46,7 +86,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -54,7 +96,11 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if letter_id not in self.storage.values():
+            return -1
+        for x in self.storage.items():
+            if x[1] == letter_id:
+                return x[0]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -62,7 +108,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for word in sentence:
+                for i in word:
+                    self._put_letter(i)
+        return 0
 
 
 # 4
@@ -73,7 +125,12 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return()
+    encoded_corpus = tuple(
+                     tuple(tuple(storage.get_id_by_letter(number) for number in word)
+                           for word in sentence) for sentence in corpus)
+    return encoded_corpus
 
 
 # 4
@@ -84,7 +141,12 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return()
+    decoded_corpus = tuple(
+                     tuple(tuple(storage.get_letter_by_id(number) for number in word)
+                           for word in sentence) for sentence in corpus)
+    return decoded_corpus
 
 
 # 6
@@ -94,7 +156,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -116,7 +181,21 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        words = []
+        sentences = []
+        corpus = []
+        for sentence in encoded_corpus:
+            for word in sentence:
+                for i in range(len(word)-self.size+1):
+                    words.append(tuple([word[i+j] for j in range(self.size)]))
+                sentences.append(tuple(words))
+                words = []
+            corpus.append(tuple(sentences))
+            sentences = []
+        self.n_grams = tuple(corpus)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -134,7 +213,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
+            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    if n_gram in self.n_gram_frequencies.keys():
+                        self.n_gram_frequencies[n_gram] += 1
+                    else:
+                        self.n_gram_frequencies[n_gram] = 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -168,7 +256,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -187,7 +278,16 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.tries.append(trie)
+            self.n_words.append(len(trie.n_grams_frequencies))
+        return 0
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -213,7 +313,16 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int):
+            return ()
+        for trie in self.trie:
+            if trie.size == trie_level:
+                sorted_keys = tuple(sorted(trie.n_gram_frequencies,
+                                           key = trie.n_gram_frequencies.get, reverse = True)[:k])
+                return sorted_keys
+        return()
+
+
 
     # 8
     def save(self, name: str) -> int:
@@ -238,7 +347,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -253,7 +362,19 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int):
+        return -1
+    if not isinstance(known_profile, LanguageProfile) or not isinstance(trie_level, int):
+        return -1
+    unknown_n_gramm_freq = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_n_gramm_freq = known_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    for ind, element in enumerate(unknown_n_gramm_freq):
+        if element in known_n_gramm_freq:
+            distance += abs(ind-known_n_gramm_freq.index(element))
+        else:
+            distance += len(known_n_gramm_freq)
+    return distance
 
 
 # 8
