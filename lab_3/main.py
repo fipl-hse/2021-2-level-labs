@@ -3,6 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 
+import json
 import re
 from typing import Dict, Tuple
 
@@ -25,7 +26,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or not text:
         return ()
 
-    sentences = re.compile(r'[.|!|?]')
+    sentences = re.compile(r'[.!?]')
     sentences = filter(lambda t: t, [t.strip() for t in sentences.split(text)])
     result = []
 
@@ -167,7 +168,6 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
@@ -202,7 +202,8 @@ class NGramTrie:
             for token in sentence:
                 n_grams_token = []
                 if self.size >= len(token):
-                    n_grams_sentence.append(token)
+                    special_tokens = [token]
+                    n_grams_sentence.append(tuple(special_tokens))
                 else:
                     i = 0
                     while i <= (len(token) - self.size):
@@ -247,7 +248,12 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, freq in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple):
+                self.n_gram_frequencies[n_gram] = freq
+        return 0
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -348,7 +354,9 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        if not isinstance(name, str):
+            return 1
+
 
     # 8
     def open(self, file_name: str) -> int:
@@ -402,7 +410,7 @@ class LanguageDetector:
     """
     
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -411,7 +419,10 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        self.language_profiles[language_profile.language] = language_profile
+        return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
@@ -421,7 +432,14 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
+        if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int)\
+                or not isinstance(trie_levels, Tuple):
+            return -1
+        language_distances = {}
+        for element in self.language_profiles.values():
+            distance = calculate_distance(unknown_profile, element, k, trie_levels[0])
+            language_distances[element.language] = distance
+        return language_distances
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
