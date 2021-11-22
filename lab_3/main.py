@@ -174,7 +174,10 @@ class NGramTrie:
     """
 
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -196,7 +199,25 @@ class NGramTrie:
             )
         )
         """
-        pass
+
+        # works for 2 and 3 grams
+
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+
+        for sentence in encoded_corpus:
+            sentence_grams = ()
+            for word in sentence:
+                word_grams = ()
+                # splitting the whole tuple into sentences, then words
+                # cutting to tuples of position + gram size length
+                # adding them to the word, then sentence, then corpus
+                for i in range(len(word) - self.size+1):
+                    word_grams += ((word[i:i + self.size]),)
+                sentence_grams += (word_grams,)
+            self.n_grams += (sentence_grams,)
+
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -214,7 +235,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not self.n_grams or not isinstance(self.n_grams, tuple):
+            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for gram in word:
+                    if gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[gram] = 1
+                    else:
+                        self.n_gram_frequencies[gram] += 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -248,7 +278,10 @@ class LanguageProfile:
     """
 
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language_name = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -267,7 +300,9 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple)):
+            return 1
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
