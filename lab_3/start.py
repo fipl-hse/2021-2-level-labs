@@ -55,27 +55,49 @@ if __name__ == '__main__':
     # encoding text
     eng_text_encoded = encode_corpus(storage, eng_tokens)
     de_text_encoded = encode_corpus(storage, de_tokens)
-    unk_text_encoded = encode_corpus(storage, unknown_tokens)
+    unknown_text_encoded = encode_corpus(storage, unknown_tokens)
 
     # decoding text
-    eng_text_decoded = decode_corpus(storage, eng_tokens)
-    de_text_decoded = decode_corpus(storage, de_tokens)
-    unk_text_decoded = decode_corpus(storage, unknown_tokens)
+    # eng_text_decoded = decode_corpus(storage, eng_text_encoded)
+    # de_text_decoded = decode_corpus(storage, de_text_encoded)
+    # unknown_text_decoded = decode_corpus(storage, unknown_text_encoded)
 
     # creating n-grams
     eng_grams = NGramTrie(3, storage)
+    eng_grams.extract_n_grams(eng_text_encoded)
+    eng_grams.get_n_grams_frequencies()
+
     de_grams = NGramTrie(3, storage)
+    de_grams.extract_n_grams(de_text_encoded)
+    de_grams.get_n_grams_frequencies()
+
     unknown_grams = NGramTrie(3, storage)
+    unknown_grams.extract_n_grams(unknown_text_encoded)
+    unknown_grams.get_n_grams_frequencies()
 
     # creating language profiles
     eng_profile = LanguageProfile(storage, 'en')
-    de_profile = LanguageProfile(storage, 'de')
-    unknown_profile = LanguageProfile(storage, 'unknown')
+    eng_profile.create_from_tokens(eng_text_encoded, (3,))
 
-    # saving
-    # calculating distance
-    # detecting language
+    de_profile = LanguageProfile(storage, 'de')
+    de_profile.create_from_tokens(de_text_encoded, (3,))
+
+    unknown_profile = LanguageProfile(storage, 'unknown')
+    unknown_profile.create_from_tokens(unknown_text_encoded, (3,))
+
+    # saving and opening
+    unknown_profile.save('unknown_profile.json')
+    profile_unk = LanguageProfile(storage, '')
+    profile_unk.open('unknown_profile.json')
+
+    # detecting language and calculating distance
+    detector = LanguageDetector()
+    detector.register_language(eng_profile)
+    detector.register_language(de_profile)
+    language = detector.detect(profile_unk, 5, (3,))
+    print(language)
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    EXPECTED_SCORE = {'en': 24, 'de': 25}
+    assert language, EXPECTED_SCORE
