@@ -2,7 +2,7 @@
 Lab 3
 Language classification using n-grams
 """
-
+import json
 from typing import Dict, Tuple
 
 
@@ -272,6 +272,13 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
+        if not isinstance(n_grams_dictionary,dict):
+            return 1
+        for n_gram in n_grams_dictionary:
+            if isinstance (n_gram,tuple):
+                self.n_gram_frequencies[n_gram] = n_grams_dictionary[n_gram]
+
+        return 0
         pass
 
     # 10
@@ -380,6 +387,23 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
+        if not isinstance(name, str):
+            return 1
+        freq = {}
+        profile = {}
+        with open (name, 'w') as file:
+            profile['name'] = self.language
+            profile['n_words'] = self.n_words
+            for trie in self.tries:
+
+                for n_gram in trie.n_gram_frequencies:
+                    new_n_gram = ''
+                    for id in n_gram:
+                        new_n_gram += self.storage.get_letter_by_id(id)
+                    freq[new_n_gram] = trie.n_gram_frequencies[n_gram]
+            profile['freq'] = freq
+            file.write(json.dumps(profile))
+        return 0
         pass
 
     # 8
@@ -392,6 +416,33 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
+        if not isinstance(file_name, str):
+            return 1
+        with open (file_name, 'r') as file:
+            profile = json.load(file)
+            self.n_words = profile['n_words']
+            self.language = profile['name']
+            self.tries = []
+            decoded_n_grams = []
+            for n_gram in profile['freq']:
+                new_n_gram = []
+                for letter in n_gram:
+                    self.storage._put_letter(letter)
+                    new_n_gram.append(self.storage.get_id_by_letter(letter))
+                decoded_n_grams.append((tuple(new_n_gram), profile['freq'][n_gram]))
+            sizes = {}
+
+            for n_gram in decoded_n_grams:
+                size = len(n_gram[0])
+                if size not in sizes:
+                    sizes[size] = {n_gram[0]:n_gram[1]}
+                else:
+                    sizes[size][n_gram[0]] = n_gram[1]
+            for size, freq_dict in sizes.items():
+                tries = NGramTrie(size, self.storage)
+                tries.n_gram_frequencies = freq_dict
+                self.tries.append(tries)
+        return 0
         pass
 
 
@@ -434,6 +485,7 @@ class LanguageDetector:
     """
     
     def __init__(self):
+        self.language_profiles = {}
         pass
 
     def register_language(self, language_profile: LanguageProfile) -> int:
@@ -443,6 +495,12 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        self.language_profiles[language_profile.language] = language_profile
+
+        return 0
+
         pass
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
@@ -453,6 +511,14 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
+        if not isinstance(unknown_profile, LanguageProfile) \
+                or not isinstance(k, int) or not isinstance(trie_levels, tuple):
+            return -1
+        detection = {}
+        for language, profile in self.language_profiles.items():
+            detection[language] = calculate_distance(unknown_profile, profile, k, trie_levels[0])
+            print(detection)
+        return detection
         pass
 
 
