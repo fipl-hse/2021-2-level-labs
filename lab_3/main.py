@@ -411,7 +411,15 @@ class LanguageDetector:
         :param trie_levels: N-gram size - tuple with one int for score 8
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
-        pass
+        if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int) \
+                or not isinstance(trie_levels, tuple):
+            return -1
+        freq_dict = {}
+        for language, trie in self.language_profiles.items():
+            for trie_level in trie_levels:
+                distance = calculate_distance(unknown_profile, trie, k, trie_level)
+            freq_dict[language] = distance
+        return freq_dict
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
