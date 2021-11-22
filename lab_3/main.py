@@ -79,7 +79,6 @@ class LetterStorage:
     """
 
     def __init__(self):
-        self.id = 1
         self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
@@ -91,8 +90,7 @@ class LetterStorage:
         if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
-            self.storage[letter] = self.id
-            self.id += 1
+            self.storage[letter] = len(self.storage) + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -429,9 +427,9 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     unknown_freq = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_freq = known_profile.get_top_k_n_grams(k, trie_level)
     distance = 0
-    for index, tuple in enumerate(unknown_freq):
-        if tuple in known_freq:
-            distance += abs(index - known_freq.index(tuple))
+    for index, n_gram in enumerate(unknown_freq):
+        if n_gram in known_freq:
+            distance += abs(index - known_freq.index(n_gram))
         else:
             distance += len(known_freq)
     return distance
@@ -458,7 +456,8 @@ class LanguageDetector:
         self.language_profiles[language_profile.language] = language_profile
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) \
+            -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
