@@ -356,7 +356,25 @@ class LanguageProfile:
         """
         if not isinstance(name, str):
             return 1
+        profile_as_dict = {}
+        freq_dict = {}
+        string_for_file = ''
 
+        for trie in self.tries:
+            for key, value in trie.n_gram_frequencies.items():
+                # (1, 2): 1;, where key = n-gram, value = how many times it appears
+                for element in key:
+                    string_for_file += self.storage.get_letter_by_id(element)
+                freq_dict[string_for_file] = value
+
+        profile_as_dict['freq'] = freq_dict
+        profile_as_dict['n_words'] = self.n_words
+        profile_as_dict['name'] = self.language
+        with open(name, 'w', encoding="UTF-8") as file:
+            # added parameter "encoding" because of code style
+            json_string = json.dumps(profile_as_dict)
+            file.write(json_string)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
@@ -368,7 +386,30 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name, 'r') as file:
+            profile_dict = json.load(file)
+        self.language = profile_dict['name']
+        self.n_words = profile_dict['n_words']
+        freq_dict = profile_dict['freq']
+
+        size_of_gram = ''
+        counter = -1
+
+        for gram, value in freq_dict.items():
+            gram_correct = []
+            for letter in gram:
+                self.storage.update(tokenize_by_sentence(letter))
+                gram_correct.append(self.storage.get_id_by_letter(letter))
+            if len(gram) != size_of_gram:
+                size_of_gram = len(gram)
+                counter += 1
+                self.tries.append(NGramTrie(size_of_gram, self.storage))
+                self.tries[counter].n_gram_frequencies[tuple(gram_correct)] = value
+            else:
+                self.tries[counter].n_gram_frequencies[tuple(gram_correct)] = value
+        return 0
 
 
 # 6
