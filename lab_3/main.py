@@ -339,6 +339,7 @@ class LanguageProfile:
                 top_k_n_grams = tuple(sorted(trie.n_gram_frequencies,
                                              key=trie.n_gram_frequencies.get, reverse=True)[:k])
                 return top_k_n_grams
+        return ()
 
     # 8
     def save(self, name: str) -> int:
