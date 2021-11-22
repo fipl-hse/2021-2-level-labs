@@ -348,6 +348,31 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name, 'r') as lang_profile_file:
+            profile_dict = json.load(lang_profile_file)
+        self.language = profile_dict['name']
+        self.n_words = profile_dict['n_words']
+        freq_dict = {}
+        count = 1
+        for n_gram in profile_dict['freq'].keys():
+            for letter in n_gram:
+                if letter not in self.storage.storage:
+                    self.storage.storage[letter] = count
+                    count += 1
+        n_gram_list = list(profile_dict['freq'])
+        for n_gram, freq in profile_dict['freq'].items():
+            for n_word in self.n_words:
+                n_gram_tuple = ()
+                for letter in n_gram:
+                    n_gram_tuple += (self.storage.get_id_by_letter(letter),)
+                freq_dict[n_gram_tuple] = freq
+                if n_gram == n_gram_list[n_word-1]:
+                    trie = NGramTrie(len(n_gram), self.storage)
+                    trie.extract_n_grams_frequencies(freq_dict)
+                    self.tries.append(trie)
+        return 0
 
 
 # 6
