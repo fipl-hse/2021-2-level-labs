@@ -41,9 +41,8 @@ def tokenize_by_sentence(text: str) -> tuple:
                        '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '1', '2', '3', '4', '5', '6',
                        '7', '8', '9', '0']
 
-    for symbol in text:
-        if symbol in special_symbols:
-            text = text.replace(symbol, '')
+    for symbol in special_symbols:
+        text = text.replace(symbol, '')
 
     for symbol in text:
         if symbol.isspace() or symbol.isalpha():
