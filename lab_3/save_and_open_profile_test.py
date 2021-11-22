@@ -61,8 +61,6 @@ I wish I thought What Jolly Fun'''.lower()
         self.assertEqual(profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'eng_profile.json')), 0)
 
         self.assertEqual(lang, profile.language)
-        print(profile_storage.storage)
-        print(profile.storage.storage)
         self.assertEqual(len(profile_storage.storage), len(profile.storage.storage))
         self.assertEqual(profile_n_words, profile.n_words)
         self.assertEqual(len(profile_tries), len(profile.tries))

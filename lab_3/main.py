@@ -116,6 +116,19 @@ class LetterStorage:
                         return -1
         return 0
 
+    def update_string(self, text: str) -> int:
+        """
+        Fills a storage by letters from the glued_letters
+        :param text: a string with glued_letters
+        :return: 0 if succeeds, 1 if not
+        """
+        if not isinstance(text, str):
+            return -1
+        for letter in text:
+            if self._put_letter(letter) == -1:
+                return -1
+        return 0
+
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -164,6 +177,7 @@ class NGramTrie:
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -231,7 +245,6 @@ class NGramTrie:
             if isinstance(key, tuple) and isinstance(value, int):
                 self.n_gram_frequencies[key] = value
         return 0
-        # self.n_gram_frequencies.update(n_grams_dictionary)
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -239,7 +252,7 @@ class NGramTrie:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
-        pass
+
 
     # 10
     def calculate_log_probabilities(self) -> int:
@@ -347,10 +360,11 @@ class LanguageProfile:
         profile_as_dict["freq"] = freq
         profile_as_dict["n_words"] = self.n_words
         profile_as_dict["name"] = self.language
-        with open(name, "w", encoding="utf-8") as file:
-            json_string = json.dumps(profile_as_dict)
-            file.write(json_string)
+        # changes for name 'file'
+        with open(name, "w", encoding="utf-8") as lang_profile_file:
+            json.dump(profile_as_dict, lang_profile_file)
         return 0
+
 
 
     # 8
@@ -367,12 +381,27 @@ class LanguageProfile:
             return 1
         with open(file_name, encoding="utf-8") as lang_profile_file:
             profile_dict = json.load(lang_profile_file)
+        # task 1: name and n_words
         self.language = profile_dict["name"]
         self.n_words = profile_dict["n_words"]
+
         self.tries = []
-        # for freq in profile_dict["freq"]
-            # for n_gram, frequency in freq:
-                # if len(n_gram) == .size:
+
+        # task 3: fill the storage
+        for glued_letter in "".join(profile_dict["freq"]):
+            self.storage.update_string(glued_letter)
+
+        # task 2, 4, 5: get {2: {"ab": 1, "bd": 2}, 3: {"abc": 5, "cde": 6}}
+        freq_with_size = {}
+        for n_gram, frequency in profile_dict["freq"].items():
+            if len(n_gram) not in freq_with_size:
+                freq_with_size[len(n_gram)] = {}
+            freq_with_size[len(n_gram)][tuple(map(self.storage.get_id_by_letter, n_gram))] = frequency
+            # fill self.tries
+        for size, freq_dict in freq_with_size.items():
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams_frequencies(freq_dict)
+            self.tries.append(trie)
         return 0
 
 
