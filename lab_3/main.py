@@ -4,6 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
+import re
 
 
 # 4
@@ -20,8 +21,29 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+    if not (isinstance(text, str) and text):
+        return ()
 
-
+    sentences = re.split(r'[.!?]\s', text)
+    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    signs = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
+                       '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '1', '2', '3', '4', '5', '6',
+                       '7', '8', '9', '0']
+    for index, sentence in enumerate(sentences):
+        new_sentence = sentence.lower()
+        for element in sentence:
+            if element in umlauts:
+                new_sentence = new_sentence.replace(element, umlauts.get(element))
+            if element in signs:
+                new_sentence = new_sentence.replace(element, '')
+        new_sentence = new_sentence.split()
+        if not new_sentence:
+            return ()
+        for token_index, token in enumerate(new_sentence):
+            upd_token = '_' + token + '_'
+            new_sentence[token_index] = tuple(upd_token) #each token has its own tuple (in order in the sentence)
+        sentences[index] = tuple(new_sentence)
+    return tuple(sentences)
 
 # 4
 class LetterStorage:
@@ -31,6 +53,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
+        self.count = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -38,7 +61,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = self.count
+            self.count += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -46,7 +74,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -54,7 +84,11 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+        for letter, new_letter_id in self.storage.items():
+            if new_letter_id == letter_id:
+                return letter
 
     def update(self, corpus: tuple) -> int:
         """
@@ -62,8 +96,17 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    if self._put_letter(letter) != -1:
+                        self._put_letter(letter)
+                    else:
+                        return -1
 
+        return 0
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
