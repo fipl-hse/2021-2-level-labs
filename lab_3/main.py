@@ -116,9 +116,7 @@ class LetterStorage:
         for k, v in self.storage.items():
             if v == letter_id:
                 return k
-            else:
-                return -1
-
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
