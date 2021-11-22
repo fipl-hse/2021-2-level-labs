@@ -150,6 +150,14 @@ class LetterStorage:
 
         return 0
 
+    def update(self, letter: str) -> int:
+        """
+        Fills a storage with a letter
+        :param letter: a letter
+        :return: 0 if succeeds, 1 if not
+        """
+        return self._put_letter(letter)
+
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -338,7 +346,8 @@ class NGramTrie:
             return 1
 
         for n_gram in n_grams_dictionary:
-            if isinstance(n_gram, tuple) and isinstance(n_grams_dictionary[n_gram], (int, float)):
+            if isinstance(n_gram, tuple) \
+                    and isinstance(n_grams_dictionary[n_gram], (int, float)):
                 self.n_gram_log_probabilities[n_gram] = n_grams_dictionary[n_gram]
 
         return 0
@@ -386,7 +395,7 @@ class LanguageProfile:
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
-        :param letters: a tuple of encoded letters
+        :param encoded_corpus: encoded_corpus
         :param ngram_sizes: a tuple of ngram sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
@@ -394,10 +403,12 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries -->
+        [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
 
@@ -447,9 +458,9 @@ class LanguageProfile:
 
         for trie in self.tries:
             if trie.size == trie_level:
-                most_common_ngrams_freqs = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
-                most_common_ngrams, _ = zip(*most_common_ngrams_freqs)
-                return tuple(most_common_ngrams[:k])
+                sorted_ngrams_freqs = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
+                sorted_ngrams, _ = zip(*sorted_ngrams_freqs)
+                return tuple(sorted_ngrams[:k])
 
         return ()
 
@@ -464,7 +475,7 @@ class LanguageProfile:
         if not isinstance(file_name, str):
             return 1
 
-        with open(file_name, 'w') as file:
+        with open(file_name, 'w', encoding="utf-8") as file:
             data = {"name": self.language, "n_words": self.n_words}
 
             formatted_freq = {}
@@ -498,7 +509,7 @@ class LanguageProfile:
         if not isinstance(file_name, str):
             return 1
 
-        with open(file_name, "r") as file:
+        with open(file_name, "r", encoding="utf-8") as file:
             data = json.load(file)
 
             self.language = data['name']
@@ -510,7 +521,7 @@ class LanguageProfile:
                 decoded_ngram = []
 
                 for letter in ngram:
-                    self.storage._put_letter(letter)
+                    self.storage.update(letter)
                     decoded_ngram.append(self.storage.get_id_by_letter(letter))
 
                 decoded_ngrams.append((tuple(decoded_ngram), data['freq'][ngram]))
@@ -534,6 +545,10 @@ class LanguageProfile:
 
     # my code
     def get_trie(self, trie_level: int):
+        """
+        Finds trie with required level
+        :param trie_level: N-gram sizes to use in comparison
+        """
         for trie in self.tries:
             if trie_level == trie.size:
                 return trie
@@ -558,7 +573,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     Соответственно расстояние между наборами равно 2.
     """
 
-    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile)\
+    if not isinstance(unknown_profile, LanguageProfile)\
+            or not isinstance(known_profile, LanguageProfile)\
             or not isinstance(k, int) or not isinstance(trie_level, int):
         return -1
 
@@ -602,13 +618,15 @@ class LanguageDetector:
 
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int])\
+            -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and their scores if input is correct,
+        otherwise -1
         """
 
         if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int)\
@@ -617,9 +635,9 @@ class LanguageDetector:
 
         result_dict = {}
 
-        for language in self.language_profiles:
+        for language, profile in self.language_profiles.items():
             result_dict[language] = calculate_distance(unknown_profile,
-                                                       self.language_profiles[language],
+                                                       profile,
                                                        k,
                                                        trie_levels[0])
 
@@ -637,7 +655,8 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :return: a probability of unknown top k ngrams
     """
 
-    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile)\
+    if not isinstance(unknown_profile, LanguageProfile) \
+            or not isinstance(known_profile, LanguageProfile)\
             or not isinstance(k, int) \
             or not isinstance(trie_level, int):
         return -1
@@ -679,10 +698,10 @@ class ProbabilityLanguageDetector(LanguageDetector):
 
         result_dict = {}
 
-        for language in self.language_profiles:
+        for language, profile in self.language_profiles.items():
             for trie_level in trie_levels:
                 result_dict[(language, trie_level)] = calculate_probability(unknown_profile,
-                                                                            self.language_profiles[language],
+                                                                            profile,
                                                                             k,
                                                                             trie_level)
 
