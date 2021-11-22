@@ -357,15 +357,15 @@ class LanguageProfile:
         freq = {}
         word = ''
         for instance in self.tries:
-            for n_gram, freq in instance.n_gram_frequencies.items():
+            for n_gram, frequency in instance.n_gram_frequencies.items():
                 for integer in n_gram:
                     word += self.storage.get_letter_by_id(integer)
-                freq[word] = freq
+                freq[word] = frequency
                 word = ''
         profile_as_dict['freq'] = freq
         profile_as_dict['n_words'] = self.n_words
         profile_as_dict['name'] = self.language
-        with open(name, 'w') as file:
+        with open(name, 'w', encoding='UTF-8') as file:
             json_string = json.dumps(profile_as_dict)
             file.write(json_string)
         return 0
@@ -382,7 +382,26 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-
+        with open(file_name, 'r', encoding="UTF-8") as file:
+            language_profile = json.load(file)
+        self.language = language_profile['name']
+        self.n_words = language_profile['n_words']
+        freq = language_profile['freq']
+        n_gram_size = 0
+        counter = -1
+        for n_gram, frequency in freq.items():
+            n_gram_tuple = []
+            for letter in n_gram:
+                self.storage.update(tokenize_by_sentence(letter))
+                n_gram_tuple.append(self.storage.get_id_by_letter(letter))
+            if len(n_gram) != n_gram_size:
+                n_gram_size = len(n_gram)
+                counter += 1
+                self.tries.append(NGramTrie(n_gram_size, self.storage))
+                self.tries[counter].n_gram_frequencies[tuple(n_gram_tuple)] = frequency
+            else:
+                self.tries[counter].n_gram_frequencies[tuple(n_gram_tuple)] = frequency
+        return 0
 
 
 # 6
