@@ -264,7 +264,7 @@ class LanguageProfile:
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
-        :param letters: a tuple of encoded letters
+        :param encoded_corpus: a tuple of encoded letters
         :param ngram_sizes: a tuple of ngram sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
@@ -388,7 +388,7 @@ class LanguageDetector:
     """
     
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -397,7 +397,11 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        if language_profile not in self.language_profiles:
+            self.language_profiles[language_profile.language] = language_profile
+        return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
