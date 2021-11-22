@@ -392,13 +392,13 @@ class LanguageProfile:
             self.storage.update_string(glued_letter)
 
         # task 2, 4, 5: get {2: {"ab": 1, "bd": 2}, 3: {"abc": 5, "cde": 6}}
-        freq_with_size = {}
+        tries_dict = {}
         for n_gram, frequency in profile_dict["freq"].items():
-            if len(n_gram) not in freq_with_size:
-                freq_with_size[len(n_gram)] = {}
-            freq_with_size[len(n_gram)][tuple(map(self.storage.get_id_by_letter, n_gram))] = frequency
+            if len(n_gram) not in tries_dict:
+                tries_dict[len(n_gram)] = {}
+            tries_dict[len(n_gram)][tuple(map(self.storage.get_id_by_letter, n_gram))] = frequency
             # fill self.tries
-        for size, freq_dict in freq_with_size.items():
+        for size, freq_dict in tries_dict.items():
             trie = NGramTrie(size, self.storage)
             trie.extract_n_grams_frequencies(freq_dict)
             self.tries.append(trie)
