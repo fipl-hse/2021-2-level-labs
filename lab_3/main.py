@@ -38,9 +38,7 @@ def tokenize_by_sentence(text: str) -> tuple:
             text = text.replace(symbol, 'ss')
 
     for symbol in text:
-        if symbol in ['~', '`', '@', '"', '#', '№', '$', ';', '%', '^', ':', '&', '*', '(', ')', '-', '_'
-                      '=', '+', "'", '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '/', '1', '2',
-                      '3', '4', '5', '6', '7', '8', '9', '0']:
+        if not symbol.isspace() or not symbol.isalpha():
             text = text.replace(symbol, '')
 
     for symbol in text:
