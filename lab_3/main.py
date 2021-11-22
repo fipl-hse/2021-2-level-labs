@@ -358,10 +358,10 @@ class LanguageProfile:
             return 1
         profile_as_dict = {}
         freq_dict = {}
-        string_for_file = ''
 
         for trie in self.tries:
             for key, value in trie.n_gram_frequencies.items():
+                string_for_file = ''
                 # (1, 2): 1;, where key = n-gram, value = how many times it appears
                 for element in key:
                     string_for_file += self.storage.get_letter_by_id(element)
