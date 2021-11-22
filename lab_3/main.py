@@ -24,6 +24,8 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
     text = text.lower()
     sentences = re.split(r'[.!?]', text)
+    umlauts = ('ö', 'ü', 'ä', 'ß')
+    replacements = ('oe', 'ue', 'ae', 'ss')
     if '' in sentences:
         sentences.remove('')
     framed_letters = []
@@ -31,10 +33,8 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentence = sentence.split()
         list_of_letters_new = []
         for word in sentence:
-            word.replace('ö', 'oe')
-            word.replace('ü', 'ue')
-            word.replace('ä', 'ae')
-            word.replace('ß', 'ss')
+            for umlaut, replacement in zip(umlauts, replacements):
+                word.replace(umlaut, replacement)
             list_of_letters = [letter for letter in word if letter.isalpha()]
             if len(list_of_letters) != 0:
                 list_of_letters.insert(0, '_')
@@ -54,7 +54,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.counter = 0
+
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -89,8 +89,7 @@ class LetterStorage:
         for key, value in self.storage.items():
             if value == letter_id:
                 return key
-        else:
-            return -1
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -209,12 +208,12 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
+        if not self.n_grams:
+            return 1
         for sentence in self.n_grams:
             for word in sentence:
                 for freq in word:
                     self.n_gram_frequencies[freq] = self.n_gram_frequencies.get(freq, 0) + 1
-        if len(self.n_gram_frequencies) == 0:
-            return 1
         return 0
 
     # 8
