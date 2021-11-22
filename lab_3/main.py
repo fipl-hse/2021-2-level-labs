@@ -384,7 +384,7 @@ class LanguageProfile:
         for gram, value in freq.items():
             gram_correct = []
             for letter in gram:
-                self.storage._put_letter(letter)
+                self.storage.update(tokenize_by_sentence(letter))
                 gram_correct.append(self.storage.get_id_by_letter(letter))
             if len(gram) != size:
                 size = len(gram)
