@@ -515,27 +515,21 @@ class LanguageProfile:
 
                 decoded_ngrams.append((tuple(decoded_ngram), data['freq'][ngram]))
 
-            groups = []
-            group = {}
-
-            ngram_size = 0
             ngram_sizes = []
+            groups = []
 
             for ngram in decoded_ngrams:
                 size = len(ngram[0])
 
-                if ngram_size == 0:
-                    ngram_size = size
-                    ngram_sizes.append(ngram_size)
-                elif ngram_size != size:
-                    ngram_size = size
-                    ngram_sizes.append(ngram_size)
-                    groups.append(group)
-                    group = {}
+                if size not in ngram_sizes:
+                    ngram_sizes.append(size)
+                    groups.append({})
 
-                group[ngram[0]] = ngram[1]
-            else:
-                groups.append(group)
+            for ngram in decoded_ngrams:
+                size = len(ngram[0])
+
+                group_index = ngram_sizes.index(size)
+                groups[group_index][ngram[0]] = ngram[1]
 
             for index, group in enumerate(groups):
                 trie = NGramTrie(ngram_sizes[index], self.storage)
