@@ -193,7 +193,8 @@ class NGramTrie:
             for token in sentence:
                 grams = []
                 if self.size >= len(token):
-                    tokens.append(token)
+                    subtokens = [token]
+                    tokens.append(tuple(subtokens))
                 else:
                     index = 0
                     while index <= (len(token) - self.size):
@@ -232,7 +233,12 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, freq in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple):
+                self.n_gram_frequencies[n_gram] = freq
+        return 0
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -336,7 +342,23 @@ class LanguageProfile:
         """
         if not isinstance(name, str):
             return 1
-
+        freq_tuple = {}
+        freq = {}
+        for trie in self.tries:
+            freq_tuple |= trie.n_gram_frequencies
+        for corpus, freq_value in freq_tuple.items():
+            string = ''
+            if isinstance(corpus, tuple):
+                for element in corpus:
+                    string += self.storage.get_letter_by_id(element)
+            else:
+                return 1
+            freq[string] = freq_value
+        file_w = {'freq': freq, 'n_words': self.n_words, 'name': self.language}
+        with open(name, 'w') as file:
+            json_string = json.dumps(file_w)
+            file.write(json_string)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
@@ -348,7 +370,29 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name, 'r') as file:
+            language_profile = json.load(file)
+        self.language = language_profile['name']
+        self.n_words = language_profile['n_words']
+        freq = language_profile['freq']
+        size = ''
+        counter = -1
+        for gram, value in freq.items():
+            gram_correct = []
+            for letter in gram:
+                self.storage._put_letter(letter)
+                gram_correct.append(self.storage.get_id_by_letter(letter))
+            if len(gram) != size:
+                size = len(gram)
+                counter += 1
+                self.tries.append(NGramTrie(size, self.storage))
+                self.tries[counter].n_gram_frequencies[tuple(gram_correct)] = value
+            else:
+                self.tries[counter].n_gram_frequencies[tuple(gram_correct)] = value
+        return 0
+
 
 
 # 6
