@@ -426,7 +426,7 @@ class LanguageProfile:
             for n_gram in profile['freq']:
                 new_n_gram = []
                 for letter in n_gram:
-                    self.storage.put_letter(letter)
+                    self.storage._put_letter(letter)
                     new_n_gram.append(self.storage.get_id_by_letter(letter))
                 decoded_n_grams.append((tuple(new_n_gram), profile['freq'][n_gram]))
             sizes = {}
