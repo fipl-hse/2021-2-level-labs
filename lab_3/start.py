@@ -32,7 +32,6 @@ am Arbeitsplatz schon mal gar nicht."""
 
     # score 6, params: k = 5, trie_level = 2
     # predict UNKNOWN_SAMPLE
-    '''''
     eng_profile = LanguageProfile(storage, 'eng')
     de_profile = LanguageProfile(storage, 'de')
     unk_profile = LanguageProfile(storage, 'unk')
@@ -45,8 +44,8 @@ am Arbeitsplatz schon mal gar nicht."""
     de_distance = calculate_distance(unk_profile, de_profile, 5, 2)
 
     RESULT_6 = eng_distance, de_distance
+    print(f'score 6. distances to english and deutsch: {RESULT_6}')
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
-    '''''
 
     # score 8, k = 5, trie_level = 3
     # predict UNKNOWN_SAMPLE
@@ -67,7 +66,7 @@ am Arbeitsplatz schon mal gar nicht."""
     detector.register_language(de_profile_8)
 
     RESULT_8 = detector.detect(unk_profile_new, 5, (3,))
-    print(RESULT_8)
+    print(f'score 8. result of detection: {RESULT_8}')
     EXPECTED_SCORE = {'en': 24, 'de': 25}
 
     # score 10, k = 1000, trie_levels = (2,)
@@ -77,5 +76,5 @@ am Arbeitsplatz schon mal gar nicht."""
     # EXPECTED_MIN_DISTANCE = ?
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    # assert RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
+    assert RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
     assert RESULT_8 == EXPECTED_SCORE, 'Detection not working'
