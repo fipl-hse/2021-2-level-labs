@@ -22,8 +22,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     # if isinstance(text,str) is False:
     # return None
-    if not isinstance(text,str):
-        return None
+    if not isinstance(text, str):
+        return ()
     t = text.split()
     output_text = []
     start_sentence = 0
@@ -31,7 +31,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     end_symbols = "!?."
     for i, word in enumerate(t):
         sentence_list = []
-        if word[-1] in end_symbols and (t[-1] == word or t[i + 1][0].isupper() is True or t[i + 1][0].isdigit() is True):
+        if word[-1] in end_symbols and (t[-1] == word or t[i + 1][0].isupper() is True or
+                                        t[i + 1][0].isdigit() is True):
             sentence = t[start_sentence:i + 1]
             start_sentence = i + 1
             for token in sentence:
@@ -68,7 +69,7 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(letter,str):
+        if not isinstance(letter, str):
             return -1
         if letter.isalpha() is False and letter != '_':
             return -1
@@ -104,7 +105,7 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(corpus,tuple):
+        if not isinstance(corpus, tuple):
             return -1
         for sentence in corpus:
             for word in sentence:
@@ -124,7 +125,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not( isinstance(storage,LetterStorage) or isinstance(corpus,tuple)):
+    if not(isinstance(storage, LetterStorage) or isinstance(corpus, tuple)):
         return()
     coded_corpus = []
     for sentence in corpus:
@@ -149,7 +150,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    if not (isinstance(corpus,tuple) or isinstance(storage,LetterStorage)):
+    if not (isinstance(corpus, tuple) or isinstance(storage, LetterStorage)):
         return ()
     decoded_corpus = []
     for sentence in corpus:
@@ -308,7 +309,7 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        if not (isinstance(encoded_corpus,tuple) or isinstance(ngram_sizes,tuple)):
+        if not (isinstance(encoded_corpus, tuple) or isinstance(ngram_sizes, tuple)):
             return 1
         for n in ngram_sizes:
             summa = 0
@@ -356,8 +357,6 @@ class LanguageProfile:
                 return tuple(ngram_list)
         return ()
 
-        pass
-
     # 8
     def save(self, name: str) -> int:
         """
@@ -396,7 +395,22 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not (isinstance(unknwon_profile, LanguageProfile) or isinstance(known_profile, LanguageProfile) or
+            isinstance(k, int) or isinstance(trie_level, int)):
+        return -1
+    result = 0
+    unknown_top_ngram = unknwon_profile.get_top_k_n_grams(k, trie_level)
+    known_top_ngram = known_profile.get_top_k_n_grams(k, trie_level)
+    for ng in unknown_top_ngram:
+        if ng in known_top_ngram:
+            length = unknown_top_ngram.index(ng) - known_top_ngram.index(ng)
+            if length < 0:
+                length *= -1
+            result += length
+        else:
+            result += len(known_top_ngram)
+    return result
+
 
 
 # 8
