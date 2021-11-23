@@ -171,7 +171,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.ngrams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -193,7 +196,20 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+
+        list_of_ngrams = []
+        for sentence in encoded_corpus:
+            ngrams_sentence = []
+            for word in sentence:
+                ngrams_word = []
+                for index in range(len(word) - (self.size - 1)):
+                    ngrams_word.append(tuple(word[index:(index + self.size)]))
+                ngrams_sentence.append(tuple(ngrams_word))
+            list_of_ngrams.append(tuple(ngrams_sentence))
+        self.ngrams = tuple(list_of_ngrams)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -211,7 +227,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not self.ngrams:
+            return 1
+        for sentence in self.ngrams:
+            for word in sentence:
+                for ngram in word:
+                    if ngram in self.n_gram_frequencies:
+                        self.n_gram_frequencies[ngram] += 1
+                    else:
+                        self.n_gram_frequencies[ngram] = 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -245,7 +270,6 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -264,7 +288,7 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
