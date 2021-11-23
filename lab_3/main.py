@@ -339,10 +339,10 @@ class LanguageProfile:
         for n in ngram_sizes:
             summa = 0
             trie = NGramTrie(n, self.storage)
-            if trie.extract_n_grams(encoded_corpus) or trie.get_n_grams_frequencies():
+            checker_1 = trie.extract_n_grams(encoded_corpus)
+            checker_2 = trie.get_n_grams_frequencies()
+            if checker_1 or checker_2:
                 return 1
-            trie.extract_n_grams(encoded_corpus)
-            trie.get_n_grams_frequencies()
             self.tries.append(trie)
             for value in trie.n_gram_frequencies.values():
                 summa += value
@@ -373,10 +373,14 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
+        if (not (isinstance(k, int) and isinstance(trie_level, int))) or \
+                k <= 0 or trie_level <= 0:
+            return ()
         for trie in self.tries:
             if trie.size == trie_level:
                 ngram_list = []
-                sorted_freq = sorted(trie.n_gram_frequencies.items(), key=lambda x: x[1], reverse=True)
+                freq_dict = trie.n_gram_frequencies
+                sorted_freq = sorted(freq_dict, key=lambda x: x[1], reverse=True)
                 for i in range(k):
                     ngram_list.append(sorted_freq[i][0])
                 return tuple(ngram_list)
