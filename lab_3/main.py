@@ -30,7 +30,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     if text:
         last_letter = text[-1]
-        if last_letter == '.' or last_letter == '!' or last_letter == '?':
+        if last_letter in ('.', '!','?'):
             text = text[:-1]
     for symbol in symbols:
         text = text.replace(symbol, '')
@@ -71,7 +71,6 @@ class LetterStorage:
     def __init__(self):
         self.storage = {}
         self.count = 0
-
     def put_letter(self, letter):
         if not isinstance(letter,str):
             return -1
@@ -123,7 +122,7 @@ class LetterStorage:
         for letter, character_id in self.storage.items():
             if character_id == letter_id:
                 return letter
-
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """

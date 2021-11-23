@@ -18,13 +18,12 @@ if __name__ == '__main__':
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
-    """ score 6, params: k = 5, trie_level = 2
+
+    def get_6_score():
+        """ score 6, params: k = 5, trie_level = 2
     predict UNKNOWN_SAMPLE
     print(calculate_distance(unknown_profile, en_profile, 5, 2))
     print(calculate_distance(unknown_profile, de_profile, 5, 2))"""
-
-
-    def get_6_score():
         eng_text = tokenize_by_sentence(ENG_SAMPLE)
         de_text = tokenize_by_sentence(GERMAN_SAMPLE)
         unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -53,13 +52,12 @@ if __name__ == '__main__':
 
     get_6_score()
 
-    """ score 8, k = 5, trie_level = 3
-    # predict UNKNOWN_SAMPLE
-    # print(detector.detect(profile_unk, 5, 3))
-    # EXPECTED_SCORE = {'en': 24, 'de': 25}"""
-
 
     def get_8_score():
+        """ score 8, k = 5, trie_level = 3
+        predict UNKNOWN_SAMPLE
+        print(detector.detect(profile_unk, 5, 3))
+        EXPECTED_SCORE = {'en': 24, 'de': 25}"""
         eng_text = tokenize_by_sentence(ENG_SAMPLE)
         de_text = tokenize_by_sentence(GERMAN_SAMPLE)
         unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
