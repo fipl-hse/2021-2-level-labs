@@ -3,6 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 import json
+import math
 from typing import Dict, Tuple
 import re
 
@@ -252,7 +253,12 @@ class NGramTrie:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
-
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, log_probability in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple) and isinstance(log_probability, float):
+                self.n_gram_log_probabilities[n_gram] = log_probability
+        return 0
 
     # 10
     def calculate_log_probabilities(self) -> int:
@@ -260,7 +266,24 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_gram_frequencies:
+            return 1
+        '''
+        for n_gram in self.n_gram_frequencies:
+            for n_gram_else in self.n_gram_frequencies:
+                if n_gram[:len(n_gram) - 1] == n_gram_else[:len(n_gram_else) - 1]:
+                    amount = round(math.fsum(n_gram[:len(n_gram) - 1]))
+                    self.n_gram_log_probabilities[n_gram] = math.log(self.n_gram_frequencies[n_gram] / amount)
+        '''
+        if not self.n_gram_frequencies:
+            return 1
+        for n_gram, frequency in self.n_gram_frequencies.items():
+            amount = 0
+            for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
+                if n_gram[:- 1] == n_gram_neighbour[:- 1]:
+                    amount += frequency_neighbour
+            self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
+        return 0
 
 
 # 6
@@ -364,8 +387,6 @@ class LanguageProfile:
         with open(name, "w", encoding="utf-8") as lang_profile_file:
             json.dump(profile_as_dict, lang_profile_file)
         return 0
-
-
 
     # 8
     def open(self, file_name: str) -> int:
@@ -494,6 +515,24 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :param trie_level: the size of ngrams
     :return: a probability of unknown top k ngrams
     """
+    if not (isinstance(unknown_profile, LanguageProfile)
+            or isinstance(known_profile, LanguageProfile)
+            or isinstance(k, int)
+            or isinstance(trie_level, int)):
+        return -1
+    '''
+    probabilty = 0
+    for n_gram in unknown_profile.get_top_k_n_grams(k, trie_level):
+        if n_gram in 
+    n_gram_trie_unk = NGramTrie(trie_level, unknown_profile.storage)
+    n_gram_trie_kn = NGramTrie(trie_level, known_profile.storage)
+
+    frequency_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
+    frequency_kn = known_profile.get_top_k_n_grams(k, trie_level)
+
+    prob_unk = n_gram_trie_unk.extract_n_grams_log_probabilities(frequency_unk)
+    prob_kn = n_gram_trie_kn.extract_n_grams_log_probabilities()
+    '''
     pass
 
 
