@@ -370,12 +370,13 @@ class LanguageProfile:
             return ()
         if k < 1:
             return ()
+        sorted_freq = (1, 1)
         for trie in self.tries:
             if trie.size == trie_level:
                 freq_dict = trie.n_gram_frequencies
                 sorted_freq = sorted(freq_dict, key=freq_dict.get, reverse=True)[:k]
                 return tuple(sorted_freq)
-        return (0, 0)
+        return ()
 
     # 8
     def save(self, name: str) -> int:
