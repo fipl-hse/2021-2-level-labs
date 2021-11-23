@@ -119,8 +119,13 @@ class LetterStorage:
                 for letter in word:
                     if self._put_letter(letter) == -1:
                         return -1
+                    else:
+                        self._put_letter(letter)
         return 0
 
+    def for_open_update(self, letter: str):
+        """update letter"""
+        return self._put_letter(letter)
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -409,9 +414,8 @@ class LanguageProfile:
             for n_gram in profile_dict['freq']:
                 decoded_n_gram = []
                 for letter in n_gram:
-                    self.storage._put_letter(letter)
-                    id_by_letter = self.storage.get_id_by_letter(letter)
-                    decoded_n_gram.append(id_by_letter)
+                    self.storage.for_open_update(letter)
+                    decoded_n_gram.append(self.storage.get_id_by_letter(letter))
                 n_grams.append((tuple(decoded_n_gram), profile_dict['freq'][n_gram]))
                 sizes = {}
             for n_gram in n_grams:
