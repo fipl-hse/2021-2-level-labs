@@ -37,9 +37,11 @@ def tokenize_by_sentence(text: str) -> tuple:
         list_text.append(symbol)
     len_for_last_symbol = len(list_text) - 1
     for index, symbol in enumerate(list_text):
+        if symbol == '\n':
+            list_text[index] = '!!!'
         if symbol in end_symbols:
             if not (index == len_for_last_symbol or (list_text[index + 1] == ' ' and
-                                                     list_text[index + 2].isupper() == True)):
+                                                     list_text[index + 2].isupper() is True)):
                 list_text[index] = ''
             else:
                 list_text[index] = '!!!'
@@ -69,7 +71,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.l_id = 1000
+        self.l_id = 1
 
     def _put_letter(self, letter: str) -> int:
         """
