@@ -144,7 +144,6 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     decode = tuple(tuple(tuple(storage.get_letter_by_id(letter_id) for letter_id in word)
                                     for word in sentence) for sentence in corpus)
     return decode
-    pass
 
 
 # 6
@@ -185,7 +184,6 @@ class NGramTrie:
                                          for i in range(len(word) - (self.size - 1)))
                                    for word in sentence) for sentence in encoded_corpus)
         return 0
-        pass
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -214,8 +212,6 @@ class NGramTrie:
                         self.n_gram_frequencies[tpl] += 1
         return 0
 
-        pass
-
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
         """
@@ -227,8 +223,7 @@ class NGramTrie:
         for key, value in n_grams_dictionary.items():
             if not isinstance(key, tuple) or not isinstance(value, int):
                 return 1
-            else:
-                self.n_gram_frequencies[key] = value
+            self.n_gram_frequencies[key] = value
         return 0
         pass
 
