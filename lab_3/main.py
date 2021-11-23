@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -20,8 +20,33 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    text = text.split()
-    return text
+    if not isinstance(text, str):
+        return ()
+    else:
+        text = text.lower()
+        sentences = re.split(r'[.?!]', text)
+        if '' in sentences:
+            sentences.remove('')
+
+        result = []
+        for sentence in sentences:
+            sentence_list = sentence.split()
+            sentence_letters = []
+            for word in sentence_list:
+                word.replace('ü', 'ue')
+                word.replace('ä', 'ae')
+                word.replace('ö', 'oe')
+                word.replace('ß', 'ss')
+                letters_list = [letter for letter in word if letter.isalpha()]
+                if letters_list:
+                    letters_list.insert(0, '_')
+                    letters_list.append('_')
+                    sentence_letters.append(tuple(letters_list))
+                if not sentence_letters:
+                    return ()
+            result.append(tuple(sentence_letters))
+        return tuple(result)
+
 
 
 # 4
@@ -39,7 +64,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage:
+            self.storage[letter] = len(self.storage) + 1
+        return 0
+
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -47,7 +77,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -55,7 +87,12 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+        for key, value in self.storage.items():
+            if value == letter_id:
+                return key
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -63,7 +100,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    self._put_letter(letter)
+        return 0
 
 
 # 4
@@ -74,7 +117,19 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for sentence in corpus:
+        encoded_sentence = []
+        for word in sentence:
+            encoded_word = []
+            for letter in word:
+                encoded_word.append(storage.get_id_by_letter(letter))
+            encoded_sentence.append(tuple(encoded_word))
+        encoded_corpus.append(tuple(encoded_sentence))
+    return tuple(encoded_corpus)
 
 
 # 4
@@ -85,7 +140,19 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for sentence in corpus:
+        encoded_sentence = []
+        for word in sentence:
+            encoded_word = []
+            for letter in word:
+                encoded_word.append(storage.get_letter_by_id(letter))
+            encoded_sentence.append(tuple(encoded_word))
+        encoded_corpus.append(tuple(encoded_sentence))
+    return tuple(encoded_corpus)
 
 
 # 6
