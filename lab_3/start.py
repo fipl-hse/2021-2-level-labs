@@ -19,19 +19,6 @@ if __name__ == '__main__':
     # print(detector.detect(unknown_profile, 1000, (2,)))
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
-    tokenized_unk = tokenize_by_sentence(SECRET_SAMPLE)
-
-    unknown_storage = LetterStorage()
-    unknown_storage.update(tokenized_unk)
-    encoded_unk_corpus = encode_corpus(unknown_storage, tokenized_unk)
-
-    unk_trie = NGramTrie(2, unknown_storage)
-    unk_trie.extract_n_grams(encoded_unk_corpus)
-    unk_trie.get_n_grams_frequencies()
-    unk_trie.calculate_log_probabilities()
-
-    unknown_profile = LanguageProfile(unknown_storage, 'unk')
-    unknown_profile.create_from_tokens(encoded_unk_corpus, (2,))
 
     detector = ProbabilityLanguageDetector()
 
@@ -41,22 +28,26 @@ if __name__ == '__main__':
         known_profile.open(os.path.join(PATH_TO_PROFILES_FOLDER, profile))
         detector.register_language(known_profile)
 
-    new_freq_dict = {}
-    for profile in detector.language_profiles.values():
-        new_freq_dict = {}
-        for trie in profile.tries:
-            for n_gram_freq in trie.n_gram_frequencies:
-                if isinstance(n_gram_freq, str):
-                    for letter in n_gram_freq:
-                        new_freq_dict[profile.storage.storage[letter]] = profile.storage.storage[letter]
-        trie.extract_n_grams_frequencies(new_freq_dict)
+    tokenized_unk = tokenize_by_sentence(SECRET_SAMPLE)
 
-    freq_dict = detector.detect(unknown_profile, 1000, (2,))
-    language_value = freq_dict.max()
-    for i in freq_dict.items():
-        if i[1] == language_value:
-            final_language = i[0]
+    unknown_storage = LetterStorage()
+    unknown_storage.update(tokenized_unk)
+    encoded_unk_corpus = encode_corpus(unknown_storage, tokenized_unk)
 
+    unknown_profile = LanguageProfile(letter_storage=unknown_storage, language_name='unk')
+    unknown_profile.create_from_tokens(encoded_unk_corpus, (2,))
+
+    probabilities = detector.detect(unknown_profile, 1000, (2,))
+
+    final_language = ()
+
+    for language, distance in probabilities.items():
+        if not final_language:
+            final_language = (language, distance)
+        elif distance < final_language[1]:
+            final_language = (language, distance)
+
+    print(final_language)
     RESULT = final_language
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'

@@ -3,9 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 import json
-import codecs
 from math import fabs, log
-
 from typing import Dict, Tuple
 import re
 
@@ -134,6 +132,17 @@ class LetterStorage:
                 for letter in word:
                     if self._put_letter(letter) == -1:
                         return -1
+        return 0
+
+    def update_letter(self, letter: str) -> int:
+        """
+        Fills a storage with a letter
+        :param letter: a letter
+        :return: 0 if succeeds, 1 if not
+        """
+        if not isinstance(letter, str):
+            return 1
+        self._put_letter(letter)
         return 0
 
 
@@ -395,57 +404,54 @@ class LanguageProfile:
         """
         if not isinstance(name, str):
             return 1
-        freq_dict = {}
-        for profile in self.tries:
-            profile.get_n_grams_frequencies()
-            freq_dict = freq_dict_decoder(profile, freq_dict)
-        profile_as_dict = {'freq': freq_dict, 'n_words': self.n_words, 'name': self.language}
-        with open(name, 'w') as file:
-            json_string = json.dumps(profile_as_dict)
-            file.write(json_string)
+        with open(name, 'w', encoding="utf-8") as file:
+            data = {"name": self.language, "n_words": self.n_words}
+            formatted_freq = {}
+            for trie in self.tries:
+                for ngram in trie.n_gram_frequencies:
+                    new_ngram = ''
+                    for letter_id in ngram:
+                        new_ngram += self.storage.get_letter_by_id(letter_id)
+                    formatted_freq[new_ngram] = trie.n_gram_frequencies[ngram]
+            data["freq"] = formatted_freq
+            json.dump(data, file)
         return 0
 
     # 8
-    def freq_dict_coder(self, profile_dict: dict, size: int) -> NGramTrie:
-        """
-        Decodes n_gram_freq in dict
-        :param size: size of n-gramm
-        :param profile_dict: dictionary with letters and their frequency
-        :return: 0 if profile saves, 1 if any errors occurred
-        """
-        n_gramm = NGramTrie(size, self.storage)
-        for pair in profile_dict['freq'].items():
-            if len(pair[0]) == size:
-                n_gramm.n_gram_frequencies[pair[0]] = pair[1]
-        for element in n_gramm.n_gram_frequencies:
-            if len(element) == size:
-                for letter in element:
-                    n_gramm.storage._put_letter(letter)
-        self.tries.append(n_gramm)
-        return n_gramm
 
-    def open(self, file_name: str) -> int:
+    def open(self, name: str) -> int:
         """
         Opens language profile from json file and writes output to
             self.language,
             self.tries,
             self.n_words fields.
-        :param file_name: name of the json file with .json format
+        :param name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        if not isinstance(file_name, str):
+        if not isinstance(name, str):
             return 1
-        lang_profile_file = codecs.open(file_name, "r", "utf_8_sig")
-        profile_dict = json.load(lang_profile_file)
-        list_size = []
-        for i in profile_dict['freq']:
-            if len(i) not in list_size:
-                list_size.append(len(i))
-        for element in list_size:
-            self.freq_dict_coder(profile_dict, element)
-        self.language = profile_dict['name']
-        self.n_words = profile_dict['n_words']
-        lang_profile_file.close()
+
+        with open(name, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            self.language = data['name']
+            self.n_words = data['n_words']
+            decoded_ngrams = []
+            for ngram in data['freq']:
+                decoded_ngram = []
+                for letter in ngram:
+                    self.storage.update_letter(letter)
+                    decoded_ngram.append(self.storage.get_id_by_letter(letter))
+                decoded_ngrams.append((tuple(decoded_ngram), data['freq'][ngram]))
+            ngram_sizes_dict = {}
+            for ngram in decoded_ngrams:
+                size = len(ngram[0])
+                if size not in ngram_sizes_dict:
+                    ngram_sizes_dict[size] = {}
+                ngram_sizes_dict[size][ngram[0]] = ngram[1]
+            for size, group in ngram_sizes_dict.items():
+                trie = NGramTrie(size, self.storage)
+                trie.n_gram_frequencies = group
+                self.tries.append(trie)
         return 0
 
 
