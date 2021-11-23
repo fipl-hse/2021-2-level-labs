@@ -109,6 +109,14 @@ class LetterStorage:
                     self._put_letter(letter)
         return 0
 
+    def new_update(self, letter: str) -> int:
+        """
+        Fills a storage with a letter
+        :param letter: a letter
+        :return: 0 if succeeds, 1 if not
+        """
+        return self._put_letter(letter)
+
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -364,7 +372,7 @@ class LanguageProfile:
             for ngram in profile['freq']:
                 encode = []
                 for letter in ngram:
-                    self.storage.put_letter(letter)
+                    self.storage.new_update(letter)
                     encode.append(self.storage.get_id_by_letter(letter))
                 decoded_ngrams.append((tuple(encode), profile['freq'][ngram]))
             for ngram in decoded_ngrams:
