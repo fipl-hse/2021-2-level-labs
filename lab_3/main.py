@@ -90,7 +90,7 @@ class LetterStorage:
             return -1
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -388,17 +388,19 @@ class LanguageProfile:
             profile_dict = json.load(lang_profile_file)
         self.language = profile_dict['name']
         self.n_words = profile_dict['n_words']
+        id_number = 1
         for key in profile_dict['freq'].keys():
             for letter in key:
                 if letter not in self.storage.storage:
-                    self.storage._put_letter(letter)
+                    self.storage.storage[letter] = id_number
+                    id_number += 1
         n_gram_dict = {}
         n_gram_tuple = ()
         for n_gram, frequency in profile_dict['freq'].items():
             if len(n_gram) not in n_gram_dict:
                 n_gram_dict[len(n_gram)] = {}
             for letter in n_gram:
-                    n_gram_tuple += (self.storage.get_id_by_letter(letter),)
+                n_gram_tuple += (self.storage.get_id_by_letter(letter),)
             n_gram_dict[len(n_gram)][n_gram_tuple] = frequency
             n_gram_tuple = ()
         for number, freq_dict in n_gram_dict.items():
