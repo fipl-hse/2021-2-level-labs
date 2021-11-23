@@ -66,13 +66,13 @@ class LetterStorage:
         self.count = 1
 
     def _put_letter(self, letter: str) -> int:
-        if not isinstance(letter, str):
-            return -1
         """
         Puts a letter into storage, assigns a unique id
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
+        if not isinstance(letter, str):
+            return -1
         if letter not in self.storage:
             self.storage[letter] = self.count
             self.count += 1
@@ -92,8 +92,7 @@ class LetterStorage:
         return -1
 
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
-
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -101,9 +100,9 @@ class LetterStorage:
         """
         if not isinstance(letter_id, int):
             return -1
-        for k, v in self.storage.items():
-            if v == letter_id:
-                return k
+        for key, value in self.storage.items():
+            if value == letter_id:
+                return key
         if letter_id not in self.storage.values():
             return -1
 
@@ -269,7 +268,7 @@ class NGramTrie:
             if isinstance(n_gram, tuple):
                 self.n_gram_frequencies[n_gram] = n_grams_dictionary[n_gram]
         return 0
-        pass
+
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -311,10 +310,12 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+        <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         if (not isinstance(encoded_corpus, tuple)) or (not isinstance(ngram_sizes, tuple)):
@@ -442,7 +443,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного профиля - first_n_grams =
+    ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
@@ -469,7 +471,6 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
     def __init__(self):
         self.language_profiles = {}
 
