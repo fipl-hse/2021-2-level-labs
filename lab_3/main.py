@@ -109,23 +109,22 @@ class LetterStorage:
 
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
-    Encodes sentences by replacing letters with their ids
+    Decodes sentences by replacing letters with their ids
     :param storage: an instance of the LetterStorage class
-    :param corpus: a tuple of sentences
-    :return: a tuple of the encoded sentences
+    :param corpus: an encoded tuple of sentences
+    :return: a tuple of the decoded sentences
     """
     if isinstance(storage, LetterStorage) and isinstance(corpus, tuple):
         storage.update(corpus)
         result = []
-        enc_c = []
-
         for c in corpus:
+            enc_c = []
             for word in c:
+                id_word = []
                 for letter in word:
-                    enc_c.append(storage.get_id_by_letter(letter))
-                result.append(tuple(enc_c))
-                enc_c = []
-
+                    id_word.append(storage.get_id_by_letter(letter))
+                enc_c.append(tuple(id_word))
+            result.append(tuple(enc_c))
         return tuple(result)
     else:
         return ()
@@ -141,15 +140,14 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if isinstance(storage, LetterStorage) and isinstance(corpus, tuple):
         storage.update(corpus)
         result = []
-        dec_c = []
-
-        for c in corpus:
-            for word in c:
-                for id_letter in word:
-                    dec_c.append(storage.get_letter_by_id(id_letter))
-                result.append(tuple(dec_c))
-                dec_c = []
-
+        for encoded_sent in corpus:
+            enc_c = []
+            for id_word in encoded_sent:
+                word = []
+                for id_letter in id_word:
+                    word.append(storage.get_letter_by_id(id_letter))
+                enc_c.append(tuple(word))
+            result.append(tuple(enc_c))
         return tuple(result)
     else:
         return ()
