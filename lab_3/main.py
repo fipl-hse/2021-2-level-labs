@@ -147,11 +147,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                 return ()
             coded_word = []
             for letter in word:
-                if not isinstance(letter, str):
-                    return ()
                 code_letter = storage.get_id_by_letter(letter)
-                if code_letter == -1:
-                    return ()
                 coded_word.append(code_letter)
             coded_sentence.append(tuple(coded_word))
         coded_corpus.append(tuple(coded_sentence))
@@ -370,14 +366,15 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        if (not (isinstance(k, int) and isinstance(trie_level, int))) or \
-                k <= 0 or trie_level <= 0:
+        if not (isinstance(k, int) and isinstance(trie_level, int)):
+            return ()
+        if k <= 0 or trie_level <= 0:
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
                 freq_dict = trie.n_gram_frequencies
                 sorted_freq = sorted(freq_dict, key = freq_dict.get, reverse=True)[:k]
-        return tuple(sorted_freq)
+                return tuple(sorted_freq)
 
     # 8
     def save(self, name: str) -> int:
