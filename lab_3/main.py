@@ -76,8 +76,7 @@ class LetterStorage:
         if letter not in self.storage:
             self.storage[letter] = self.count
             self.count += 1
-        if letter in self.storage:
-            return 0
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -103,8 +102,7 @@ class LetterStorage:
         for key, value in self.storage.items():
             if value == letter_id:
                 return key
-        if letter_id not in self.storage.values():
-            return -1
+        return -1
 
 
     def update(self, corpus: tuple) -> int:
@@ -179,8 +177,6 @@ class NGramTrie:
     Stores and manages ngrams
     """
     def __init__(self, n: int, letter_storage: LetterStorage):
-        if (not isinstance(n, int)) or (not isinstance(letter_storage, LetterStorage)):
-            return None
         self.size = n
         self.storage = letter_storage
         self.n_gram_frequencies = {}
@@ -191,8 +187,6 @@ class NGramTrie:
     # 8 - threeGrams
     # 10 - nGrams
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
-        if not isinstance(encoded_corpus, tuple):
-            return 1
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
@@ -209,6 +203,8 @@ class NGramTrie:
             )
         )
         """
+        if not isinstance(encoded_corpus, tuple):
+            return 1
         sentences = []
         if encoded_corpus == ():
             return 0
@@ -292,7 +288,6 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
