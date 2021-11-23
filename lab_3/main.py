@@ -27,6 +27,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     sentences = re.split(r'[.!?]', text)
     umlauts = ('ö', 'ü', 'ä', 'ß')
     replacements = ('oe', 'ue', 'ae', 'ss')
+    for umlaut, replacement in zip(umlauts, replacements):
+        text.replace(umlaut, replacement)
     if '' in sentences:
         sentences.remove('')
     framed_letters = []
@@ -34,8 +36,6 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentence = sentence.split()
         list_of_letters_new = []
         for word in sentence:
-            for umlaut, replacement in zip(umlauts, replacements):
-                word.replace(umlaut, replacement)
             list_of_letters = [letter for letter in word if letter.isalpha()]
             if len(list_of_letters) != 0:
                 list_of_letters.insert(0, '_')
@@ -311,8 +311,9 @@ class LanguageProfile:
             return ()
         for n_gram_trie in self.tries:
             if n_gram_trie.size == trie_level:
-                frequency = n_gram_trie.n_gram_frequencies
-                top_k_ngrams = tuple(sorted(frequency, key=frequency.get, reverse=True)[:k])
+                top_k_ngrams = tuple(sorted(n_gram_trie.n_gram_frequencies,
+                                            key=n_gram_trie.n_gram_frequencies.get,
+                                            reverse=True)[:k])
                 return top_k_ngrams
         else:
             return ()
