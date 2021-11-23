@@ -4,8 +4,6 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-import math
-
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -377,13 +375,9 @@ class LanguageProfile:
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
-                ngram_list = []
                 freq_dict = trie.n_gram_frequencies
-                sorted_freq = sorted(freq_dict, key=lambda x: x[1], reverse=True)
-                for i in range(k):
-                    ngram_list.append(sorted_freq[i][0])
-                return tuple(ngram_list)
-        return ()
+                sorted_freq = sorted(freq_dict, key = freq_dict.get, reverse=True)[:k]
+        return tuple(sorted_freq)
 
     # 8
     def save(self, name: str) -> int:
@@ -432,7 +426,10 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     known_ng_len = len(known_top_ngram)
     for ng in unknown_top_ngram:
         if ng in known_top_ngram:
-            distance += abs(known_top_ngram.index(ng) - unknown_top_ngram.index(ng))
+            length = known_top_ngram.index(ng) - unknown_top_ngram.index(ng)
+            if length < 0:
+                length = length * (-1)
+            distance += length
         else:
             distance += known_ng_len
     return distance
