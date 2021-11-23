@@ -97,23 +97,6 @@ if __name__ == '__main__':
 
         print(detector.detect(unk_profile, k, (trie_level,)))
 
-    def score_10(k=1000, trie_levels=(2,)):
-        """
-        score 10, params: k = 1000, trie_levels = (2,)
-        predict SECRET_SAMPLE
-        EXPECTED_LANGUAGE = ?
-        EXPECTED_MIN_DISTANCE = ?
-        """
-        results = detector.detect(secret_profile, k, trie_levels)
-        closest_language = ()
-        for language, distance in results.items():
-            if not closest_language:
-                closest_language = (language, distance)
-            elif distance < closest_language[1]:
-                closest_language = (language, distance)
-        print(closest_language)
-        # print(detector.detect(unknown_profile, 1000, (2,)))
-
     score_6()
     score_8()
 
