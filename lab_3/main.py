@@ -137,7 +137,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not(isinstance(storage, LetterStorage) or isinstance(corpus, tuple)) or corpus == ():
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return()
     coded_corpus = []
     for sentence in corpus:
