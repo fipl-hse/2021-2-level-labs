@@ -27,15 +27,15 @@ def tokenize_by_sentence(text: str) -> tuple:
     symbols = ['`', '~', '@', '*', '#', '$', '%', '^', '&', '(', ')', '_', '-', '+',
                '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-
+    for symbol in symbols:
+        text = text.replace(symbol, '')
     if text:
         last_letter = text[-1]
         if last_letter in ('.', '!', '?'):
             text = text[:-1]
     else:
         return ()
-    for symbol in symbols:
-        text = text.replace(symbol, '')
+
     # if not text:
     #     return ()
     text = text.replace('!', '*end*')
