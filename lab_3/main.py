@@ -300,9 +300,15 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple)):
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
 
+        for s in ngram_sizes:
+            n_gram = NGramTrie(s, self.storage)
+            self.tries.append(n_gram)
+            n_gram.extract_n_grams(encoded_corpus)
+            n_gram.get_n_grams_frequencies()
+            self.n_words.append(len(n_gram.n_gram_frequencies))
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -328,7 +334,16 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+
+        if not isinstance(k, int) or not isinstance(trie_level, int) or (k < 1 or trie_level < 1):
+            return ()
+
+        for n_trie in self.tries:
+            if trie.size == trie_level:
+                sorted_ngrams_freqs = tuple(sorted(trie.n_gram_frequencies.items(), reverse=True)[:k])
+                return sorted_ngrams_freqs
+
+        return ()
 
     # 8
     def save(self, name: str) -> int:
