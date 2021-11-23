@@ -408,7 +408,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -423,21 +423,22 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not (isinstance(unknwon_profile, LanguageProfile) and isinstance(known_profile, LanguageProfile) and
+    if not (isinstance(unknown_profile, LanguageProfile) and isinstance(known_profile, LanguageProfile) and
             isinstance(k, int) and isinstance(trie_level, int)):
         return -1
-    result = 0
-    unknown_top_ngram = unknwon_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    unknown_top_ngram = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_top_ngram = known_profile.get_top_k_n_grams(k, trie_level)
+    known_ng_len = len(known_top_ngram)
     for ng in unknown_top_ngram:
         if ng in known_top_ngram:
-            length = unknown_top_ngram.index(ng) - known_top_ngram.index(ng)
+            length = known_top_ngram.index(ng) - unknown_top_ngram.index(ng)
             if length < 0:
                 length = length * (-1)
-            result += length
+            distance += length
         else:
-            result += len(known_top_ngram)
-    return result
+            distance += known_ng_len
+    return distance
 
 
 
