@@ -163,7 +163,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    if not isinstance (corpus, tuple) \
+    if not isinstance(corpus, tuple) \
             or not isinstance(storage, LetterStorage):
         return()
     storage.update(corpus)
@@ -217,7 +217,7 @@ class NGramTrie:
         if not isinstance(encoded_corpus,tuple):
             return 1
         bigramms_corpus = []
-        # print(self.size)
+
         for sentence in encoded_corpus:
             bigramms_sentence = []
             for token in sentence:
@@ -397,8 +397,8 @@ class LanguageProfile:
 
                 for n_gram in trie.n_gram_frequencies:
                     new_n_gram = ''
-                    for id in n_gram:
-                        new_n_gram += self.storage.get_letter_by_id(id)
+                    for letter_id in n_gram:
+                        new_n_gram += self.storage.get_letter_by_id(letter_id)
                     freq[new_n_gram] = trie.n_gram_frequencies[n_gram]
             profile['freq'] = freq
             file.write(json.dumps(profile))
@@ -426,7 +426,7 @@ class LanguageProfile:
             for n_gram in profile['freq']:
                 new_n_gram = []
                 for letter in n_gram:
-                    self.storage._put_letter(letter)
+                    self.storage.put_letter(letter)
                     new_n_gram.append(self.storage.get_id_by_letter(letter))
                 decoded_n_grams.append((tuple(new_n_gram), profile['freq'][n_gram]))
             sizes = {}
@@ -509,7 +509,8 @@ class LanguageDetector:
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels
+        and their scores if input is correct, otherwise -1
         """
         if not isinstance(unknown_profile, LanguageProfile) \
                 or not isinstance(k, int) or not isinstance(trie_levels, tuple):
@@ -548,6 +549,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding
+        ngram size and their prob scores if input is correct, otherwise -1
         """
         pass

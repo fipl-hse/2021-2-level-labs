@@ -19,6 +19,7 @@ if __name__ == '__main__':
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
 
+
     def get_6_score():
         # score 6, params: k = 5, trie_level = 2
         # predict UNKNOWN_SAMPLE
@@ -51,6 +52,7 @@ if __name__ == '__main__':
 
 
     get_6_score()
+
 
 
     def get_8_score():
