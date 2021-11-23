@@ -45,7 +45,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
         for word in sentence:
             letters = [letter for letter in word if letter.isalpha()]
-            if len(letters)!= 0:
+            if len(letters) != 0:
                 letters.insert(0, '_')
                 letters.append('_')
                 words.append(tuple(letters))
@@ -132,7 +132,17 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance (storage, LetterStorage) or not isinstance (corpus, tuple):
+        return ()
+
+    storage.update(corpus)
+    encoded_sentences = []
+
+    for sentence in corpus:
+        sentences = [tuple([storage.get_id_by_letter(letter) for letter in word]) for word in sentence]
+
+        encoded_sentences.append(sentences)
+    return tuple(encoded_sentences)
 
 
 # 4
@@ -143,7 +153,15 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+
+    storage.update(corpus)
+    decoded_sentences = []
+    for sentence in corpus:
+        sentences = [tuple([storage.get_letter_by_id(letter_id) for letter_id in word]) for word in sentence]
+        decoded_sentences.append(tuple(sentences))
+    return tuple(decoded_sentences)
 
 
 # 6
