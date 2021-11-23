@@ -66,7 +66,7 @@ if __name__ == '__main__':
     profile_en_8.create_from_tokens(encoded_en, (3,))
     profile_de_8.create_from_tokens(encoded_de, (3,))
     profile_unk_8.create_from_tokens(encoded_unk, (3,))
-    
+
     calculate_distance(profile_unk_8, profile_en_8, 5, 3)
     calculate_distance(profile_unk_8, profile_de_8, 5, 3)
 
