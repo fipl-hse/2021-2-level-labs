@@ -23,15 +23,6 @@ if __name__ == '__main__':
     Dлетува гол во дупка од мраз. 
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
-    # score 6, params: k = 5, trie_level = 2
-    # predict UNKNOWN_SAMPLE
-    # calculate_distance(unknown_profile, en_profile, 5, 2)
-    # calculate_distance(unknown_profile, de_profile, 5, 2)
-    # EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
-
-    # score 8, k = 5, trie_level = 3
-    # predict UNKNOWN_SAMPLE
-
     tokenized_en = tokenize_by_sentence(ENG_SAMPLE)
     tokenized_de = tokenize_by_sentence(GERMAN_SAMPLE)
     tokenized_unk = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -45,28 +36,48 @@ if __name__ == '__main__':
     encoded_de = encode_corpus(storage, tokenized_de)
     encoded_unk = encode_corpus(storage, tokenized_unk)
 
-    en_profile = LanguageProfile(storage, 'en')
-    de_profile = LanguageProfile(storage, 'de')
-    unknown_profile = LanguageProfile(storage, 'unk')
+    # score 6, params: k = 5, trie_level = 2
+    # predict UNKNOWN_SAMPLE
 
-    en_profile.create_from_tokens(encoded_en, (5, 3))
-    de_profile.create_from_tokens(encoded_de, (5, 3))
-    unknown_profile.create_from_tokens(encoded_unk, (5, 3))
+    en_profile_6 = LanguageProfile(storage, 'en')
+    de_profile_6 = LanguageProfile(storage, 'de')
+    unknown_profile_6 = LanguageProfile(storage, 'unk')
 
-    calculate_distance(unknown_profile, en_profile, 5, 3)
-    calculate_distance(unknown_profile, de_profile, 5, 3)
+    en_profile_6.create_from_tokens(encoded_en, (5, 2))
+    de_profile_6.create_from_tokens(encoded_de, (5, 2))
+    unknown_profile_6.create_from_tokens(encoded_unk, (5, 2))
 
-    unknown_profile.save('unknown_profile.json')
+    en_distance_6 = calculate_distance(unknown_profile_6, en_profile_6, 5, 2)
+    de_distance_6 = calculate_distance(unknown_profile_6, de_profile_6, 5, 2)
+    RESULT_6 = en_distance_6, de_distance_6
+    print(RESULT_6)
+    EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
+
+    # score 8, k = 5, trie_level = 3
+    # predict UNKNOWN_SAMPLE
+
+    en_profile_8 = LanguageProfile(storage, 'en')
+    de_profile_8 = LanguageProfile(storage, 'de')
+    unknown_profile_8 = LanguageProfile(storage, 'unk')
+
+    en_profile_8.create_from_tokens(encoded_en, (5, 3))
+    de_profile_8.create_from_tokens(encoded_de, (5, 3))
+    unknown_profile_8.create_from_tokens(encoded_unk, (5, 3))
+
+    calculate_distance(unknown_profile_8, en_profile_8, 5, 3)
+    calculate_distance(unknown_profile_8, de_profile_8, 5, 3)
+
+    unknown_profile_8.save('unknown_profile.json')
     profile_unk = LanguageProfile(storage, 'unk')
     profile_unk.open('unknown_profile.json')
 
     detector = LanguageDetector()
 
-    detector.register_language(en_profile)
-    detector.register_language(de_profile)
+    detector.register_language(en_profile_8)
+    detector.register_language(de_profile_8)
 
-    RESULT = detector.detect(profile_unk, 5, (3,))
-    print(RESULT)
+    RESULT_8 = detector.detect(profile_unk, 5, (3,))
+    print(RESULT_8)
     EXPECTED_SCORE = {'en': 24, 'de': 25}
 
     # score 10, k = 1000, trie_levels = (2,)
@@ -76,4 +87,5 @@ if __name__ == '__main__':
     # EXPECTED_MIN_DISTANCE = ?
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == EXPECTED_SCORE, 'Detection not working'
+    assert RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
+    assert RESULT_8 == EXPECTED_SCORE, 'Detection not working'
