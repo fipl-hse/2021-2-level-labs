@@ -133,8 +133,8 @@ class NGramTrie:
             ngram_sentence = []
             for encoded_word in encoded_sentence:
                 ngram_word = []
-                for i in range(len(ngram_word)-self.size+1):
-                    ngram_word.append(tuple(encoded_word[i:i+self.size]))
+                for i in range(len(encoded_word) - self.size + 1):
+                    ngram_word.append(tuple(encoded_word[i:i + self.size]))
                 ngram_sentence.append(tuple(ngram_word))
             ngrams.append(tuple(ngram_sentence))
         self.n_grams = tuple(ngrams)
@@ -144,11 +144,12 @@ class NGramTrie:
         if not self.n_grams:
             return 1
         for ngram_sentence in self.n_grams:
-            for n_gram in ngram_sentence:
-                if n_gram not in self.n_gram_frequencies:
-                    self.n_gram_frequencies[n_gram] = 1
-                else:
-                    self.n_gram_frequencies[n_gram] += 1
+            for ngram_word in ngram_sentence:
+                for n_gram in ngram_word:
+                    if n_gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] = 1
+                    else:
+                        self.n_gram_frequencies[n_gram] += 1
         return 0
 
     # 8
@@ -190,12 +191,15 @@ class LanguageProfile:
         for ngram_size in ngram_sizes:
             self.tries.append(NGramTrie(ngram_size, self.storage))
         for trie in self.tries:
+            trie.extract_n_grams(encoded_corpus)
             trie.get_n_grams_frequencies()
-            self.n_words.append(len(trie.get_n_grams_frequencies))
+            self.n_words.append(len(trie.n_gram_frequencies))
         return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         if not isinstance(k, int) or not isinstance(trie_level, int):
+            return ()
+        if k < 1 or trie_level < 1:
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
