@@ -3,6 +3,7 @@ Language detection starter
 """
 
 import os
+from lab_3 import main
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,6 +20,30 @@ if __name__ == '__main__':
     # print(calculate_distance(unknown_profile, de_profile, 5, 2))
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
+    tokenize_unknown_sample = main.tokenize_by_sentence(UNKNOWN_SAMPLE)
+    tokenize_en_sample = main.tokenize_by_sentence(ENG_SAMPLE)
+    tokenize_de_sample = main.tokenize_by_sentence(GERMAN_SAMPLE)
+
+    storage = main.LetterStorage()
+    storage.update(tokenize_unknown_sample)
+    storage.update(tokenize_en_sample)
+    storage.update(tokenize_de_sample)
+
+    unknown_encoded_corpus = main.encode_corpus(storage, tokenize_unknown_sample)
+    en_encoded_corpus = main.encode_corpus(storage, tokenize_en_sample)
+    de_encoded_corpus = main.encode_corpus(storage, tokenize_de_sample)
+
+    unknown_profile = main.LanguageProfile(storage, 'unknown')
+    en_profile = main.LanguageProfile(storage, 'en')
+    de_profile = main.LanguageProfile(storage, 'de')
+
+    unknown_profile.create_from_tokens(unknown_encoded_corpus, (2,))
+    en_profile.create_from_tokens(en_encoded_corpus, (2,))
+    de_profile.create_from_tokens(de_encoded_corpus, (2,))
+
+    distance_en = main.calculate_distance(unknown_profile, en_profile, 5, 2)
+    distance_de = main.calculate_distance(unknown_profile, de_profile, 5, 2)
+
     # score 8, k = 5, trie_level = 3
     # predict UNKNOWN_SAMPLE
     # print(detector.detect(profile_unk, 5, 3))
@@ -30,7 +55,8 @@ if __name__ == '__main__':
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
 
-    RESULT = ''
+    RESULT = (distance_en, distance_de)
+    print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
 
