@@ -489,10 +489,11 @@ class LanguageDetector:
             return -1
         dict_label_score = {}
         for language, language_profile in self.language_profiles.items():
-            dict_label_score[language] = calculate_distance(unknown_profile,
-                                                            language_profile,
-                                                            k,
-                                                            trie_levels[0])
+            for trie_level in trie_levels:
+                dict_label_score[language] = calculate_distance(unknown_profile,
+                                                                language_profile,
+                                                                k,
+                                                                trie_level)
         return dict_label_score
 
 
@@ -507,12 +508,22 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :return: a probability of unknown top k ngrams
     """
     if not (isinstance(unknown_profile, LanguageProfile)
-            or isinstance(known_profile, LanguageProfile)
-            or isinstance(k, int)
-            or isinstance(trie_level, int)):
+            and isinstance(known_profile, LanguageProfile)
+            and isinstance(k, int)
+            and isinstance(trie_level, int)):
         return -1
 
-    pass
+    probability = 0
+
+    for n_gram_trie in known_profile.tries:
+        if n_gram_trie.size == trie_level:
+            n_gram_trie.calculate_log_probabilities()
+
+            for n_gram in unknown_profile.get_top_k_n_grams(k, trie_level):
+                if n_gram in n_gram_trie.n_gram_log_probabilities:
+                    probability += n_gram_trie.n_gram_log_probabilities[n_gram]
+
+    return probability
 
 
 # 10
@@ -531,4 +542,15 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: sorted language labels with corresponding ngram size and their prob scores
         if input is correct, otherwise -1
         """
-        pass
+        if not (isinstance(unknown_profile, LanguageProfile)
+                and isinstance(k, int)
+                and isinstance(trie_levels, tuple)):
+            return -1
+        result_dict = {}
+        for language, language_profile in self.language_profiles.items():
+            for trie_level in trie_levels:
+                result_dict[(language, language_profile)] = calculate_probability(unknown_profile,
+                                                                                  language_profile,
+                                                                                  k,
+                                                                                  trie_level)
+        return result_dict

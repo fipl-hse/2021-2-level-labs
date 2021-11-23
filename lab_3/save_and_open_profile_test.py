@@ -45,7 +45,6 @@ I wish I thought What Jolly Fun'''.lower()
         profile = LanguageProfile(letter_storage=storage, language_name='en')
 
         profile.create_from_tokens(encoded_text, (2, 3))
-
         self.assertEqual(profile.save(os.path.join(PATH_TO_LAB_FOLDER, 'eng_profile.json')), 0)
 
         profile_tries = profile.tries
