@@ -27,8 +27,19 @@ def tokenize_by_sentence(text: str) -> tuple:
         new_text = ''
 
         for i, item in enumerate(text):
-            if item.isalpha() or item.isdigit() or (item in ['.', '!', '?', ' ']):
-                new_text = new_text + item
+            if item == '\n':
+                new_text = new_text + ' '
+            else:
+                if item.isalpha() or item.isdigit() or (item in ['.', '!', '?', ' ']):
+                    if item == 'ö':
+                        item = 'oe'
+                    if item == 'ü':
+                        item = 'ue'
+                    if item == 'ä':
+                        item = 'ae'
+                    if item == 'ß':
+                        item = 'ss'
+                    new_text = new_text + item
 
         if new_text == '':
             return ()
@@ -278,10 +289,7 @@ class LanguageProfile:
     """
 
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        self.storage = letter_storage
-        self.language = language_name
-        self.tries = []
-        self.n_words = []
+        pass
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
