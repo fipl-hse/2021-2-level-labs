@@ -192,10 +192,11 @@ class NGramTrie:
         all_sentences = []
         for sentence_tuple in encoded_corpus:
             for word_tuple in sentence_tuple:
-                for i in range(len(word_tuple)-self.size+1):
-                    word.append(tuple([word_tuple[i+j] for j in range(self.size)]))
-                sentence.append(tuple(word))
-                word = []
+                if len(word_tuple) >= self.size:
+                    for i in range(len(word_tuple)-self.size+1):
+                        word.append(tuple([word_tuple[i+j] for j in range(self.size)]))
+                    sentence.append(tuple(word))
+                    word = []
             all_sentences.append(tuple(sentence))
             sentence = []
         self.n_grams = tuple(all_sentences)
