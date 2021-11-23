@@ -7,6 +7,7 @@ from typing import Dict, Tuple
 import re
 import random
 
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -126,6 +127,7 @@ class LetterStorage:
                     self._put_letter(letter)
         return 0
 
+
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -148,6 +150,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             word_tuple += (id_letter,)
         encoded_corpus += (word_tuple,)
     return encoded_corpus
+
 
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -218,7 +221,7 @@ class NGramTrie:
                 # splitting the whole tuple into sentences, then words
                 # cutting to tuples of position + gram size length
                 # adding them to the word, then sentence, then corpus
-                for i in range(len(word) - self.size+1):
+                for i in range(len(word) - self.size + 1):
                     word_grams += ((word[i:i + self.size]),)
                 sentence_grams += (word_grams,)
             self.n_grams += (sentence_grams,)
@@ -288,7 +291,7 @@ class LanguageProfile:
 
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
-        self.language_name = language_name
+        self.language = language_name
         self.tries = []
         self.n_words = []
 
@@ -349,11 +352,13 @@ class LanguageProfile:
 
         if not isinstance(k, int) or not isinstance(trie_level, int) or (k < 1 or trie_level < 1):
             return ()
-        # creates a reversely sorted tuple with needed trie level
+        # creates a reversely (-i makes the int negative)
+        # sorted tuple with needed trie level
         # and cuts it to necessary length
         for n_trie in self.tries:
             if n_trie.size == trie_level:
-                sorted_ngrams_freqs = tuple(sorted(n_trie.n_gram_frequencies.items(), reverse=True)[:k])
+                sorted_ngrams_freqs = tuple([key for key, value in
+                                             sorted(n_trie.n_gram_frequencies.items(), key=lambda i: -i[1])][:k])
                 return sorted_ngrams_freqs
 
         return ()
