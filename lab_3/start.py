@@ -18,7 +18,7 @@ if __name__ == '__main__':
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
 
-def predict_language(k_6: int, k_8: int, trie_level_6: int, trie_level_8: int):
+def predict_language(k: int, trie_level_6: int, trie_level_8: int):
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
     and predicts UNKNOWN_SAMPLE
@@ -44,25 +44,25 @@ def predict_language(k_6: int, k_8: int, trie_level_6: int, trie_level_8: int):
     de_profile_6 = LanguageProfile(storage, 'de')
     unk_profile_6 = LanguageProfile(storage, 'unk')
 
-    en_profile_6.create_from_tokens(encoded_en, (k_6, trie_level_6))
-    de_profile_6.create_from_tokens(encoded_de, (k_6, trie_level_6))
-    unk_profile_6.create_from_tokens(encoded_unk, (k_6, trie_level_6))
+    en_profile_6.create_from_tokens(encoded_en, (k, trie_level_6))
+    de_profile_6.create_from_tokens(encoded_de, (k, trie_level_6))
+    unk_profile_6.create_from_tokens(encoded_unk, (k, trie_level_6))
 
-    en_distance_6 = calculate_distance(unk_profile_6, en_profile_6, k_6, trie_level_6)
-    de_distance_6 = calculate_distance(unk_profile_6, de_profile_6, k_6, trie_level_6)
-    RESULT_6 = en_distance_6, de_distance_6
-    print(RESULT_6)
+    en_distance_6 = calculate_distance(unk_profile_6, en_profile_6, k, trie_level_6)
+    de_distance_6 = calculate_distance(unk_profile_6, de_profile_6, k, trie_level_6)
+    RESULT6 = en_distance_6, de_distance_6
+    print(RESULT6)
 
     en_profile_8 = LanguageProfile(storage, 'en')
     de_profile_8 = LanguageProfile(storage, 'de')
     unk_profile_8 = LanguageProfile(storage, 'unk')
 
-    en_profile_8.create_from_tokens(encoded_en, (k_8, trie_level_8))
-    de_profile_8.create_from_tokens(encoded_de, (k_8, trie_level_8))
-    unk_profile_8.create_from_tokens(encoded_unk, (k_8, trie_level_8))
+    en_profile_8.create_from_tokens(encoded_en, (k, trie_level_8))
+    de_profile_8.create_from_tokens(encoded_de, (k, trie_level_8))
+    unk_profile_8.create_from_tokens(encoded_unk, (k, trie_level_8))
 
-    calculate_distance(unk_profile_8, en_profile_8, k_8, trie_level_8)
-    calculate_distance(unk_profile_8, de_profile_8, k_8, trie_level_8)
+    calculate_distance(unk_profile_8, en_profile_8, k, trie_level_8)
+    calculate_distance(unk_profile_8, de_profile_8, k, trie_level_8)
 
     unk_profile_8.save('unknown_profile.json')
     profile_unk = LanguageProfile(storage, 'unk')
@@ -73,18 +73,18 @@ def predict_language(k_6: int, k_8: int, trie_level_6: int, trie_level_8: int):
     detector.register_language(en_profile_8)
     detector.register_language(de_profile_8)
 
-    RESULT_8 = detector.detect(profile_unk, 5, (3,))
-    print(RESULT_8)
+    RESULT8 = detector.detect(profile_unk, k, (trie_level_8,))
+    print(RESULT8)
 
-    EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
-    EXPECTED_SCORE = {'en': 24, 'de': 25}
+    DISTANCE = 17, 25
+    SCORE = {'en': 24, 'de': 25}
 
-    if RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES and RESULT_8 == EXPECTED_SCORE:
+    if RESULT6 == DISTANCE and RESULT8 == SCORE:
         return True
     return False
 
 
-EXPECTED = predict_language(5, 5, 2, 3)
+EXPECTED = predict_language(5, 2, 3)
 
 RESULT = True
 
