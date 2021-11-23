@@ -32,7 +32,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     text_no_digits = re.split(r"[\d]", text)
     text = ''.join(text_no_digits)
-    changed_text = re.split(r"[.!?] ", text)
+    changed_text = re.split(r"[.!?] *", text)
 
     if '' in changed_text:
         changed_text.remove('')
