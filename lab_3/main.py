@@ -130,7 +130,7 @@ class LetterStorage:
                 for letter in token:
                     self._put_letter(letter)
         return 0
-        pass
+ 
 
 
 # 4
@@ -154,7 +154,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             encoded_sentences.append(tuple(encoded_tokens))
         encoded_corpus.append(tuple(encoded_sentences))
     return tuple(encoded_corpus)
-    pass
+
 
 
 # 4
@@ -178,7 +178,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             encoded_sentences.append(tuple(encoded_tokens))
         encoded_corpus.append(tuple(encoded_sentences))
     return tuple(encoded_corpus)
-    pass
+
 
 
 # 6
@@ -192,7 +192,7 @@ class NGramTrie:
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
-        pass
+
 
 
 
@@ -236,7 +236,7 @@ class NGramTrie:
             bigramms_corpus.append(tuple(bigramms_sentence))
         self.n_grams = tuple(bigramms_corpus)
         return 0
-        pass
+
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -264,7 +264,7 @@ class NGramTrie:
                     else:
                         self.n_gram_frequencies[bigramm] +=1
         return 0
-        pass
+
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -279,7 +279,7 @@ class NGramTrie:
                 self.n_gram_frequencies[n_gram] = n_grams_dictionary[n_gram]
 
         return 0
-        pass
+
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -310,7 +310,7 @@ class LanguageProfile:
         # self.tries = NGramTrie.n_grams
         self.tries = []
         self.n_words = []
-        pass
+
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -338,7 +338,7 @@ class LanguageProfile:
             trie.get_n_grams_frequencies()
             self.n_words.append(len(trie.n_gram_frequencies))
         return 0
-        pass
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -378,7 +378,7 @@ class LanguageProfile:
                 return top_common_n_grams
 
         return()
-        pass
+
 
     # 8
     def save(self, name: str) -> int:
@@ -404,7 +404,7 @@ class LanguageProfile:
             profile['freq'] = freq
             file.write(json.dumps(profile))
         return 0
-        pass
+
 
     # 8
     def open(self, file_name: str) -> int:
@@ -443,7 +443,7 @@ class LanguageProfile:
                 tries.n_gram_frequencies = freq_dict
                 self.tries.append(tries)
         return 0
-        pass
+
 
 
 # 6
@@ -475,7 +475,7 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
         else:
             distance += len(known_top_k_n_grams)
     return distance
-    pass
+
 
 
 # 8
@@ -501,7 +501,7 @@ class LanguageDetector:
 
         return 0
 
-        pass
+
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
@@ -519,7 +519,7 @@ class LanguageDetector:
             detection[language] = calculate_distance(unknown_profile, profile, k, trie_levels[0])
             print(detection)
         return detection
-        pass
+
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
