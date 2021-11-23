@@ -168,7 +168,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    if (not (isinstance(corpus, tuple) or isinstance(storage, LetterStorage))) or corpus == ():
+    if not (isinstance(corpus, tuple) and isinstance(storage, LetterStorage)):
         return ()
     decoded_corpus = []
     for sentence in corpus:
@@ -334,7 +334,7 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        if not (isinstance(encoded_corpus, tuple) or isinstance(ngram_sizes, tuple)):
+        if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
             return 1
         for n in ngram_sizes:
             summa = 0
@@ -420,8 +420,8 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not (isinstance(unknwon_profile, LanguageProfile) or isinstance(known_profile, LanguageProfile) or
-            isinstance(k, int) or isinstance(trie_level, int)):
+    if not (isinstance(unknwon_profile, LanguageProfile) and isinstance(known_profile, LanguageProfile) and
+            isinstance(k, int) and isinstance(trie_level, int)):
         return -1
     result = 0
     unknown_top_ngram = unknwon_profile.get_top_k_n_grams(k, trie_level)
