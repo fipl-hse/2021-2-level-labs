@@ -271,7 +271,7 @@ class NGramTrie:
         for n_gram, frequency in self.n_gram_frequencies.items():
             amount = 0
             for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
-                if n_gram[:- 1] == n_gram_neighbour[:- 1]:
+                if n_gram[:-1] == n_gram_neighbour[:-1]:
                     amount += frequency_neighbour
             self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
         return 0
