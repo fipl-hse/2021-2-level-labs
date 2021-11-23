@@ -36,8 +36,7 @@ if __name__ == '__main__':
         if not final_language:
             final_language = (language, distance)
         elif distance < final_language[1]:
-            final_language = (language, distance)   
-    print(final_language)
-    RESULT = final_language
+            final_language = (language, distance)
+    RESULT = final_language[0][0]  # (('ne', 2), -156.42218725538507)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'

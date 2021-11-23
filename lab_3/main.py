@@ -20,9 +20,8 @@ def split_words(token: str) -> tuple:
         token.replace(key[0], key[1])
     skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
     token_list = []
-    for element in token:
-        if element in skip_signs:
-            token = token.replace(element, "")
+    for sign in skip_signs:
+        token.replace(sign,'')
     for element in token:
         if element.isalpha():
             token_list.append(element)
@@ -79,7 +78,6 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.counter = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -91,8 +89,7 @@ class LetterStorage:
             return -1
         if letter in self.storage:
             return 0
-        self.storage[letter] = self.counter
-        self.counter += 1
+        self.storage[letter] = len(self.storage) + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -157,8 +154,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     storage.update(corpus)
-    last_tuple = tuple(tuple(tuple(storage.get_id_by_letter(a)
-                                   for a in b) for b in c) for c in corpus)
+    last_tuple = tuple(tuple(tuple(storage.get_id_by_letter(letter)
+                                   for letter in word) for word in sentence) for sentence in corpus)
     return last_tuple
 
 
@@ -172,15 +169,15 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-    last_tuple = tuple(tuple(tuple(storage.get_letter_by_id(q)
-                                   for q in b) for b in c) for c in corpus)
+    last_tuple = tuple(tuple(tuple(storage.get_letter_by_id(letter)
+                                   for letter in word) for word in sentence) for sentence in corpus)
     return last_tuple
 
 
 # 6
 class NGramTrie:
     """
-    Stores and manages s
+    Stores and manages ngrams
     """
 
     def __init__(self, n: int, letter_storage: LetterStorage):
@@ -192,7 +189,7 @@ class NGramTrie:
 
     # 6 - biGrams
     # 8 - threeGrams
-    # 10 - s
+    # 10 - nGrams
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
@@ -300,23 +297,6 @@ class NGramTrie:
         return 0
 
 
-def freq_dict_decoder(profile: NGramTrie, freq_dict: dict) -> dict:
-    """
-    Decodes n_gram_freq in dict
-    :param freq_dict: dictionary with frequencies
-    :param profile: profile from tries
-    :return: 0 if profile saves, 1 if any errors occurred
-    """
-    for element in profile.n_gram_frequencies.items():
-        string_for_dict = ''
-        for freq in element[0]:
-            for item in profile.storage.storage.items():
-                if item[1] == freq:
-                    string_for_dict += item[0]
-        freq_dict[string_for_dict] = element[1]
-    return freq_dict
-
-
 # 6
 
 
@@ -331,27 +311,27 @@ class LanguageProfile:
         self.tries = []
         self.n_words = []
 
-    def create_from_tokens(self, encoded_corpus: tuple, _sizes: tuple) -> int:
+    def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
-        :param encoded_corpus: a tuple of encoded letters
-        :param _sizes: a tuple of  sizes,
+        :param letters: a tuple of encoded letters
+        :param ngram_sizes: a tuple of ngram sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
         e.g.
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         _sizes = (2, 3)
 
-        self.tries --> [<__main__.Trie object at 0x09DB9BB0>, <__main__.Trie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5),
             (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        if not isinstance(encoded_corpus, tuple) or not isinstance(_sizes, tuple):
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
-        for size in _sizes:
+        for size in ngram_sizes:
             self.tries.append(NGramTrie(size, self.storage))
         for trie in self.tries:
             trie.extract_n_grams(encoded_corpus)
@@ -399,15 +379,15 @@ class LanguageProfile:
         return top_k_ngrams
 
     # 8
-    def save(self, name: str) -> int:
+    def save(self, file_name: str) -> int:
         """
         Saves language profile into json file
-        :param name: name of the json file with .json format
+        :param file_name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        if not isinstance(name, str):
+        if not isinstance(file_name, str):
             return 1
-        with open(name, 'w', encoding="utf-8") as file:
+        with open(file_name, 'w', encoding="utf-8") as file:
             data = {"name": self.language, "n_words": self.n_words}
             formatted_freq = {}
             for trie in self.tries:
@@ -422,19 +402,19 @@ class LanguageProfile:
 
     # 8
 
-    def open(self, name: str) -> int:
+    def open(self, file_name: str) -> int:
         """
         Opens language profile from json file and writes output to
             self.language,
             self.tries,
             self.n_words fields.
-        :param name: name of the json file with .json format
+        :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        if not isinstance(name, str):
+        if not isinstance(file_name, str):
             return 1
 
-        with open(name, "r", encoding="utf-8") as file:
+        with open(file_name, "r", encoding="utf-8") as file:
             data = json.load(file)
             self.language = data['name']
             self.n_words = data['n_words']
@@ -536,12 +516,12 @@ class LanguageDetector:
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                           k: int, trie_level: int) -> float or int:
     """
-    Calculates probability of unknown_profile top_k s in relation to known_profile
+    Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
     :param known_profile: an instance of known profile
-    :param k: number of most frequent s
-    :param trie_level: the size of s
-    :return: a probability of unknown top k s
+    :param k: number of most frequent ngrams
+    :param trie_level: the size of ngrams
+    :return: a probability of unknown top k ngrams
     """
     if not isinstance(unknown_profile, LanguageProfile) \
             or not isinstance(known_profile, LanguageProfile) \
@@ -553,7 +533,7 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
             known_trie = trie
             break
     common_probability = 0
-    known_trie.calculate_log_probabilities(known_trie)
+    known_trie.calculate_log_probabilities()
     unk_k_gramms = unknown_profile.get_top_k_n_grams(k, trie_level)
     for i in unk_k_gramms:
         if i in known_trie.n_gram_log_probabilities:
