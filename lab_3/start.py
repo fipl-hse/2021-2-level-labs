@@ -3,7 +3,14 @@ Language detection starter
 """
 
 import os
-from lab_3.main import *
+from lab_3.main import (
+    LetterStorage,
+    LanguageProfile,
+    LanguageDetector,
+    ProbabilityLanguageDetector,
+    create_profile_from_text,
+    calculate_distance
+)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
