@@ -112,7 +112,8 @@ class LetterStorage:
             return -1
         for letter, ids in self.storage.items():
             if ids == letter_id:
-                return letter
+                final_letter = letter
+        return final_letter
 
     def update(self, corpus: tuple) -> int:
         """
@@ -322,7 +323,8 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         _sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+         <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5),

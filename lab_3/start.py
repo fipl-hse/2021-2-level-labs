@@ -13,11 +13,13 @@ profiles = os.listdir(PATH_TO_PROFILES_FOLDER)
 if __name__ == '__main__':
     SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
+
     # score 10, k = 1000, trie_levels = (2,)
     # predict SECRET_SAMPLE
     # print(detector.detect(unknown_profile, 1000, (2,)))
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
+
     detector = ProbabilityLanguageDetector()
     for profile in profiles:
         known_letter_storage = LetterStorage()
