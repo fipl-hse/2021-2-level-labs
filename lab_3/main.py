@@ -123,7 +123,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             for word in c:
                 for letter in word:
                     enc_c.append(storage.get_id_by_letter(letter))
-            result.append(enc_c)
+                result.append(tuple(enc_c))
+                enc_c = []
 
         return tuple(result)
     else:
@@ -146,10 +147,9 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             for word in c:
                 for id_letter in word:
                     dec_c.append(storage.get_id_by_letter(id_letter))
-            result.append(dec_c)
+                result.append(tuple(dec_c))
+                dec_c = []
 
         return tuple(result)
     else:
         return ()
-
-    
