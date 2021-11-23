@@ -298,8 +298,8 @@ class LanguageProfile:
         )
         """
         if not (isinstance(k, int)
-                or isinstance(trie_level, int)
-                or k <= 0):
+                and isinstance(trie_level, int)
+                and k <= 0):
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
@@ -349,9 +349,9 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     Соответственно расстояние между наборами равно 2.
     """
     if not (isinstance(unknown_profile, LanguageProfile)
-            or isinstance(known_profile, LanguageProfile)
-            or isinstance(k, int)
-            or isinstance(trie_level, int)):
+            and isinstance(known_profile, LanguageProfile)
+            and isinstance(k, int)
+            and isinstance(trie_level, int)):
         return -1
     topk_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
     topk_kn = known_profile.get_top_k_n_grams(k, trie_level)
