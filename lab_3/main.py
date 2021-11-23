@@ -344,7 +344,7 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        if not isinstance(k, int) or not isinstance(trie_level, int) or k <= 0 or trie_level <= 1:
+        if not isinstance(k, int) or not isinstance(trie_level, int) or k < 1 or trie_level < 1:
             return ()
 
         for trie in self.tries:
@@ -404,11 +404,12 @@ class LanguageProfile:
             n_grams.append(tuple(map(self.storage.get_id_by_letter, list(n_gram))))
 
         for i, number in enumerate(self.n_words):
+            size = len(n_grams[0])
             new_freq = dict(zip(tuple(n_grams[:number]), frequencies[:number]))
             n_grams = n_grams[number:]
             frequencies = frequencies[number:]
 
-            trie = NGramTrie(i+1, self.storage)
+            trie = NGramTrie(size, self.storage)
             trie.extract_n_grams_frequencies(new_freq)
             self.tries.append(trie)
 
