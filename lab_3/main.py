@@ -98,8 +98,8 @@ class LetterStorage:
             return -1
         if letter not in self.storage.keys():
             return -1
-        id = self.storage[letter]
-        return id
+        letter_id = self.storage[letter]
+        return letter_id
 
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
@@ -324,7 +324,8 @@ class LanguageProfile:
         [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
@@ -454,7 +455,8 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного
+    профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
@@ -481,7 +483,6 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
     def __init__(self):
         self.language_profiles = {}
         pass
@@ -501,7 +502,8 @@ class LanguageDetector:
 
 
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) \
+            -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
@@ -539,7 +541,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) \
+            -> Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
