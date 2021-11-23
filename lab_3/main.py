@@ -64,7 +64,7 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         if not isinstance(letter, str):
-            return 1
+            return -1
         if letter not in self.storage:
             self.storage[letter] = self.counter
             self.counter += 1
@@ -77,7 +77,7 @@ class LetterStorage:
         :return: an id
         """
         if not isinstance(letter, str) or letter not in self.storage:
-            return 1
+            return -1
         return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
@@ -88,7 +88,7 @@ class LetterStorage:
         """
         storage_upside_down = dict(zip(self.storage.values(), self.storage.keys()))
         if not isinstance(letter_id, int) or letter_id not in storage_upside_down:
-            return 1
+            return -1
         return storage_upside_down[letter_id]
 
     def update(self, corpus: tuple) -> int:
@@ -98,12 +98,12 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         if not isinstance(corpus, tuple):
-            return 1
-        for sentence in corpus:
-            for word in sentence:
-                for letter in word:
-                    if self._put_letter(letter) == 1:
-                        return 1
+            return -1
+        for text in corpus:
+            for sentence in text:
+                for word in sentence:
+                    for letter in word:
+                        self._put_letter(letter)
         return 0
 
 
@@ -117,12 +117,12 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
-    storage.update(corpus)
-    encoded_sentences = tuple(tuple(tuple(storage.get_id_by_letter(letter)
-                                          for letter in word)
-                                    for word in sentence)
-                              for sentence in corpus)
-    return encoded_sentences
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    if not storage.update(corpus):
+        encoded_sentences = tuple(tuple(tuple(storage.get_id_by_letter(letter) for letter in word)
+                                        for word in sentence) for sentence in corpus)
+        return encoded_sentences
 
 
 # 4
@@ -133,13 +133,10 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-    storage.update(corpus)
-    decoded_sentences = tuple(tuple(tuple(storage.get_letter_by_id(letter)
-                                          for letter in word)
-                                    for word in sentence)
-                              for sentence in corpus)
+    decoded_sentences = tuple(tuple(tuple(storage.get_letter_by_id(letter_id) for letter_id in word)
+                                    for word in sentence) for sentence in corpus)
     return decoded_sentences
 
 
