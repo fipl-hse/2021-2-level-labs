@@ -546,11 +546,11 @@ class ProbabilityLanguageDetector(LanguageDetector):
                 and isinstance(k, int)
                 and isinstance(trie_levels, tuple)):
             return -1
-        result_dict = {}
+        lang_probabilities = {}
         for language, language_profile in self.language_profiles.items():
             for trie_level in trie_levels:
-                result_dict[(language, language_profile)] = calculate_probability(unknown_profile,
-                                                                                  language_profile,
-                                                                                  k,
-                                                                                  trie_level)
-        return result_dict
+                lang_probabilities[language, trie_level] = calculate_probability(unknown_profile,
+                                                                                 language_profile,
+                                                                                 k,
+                                                                                 trie_level)
+        return lang_probabilities
