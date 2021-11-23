@@ -151,3 +151,5 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return tuple(result)
     else:
         return ()
+
+    
