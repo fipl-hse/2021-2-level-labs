@@ -398,7 +398,7 @@ class LanguageProfile:
             return 1
         freq = {}
         profile = {}
-        with open (name, 'w', 'UTF-8') as file:
+        with open (name, 'w', encoding="utf-8") as file:
             profile['name'] = self.language
             profile['n_words'] = self.n_words
             for trie in self.tries:
@@ -425,7 +425,7 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-        with open(file_name, 'r', 'UTF-8') as file:
+        with open(file_name, 'r', encoding="utf-8") as file:
             profile = json.load(file)
             self.n_words = profile['n_words']
             self.language = profile['name']
