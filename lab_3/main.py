@@ -146,7 +146,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         for c in corpus:
             for word in c:
                 for id_letter in word:
-                    dec_c.append(storage.get_id_by_letter(id_letter))
+                    dec_c.append(storage.get_letter_by_id(id_letter))
                 result.append(tuple(dec_c))
                 dec_c = []
 
