@@ -95,8 +95,8 @@ class LetterStorage:
     @storage.setter
     def storage(self, value):
         self._letter_to_id = value
-        for key, value in self._letter_to_id.items():
-            self._id_to_letter[value] = key
+        for letter, letter_id in self._letter_to_id.items():
+            self._id_to_letter[letter_id] = letter
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -591,6 +591,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
             return -1
         probabilities = {}
         for language, profile in self.language_profiles.items():
-            probabilities[language] = calculate_probability(unknown_profile,
-                                                            profile, k, trie_levels[0])
+            for trie_level in trie_levels:
+                probabilities[language, trie_level] = \
+                    calculate_probability(unknown_profile, profile, k, trie_level)
         return probabilities
