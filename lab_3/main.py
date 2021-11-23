@@ -46,7 +46,6 @@ def tokenize_by_sentence(text: str) -> tuple:
                 return ()
         new_sentence_tuple.append(tuple(new_words_lst))
     return tuple(new_sentence_tuple)
-    pass
 
 # 4
 class LetterStorage:
@@ -93,7 +92,6 @@ class LetterStorage:
             if new_letter_id == letter_id:
                 return letter
         return -1
-        pass
 
     def update(self, corpus: tuple) -> int:
         """
@@ -127,7 +125,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                              for word in sentence) for sentence in corpus)
         return encode
     return ()
-    pass
 
 
 # 4
@@ -367,7 +364,7 @@ class LanguageProfile:
             for ngram in profile['freq']:
                 encode = []
                 for letter in ngram:
-                    self.storage._put_letter(letter)
+                    self.storage.put_letter(letter)
                     encode.append(self.storage.get_id_by_letter(letter))
                 decoded_ngrams.append((tuple(encode), profile['freq'][ngram]))
             for ngram in decoded_ngrams:
@@ -415,7 +412,6 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
         if first_n_grams not in frequency_known_profile:
             distance += len(frequency_known_profile)
     return distance
-    pass
 
 
 # 8
