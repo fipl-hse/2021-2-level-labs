@@ -225,10 +225,8 @@ class NGramTrie:
         """
 
         ngrammed_text = []
-        n = self.size
         if not (isinstance(n, int) and isinstance(encoded_corpus, tuple)):
             return 1
-        idk_but_helped = n
         for sentence in encoded_corpus:
             if not isinstance(sentence, tuple):
                 return 1
@@ -237,9 +235,10 @@ class NGramTrie:
                 if not isinstance(word, tuple):
                     return 1
                 ngram_word = []
-                ngrams_per_word = len(word) - n + 1
+                idk_but_helped = self.size
+                ngrams_per_word = len(word) - self.size + 1
                 for i in range(ngrams_per_word):
-                    n_gram = word[idk_but_helped - n:idk_but_helped]
+                    n_gram = word[idk_but_helped - self.size:idk_but_helped]
                     ngram_word.append(tuple(n_gram))
                     idk_but_helped += 1
                 if ngram_word:
