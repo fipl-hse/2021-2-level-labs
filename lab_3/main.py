@@ -65,7 +65,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.id = 0
+        self.count = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -73,11 +73,11 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(letter, str) or not letter:
+        if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
-            self.storage[letter] = self.id
-            self.id += 1
+            self.count += 1
+            self.storage[letter] = self.count
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -86,9 +86,12 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if letter not in self.storage:
+        if not isinstance(letter, str):
             return -1
-        return self.storage[letter]
+        if letter not in self.storage.keys():
+            return -1
+        id = self.storage[letter]
+        return id
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -96,6 +99,8 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
+        if not isinstance(letter_id, int):
+            return -1
         if letter_id not in self.storage.values():
             return -1
         for x in self.storage.items():
@@ -183,17 +188,21 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-        words = []
-        sentences = []
         corpus = []
         for sentence in encoded_corpus:
-            for word in sentence:
-                for i in range(len(word)-self.size+1):
-                    words.append(tuple([word[i+j] for j in range(self.size)]))
-                sentences.append(tuple(words))
-                words = []
-            corpus.append(tuple(sentences))
             sentences = []
+            for word in sentence:
+                words = []
+                first_symbol = 0
+
+                last_symbol = first_symbol + self.size
+                while last_symbol <= len(word):
+                    n_gram = word[first_symbol: last_symbol]
+                    first_symbol += 1
+                    last_symbol += 1
+                    words.append(tuple(n_gram))
+                sentences.append(tuple(words))
+            corpus.append(tuple(sentences))
         self.n_grams = tuple(corpus)
         return 0
 
@@ -213,15 +222,15 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
+        if not self.n_grams:
             return 1
         for sentence in self.n_grams:
             for word in sentence:
                 for n_gram in word:
-                    if n_gram in self.n_gram_frequencies.keys():
-                        self.n_gram_frequencies[n_gram] += 1
-                    else:
+                    if n_gram not in self.n_gram_frequencies.keys():
                         self.n_gram_frequencies[n_gram] = 1
+                    else:
+                        self.n_gram_frequencies[n_gram] += 1
         return 0
 
     # 8
@@ -281,11 +290,11 @@ class LanguageProfile:
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
         for size in ngram_sizes:
-            trie = NGramTrie(size, self.storage)
+            self.tries.append(NGramTrie(size, self.storage))
+        for trie in self.tries:
             trie.extract_n_grams(encoded_corpus)
             trie.get_n_grams_frequencies()
-            self.tries.append(trie)
-            self.n_words.append(len(trie.n_grams_frequencies))
+            self.n_words.append(len(trie.n_gram_frequencies))
         return 0
 
 
@@ -315,7 +324,9 @@ class LanguageProfile:
         """
         if not isinstance(k, int) or not isinstance(trie_level, int):
             return ()
-        for trie in self.trie:
+        if trie_level < 1 or k < 1:
+            return ()
+        for trie in self.tries:
             if trie.size == trie_level:
                 sorted_keys = tuple(sorted(trie.n_gram_frequencies,
                                            key = trie.n_gram_frequencies.get, reverse = True)[:k])
@@ -366,14 +377,15 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
         return -1
     if not isinstance(known_profile, LanguageProfile) or not isinstance(trie_level, int):
         return -1
-    unknown_n_gramm_freq = unknown_profile.get_top_k_n_grams(k, trie_level)
-    known_n_gramm_freq = known_profile.get_top_k_n_grams(k, trie_level)
     distance = 0
-    for ind, element in enumerate(unknown_n_gramm_freq):
-        if element in known_n_gramm_freq:
-            distance += abs(ind-known_n_gramm_freq.index(element))
-        else:
-            distance += len(known_n_gramm_freq)
+    top_un = unknown_profile.get_top_k_n_grams(k, trie_level)
+    top_kn = known_profile.get_top_k_n_grams(k, trie_level)
+    for ind_un, element_un in enumerate(top_un):
+        if element_un not in top_kn:
+            distance += len(top_kn)
+        for ind_kn, element_kn in enumerate(top_kn):
+            if element_kn == element_un:
+                distance += abs(ind_un - ind_kn)
     return distance
 
 
