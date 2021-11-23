@@ -17,14 +17,6 @@ if __name__ == '__main__':
     SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
-
-def predict_language():
-    """
-    Calculates distance between top_k n-grams of unknown profile and known profile
-    and predicts UNKNOWN_SAMPLE
-    :return: True if succeeds, False if not
-    """
-
     tokenized_en = tokenize_by_sentence(ENG_SAMPLE)
     tokenized_de = tokenize_by_sentence(GERMAN_SAMPLE)
     tokenized_unk = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -48,8 +40,8 @@ def predict_language():
 
     en_distance_6 = calculate_distance(unk_profile_6, en_profile_6, 5, 2)
     de_distance_6 = calculate_distance(unk_profile_6, de_profile_6, 5, 2)
-    result_6 = en_distance_6, de_distance_6
-    print(result_6)
+    RESULT_6 = en_distance_6, de_distance_6
+    print(RESULT_6)
 
     en_profile_8 = LanguageProfile(storage, 'en')
     de_profile_8 = LanguageProfile(storage, 'de')
@@ -71,19 +63,10 @@ def predict_language():
     detector.register_language(en_profile_8)
     detector.register_language(de_profile_8)
 
-    result_8 = detector.detect(profile_unk, 5, (3,))
-    print(result_8)
+    RESULT_8 = detector.detect(profile_unk, 5, (3,))
+    print(RESULT_8)
 
-    expected_distance = 17, 25
-    expected_score = {'en': 24, 'de': 25}
+    EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
+    EXPECTED_SCORE = {'en': 24, 'de': 25}
 
-    if result_6 == expected_distance and result_8 == expected_score:
-        return True
-    return False
-
-
-EXPECTED = predict_language()
-
-RESULT = True
-
-assert RESULT == EXPECTED, 'Detection not working'
+assert RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES and RESULT_8 == EXPECTED_SCORE, 'Detection not working'
