@@ -74,7 +74,8 @@ class LetterStorage:
         """
         if not isinstance(letter, str):
             return -1
-
+        # if we already have the number we return 0
+        # if not than a new element added
         while True:
             if letter in self.storage:
                 return 0
@@ -118,6 +119,7 @@ class LetterStorage:
             return -1
         if corpus == ():
             return 0
+
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
@@ -135,6 +137,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     encoded_corpus = ()
+    # getting id for each letter and then adding recursively
+    # to tuple sequences
     for sentence in corpus:
         word_tuple = ()
         for word in sentence:
@@ -153,6 +157,8 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
+    # getting letter for each id and then adding recursively
+    # to tuple sequences
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     decoded_corpus = ()
@@ -237,6 +243,9 @@ class NGramTrie:
         """
         if not self.n_grams or not isinstance(self.n_grams, tuple):
             return 1
+
+        # if the gram isn't found it's added with the counter-value of 1
+        # if the gram is present in keys - the value is updated
         for sentence in self.n_grams:
             for word in sentence:
                 for gram in word:
@@ -302,12 +311,15 @@ class LanguageProfile:
         """
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
-
+        # creating one n_gram
+        # filling n_gram with encoded corpus and frequencies
+        # adding it to ties storage
+        # filling n_words as well
         for s in ngram_sizes:
             n_gram = NGramTrie(s, self.storage)
-            self.tries.append(n_gram)
             n_gram.extract_n_grams(encoded_corpus)
             n_gram.get_n_grams_frequencies()
+            self.tries.append(n_gram)
             self.n_words.append(len(n_gram.n_gram_frequencies))
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
@@ -337,10 +349,11 @@ class LanguageProfile:
 
         if not isinstance(k, int) or not isinstance(trie_level, int) or (k < 1 or trie_level < 1):
             return ()
-
+        # creates a reversely sorted tuple with needed trie level
+        # and cuts it to necessary length
         for n_trie in self.tries:
-            if trie.size == trie_level:
-                sorted_ngrams_freqs = tuple(sorted(trie.n_gram_frequencies.items(), reverse=True)[:k])
+            if n_trie.size == trie_level:
+                sorted_ngrams_freqs = tuple(sorted(n_trie.n_gram_frequencies.items(), reverse=True)[:k])
                 return sorted_ngrams_freqs
 
         return ()
@@ -368,7 +381,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -383,7 +396,22 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile):
+        return -1
+    if not isinstance(k, int) or not isinstance(trie_level, int):
+        return -1
+
+    known_top_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    unknown_top_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+
+    for n_gram in unknown_top_n_grams:
+        if n_gram in known_top_n_grams:
+            distance += abs(known_top_n_grams.index(n_gram) - unknown_top_n_grams.index(n_gram))
+        else:
+            distance += len(known_top_n_grams)
+
+    return distance
 
 
 # 8
