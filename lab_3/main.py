@@ -46,7 +46,6 @@ def tokenize_by_sentence(text: str) -> tuple:
                 return ()
         new_sentence_tuple.append(tuple(new_words_lst))
     return tuple(new_sentence_tuple)
-    pass
 
 
 # 4
@@ -340,16 +339,16 @@ class LanguageProfile:
         profile = {}
         freq_dict = {}
         new_key = ''
-        for trie in self.tries:
-            for key, value in trie.n_gram_frequencies.items():
-                for letter_id in key:
-                    new_key += self.storage.get_letter_by_id(letter_id)
-                freq_dict[new_key] = value
-                new_key = ''
-        profile['freq'] = freq_dict
-        profile['n_words'] = self.n_words
-        profile['name'] = self.language
-        with open(f'{name}.json', 'w') as file:
+        with open(name, 'w') as file:
+            for trie in self.tries:
+                for key, value in trie.n_gram_frequencies.items():
+                    for letter_id in key:
+                        new_key += self.storage.get_letter_by_id(letter_id)
+                    freq_dict[new_key] = value
+                    new_key = ''
+            profile['freq'] = freq_dict
+            profile['n_words'] = self.n_words
+            profile['name'] = self.language
             json_string = json.dumps(profile)
             file.write(json_string)
         return 0
@@ -368,7 +367,7 @@ class LanguageProfile:
         if not isinstance(file_name, str):
             return 1
 
-        with open(file_name) as file:
+        with open(file_name, 'r', encoding="UTF-8") as file:
             profile = json.load(file)
         self.language = profile["name"]
         self.n_words = profile["n_words"]
