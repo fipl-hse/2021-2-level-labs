@@ -511,8 +511,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
         if input is correct, otherwise -1
         """
         if not (isinstance(unknown_profile, LanguageProfile)
-                or isinstance(k, int)
-                or isinstance(trie_levels, tuple)):
+                and isinstance(k, int)
+                and isinstance(trie_levels, tuple)):
             return -1
         lang_detection = {}
         for lang_label, known_profile in self.language_profiles.items():
