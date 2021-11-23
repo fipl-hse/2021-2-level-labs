@@ -90,7 +90,7 @@ class LetterStorage:
             return -1
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) -> str or int:
+    def get_letter_by_id(self, letter_id: int) -> int or str:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -193,7 +193,8 @@ class NGramTrie:
             for word_tuple in sentence_tuple:
                 if len(word_tuple) >= self.size:
                     for i in range(len(word_tuple)-self.size+1):
-                        word.append(tuple([word_tuple[i+j] for j in range(self.size)]))
+                        word_list = [word_tuple[i+j] for j in range(self.size)]
+                        word.append(tuple(word_list))
                     sentence.append(tuple(word))
                     word = []
             all_sentences.append(tuple(sentence))
