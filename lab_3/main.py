@@ -32,10 +32,12 @@ def tokenize_by_sentence(text: str) -> tuple:
         last_letter = text[-1]
         if last_letter in ('.', '!', '?'):
             text = text[:-1]
+    else:
+        return ()
     for symbol in symbols:
         text = text.replace(symbol, '')
-    if not text:
-        return ()
+    # if not text:
+    #     return ()
     text = text.replace('!', '*end*')
     text = text.replace('?', '*end*')
     text = text.replace('.', '*end*')
@@ -514,7 +516,7 @@ class LanguageDetector:
         detection = {}
         for language, profile in self.language_profiles.items():
             detection[language] = calculate_distance(unknown_profile, profile, k, trie_levels[0])
-            print(detection)
+            # print(detection)
         return detection
 
 
