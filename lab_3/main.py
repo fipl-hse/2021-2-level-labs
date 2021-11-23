@@ -156,7 +156,6 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
@@ -278,7 +277,6 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
@@ -296,10 +294,12 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+        <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
@@ -401,8 +401,8 @@ class LanguageProfile:
                     n_gram_tuple += (self.storage.get_id_by_letter(letter),)
             n_gram_dict[len(n_gram)][n_gram_tuple] = frequency
             n_gram_tuple = ()
-        for n, freq_dict in n_gram_dict.items():
-            trie = NGramTrie(n, self.storage)
+        for number, freq_dict in n_gram_dict.items():
+            trie = NGramTrie(number, self.storage)
             trie.extract_n_grams_frequencies(freq_dict)
             self.tries.append(trie)
         return 0
@@ -418,7 +418,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного профиля -
+    first_n_grams = ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
@@ -445,7 +446,6 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
     def __init__(self):
         self.language_profiles = {}
 
@@ -468,7 +468,8 @@ class LanguageDetector:
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and their scores
+        if input is correct, otherwise -1
         """
         if not (isinstance(unknown_profile, LanguageProfile)
                 and isinstance(k, int)
@@ -534,7 +535,6 @@ class ProbabilityLanguageDetector(LanguageDetector):
         dictionary = {}
         for name, kn_profile in self.language_profiles.items():
             for level in trie_levels:
-                dictionary[(name, level)] = calculate_probability(unknown_profile, kn_profile, k, level)
+                dictionary[(name, level)] = calculate_probability(unknown_profile,
+                                                                  kn_profile, k, level)
         return dictionary
-
-
