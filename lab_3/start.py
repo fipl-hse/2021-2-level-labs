@@ -11,8 +11,8 @@ PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
 profiles = os.listdir(PATH_TO_PROFILES_FOLDER)
 
 if __name__ == '__main__':
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
-    И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
+        И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
     # score 10, k = 1000, trie_levels = (2,)
     # predict SECRET_SAMPLE
