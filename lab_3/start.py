@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
     # score 6, params: k = 5, trie_level = 2
     def score_6():
+        """realisation for score 6"""
         #TOKENS
         eng_sample_tokens = lab_3.main.tokenize_by_sentence(ENG_SAMPLE)
         de_sample_tokens = lab_3.main.tokenize_by_sentence(GERMAN_SAMPLE)
@@ -48,6 +49,7 @@ if __name__ == '__main__':
 
     # score 8, k = 5, trie_level = 3
     def score_8():
+        """realisation for score 8"""
         # TOKENS
         eng_sample_tokens = lab_3.main.tokenize_by_sentence(ENG_SAMPLE)
         de_sample_tokens = lab_3.main.tokenize_by_sentence(GERMAN_SAMPLE)

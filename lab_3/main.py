@@ -384,7 +384,7 @@ class LanguageProfile:
         profile_as_dict['name'] = self.language
         profile_as_dict['freq'] = decoded_freq
         profile_as_dict['n_words'] = self.n_words
-        with open(name, 'w') as file:
+        with open(name, 'w', encoding='utf-8') as file:
             json_string = json.dumps(profile_as_dict)
             file.write(json_string)
         return 0
@@ -401,7 +401,7 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-        with open(file_name, 'r') as file:
+        with open(file_name, 'r', encoding='utf-8') as file:
             profile_dict = json.load(file)
             self.language = profile_dict['name']
             self.n_words = profile_dict['n_words']
