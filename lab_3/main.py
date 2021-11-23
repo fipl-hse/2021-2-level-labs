@@ -299,7 +299,7 @@ class LanguageProfile:
         """
         if not (isinstance(k, int)
                 and isinstance(trie_level, int)
-                and k <= 0):
+                and k > 0):
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
