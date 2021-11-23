@@ -226,7 +226,7 @@ class NGramTrie:
 
         ngrammed_text = []
         n = self.size
-        if not (isinstance(n, int) or isinstance(encoded_corpus, tuple)):
+        if not (isinstance(n, int) and isinstance(encoded_corpus, tuple)):
             return 1
         idk_but_helped = n
         for sentence in encoded_corpus:
@@ -430,7 +430,7 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
         if ng in known_top_ngram:
             length = unknown_top_ngram.index(ng) - known_top_ngram.index(ng)
             if length < 0:
-                length *= -1
+                length = length * (-1)
             result += length
         else:
             result += len(known_top_ngram)
