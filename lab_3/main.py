@@ -105,66 +105,51 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     storage.update(corpus)
-    encoded_corpus = []
+    decoded_corpus = []
     for sentence in corpus:
-        encoded_sentences = []
+        decoded_sentences = []
         for token in sentence:
-            encoded_tokens = []
+            decoded_tokens = []
             for letter in token:
-                encoded_tokens.append(storage.get_letter_by_id(letter))
-            encoded_sentences.append(tuple(encoded_tokens))
-        encoded_corpus.append(tuple(encoded_sentences))
-    return tuple(encoded_corpus)
+                decoded_tokens.append(storage.get_letter_by_id(letter))
+            decoded_sentences.append(tuple(decoded_tokens))
+        decoded_corpus.append(tuple(decoded_sentences))
+    return tuple(decoded_corpus)
 
 
 # 6
 class NGramTrie:
-    """
-    Stores and manages ngrams
-    """
-
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
-    # 6 - biGrams
-    # 8 - threeGrams
-    # 10 - nGrams
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
-        """
-        Extracts n-grams from the given sentence, fills the field n_grams
-        :return: 0 if succeeds, 1 if not
-        e.g.
-        encoded_corpus = (
-            ((1, 2, 3, 4, 1), (1, 5, 2, 1)),
-            ((1, 3, 4, 1), (1, 5, 2, 1))
-        )
-        self.size = 2
-        --> (
-            (
-                ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
-                (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
-            )
-        )
-        """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        ngrams = []
+        for encoded_sentence in encoded_corpus:
+            ngram_sentence = []
+            for encoded_word in encoded_sentence:
+                ngram_word = []
+                for i in range(len(ngram_word)-self.size+1):
+                    ngram_word.append(tuple(encoded_word[i:i+self.size]))
+                ngram_sentence.append(tuple(ngram_word))
+            ngrams.append(tuple(ngram_sentence))
+        self.n_grams = tuple(ngrams)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
-        """
-        Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
-        :return: 0 if succeeds, 1 if not
-        e.g.
-        self.n_grams = (
-            (
-                ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
-                (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
-            )
-        )
-        --> {
-            (1, 2): 1, (2, 3): 1, (3, 4): 2, (4, 1): 2,
-            (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
-        }
-        """
-        pass
+        if not self.n_grams:
+            return 1
+        for ngram_sentence in self.n_grams:
+            for n_gram in ngram_sentence:
+                if n_gram not in self.n_gram_frequencies:
+                    self.n_gram_frequencies[n_gram] = 1
+                else:
+                    self.n_gram_frequencies[n_gram] += 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -193,57 +178,31 @@ class NGramTrie:
 
 # 6
 class LanguageProfile:
-    """
-    Stores and manages language profile information
-    """
-
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
-        """
-        Creates a language profile
-        :param letters: a tuple of encoded letters
-        :param ngram_sizes: a tuple of ngram sizes,
-            e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
-        :return: 0 if succeeds, 1 if not
-        e.g.
-        encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
-        ngram_sizes = (2, 3)
-
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
-        self.n_words --> [11, 9]
-        self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
-        )
-        """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+        for ngram_size in ngram_sizes:
+            self.tries.append(NGramTrie(ngram_size, self.storage))
+        for trie in self.tries:
+            trie.get_n_grams_frequencies()
+            self.n_words.append(len(trie.get_n_grams_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
-        """
-        Returns the most common n-grams
-        :param k: a number of the most common n-grams
-        :param trie_level: N-gram size
-        :return: a tuple of the most common n-grams
-        e.g.
-        language_profile = {
-            'name': 'en',
-            'freq': {
-                (1,): 8, (2,): 3, (3,): 2, (4,): 2, (5,): 2,
-                (1, 2): 1, (2, 3): 1, (3, 4): 2, (4, 1): 2,
-                (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1,
-                (1, 2, 3): 1, (2, 3, 4): 1, (3, 4, 1): 2,
-                (1, 5, 2): 2, (5, 2, 1): 2, (1, 3, 4): 1
-            },
-            'n_words': [5, 8, 6]
-        }
-        k = 5
-        --> (
-            (1,), (2,), (3,), (4,), (5,),
-            (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
-        )
-        """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int):
+            return ()
+        for trie in self.tries:
+            if trie.size == trie_level:
+                sorted_n_grams_frequencies = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
+                sorted_n_grams = [i[0] for i in sorted_n_grams_frequencies]
+                return tuple(sorted_n_grams[:k])
+        return ()
 
     # 8
     def save(self, name: str) -> int:
