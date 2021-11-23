@@ -15,8 +15,7 @@ if __name__ == '__main__':
                     "zueinander passen, am Arbeitsplatz" \
                     " schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. 
-    Dлетува гол во дупка од мраз.
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен.Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
