@@ -332,7 +332,8 @@ class LanguageProfile:
             if ngram_trie.size == trie_level:
                 freq = ngram_trie.n_gram_frequencies
                 top_k_n_grams = tuple(sorted(freq, key = freq.get, reverse = True) [:k])
-        return top_k_n_grams
+                return top_k_n_grams
+        return ()
 
     # 8
     def save(self, name: str) -> int:
