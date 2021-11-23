@@ -225,7 +225,7 @@ class NGramTrie:
         """
 
         ngrammed_text = []
-        if not (isinstance(n, int) and isinstance(encoded_corpus, tuple)):
+        if not isinstance(encoded_corpus, tuple):
             return 1
         for sentence in encoded_corpus:
             if not isinstance(sentence, tuple):
