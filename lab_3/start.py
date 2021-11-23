@@ -3,7 +3,12 @@ Language detection starter
 """
 
 import os
-import main
+from lab_3.main import (tokenize_by_sentence,
+                        LetterStorage,
+                        encode_corpus,
+                        LanguageProfile,
+                        calculate_distance,
+                        LanguageDetector)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,24 +27,24 @@ if __name__ == '__main__':
             predict UNKNOWN_SAMPLE
             print(calculate_distance(unknown_profile, en_profile, 5, 2))
             print(calculate_distance(unknown_profile, de_profile, 5, 2))"""
-        eng_text = main.tokenize_by_sentence(ENG_SAMPLE)
-        de_text = main.tokenize_by_sentence(GERMAN_SAMPLE)
-        unknown_text = main.tokenize_by_sentence(UNKNOWN_SAMPLE)
-        letter_storage = main.LetterStorage()
+        eng_text = tokenize_by_sentence(ENG_SAMPLE)
+        de_text = tokenize_by_sentence(GERMAN_SAMPLE)
+        unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
+        letter_storage = LetterStorage()
         letter_storage.update(eng_text)
         letter_storage.update(de_text)
         letter_storage.update(unknown_text)
-        encoded_eng_text = main.encode_corpus(letter_storage, eng_text)
-        encoded_de_text = main.encode_corpus(letter_storage, de_text)
-        encoded_unknown_text = main.encode_corpus(letter_storage, unknown_text)
-        profile_en = main.LanguageProfile(letter_storage=letter_storage, language_name='en')
+        encoded_eng_text = encode_corpus(letter_storage, eng_text)
+        encoded_de_text = encode_corpus(letter_storage, de_text)
+        encoded_unknown_text = encode_corpus(letter_storage, unknown_text)
+        profile_en = LanguageProfile(letter_storage=letter_storage, language_name='en')
         profile_en.create_from_tokens(encoded_eng_text, (2,))
-        profile_de = main.LanguageProfile(letter_storage=letter_storage, language_name='de')
+        profile_de = LanguageProfile(letter_storage=letter_storage, language_name='de')
         profile_de.create_from_tokens(encoded_de_text, (2,))
-        unknown_profile = main.LanguageProfile(letter_storage=letter_storage, language_name='unk')
+        unknown_profile = LanguageProfile(letter_storage=letter_storage, language_name='unk')
         unknown_profile.create_from_tokens(encoded_unknown_text, (2,))
-        distance_en = main.calculate_distance(unknown_profile, profile_en, 5, 2)
-        distance_de = main.calculate_distance(unknown_profile, profile_de, 5, 2)
+        distance_en = calculate_distance(unknown_profile, profile_en, 5, 2)
+        distance_de = calculate_distance(unknown_profile, profile_de, 5, 2)
         print(distance_en, distance_de)
 
     get_6_score()
@@ -51,26 +56,26 @@ if __name__ == '__main__':
             # predict UNKNOWN_SAMPLE
             # print(detector.detect(profile_unk, 5, 3))
             # EXPECTED_SCORE = {'en': 24, 'de': 25}"""
-        eng_text = main.tokenize_by_sentence(ENG_SAMPLE)
-        de_text = main.tokenize_by_sentence(GERMAN_SAMPLE)
-        unknown_text = main.tokenize_by_sentence(UNKNOWN_SAMPLE)
-        letter_storage = main.LetterStorage()
+        eng_text = tokenize_by_sentence(ENG_SAMPLE)
+        de_text = tokenize_by_sentence(GERMAN_SAMPLE)
+        unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
+        letter_storage = LetterStorage()
         letter_storage.update(eng_text)
         letter_storage.update(de_text)
         letter_storage.update(unknown_text)
-        encoded_eng_text = main.encode_corpus(letter_storage, eng_text)
-        encoded_de_text = main.encode_corpus(letter_storage, de_text)
-        encoded_unknown_text = main.encode_corpus(letter_storage, unknown_text)
-        profile_en = main.LanguageProfile(letter_storage=letter_storage, language_name='en')
+        encoded_eng_text = encode_corpus(letter_storage, eng_text)
+        encoded_de_text = encode_corpus(letter_storage, de_text)
+        encoded_unknown_text = encode_corpus(letter_storage, unknown_text)
+        profile_en = LanguageProfile(letter_storage=letter_storage, language_name='en')
         profile_en.create_from_tokens(encoded_eng_text, (3,))
-        profile_de = main.LanguageProfile(letter_storage=letter_storage, language_name='de')
+        profile_de = LanguageProfile(letter_storage=letter_storage, language_name='de')
         profile_de.create_from_tokens(encoded_de_text, (3,))
-        unknown_profile_1 = main.LanguageProfile(letter_storage=letter_storage, language_name='unk')
+        unknown_profile_1 = LanguageProfile(letter_storage=letter_storage, language_name='unk')
         unknown_profile_1.create_from_tokens(encoded_unknown_text, (3,))
         unknown_profile_1.save('unknown_profile.json')
-        unknown_profile_2 = main.LanguageProfile(letter_storage=letter_storage, language_name='unk')
+        unknown_profile_2 = LanguageProfile(letter_storage=letter_storage, language_name='unk')
         unknown_profile_2.open('unknown_profile.json')
-        language_detector = main.LanguageDetector()
+        language_detector = LanguageDetector()
         language_detector.register_language(profile_en)
         language_detector.register_language(profile_de)
         result = language_detector.detect(unknown_profile_2, 5, (3,))
