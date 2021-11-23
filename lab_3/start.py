@@ -4,6 +4,8 @@ Language detection starter
 
 import os
 
+from lab_3.main import tokenize_by_sentence, LetterStorage, encode_corpus, LanguageProfile, calculate_distance
+
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
@@ -12,6 +14,38 @@ if __name__ == '__main__':
     UNKNOWN_SAMPLE = "Helium is material."
     SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
+
+    def score_6():
+        en_text = tokenize_by_sentence(ENG_SAMPLE)
+        de_text = tokenize_by_sentence(GERMAN_SAMPLE)
+        unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
+
+        en_storage = LetterStorage()
+        en_storage.update(en_text)
+        encoded_en_text = encode_corpus(en_storage, en_text)
+
+        de_storage = LetterStorage()
+        de_storage.update(de_text)
+        encoded_de_text = encode_corpus(de_storage, de_text)
+
+        unknown_storage = LetterStorage()
+        unknown_storage.update(unknown_text)
+        encoded_unknown_text = encode_corpus(unknown_storage, unknown_text)
+
+        en_profile = LanguageProfile(letter_storage=storage, language_name='en')
+        en_profile.create_from_tokens(encoded_en_text, (2,))
+
+        de_profile = LanguageProfile(letter_storage=storage, language_name='de')
+        de_profile.create_from_tokens(encoded_de_text, (2,))
+
+        unknown_profile = LanguageProfile(letter_storage=storage, language_name='unknown')
+        unknown_profile.create_from_tokens(encoded_unknown_text, (2,))
+
+        distance_en_to_unknown = calculate_distance(unknown_profile, en_profile, 5, 2)
+        distance_de_to_unknown = calculate_distance(unknown_profile, de_profile, 5, 2)
+        print(f"DISTANCE_TO_EN_DE_PROFILES = {str(distance_en_to_unknown)}, {str(distance_de_to_unknown)}")
+
+    score_6()
 
     # score 6, params: k = 5, trie_level = 2
     # predict UNKNOWN_SAMPLE

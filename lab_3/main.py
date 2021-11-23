@@ -231,22 +231,21 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
-    """
-    Calculates distance between top_k n-grams of unknown profile and known profile
-    :param unknown_profile: LanguageProfile class instance
-    :param known_profile: LanguageProfile class instance
-    :param k: number of frequent N-grams to take into consideration
-    :param trie_level: N-gram sizes to use in comparison
-    :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
-    второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
-    Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
-    Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
-    Соответственно расстояние между наборами равно 2.
-    """
-    pass
+    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile) \
+            or not isinstance(k, int) or not isinstance(trie_level, int):
+        return -1
+    unknown_top_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_top_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    len_known_top_n_grams = len(known_top_n_grams)
+    for n_gram in unknown_top_n_grams:
+        if n_gram in known_top_n_grams:
+            distance += abs(known_top_n_grams.index(n_gram) - unknown_top_n_grams.index(n_gram))
+        else:
+            distance += len_known_top_n_grams
+    return distance
 
 
 # 8
