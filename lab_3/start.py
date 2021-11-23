@@ -15,10 +15,12 @@ from lab_3.main import (
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
-    ENG_SAMPLE = "Helium is the byproduct of millennia of radioactive decay from the elements thorium and uranium."
-    GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, am Arbeitsplatz schon mal gar nicht."
+    ENG_SAMPLE = "Helium is the byproduct of millennia of radioactive decay " \
+                 "from the elements thorium and uranium."
+    GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, " \
+                    "am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
     # score 6, params: k = 5, trie_level = 2
@@ -67,4 +69,3 @@ if __name__ == '__main__':
     #RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     #assert RESULT, 'Detection not working'
-

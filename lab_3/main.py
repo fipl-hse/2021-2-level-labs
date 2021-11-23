@@ -366,7 +366,7 @@ class LanguageProfile:
         :return: NGramTrie if succeeds, None if not
         """
         for trie in self.tries:
-            if trie.trie_level == trie_level:
+            if trie.size == trie_level:
                 return trie
         return None
 
