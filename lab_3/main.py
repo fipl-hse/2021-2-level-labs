@@ -201,7 +201,7 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        if not isinstance(self.n_grams, tuple):
+        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
             return 1
         for sentence in self.n_grams:
             for token in sentence:
@@ -299,16 +299,16 @@ class LanguageProfile:
         """
         if not (isinstance(k, int)
                 or isinstance(trie_level, int)
-                or k < 1
-                or trie_level < 1):
+                or k <= 0):
             return ()
-        for n_gram_trie in self.tries:
-            if n_gram_trie.size == trie_level:
-                n_gram_trie.get_n_grams_frequencies()
-                sorted_freq = sorted(n_gram_trie.n_gram_frequencies.items(),
+        for trie in self.tries:
+            if trie.size == trie_level:
+                trie.get_n_grams_frequencies()
+                sorted_freq = sorted(trie.n_gram_frequencies.items(),
                                      key=lambda x: x[1], reverse=True)[:k]
                 top_k = tuple([ngram[0] for ngram in sorted_freq])
                 return top_k
+        return ()
 
     # 8
     def save(self, name: str) -> int:
@@ -333,7 +333,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
