@@ -344,7 +344,7 @@ class LanguageProfile:
         :return: 0 if profile saves, 1 if any errors occurred
         """
         if not isinstance(name, str):
-            return 0
+            return 1
         language_profile = {}
         freq_dict = {}
         for trie in self.tries:
@@ -370,7 +370,42 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        n_grams = []
+        # 1
+        with open(file_name, 'r') as lang_profile_file:
+            profile_dict = json.load(lang_profile_file)
+            self.language = profile_dict['name']
+            self.n_words = profile_dict['n_words']
+            # 2
+            sep_index = 0
+            frequencies = list(profile_dict['freq'])
+            for n_gram_index, n_gram in enumerate(profile_dict['freq']):
+                if n_gram_index < len(frequencies) - 1:
+                    if len(n_gram) != len(frequencies[n_gram_index + 1]):
+                        n_grams.append(frequencies[sep_index:n_gram_index])
+                        sep_index = n_gram_index
+            n_grams.append(frequencies[sep_index:n_gram_index])
+            n_grams_tuple = tuple(tuple(tuple(n_grams)))
+            # 3
+            self.storage.update(n_grams_tuple)
+            # 4
+            n_grams_dict = {}
+            for n_gram, freq in profile_dict['freq'].items():
+                encoded_n_gram = []
+                for letter in n_gram:
+                    encoded_n_gram.append(self.storage.get_id_by_letter(letter))
+                if len(tuple(encoded_n_gram)) not in n_grams_dict:
+                    n_grams_dict[len(tuple(encoded_n_gram))] = {tuple(encoded_n_gram): freq}
+                else:
+                    n_grams_dict[len(tuple(encoded_n_gram))] |= {tuple(encoded_n_gram): freq}
+            # 5
+            for group in n_grams_dict:
+                trie = NGramTrie(group, self.storage)
+                trie.extract_n_grams_frequencies(n_grams_dict[group])
+                self.tries.append(trie)
+            return 0
 
 
 # 6
