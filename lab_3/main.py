@@ -489,8 +489,8 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
         if ngram in ngrams_kn:
             for ngram_kn in ngrams_kn:
                 if ngram_kn.size == trie.level:
-                    trie.calculate_log_probabilities():
-                        probability += n_gram_log_probabilities[ngram]
+                    trie.calculate_log_probabilities()
+                    probability += n_gram_log_probabilities[ngram]
     return probability
 
 
