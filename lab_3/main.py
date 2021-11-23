@@ -119,8 +119,6 @@ class LetterStorage:
                 for letter in word:
                     if self._put_letter(letter) == -1:
                         return -1
-                    else:
-                        self._put_letter(letter)
         return 0
 
     def for_open_update(self, letter: str):
