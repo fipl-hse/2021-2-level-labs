@@ -65,7 +65,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.id = 1
+        self.id_number = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -76,8 +76,8 @@ class LetterStorage:
         if not isinstance(letter, str) or not letter:
             return -1
         if letter not in self.storage:
-            self.storage[letter] = self.id
-            self.id += 1
+            self.storage[letter] = self.id_number
+            self.id_number += 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -130,8 +130,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     encoded_corpus = tuple(
-                     tuple(tuple(storage.get_id_by_letter(letter) for letter in word) for word in sentence)
-                                                                                    for sentence in corpus)
+                     tuple(tuple(storage.get_id_by_letter(letter) for letter in word)
+                           for word in sentence) for sentence in corpus)
     return encoded_corpus
 
 
@@ -146,8 +146,8 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     encoded_corpus = tuple(
-                     tuple(tuple(storage.get_letter_by_id(number) for number in word) for word in sentence)
-                                                                                    for sentence in corpus)
+                     tuple(tuple(storage.get_letter_by_id(number) for number in word)
+                           for word in sentence) for sentence in corpus)
     return encoded_corpus
 
 
@@ -461,7 +461,8 @@ class LanguageDetector:
         self.language_profiles[language_profile.language] = language_profile
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int])\
+            -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
@@ -523,8 +524,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct,
-        otherwise -1
+        :return: sorted language labels with corresponding ngram size and their
+        prob scores if input is correct, otherwise -1
         """
         if not (isinstance(unknown_profile, LanguageProfile)
                 and isinstance(k, int)
