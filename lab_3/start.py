@@ -14,17 +14,27 @@ if __name__ == '__main__':
     GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt " \
                     "zueinander passen, am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
 
+    # score 6, params: k = 5, trie_level = 2
+    # predict UNKNOWN_SAMPLE
+    # print(calculate_distance(unknown_profile, en_profile, 5, 2))
+    # print(calculate_distance(unknown_profile, de_profile, 5, 2))
+    # score 8, k = 5, trie_level = 3
+    # predict UNKNOWN_SAMPLE
+    # print(detector.detect(profile_unk, 5, 3))
+    # EXPECTED_SCORE = {'en': 24, 'de': 25}
+    # score 10, k = 1000, trie_levels = (2,)
+    # predict SECRET_SAMPLE
+    # print(detector.detect(unknown_profile, 1000, (2,)))
+    # EXPECTED_LANGUAGE = ?
+    # EXPECTED_MIN_DISTANCE = ?
+
 
     def get_6_score():
-        # score 6, params: k = 5, trie_level = 2
-        # predict UNKNOWN_SAMPLE
-        # print(calculate_distance(unknown_profile, en_profile, 5, 2))
-        # print(calculate_distance(unknown_profile, de_profile, 5, 2))
         eng_text = tokenize_by_sentence(ENG_SAMPLE)
         de_text = tokenize_by_sentence(GERMAN_SAMPLE)
         unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -54,13 +64,7 @@ if __name__ == '__main__':
     get_6_score()
 
 
-
     def get_8_score():
-        # score 8, k = 5, trie_level = 3
-        # predict UNKNOWN_SAMPLE
-        # print(detector.detect(profile_unk, 5, 3))
-        # EXPECTED_SCORE = {'en': 24, 'de': 25}
-
         eng_text = tokenize_by_sentence(ENG_SAMPLE)
         de_text = tokenize_by_sentence(GERMAN_SAMPLE)
         unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -95,14 +99,6 @@ if __name__ == '__main__':
 
 
     get_8_score()
-
-
-
-    # score 10, k = 1000, trie_levels = (2,)
-    # predict SECRET_SAMPLE
-    # print(detector.detect(unknown_profile, 1000, (2,)))
-    # EXPECTED_LANGUAGE = ?
-    # EXPECTED_MIN_DISTANCE = ?
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST

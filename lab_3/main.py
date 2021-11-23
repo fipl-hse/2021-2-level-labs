@@ -72,6 +72,14 @@ class LetterStorage:
         self.storage = {}
         self.count = 0
 
+    def put_letter(self, letter):
+        if not isinstance(letter,str):
+            return -1
+        if letter not in self.storage:
+            self.count += 1
+            self.storage[letter] = self.count
+
+        return 0
     def _put_letter(self, letter: str) -> int:
         """
         Puts a letter into storage, assigns a unique id
@@ -390,7 +398,7 @@ class LanguageProfile:
             return 1
         freq = {}
         profile = {}
-        with open (name, 'w') as file:
+        with open (name, 'w', 'UTF-8') as file:
             profile['name'] = self.language
             profile['n_words'] = self.n_words
             for trie in self.tries:
@@ -417,7 +425,7 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-        with open (file_name, 'r') as file:
+        with open(file_name, 'r', 'UTF-8') as file:
             profile = json.load(file)
             self.n_words = profile['n_words']
             self.language = profile['name']
@@ -426,7 +434,7 @@ class LanguageProfile:
             for n_gram in profile['freq']:
                 new_n_gram = []
                 for letter in n_gram:
-                    self.storage._put_letter(letter)
+                    self.storage.put_letter(letter)
                     new_n_gram.append(self.storage.get_id_by_letter(letter))
                 decoded_n_grams.append((tuple(new_n_gram), profile['freq'][n_gram]))
             sizes = {}
