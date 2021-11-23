@@ -34,14 +34,13 @@ def tokenize_by_sentence(text: str) -> tuple:
                 text = text.replace(letter, value)
     for symbols in invaluable_trash:
         text = text.replace(symbols, '')
-    regexp = re.compile('[.!?] ?')
-    sents = re.split(regexp, text)
-    cleaned_sents = []
+    # regexp = re.compile('[.!?] ?')
+    sents = re.split(re.compile('[.!?] ?'), text)
+    tokenized_sents = []
     for sent in sents:
-        cleaned_sent = sent.strip()
-        if cleaned_sent:
-            cleaned_sents.append([cleaned_sent])
-    for ind, sent in enumerate(cleaned_sents):
+        if sent:
+            tokenized_sents.append([sent])
+    for ind, sent in enumerate(tokenized_sents):
         for words in sent:
             tokens = words.split()
             for i, token in enumerate(tokens):
@@ -49,9 +48,9 @@ def tokenize_by_sentence(text: str) -> tuple:
                 token.insert(0, '_')
                 token.append('_')
                 tokens[i] = tuple(token)
-                cleaned_sents[ind] = tokens
-    tuple_tokens = tuple((tuple(i) for i in cleaned_sents))
-    return tuple_tokens
+                tokenized_sents[ind] = tokens
+    tokenized_sents = tuple((tuple(i) for i in tokenized_sents))
+    return tokenized_sents
 
 
 
@@ -495,9 +494,9 @@ class LanguageDetector:
                 or (not isinstance(trie_levels, Tuple)):
             return -1
         detected = {}
-        for language in self.language_profiles.keys():
+        for language, element in self.language_profiles.items():
             detected[language] = calculate_distance(unknown_profile,
-                                                    self.language_profiles[language],
+                                                    element,
                                                     k, trie_levels[0])
         return detected
 
