@@ -3,8 +3,7 @@ Language detection starter
 """
 
 import os
-from lab_3.main import NGramTrie, \
-    LetterStorage, \
+from lab_3.main import LetterStorage, \
     encode_corpus, \
     LanguageProfile, \
     tokenize_by_sentence, \
