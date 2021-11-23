@@ -3,12 +3,17 @@ Language detection starter
 """
 
 import os
-from lab_3.main import *
+from lab_3.main import tokenize_by_sentence, LetterStorage, encode_corpus, \
+    LanguageProfile, calculate_distance, LanguageDetector
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 
 def score_6():
+    """
+    Score 6
+    :return:
+    """
     eng_text = tokenize_by_sentence(ENG_SAMPLE)
     de_text = tokenize_by_sentence(GERMAN_SAMPLE)
     unk_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -36,6 +41,10 @@ def score_6():
 
 
 def score_8():
+    """
+    Score 8
+    :return:
+    """
     eng_text = tokenize_by_sentence(ENG_SAMPLE)
     de_text = tokenize_by_sentence(GERMAN_SAMPLE)
     unk_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
@@ -69,6 +78,10 @@ def score_8():
 
 
 def score_10():
+    """
+    Score 10
+    :return:
+    """
     profiles = []
 
     for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
@@ -137,4 +150,3 @@ if __name__ == '__main__':
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
-
