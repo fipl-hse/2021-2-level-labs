@@ -13,7 +13,7 @@ if __name__ == '__main__':
     GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, " \
                     "am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
     # score 6, params: k = 5, trie_level = 2
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         # predict UNKNOWN_SAMPLE
         print(un_en_distance)
         print(un_de_distance)
-        EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
+        #EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
     # score 8, k = 5, trie_level = 3
     def score_8():
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         detector.register_language(de_profile)
         # predict UNKNOWN_SAMPLE
         print(detector.detect(unk_profile, 5, (3,)))
-        EXPECTED_SCORE = {'en': 24, 'de': 25}
+        #EXPECTED_SCORE = {'en': 24, 'de': 25}
 
     # score 10, k = 1000, trie_levels = (2,)
     # predict SECRET_SAMPLE
@@ -87,4 +87,3 @@ if __name__ == '__main__':
     RESULT = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
-

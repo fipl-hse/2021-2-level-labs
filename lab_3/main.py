@@ -495,7 +495,7 @@ class LanguageDetector:
                 or (not isinstance(trie_levels, Tuple)):
             return -1
         detected = {}
-        for language in self.language_profiles:
+        for language in self.language_profiles.keys():
             detected[language] = calculate_distance(unknown_profile,
                                                     self.language_profiles[language],
                                                     k, trie_levels[0])
