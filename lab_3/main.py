@@ -90,7 +90,7 @@ class LetterStorage:
             return -1
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) -> int or str:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -100,7 +100,8 @@ class LetterStorage:
             return -1
         for key, value in self.storage.items():
             if value == letter_id:
-                return key
+                letter = key
+        return letter
 
     def update(self, corpus: tuple) -> int:
         """
