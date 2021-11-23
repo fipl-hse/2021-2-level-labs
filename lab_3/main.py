@@ -24,33 +24,41 @@ def tokenize_by_sentence(text: str) -> tuple:
     # return None
     if not isinstance(text, str):
         return ()
-    t = text.split()
-    output_text = []
-    start_sentence = 0
-    stop_symbols = "1234567890?!@#$%^&*()_-+=~`\"':;\\|/.,><{}[]"
+    stop_symbols = "1234567890@#$%^&*()_-+=~`\"':;\\|/,><{}[]"
     end_symbols = "!?."
-    for i, word in enumerate(t):
-        sentence_list = []
-        if word[-1] in end_symbols and (t[-1] == word or t[i + 1][0].isupper() is True or
-                                        t[i + 1][0].isdigit() is True):
-            sentence = t[start_sentence:i + 1]
-            start_sentence = i + 1
-            for token in sentence:
-                standard_word = ['_']
-                token = token.lower()
-                token = token.replace('ö', 'oe')
-                token = token.replace('ü', 'ue')
-                token = token.replace('ä', 'ae')
-                token = token.replace('ß', 'ss')
-                for symbol in stop_symbols:
-                    token = token.replace(symbol, '')
-                for symbol in token:
-                    standard_word.append(symbol)
-                standard_word.append('_')
-                if standard_word != ['_', '_']:
-                    sentence_list.append(tuple(standard_word))
-            output_text.append(tuple(sentence_list))
-    return tuple(output_text)
+    changed_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    list_text = []
+    tupled_text = []
+    for key, value in changed_letters.items():
+        text = text.replace(key, value)
+    for stop_symbol in stop_symbols:
+        text = text.replace(stop_symbol, '')
+    for symbol in text:
+        list_text.append(symbol)
+    len_for_last_symbol = len(list_text) - 1
+    for index, symbol in enumerate(list_text):
+        if symbol in end_symbols:
+            if not (index == len_for_last_symbol or (list_text[index + 1] == ' ' and
+                                                     list_text[index + 2].isupper() == True)):
+                list_text[index] = ''
+            else:
+                list_text[index] = '!!!'
+
+    cleared_text = ''.join(list_text)
+    cleared_text = cleared_text.lower()
+    sentences = cleared_text.split('!!!')
+    sentences.pop(-1)
+    for sentence in sentences:
+        list_sentence = sentence.split()
+        splitted_sentence = []
+        for word in list_sentence:
+            splitted_word = ['_']
+            for letter in word:
+                splitted_word.append(letter)
+            splitted_word.append('_')
+            splitted_sentence.append(tuple(splitted_word))
+        tupled_text.append(tuple(splitted_sentence))
+    return tuple(tupled_text)
 
 
 # 4
