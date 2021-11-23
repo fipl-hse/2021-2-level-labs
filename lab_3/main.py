@@ -68,6 +68,11 @@ class LetterStorage:
         self.count = 0
 
     def put_letter(self, letter):
+        """
+        Puts a letter into storage, assigns a unique id
+        :param letter: a letter
+        :return: 0 if succeeds, 1 if not
+        """
         if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
