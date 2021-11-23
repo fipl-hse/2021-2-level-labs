@@ -268,15 +268,6 @@ class NGramTrie:
         """
         if not self.n_gram_frequencies:
             return 1
-        '''
-        for n_gram in self.n_gram_frequencies:
-            for n_gram_else in self.n_gram_frequencies:
-                if n_gram[:len(n_gram) - 1] == n_gram_else[:len(n_gram_else) - 1]:
-                    amount = round(math.fsum(n_gram[:len(n_gram) - 1]))
-                    self.n_gram_log_probabilities[n_gram] = math.log(self.n_gram_frequencies[n_gram] / amount)
-        '''
-        if not self.n_gram_frequencies:
-            return 1
         for n_gram, frequency in self.n_gram_frequencies.items():
             amount = 0
             for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
@@ -520,19 +511,7 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
             or isinstance(k, int)
             or isinstance(trie_level, int)):
         return -1
-    '''
-    probabilty = 0
-    for n_gram in unknown_profile.get_top_k_n_grams(k, trie_level):
-        if n_gram in 
-    n_gram_trie_unk = NGramTrie(trie_level, unknown_profile.storage)
-    n_gram_trie_kn = NGramTrie(trie_level, known_profile.storage)
 
-    frequency_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
-    frequency_kn = known_profile.get_top_k_n_grams(k, trie_level)
-
-    prob_unk = n_gram_trie_unk.extract_n_grams_log_probabilities(frequency_unk)
-    prob_kn = n_gram_trie_kn.extract_n_grams_log_probabilities()
-    '''
     pass
 
 
