@@ -78,7 +78,7 @@ class LetterStorage:
             return -1
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -101,11 +101,11 @@ class LetterStorage:
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
-                    if self._put_letter(letter) != -1:
+                    letter_result = self._put_letter(letter)
+                    if letter_result != -1:
                         self._put_letter(letter)
                     else:
                         return -1
-
         return 0
 
 # 4
