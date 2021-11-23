@@ -247,9 +247,9 @@ class NGramTrie:
             temp = tuple(ngram[0:self.size - 1])
             starts[temp] = starts.get(temp, 0) + freq
         for ngram, freq in self.n_gram_frequencies.items():
-            for k, v in starts.items():
-                if k == ngram[0:self.size - 1]:
-                    self.n_gram_log_probabilities[ngram] = log(freq / v)
+            for key, value in starts.items():
+                if key == ngram[0:self.size - 1]:
+                    self.n_gram_log_probabilities[ngram] = log(freq / value)
         return 0
 
 
@@ -487,10 +487,10 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     probability = 0
     for ngram in unknown_profile.get_top_k_n_grams(k, trie_level):
         if ngram in ngrams_kn:
-            for ngram_kn in ngrams_kn:
-                if ngram_kn.size == ngram_kn.level:
-                    ngram_kn.calculate_log_probabilities()
-                    probability += ngram_kn.n_gram_log_probabilities[ngram]
+            for trie in known_profile.tries:
+                if trie.size == trie_level:
+                    trie.calculate_log_probabilities()
+                    probability += trie.n_gram_log_probabilities[ngram]
     return probability
 
 
