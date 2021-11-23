@@ -130,9 +130,6 @@ class LetterStorage:
                 for letter in token:
                     self._put_letter(letter)
         return 0
- 
-
-
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -141,7 +138,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not isinstance (corpus, tuple) or not isinstance(storage, LetterStorage):
+    if not isinstance (corpus, tuple) \
+            or not isinstance(storage, LetterStorage):
         return()
     storage.update(corpus)
     encoded_corpus = []
@@ -165,7 +163,8 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    if not isinstance (corpus, tuple) or not isinstance(storage, LetterStorage):
+    if not isinstance (corpus, tuple) \
+            or not isinstance(storage, LetterStorage):
         return()
     storage.update(corpus)
     encoded_corpus = []
@@ -186,7 +185,6 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
@@ -303,7 +301,6 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
@@ -323,7 +320,8 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries -->
+        [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
