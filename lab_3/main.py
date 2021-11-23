@@ -21,7 +21,7 @@ def split_words(token: str) -> tuple:
     skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
     token_list = []
     for sign in skip_signs:
-        token.replace(sign,'')
+        token.replace(sign, '')
     for element in token:
         if element.isalpha():
             token_list.append(element)
@@ -216,11 +216,9 @@ class NGramTrie:
             for element in i:
                 seq = [element[q:] for q in range(self.size)]
                 n_gramm = tuple(zip(*seq))
+                if n_gramm == ():
+                    continue
                 list_n_gramms.append(n_gramm)
-        while () in list_n_gramms:
-            for i in list_n_gramms:
-                if i == ():
-                    list_n_gramms.remove(i)
         final_list.append(tuple(list_n_gramms))
         self.n_grams = tuple(final_list)
         if self.n_grams[0] == ():
@@ -334,12 +332,11 @@ class LanguageProfile:
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
         for size in ngram_sizes:
-            self.tries.append(NGramTrie(size, self.storage))
-        for trie in self.tries:
-            trie.extract_n_grams(encoded_corpus)
-            trie.get_n_grams_frequencies()
-            self.n_words.append(len(trie.n_gram_frequencies))
-
+            n_gramm = NGramTrie(size, self.storage)
+            self.tries.append(n_gramm)
+            n_gramm.extract_n_grams(encoded_corpus)
+            n_gramm.get_n_grams_frequencies()
+            self.n_words.append(len(n_gramm.n_gram_frequencies))
         return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
