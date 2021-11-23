@@ -12,9 +12,11 @@ if __name__ == '__main__':
     ENG_SAMPLE = "Helium is the byproduct of millennia of " \
                  "radioactive decay from the elements thorium and uranium."
     GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt " \
-                    "zueinander passen, am Arbeitsplatz schon mal gar nicht."
+                    "zueinander passen, am Arbeitsplatz" \
+                    " schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. 
+    Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
