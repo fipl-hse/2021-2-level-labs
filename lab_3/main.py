@@ -370,7 +370,6 @@ class LanguageProfile:
             return ()
         if k < 1:
             return ()
-        sorted_freq = (1, 1)
         for trie in self.tries:
             if trie.size == trie_level:
                 freq_dict = trie.n_gram_frequencies
