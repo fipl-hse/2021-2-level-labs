@@ -325,6 +325,8 @@ class LanguageProfile:
             self.tries.append(n_gram)
             self.n_words.append(len(n_gram.n_gram_frequencies))
 
+        return 0
+
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
         Returns the most common n-grams
