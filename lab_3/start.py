@@ -69,4 +69,5 @@ if __name__ == '__main__':
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
     EXPECTED_SCORE = {'en': 24, 'de': 25}
 
-assert RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES and RESULT_8 == EXPECTED_SCORE, 'Detection not working'
+assert RESULT_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES \
+       and RESULT_8 == EXPECTED_SCORE, 'Detection not working'
