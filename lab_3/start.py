@@ -3,7 +3,7 @@ Language detection starter
 """
 
 import os
-from lab_3.main imort (tokenize_by_sentence,
+from lab_3.main import (tokenize_by_sentence,
                        encode_corpus,
                        calculate_distance,
                        LetterStorage,
