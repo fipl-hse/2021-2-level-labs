@@ -403,7 +403,7 @@ class LanguageProfile:
         for n_gram in profile_dict['freq'].keys():
             n_grams.append(tuple(map(self.storage.get_id_by_letter, list(n_gram))))
 
-        for i, number in enumerate(self.n_words):
+        for number in self.n_words:
             size = len(n_grams[0])
             new_freq = dict(zip(tuple(n_grams[:number]), frequencies[:number]))
             n_grams = n_grams[number:]
