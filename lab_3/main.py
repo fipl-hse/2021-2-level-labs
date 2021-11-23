@@ -5,6 +5,7 @@ Language classification using n-grams
 
 from typing import Dict, Tuple
 import json
+import math
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -161,6 +162,7 @@ class NGramTrie:
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -246,15 +248,28 @@ class NGramTrie:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
-        pass
-
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for key, value in n_grams_dictionary.items():
+            if isinstance(key, tuple) and isinstance(value, float):
+                self.n_gram_log_probabilities[key] = value
+        return 0
     # 10
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if self.n_gram_frequencies == {}:
+            return 1
+        summa = 0
+        for current_key, current_value in self.n_gram_frequencies.items():
+            for key, value in self.n_gram_frequencies.items():
+                if list(current_key)[:-1] == list(key)[:-1]:
+                    summa += value
+            self.n_gram_log_probabilities[current_key] = math.log(current_value/summa)
+            summa = 0
+        return 0
 
 
 # 6
@@ -349,11 +364,11 @@ class LanguageProfile:
                     new_key += self.storage.get_letter_by_id(element)
                 freq_dict[new_key] = value
                 new_key = ''
+        profile_as_dict["freq"] = freq_dict
         profile_as_dict['n_words'] = self.n_words
         profile_as_dict['name'] = self.language
-        with open('{}.json'.format(name), 'w', encoding="utf-8") as file:
-            json_string = json.dumps(profile_as_dict)
-            file.write(json_string)
+        with open(name, 'w', encoding="utf-8") as lang_profile_file:
+            json.dump(profile_as_dict, lang_profile_file)
         return 0
 
     # 8
@@ -367,8 +382,29 @@ class LanguageProfile:
         :return: 0 if profile is opened, 1 if any errors occurred
         """
         if not isinstance(file_name, str):
-            return -1
-
+            return 1
+        with open(file_name, 'r', encoding="utf-8") as lang_profile_file:
+            profile_dict = json.load(lang_profile_file)
+        self.language = profile_dict['name']
+        self.n_words = profile_dict['n_words']
+        for key in profile_dict['freq'].keys():
+            for letter in key:
+                if letter not in self.storage.storage:
+                    self.storage._put_letter(letter)
+        n_gram_dict = {}
+        n_gram_tuple = ()
+        for n_gram, frequency in profile_dict['freq'].items():
+            if len(n_gram) not in n_gram_dict:
+                n_gram_dict[len(n_gram)] = {}
+            for letter in n_gram:
+                    n_gram_tuple += (self.storage.get_id_by_letter(letter),)
+            n_gram_dict[len(n_gram)][n_gram_tuple] = frequency
+            n_gram_tuple = ()
+        for n, freq_dict in n_gram_dict.items():
+            trie = NGramTrie(n, self.storage)
+            trie.extract_n_grams_frequencies(freq_dict)
+            self.tries.append(trie)
+        return 0
 
 
 # 6
@@ -453,7 +489,24 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :param trie_level: the size of ngrams
     :return: a probability of unknown top k ngrams
     """
-    pass
+    if not (isinstance(unknown_profile, LanguageProfile)
+            and isinstance(known_profile, LanguageProfile)
+            and isinstance(k, int)
+            and isinstance(trie_level, int)):
+        return -1
+    frequency_unknown = unknown_profile.get_top_k_n_grams(k, trie_level)
+    for trie in known_profile.tries:
+        if trie.size == trie_level:
+            known_profile_n_grams = trie.n_gram_frequencies
+    probability = 0
+    for element in frequency_unknown:
+        if element in known_profile_n_grams.keys():
+            for trie in known_profile.tries:
+                if trie.size == trie_level:
+                    trie.calculate_log_probabilities()
+                    probability += trie.n_gram_log_probabilities[element]
+    return probability
+
 
 
 # 10
@@ -462,13 +515,24 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple)\
+            -> Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct,
+        otherwise -1
         """
-        pass
+        if not (isinstance(unknown_profile, LanguageProfile)
+                and isinstance(k, int)
+                and isinstance(trie_levels, tuple)):
+            return -1
+        dictionary = {}
+        for name, kn_profile in self.language_profiles.items():
+            for level in trie_levels:
+                dictionary[(name, level)] = calculate_probability(unknown_profile, kn_profile, k, level)
+        return dictionary
+
 
