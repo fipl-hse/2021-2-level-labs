@@ -239,6 +239,7 @@ class NGramTrie:
                     if isinstance(letter_id, int):
                         self.n_gram_frequencies[n_gram] = frequency
         return 0
+
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
         """
@@ -342,7 +343,22 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+        if not isinstance(name, str):
+            return 0
+        language_profile = {}
+        freq_dict = {}
+        for trie in self.tries:
+            for n_gram, freq in trie.n_gram_frequencies.items():
+                decoded_n_gram = ''.join([self.storage.get_letter_by_id(letter_id)
+                                          for letter_id in n_gram])
+                freq_dict[decoded_n_gram] = freq
+        language_profile['freq'] = freq_dict
+        language_profile['n_words'] = self.n_words
+        language_profile['name'] = self.language
+        with open(name, 'w') as file_to_save:
+            json_string = json.dumps(language_profile)
+            file_to_save.write(json_string)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
