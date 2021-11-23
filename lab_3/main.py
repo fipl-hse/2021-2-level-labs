@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import math
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -432,10 +432,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     known_ng_len = len(known_top_ngram)
     for ng in unknown_top_ngram:
         if ng in known_top_ngram:
-            length = known_top_ngram.index(ng) - unknown_top_ngram.index(ng)
-            if length < 0:
-                length = length * (-1)
-            distance += length
+            distance += abs(known_top_ngram.index(ng) - unknown_top_ngram.index(ng))
         else:
             distance += known_ng_len
     return distance
