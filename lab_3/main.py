@@ -260,6 +260,8 @@ class NGramTrie:
         """
         #if isinstance(self.n_grams, tuple) or self.n_grams != ():
             #return 1
+        if not isinstance(self.n_grams, tuple):
+            return 1
         for n_sent in self.n_grams:
             if not isinstance(n_sent, tuple):
                 return 1
