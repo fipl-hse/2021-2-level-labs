@@ -248,7 +248,14 @@ class NGramTrie:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, probability in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple) and isinstance(probability, float):
+                for letter_id in n_gram:
+                    if isinstance(letter_id, int):
+                        self.n_gram_log_probabilities[n_gram] = probability
+        return 0
 
     # 10
     def calculate_log_probabilities(self) -> int:
