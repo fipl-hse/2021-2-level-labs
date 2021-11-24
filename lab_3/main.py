@@ -8,7 +8,7 @@ from typing import Dict, Tuple
 import re
 
 
-def _split_into_letters(token: str) -> tuple:
+def split_into_letters(token: str) -> tuple:
     """
     Splits a token into letters, framed with '_'
     :param token: a token
@@ -30,7 +30,7 @@ def _split_into_letters(token: str) -> tuple:
     return tuple(token)
 
 
-def _tokenize(text: str) -> tuple:
+def tokenize(text: str) -> tuple:
     """
     Splits a text into tokens, tokens into letters
     Tokens are framed with '_'
@@ -39,7 +39,7 @@ def _tokenize(text: str) -> tuple:
     """
     tokens = []
     for token in text.lower().split():
-        token = _split_into_letters(token)
+        token = split_into_letters(token)
         if token:
             tokens.append(token)
     return tuple(tokens)
@@ -66,7 +66,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     # preceded by sentence-ending punctuation and
     # followed by an uppercase letter
     for sentence in re.split(r"(?<=[!?.])\W(?=[\wäöüßÄÖÜẞ])", text):
-        tokens = _tokenize(sentence)
+        tokens = tokenize(sentence)
         if tokens:
             sentences.append(tokens)
     return tuple(sentences)
@@ -200,10 +200,6 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     return tuple(tuple(tuple(storage.get_letter_by_id(i) for i in t) for t in s) for s in corpus)
 
 
-def _word_to_n_gram(word: tuple, size: int) -> tuple:
-    return tuple(word[i:i+size] for i in range(len(word)-size+1))
-
-
 # 6
 class NGramTrie:
     """
@@ -216,6 +212,9 @@ class NGramTrie:
         self.n_grams = []
         self.n_gram_frequencies = {}
         self.n_gram_log_probabilities = {}
+
+    def word_to_n_gram(self, word: tuple) -> tuple:
+        return tuple(word[i:i + self.size] for i in range(len(word) - self.size + 1))
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -239,8 +238,8 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-        # Apply _word_to_n_gram to each word
-        n_grams = tuple(tuple(_word_to_n_gram(w, self.size) for w in s) for s in encoded_corpus)
+        # Apply word_to_n_gram to each word
+        n_grams = tuple(tuple(self.word_to_n_gram(w) for w in s) for s in encoded_corpus)
         # Remove any empty tuples.
         # Cannot combine the two steps without sacrificing performance or readability.
         self.n_grams = tuple(tuple(w for w in s if w) for s in n_grams if s)
