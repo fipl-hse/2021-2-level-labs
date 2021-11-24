@@ -62,6 +62,7 @@ if __name__ == '__main__':
         predict UNKNOWN_SAMPLE
         EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
         """
+        # use create_from_tokens
         eng_profile.create_from_tokens(encoded_eng_text, (trie_level,))
         de_profile.create_from_tokens(encoded_de_text, (trie_level,))
         unk_profile.create_from_tokens(encoded_unk_text, (trie_level,))
@@ -78,6 +79,7 @@ if __name__ == '__main__':
         predict UNKNOWN_SAMPLE
         EXPECTED_SCORE = {'en': 24, 'de': 25}
         """
+        # use create_from_tokens
         eng_profile.create_from_tokens(encoded_eng_text, (trie_level,))
         de_profile.create_from_tokens(encoded_de_text, (trie_level,))
         unk_profile.create_from_tokens(encoded_unk_text, (trie_level,))
@@ -100,10 +102,13 @@ if __name__ == '__main__':
         EXPECTED_LANGUAGE = ?
         EXPECTED_MIN_DISTANCE = ?
         """
+        # use create_from_tokens
+        secret_profile.create_from_tokens(encoded_secret_text, trie_levels)
+
         detector = ProbabilityLanguageDetector()
 
         for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
-            profile = LanguageProfile(LetterStorage(), file_name)
+            profile = LanguageProfile(storage, file_name)
             profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'profiles', file_name))
             detector.register_language(profile)
 
@@ -122,7 +127,8 @@ if __name__ == '__main__':
 
     EXPECTED_LANGUAGE = score_10()[0]
     EXPECTED_MIN_DISTANCE = score_10()[1]
-    assert EXPECTED_LANGUAGE, EXPECTED_MIN_DISTANCE
+    print(EXPECTED_LANGUAGE, EXPECTED_MIN_DISTANCE)
+
     # RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
