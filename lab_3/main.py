@@ -214,6 +214,11 @@ class NGramTrie:
         self.n_gram_log_probabilities = {}
 
     def word_to_n_gram(self, word: tuple) -> tuple:
+        """
+        Converts a word to an N-gram.
+        :param word: a word
+        :return: an N-gram
+        """
         return tuple(word[i:i + self.size] for i in range(len(word) - self.size + 1))
 
     # 6 - biGrams
