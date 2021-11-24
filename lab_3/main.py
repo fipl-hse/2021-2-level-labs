@@ -189,7 +189,7 @@ class NGramTrie:
             n_gram_sentence = []
             for encoded_word in encoded_sentence:
                 n_gram_word = []
-                for id_index, letter_id in enumerate(encoded_word):
+                for id_index in range(len(encoded_word)):
                     if id_index + self.size <= len(encoded_word):
                         n_gram_word.append(tuple(encoded_word[id_index:id_index + self.size]))
                 if n_gram_word:
@@ -296,10 +296,7 @@ class LanguageProfile:
             self.tries.append(n_gram)
             n_gram.get_n_grams_frequencies()
         for n_gram_trie in self.tries:
-            n_gram_frequency = 0
-            for unique_n_gram in n_gram_trie.n_gram_frequencies:
-                n_gram_frequency += 1
-            self.n_words.append(n_gram_frequency)
+            self.n_words.append(len(n_gram_trie.n_gram_frequencies))
         return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
@@ -382,12 +379,14 @@ class LanguageProfile:
             self.n_words = profile_dict['n_words']
             # 2
             sep_index = 0
-            for n_gram_index, n_gram in enumerate(profile_dict['freq']):
+            for n_gram_index in range(len(profile_dict['freq'])):
                 if n_gram_index < len(list(profile_dict['freq'])) - 1:
-                    if len(n_gram) != len(list(profile_dict['freq'])[n_gram_index + 1]):
+                    if len(list(profile_dict['freq'])[n_gram_index]) != \
+                            len(list(profile_dict['freq'])[n_gram_index + 1]):
                         n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
                         sep_index = n_gram_index
-            n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
+                else:
+                    n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
             n_grams_tuple = tuple(tuple(tuple(n_grams)))
             # 3
             self.storage.update(n_grams_tuple)
