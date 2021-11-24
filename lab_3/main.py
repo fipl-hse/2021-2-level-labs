@@ -6,6 +6,7 @@ Language classification using n-grams
 from typing import Dict, Tuple
 import re
 import json
+import math
 
 
 # 4
@@ -155,6 +156,7 @@ class NGramTrie:
         self.storage = letter_storage
         self.n_grams = ()
         self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -232,7 +234,12 @@ class NGramTrie:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, log in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple) and isinstance(log, float):
+                self.n_gram_log_probabilities[n_gram] = log
+        return 0
 
     # 10
     def calculate_log_probabilities(self) -> int:
@@ -240,7 +247,15 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_gram_frequencies:
+            return 1
+        for n_gram, freq in self.n_gram_frequencies.items():
+            new_freq = 0
+            for next_n_gram, next_freq in self.n_gram_frequencies.items():
+                if next_n_gram[:-1] == n_gram[:-1]:
+                    new_freq += next_freq
+            self.n_gram_log_probabilities[n_gram] = math.log(freq/new_freq, math.e)
+        return 0
 
 
 # 6
@@ -465,7 +480,19 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :param trie_level: the size of ngrams
     :return: a probability of unknown top k ngrams
     """
-    pass
+    if (not isinstance(unknown_profile, LanguageProfile)
+            or not isinstance(known_profile, LanguageProfile)
+            or not isinstance(k, int) or not isinstance(trie_level, int)):
+        return -1
+    unknown_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    prob = 0
+    for trie in known_profile.tries:
+        if trie.size == trie_level:
+            trie.calculate_log_probabilities()
+        for n_gram in unknown_n_grams:
+            if n_gram in trie.n_gram_log_probabilities:
+                prob += trie.n_gram_log_probabilities[n_gram]
+    return prob
 
 
 # 10
