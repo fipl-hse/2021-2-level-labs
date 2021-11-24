@@ -50,9 +50,9 @@ def tokenize_by_sentence(text: str) -> tuple:
             return ()
         # going through a phrase word by word
         # adding _ and rewriting it back into tmp_phrase
-        for ii, word in enumerate(tmp_phrase):
+        for index, word in enumerate(tmp_phrase):
             tmp_word = '_' + word + '_'
-            tmp_phrase[ii] = tuple(tmp_word)
+            tmp_phrase[index] = tuple(tmp_word)
         # adding an updated phrase into phrases
         phrases[i] = tuple(tmp_phrase)
     return tuple(phrases)
@@ -93,10 +93,14 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if letter not in self.storage:
+        if not isinstance(letter, str):
+            return -1
+        if char not in self.storage.keys():
             return -1
 
-        return self.storage[letter]
+        char_id = self.storage[letter]
+
+        return char_id
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
         """
@@ -314,10 +318,12 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+                       <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
@@ -445,6 +451,7 @@ class LanguageProfile:
 
         return 0
 
+
 # 6
 def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
@@ -455,9 +462,11 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного профиля -
+    first_n_grams = ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
-    Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
+    Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0,
+    во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
@@ -500,7 +509,8 @@ class LanguageDetector:
         self.language_profiles[language_profile.language] = language_profile
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) \
+            -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
@@ -536,8 +546,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
-                                                                                               str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> \
+            Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
