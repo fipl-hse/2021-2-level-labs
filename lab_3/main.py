@@ -42,7 +42,7 @@ def tokenize_by_sentence(text: str) -> tuple:
                 lst_of_letters.insert(0, '_')
                 lst_of_letters.append('_')
                 new_words_lst.append(tuple(lst_of_letters))
-            if len(new_words_lst) == 0:
+            if not len(new_words_lst):
                 return ()
         new_sentence_tuple.append(tuple(new_words_lst))
     return tuple(new_sentence_tuple)
@@ -160,7 +160,6 @@ class NGramTrie:
         self.size = n
         self.n_grams = []
         self.n_gram_frequencies = {}
-        pass
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -346,8 +345,7 @@ class LanguageProfile:
             profile['freq'] = freq_dict
             profile['n_words'] = self.n_words
             profile['name'] = self.language
-            json_string = json.dumps(profile)
-            file.write(json_string)
+            json.dump(profile, file)
         return 0
 
     # 8
