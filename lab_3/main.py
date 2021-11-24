@@ -28,16 +28,16 @@ def tokenize_by_sentence(text: str) -> tuple:
     tokenized_sentence = ''
     tokenized_sentences = []
     underscore = ['_']
-    punctuation = ('!', '?', '.')
+    punctuation = ['!', '?', '.', '...']
 
     german_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
     for k, v in german_letters.items():
         text = text.replace(k, v)
 
-    special_symbols = ('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
+    special_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
                        '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '1', '2', '3', '4', '5', '6',
-                       '7', '8', '9', '0')
+                       '7', '8', '9', '0']
 
     for symbol in special_symbols:
         text = text.replace(symbol, '')
