@@ -39,9 +39,14 @@ def tokenize_by_sentence(text: str) -> tuple:
     for symbol in special_symbols:
         text = text.replace(symbol, '')
 
-    for symbol in text:
-        if symbol.isspace() or symbol.isalpha():
+    text_length = text(len)
+
+    for i, symbol in enumerate(text):
+        if i + 1 != text_length and symbol not in ['.', '!', '?']:
             tokenized_sentence += symbol
+        elif i + 1 == text_length and symbol not in ['.', '!', '?']:
+            tokenized_sentence += symbol
+            tokenized_sentences.append(tokenized_sentence.lower())
         else:
             tokenized_sentences.append(tokenized_sentence.lower())
             tokenized_sentence = ''
