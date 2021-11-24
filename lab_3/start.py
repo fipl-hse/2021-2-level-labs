@@ -86,9 +86,9 @@ if __name__ == '__main__':
         profile.open(f"profiles/{file_name}")
         detector.register_language(profile)
     probabilities_dict = detector.detect(secret_profile, 1000, (2,))
-    secret_language = min(probabilities_dict, key=probabilities_dict.get)[0]
-    print('Language:', secret_language)
-    print('Distance:', probabilities_dict[secret_language])
+    secret_language = min(probabilities_dict, key=probabilities_dict.get)
+    print('Language:', secret_language[0])
+    print('Probability:', probabilities_dict[secret_language])
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT_SCORE_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
