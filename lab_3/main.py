@@ -1,5 +1,10 @@
-import re
+"""
+Lab 3
+Language classification using n-grams
+"""
+
 from typing import Dict, Tuple
+import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
