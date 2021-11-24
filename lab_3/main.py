@@ -39,7 +39,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     for symbol in special_symbols:
         text = text.replace(symbol, '')
 
-    text_length = text(len)
+    text_length = len(text)
 
     for i, symbol in enumerate(text):
         if i + 1 != text_length and symbol not in ['.', '!', '?']:
