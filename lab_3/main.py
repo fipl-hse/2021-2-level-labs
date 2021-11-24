@@ -95,7 +95,7 @@ class LetterStorage:
         """
         if not isinstance(letter, str):
             return -1
-        if char not in self.storage.keys():
+        if letter not in self.storage.keys():
             return -1
 
         char_id = self.storage[letter]
@@ -470,7 +470,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile):
+    if not isinstance(unknown_profile, LanguageProfile) or \
+       not isinstance(known_profile, LanguageProfile):
         return -1
     if not isinstance(k, int) or not isinstance(trie_level, int):
         return -1
@@ -516,7 +517,8 @@ class LanguageDetector:
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels
+        and their scores if input is correct, otherwise -1
         """
         if not isinstance(unknown_profile, LanguageProfile) or \
                 not isinstance(k, int) or not isinstance(trie_levels, tuple):
@@ -553,6 +555,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding ngram size
+        and their prob scores if input is correct, otherwise -1
         """
         pass

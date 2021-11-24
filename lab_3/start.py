@@ -31,13 +31,13 @@ if __name__ == '__main__':
     encoded_deu = encode_corpus(unistorage, deu)
     encoded_unk = encode_corpus(unistorage, unk)
 
-    profile_eng = LanguageProfile(letter_storage=unistorage, language_name='en')
+    profile_eng = LanguageProfile(unistorage, 'en')
     profile_eng.create_from_tokens(encoded_eng, (2,))
 
-    profile_deu = LanguageProfile(letter_storage=unistorage, language_name='de')
+    profile_deu = LanguageProfile(unistorage, 'de')
     profile_deu.create_from_tokens(encoded_deu, (2,))
 
-    profile_unk = LanguageProfile(letter_storage=unistorage, language_name='unk')
+    profile_unk = LanguageProfile(unistorage, 'unk')
     profile_unk.create_from_tokens(encoded_unk, (2,))
 
     print(calculate_distance(profile_unk, profile_eng, 5, 2))
@@ -47,18 +47,18 @@ if __name__ == '__main__':
     # score 8, k = 5, trie_level = 3
     # predict UNKNOWN_SAMPLE
 
-    profile_eng_8 = LanguageProfile(letter_storage=storage, language_name='en')
+    profile_eng_8 = LanguageProfile(unistorage, 'en')
     profile_eng_8.create_from_tokens(encoded_eng, (3,))
 
-    profile_deu_8 = LanguageProfile(letter_storage=storage, language_name='de')
+    profile_deu_8 = LanguageProfile(unistorage, 'de')
     profile_deu_8.create_from_tokens(encoded_deu, (3,))
 
-    profile_unk_8 = LanguageProfile(letter_storage=storage, language_name='unk')
+    profile_unk_8 = LanguageProfile(unistorage, 'unk')
     profile_unk_8.create_from_tokens(encoded_unk, (3,))
 
     profile_unk_8.save('unknown_profile.json')
 
-    profile_unk_8_saved = LanguageProfile(letter_storage=storage, language_name='unk')
+    profile_unk_8_saved = LanguageProfile(unistorage, 'unk')
     profile_unk_8_saved.open('unknown_profile.json')
 
     detector = LanguageDetector()
