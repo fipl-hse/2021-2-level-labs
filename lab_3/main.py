@@ -21,21 +21,23 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+
     if not isinstance(text, str):
         return ()
-    invaluable_trash = ['`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+    invaluable_trash = ('`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
-                        '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+                        '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
     for symbol in invaluable_trash:
         text = text.replace(symbol, '')
     for key, value in {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}.items():
         text = text.replace(key, value)
     sentence = ''
     all_sentences = []
+    end_punctuation_marks = ('.', '?', '!', '…')
     for number, symbol in enumerate(text):
-        if symbol not in ['.', '?', '!', '…'] and number + 1 != len(text):
+        if symbol not in end_punctuation_marks and number + 1 != len(text):
             sentence += symbol
-        elif number + 1 == len(text) and symbol not in ['.', '?', '!', '…']:
+        elif number + 1 == len(text) and symbol not in end_punctuation_marks:
             sentence += symbol
             all_sentences.append(sentence.lower())
         else:
@@ -96,12 +98,11 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        if letter_id not in self.storage.values():
-            return -1
         for key, value in self.storage.items():
             if value == letter_id:
                 letter = key
         return letter
+
 
     def update(self, corpus: tuple) -> int:
         """
@@ -272,6 +273,7 @@ class NGramTrie:
             self.n_gram_log_probabilities[current_key] = math.log(current_value/summa)
             summa = 0
         return 0
+
 
 
 # 6
@@ -501,6 +503,7 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
             and isinstance(k, int)
             and isinstance(trie_level, int)):
         return -1
+
     frequency_unknown = unknown_profile.get_top_k_n_grams(k, trie_level)
     for trie in known_profile.tries:
         if trie.size == trie_level:
@@ -513,7 +516,6 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
                     trie.calculate_log_probabilities()
                     probability += trie.n_gram_log_probabilities[element]
     return probability
-
 
 
 # 10
