@@ -349,8 +349,7 @@ class LanguageProfile:
         profile_as_dict['n_words'] = self.n_words
         profile_as_dict['name'] = self.language
         with open(name, 'w', encoding='UTF-8') as file:
-            json_string = json.dumps(profile_as_dict)
-            file.write(json_string)
+            json.dump(profile_as_dict, file)
         return 0
 
     # 8
