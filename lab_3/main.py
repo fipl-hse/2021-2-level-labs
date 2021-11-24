@@ -306,12 +306,19 @@ class NGramTrie:
         """
         if not self.n_gram_frequencies:
             return 1
+        # A group is a dictionary, where the key is an N-gram without the final element,
+        # and the value is a list of N-grams that may follow (by adding a final element).
+        # The grouping algorithm is O(n), the more naive approach of checking every combination
+        # of two existing N-grams for a match is O(n^2).
+        groups = {}
         for n_gram, frequency in self.n_gram_frequencies.items():
-            frequencies = 0
-            for adjacent_n_gram, adjacent_frequency in self.n_gram_frequencies.items():
-                if adjacent_n_gram[:-1] == n_gram[:-1]:
-                    frequencies += adjacent_frequency
-            self.n_gram_log_probabilities[n_gram] = math.log(frequency / frequencies, math.e)
+            if not n_gram[:-1] in groups:
+                groups[n_gram[:-1]] = {}
+            groups[n_gram[:-1]][n_gram] = frequency
+        for group in groups.values():
+            frequencies = sum(group.values())
+            for n_gram, frequency in group.items():
+                self.n_gram_log_probabilities[n_gram] = math.log(frequency / frequencies, math.e)
         return 0
 
 
