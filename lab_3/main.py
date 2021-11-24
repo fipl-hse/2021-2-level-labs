@@ -21,42 +21,26 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str):
+    if not isinstance(text, str) or not text:
         return ()
-    text = text.lower()
-    for letter in text:
-        if letter == "ü":
-            text.replace("ü", "ue")
-        elif letter == "ö":
-            text.replace("ö", "oe")
-        elif letter == "ä":
-            text.replace("ä", "ae")
-        elif letter == "ß":
-            text.replace("ß", "ss")
-    # Let's find sentences though it's not perfect yet
-    sentences = re.findall(r"\s?[^\.]+[\.\!\?]", text)
-    # This list is for ready tuples which contain words as tuples of letters
-    tokens = []
-    for sentence in sentences:
-        # Removes everything that's not a letter, a space character or a punctuation mark at the end of a sentence
-        new_sentence = re.sub(r"[^\w\s\.\!\?]", "", sentence)
-        # Creates a list of words from a sentence
-        new_sentence = re.findall(r"\s?[a-z]+[\s\.\!\?]", new_sentence)
-        # This list is for tuples of words which are in the sentence
-        tokens_sentence = []
-        # Let's look at every word in the sentence
-        for words in new_sentence:
-            # Removes spaces in the beginning and in the end of a word and creates a list with new words
-            words = re.findall(r"[a-z]+", words)
-            # This list is for letters of the word
-            tokens_words = []
-            for word in words:
-                tokens_words.extend(word)
-                tokens_words.append("_")
-                tokens_words.insert(0, "_")
-            tokens_sentence.append(tuple(tokens_words))
-        tokens.append(tuple(tokens_sentence))
-    return tuple(tokens)
+    sentences = re.split(r'[.!?]\s', text)
+    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    smth = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890"""
+    for index, sentence in enumerate(sentences):
+        new_sentence = sentence.lower()
+        for letter in sentence:
+            if letter in umlauts:
+                new_sentence = new_sentence.replace(letter, umlauts.get(letter))
+            if letter in smth:
+                new_sentence = new_sentence.replace(letter, '')
+        new_sentence = new_sentence.split()
+        if len(new_sentence) == 0:
+            return ()
+        for word_i, word in enumerate(new_sentence):
+            new_word = '_' + word + '_'
+            new_sentence[word_i] = tuple(new_word)
+        sentences[index] = tuple(new_sentence)
+    return tuple(sentences)
 
 
 # 4
@@ -78,7 +62,7 @@ class LetterStorage:
                 len(letter) == 0:
             return -1
         if letter not in self.storage:
-            self.storage[letter] = len(self.storage)
+            self.storage[letter] = len(self.storage) + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -138,7 +122,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or \
             not isinstance(corpus, tuple):
         return ()
-    encoded = []
+    encoded_corpus = []
     for sentence in corpus:
         if not isinstance(sentence, tuple):
             return ()
@@ -150,8 +134,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             for letter in word:
                 encoded_word.append(storage.get_id_by_letter(letter))
             encoded_sentence.append(tuple(encoded_word))
-        encoded.append(tuple(encoded_sentence))
-    return tuple(encoded)
+        encoded_corpus.append(tuple(encoded_sentence))
+    return tuple(encoded_corpus)
 
 
 # 4
@@ -165,7 +149,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or \
             not isinstance(corpus, tuple):
         return ()
-    decoded = []
+    decoded_corpus = []
     for sentence in corpus:
         if not isinstance(sentence, tuple):
             return ()
@@ -177,8 +161,8 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             for letter in word:
                 decoded_word.append(storage.get_letter_by_id(letter))
             decoded_sentence.append(tuple(decoded_word))
-        decoded.append(tuple(decoded_sentence))
-    return tuple(decoded)
+        decoded_corpus.append(tuple(decoded_sentence))
+    return tuple(decoded_corpus)
 
 
 # 6
@@ -188,7 +172,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -210,7 +197,25 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        n_gram_list = []
+        for sentence in encoded_corpus:
+            n_gram_sentence = []
+            if not isinstance(sentence, tuple):
+                return 1
+            for word in sentence:
+                n_gram_word = []
+                if not isinstance(word, tuple):
+                    return 1
+                for i in range(len(word)):
+                    n_gram = word[i:i + self.size]
+                    if len(n_gram) == self.size:
+                        n_gram_word.append(n_gram)
+                n_gram_sentence.append(tuple(n_gram_word))
+            n_gram_list.append(tuple(n_gram_sentence))
+        self.n_grams = tuple(n_gram_list)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -228,7 +233,17 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not isinstance(self.n_grams, tuple) or \
+                len(self.n_grams) == 0:
+            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for letter in word:
+                    if letter not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[letter] = 1
+                    else:
+                        self.n_gram_frequencies[letter] += 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -262,7 +277,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -281,7 +299,16 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or \
+                not isinstance(ngram_sizes, tuple):
+            return 1
+        for size in ngram_sizes:
+            sample = NGramTrie(size, self.storage)
+            sample.extract_n_grams(encoded_corpus)
+            sample.get_n_grams_frequencies()
+            self.tries.append(sample)
+            self.n_words.append(len(sample.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -307,7 +334,16 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or \
+                not isinstance(trie_level, int) or \
+                k <= 0 or trie_level <= 0:
+            return ()
+        for n_gram in self.tries:
+            if n_gram.size == trie_level:
+                n_gram.get_n_grams_frequencies()
+                n_grams = sorted(n_gram.n_gram_frequencies, key=n_gram.n_gram_frequencies.get, reverse=True)
+                return tuple(n_grams[:k])
+        return ()
 
     # 8
     def save(self, name: str) -> int:
@@ -332,7 +368,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -347,7 +383,21 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not isinstance(unknown_profile, LanguageProfile) or \
+            not isinstance(known_profile, LanguageProfile) or \
+            not isinstance(k, int) or \
+            not isinstance(trie_level, int) or \
+            k <= 0 or trie_level <= 0:
+        return -1
+    unknown_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    calc = 0
+    for unknown_n_gram_index, unknown_n_gram in enumerate(unknown_n_grams):
+        if unknown_n_gram in known_n_grams:
+            calc += abs(unknown_n_gram_index - known_n_grams.index(unknown_n_gram))
+        else:
+            calc += len(known_n_grams)
+    return calc
 
 
 # 8
