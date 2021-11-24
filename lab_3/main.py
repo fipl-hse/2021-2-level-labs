@@ -269,10 +269,10 @@ class NGramTrie:
                 if not isinstance(n_word, tuple):
                     return 1
                 for ngram in n_word:
-                    if ngram in self.n_gram_frequencies:
-                        self.n_gram_frequencies[ngram] += 1
-                    else:
+                    if ngram not in self.n_gram_frequencies:
                         self.n_gram_frequencies[ngram] = 1
+                    else:
+                        self.n_gram_frequencies[ngram] += 1
         return 0
 
     # 8
