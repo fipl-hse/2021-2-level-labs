@@ -185,21 +185,22 @@ class NGramTrie:
             )
         )
         """
-        if not(isinstance(encoded_corpus, tuple) and encoded_corpus):
+        if not isinstance(encoded_corpus, tuple):
             return 1
-        ngram_corpus = []
+        lst_ngram = []
         for s in encoded_corpus:
-            s_lst = []
+            n_gram_s = []
             for token in s:
-                t_lst = []
-                for letter in range(len(token)):
-                    uni_gram = token[letter: + self.size]
-                    if len(uni_gram) == self.size:
-                        t_lst.append(uni_gram)
-                s_lst.append(tuple(t_lst))
-            ngram_corpus.append(tuple(s_lst))
-        self.n_grams = tuple(ngram_corpus)
+                n_gram_token = []
+                for i in range(len(token)):
+                    n_gram = token[i:i + self.size]
+                    if len(n_gram) == self.size:
+                        n_gram_token.append(n_gram)
+                n_gram_s.append(tuple(n_gram_token))
+            lst_ngram.append(tuple(n_gram_s))
+        self.n_grams = tuple(lst_ngram)
         return 0
+
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -217,16 +218,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
+        if not isinstance(self.n_grams, tuple) or len(self.n_grams) == 0:
+            return 1
         for s in self.n_grams:
             for token in s:
                 for letter in token:
                     if letter not in self.n_gram_frequencies:
                         self.n_gram_frequencies[letter] = 1
                     else:
-                        self.n_gram_frequencies[letter] += 1
+                        self.n_gram_frequencies[letter] = self.n_gram_frequencies[letter] + 1
         return 0
-
-
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -234,7 +235,16 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for key, value in n_grams_dictionary.items():
+            if not (isinstance(key, tuple) or isinstance(value, int)):
+                return 1
+            for letter in key:
+                if not isinstance(letter, int):
+                    return 1
+            self.n_gram_frequencies[key] = value
+        return 0
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
