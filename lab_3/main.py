@@ -17,7 +17,7 @@ def split_words(token: str) -> tuple:
     """
     deutsch_letters = {"ä": "ae", "ü": "ue", "ß": "ss", "ö": "oe"}
     for key in deutsch_letters.items():
-        token.replace(key[0], key[1])
+        token = token.replace(key[0], key[1])
     skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
     token_list = []
     for sign in skip_signs:
@@ -320,7 +320,6 @@ class LanguageProfile:
         e.g.
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         _sizes = (2, 3)
-
         self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
          <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
