@@ -42,7 +42,7 @@ def tokenize_by_sentence(text: str) -> tuple:
                 lst_of_letters.insert(0, '_')
                 lst_of_letters.append('_')
                 new_words_lst.append(tuple(lst_of_letters))
-            if not len(new_words_lst):
+            if not new_words_lst:
                 return ()
         new_sentence_tuple.append(tuple(new_words_lst))
     return tuple(new_sentence_tuple)
