@@ -19,35 +19,54 @@ if __name__ == '__main__':
     # predict UNKNOWN_SAMPLE
 
     eng = tokenize_by_sentence(ENG_SAMPLE)
-    ger = tokenize_by_sentence(GERMAN_SAMPLE)
+    deu = tokenize_by_sentence(GERMAN_SAMPLE)
     unk = tokenize_by_sentence(UNKNOWN_SAMPLE)
 
     unistorage = LetterStorage()
     unistorage.update(eng)
-    unistorage.update(ger)
+    unistorage.update(deu)
     unistorage.update(unk)
 
     encoded_eng = encode_corpus(unistorage, eng)
-    encoded_ger = encode_corpus(unistorage, ger)
+    encoded_deu = encode_corpus(unistorage, deu)
     encoded_unk = encode_corpus(unistorage, unk)
 
     profile_eng = LanguageProfile(letter_storage=unistorage, language_name='en')
     profile_eng.create_from_tokens(encoded_eng, (2,))
 
-    profile_ger = LanguageProfile(letter_storage=unistorage, language_name='de')
-    profile_ger.create_from_tokens(encoded_ger, (2,))
+    profile_deu = LanguageProfile(letter_storage=unistorage, language_name='de')
+    profile_deu.create_from_tokens(encoded_deu, (2,))
 
     profile_unk = LanguageProfile(letter_storage=unistorage, language_name='unk')
     profile_unk.create_from_tokens(encoded_unk, (2,))
 
     print(calculate_distance(profile_unk, profile_eng, 5, 2))
-    print(calculate_distance(profile_unk, profile_ger, 5, 2))
+    print(calculate_distance(profile_unk, profile_deu, 5, 2))
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
 
     # score 8, k = 5, trie_level = 3
     # predict UNKNOWN_SAMPLE
-    # print(detector.detect(profile_unk, 5, 3))
-    # EXPECTED_SCORE = {'en': 24, 'de': 25}
+
+    profile_eng_8 = LanguageProfile(letter_storage=storage, language_name='en')
+    profile_eng_8.create_from_tokens(encoded_eng, (3,))
+
+    profile_deu_8 = LanguageProfile(letter_storage=storage, language_name='de')
+    profile_deu_8.create_from_tokens(encoded_deu, (3,))
+
+    profile_unk_8 = LanguageProfile(letter_storage=storage, language_name='unk')
+    profile_unk_8.create_from_tokens(encoded_unk, (3,))
+
+    profile_unk_8.save('unknown_profile.json')
+
+    profile_unk_8_saved = LanguageProfile(letter_storage=storage, language_name='unk')
+    profile_unk_8_saved.open('unknown_profile.json')
+
+    detector = LanguageDetector()
+    detector.register_language(profile_eng_8)
+    detector.register_language(profile_deu_8)
+
+    print(detector.detect(profile_unk_8_saved, 5, 3))
+    EXPECTED_SCORE = {'en': 24, 'de': 25}
 
     # score 10, k = 1000, trie_levels = (2,)
     # predict SECRET_SAMPLE
@@ -55,7 +74,7 @@ if __name__ == '__main__':
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
 
-    RESULT = EXPECTED_DISTANCE_TO_EN_DE_PROFILES
+    RESULT = EXPECTED_SCORE
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
 
