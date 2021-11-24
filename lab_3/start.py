@@ -3,6 +3,11 @@ Language detection starter
 """
 
 import os
+from lab_3.main import \
+    tokenize_by_sentence, \
+    LetterStorage, \
+    encode_corpus, \
+    decode_corpus
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -29,6 +34,23 @@ if __name__ == '__main__':
     # print(detector.detect(unknown_profile, 1000, (2,)))
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
+
+    eng_tokenize = tokenize_by_sentence(ENG_SAMPLE)
+    german_tokenize = tokenize_by_sentence(GERMAN_SAMPLE)
+    unknown_tokenize = tokenize_by_sentence(UNKNOWN_SAMPLE)
+
+    storage = LetterStorage()
+    storage.update(eng_tokenize)
+    storage.update(german_tokenize)
+    storage.update(unknown_tokenize)
+
+    eng_tokenize_encoded = encode_corpus(storage, eng_tokenize)
+    german_tokenize_encoded = encode_corpus(storage, german_tokenize)
+    unknown_tokenize_encoded = encode_corpus(storage, unknown_tokenize)
+
+    eng_tokenize_decoded = decode_corpus(storage, eng_tokenize_encoded)
+    german_tokenize_decoded = decode_corpus(storage, german_tokenize_encoded)
+    unknown_tokenize_decoded = decode_corpus(storage, unknown_tokenize_encoded)
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
