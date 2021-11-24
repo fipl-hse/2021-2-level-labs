@@ -29,15 +29,9 @@ def tokenize_by_sentence(text: str) -> tuple:
     text = text.lower()
     for symbol in invaluable_trash:
         text = text.replace(symbol, '')
-    for letter in text:
-        if letter == 'ö':
-            text = text.replace(letter, 'oe')
-        elif letter == 'ü':
-            text = text.replace(letter, 'ue')
-        elif letter == 'ä':
-            text = text.replace(letter, 'ae')
-        elif letter == 'ß':
-            text = text.replace(letter, 'ss')
+    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    for x in umlauts.items():
+        text = text.replace(x[0], x[1])
     regexp = re.compile('[.!?] ?')
     sentences = re.split(regexp, text)
     cleaned_sentences = []
@@ -65,7 +59,6 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.count = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -76,8 +69,7 @@ class LetterStorage:
         if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
-            self.count += 1
-            self.storage[letter] = self.count
+            self.storage[letter] = len(self.storage) + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -90,8 +82,7 @@ class LetterStorage:
             return -1
         if letter not in self.storage.keys():
             return -1
-        id = self.storage[letter]
-        return id
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) ->str or int:
         """
@@ -188,21 +179,19 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
+        words = []
+        sentences = []
         corpus = []
         for sentence in encoded_corpus:
-            sentences = []
             for word in sentence:
-                words = []
-                first_symbol = 0
-
-                last_symbol = first_symbol + self.size
-                while last_symbol <= len(word):
-                    n_gram = word[first_symbol: last_symbol]
-                    first_symbol += 1
-                    last_symbol += 1
-                    words.append(tuple(n_gram))
-                sentences.append(tuple(words))
+                if len(word) >= self.size:
+                    for i in range(len(word) - self.size + 1):
+                        word_list = [word[i+j] for j in range(self.size)]
+                        words.append(tuple(word_list))
+                    sentences.append(tuple(words))
+                    words = []
             corpus.append(tuple(sentences))
+            sentences = []
         self.n_grams = tuple(corpus)
         return 0
 
@@ -290,11 +279,11 @@ class LanguageProfile:
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
         for size in ngram_sizes:
-            self.tries.append(NGramTrie(size, self.storage))
-        for trie in self.tries:
-            trie.extract_n_grams(encoded_corpus)
-            trie.get_n_grams_frequencies()
-            self.n_words.append(len(trie.n_gram_frequencies))
+            ngram = NGramTrie(size, self.storage)
+            self.tries.append(ngram)
+            ngram.extract_n_grams(encoded_corpus)
+            ngram.get_n_grams_frequencies()
+            self.n_words.append(len(ngram.n_gram_frequencies))
         return 0
 
 
