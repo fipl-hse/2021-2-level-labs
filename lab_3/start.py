@@ -110,7 +110,7 @@ if __name__ == '__main__':
         probabilities = detector.detect(secret_profile, k, trie_levels)
         predicted_language = min(probabilities, key=probabilities.get)
 
-        return predicted_language, probabilities[predicted_language]
+        return predicted_language[0], probabilities[predicted_language]
 
     ACTUAL_6 = score_6()
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
