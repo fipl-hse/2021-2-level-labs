@@ -78,6 +78,10 @@ if __name__ == '__main__':
         predict UNKNOWN_SAMPLE
         EXPECTED_SCORE = {'en': 24, 'de': 25}
         """
+        eng_profile.create_from_tokens(encoded_eng_text, (trie_level,))
+        de_profile.create_from_tokens(encoded_de_text, (trie_level,))
+        unk_profile.create_from_tokens(encoded_unk_text, (trie_level,))
+
         # use method register_language in LanguageDetector
         detector = LanguageDetector()
 
