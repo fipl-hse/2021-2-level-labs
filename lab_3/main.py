@@ -4,7 +4,6 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-import re
 
 
 # 4
@@ -24,23 +23,39 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    text_low = text.lower()
-    split_text = re.split(r'[!?.] ', text_low)
+    text = text.lower()
 
     tokenized_sentence = ''
     tokenized_sentences = []
     underscore = ['_']
+    punctuation = ['!', '?', '.']
 
     german_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
-    for sent in split_text:
-        for symbol in sent:
-            if symbol in german_letters:
-                tokenized_sentence += german_letters[symbol]
-            elif symbol.isalpha() or symbol.isspace():
-                tokenized_sentence += symbol
-        tokenized_sentences.append(tokenized_sentence.split())
-        tokenized_sentence = ''
+    for k, v in german_letters.items():
+        text = text.replace(k, v)
+
+    special_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
+                       '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '1', '2', '3', '4', '5', '6',
+                       '7', '8', '9', '0']
+
+    for symbol in special_symbols:
+        text = text.replace(symbol, '')
+
+    text_length = len(text)
+
+    for i, symbol in enumerate(text):
+        if i + 1 != text_length and symbol not in punctuation:
+            tokenized_sentence += symbol
+        elif i + 1 == text_length and symbol not in punctuation:
+            tokenized_sentence += symbol
+            tokenized_sentences.append(tokenized_sentence)
+        else:
+            tokenized_sentences.append(tokenized_sentence)
+            tokenized_sentence = ''
+
+    for x, tokenized_sentence in enumerate(tokenized_sentences):
+        tokenized_sentences[x] = tokenized_sentence.split()
 
     for tokenized_sentence in tokenized_sentences:
         for y, word in enumerate(tokenized_sentence):
@@ -49,10 +64,10 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokenized_sentence[y] = underscore
             underscore = ['_']
 
-    for x, tokenized_sentence in enumerate(tokenized_sentences):
-        for j, word in enumerate(tokenized_sentence):
-            tokenized_sentence[j] = tuple(word)
-        tokenized_sentences[x] = tuple(tokenized_sentence)
+    for a, tokenized_sentence in enumerate(tokenized_sentences):
+        for b, word in enumerate(tokenized_sentence):
+            tokenized_sentence[b] = tuple(word)
+        tokenized_sentences[a] = tuple(tokenized_sentence)
 
     return tuple(tokenized_sentences)
 
