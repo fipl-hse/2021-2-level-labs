@@ -379,17 +379,15 @@ class LanguageProfile:
             self.n_words = profile_dict['n_words']
             # 2
             sep_index = 0
-            for n_gram_index in range(len(profile_dict['freq'])):
+            for n_gram_index, n_gram in enumerate(profile_dict['freq']):
                 if n_gram_index < len(list(profile_dict['freq'])) - 1:
-                    if len(list(profile_dict['freq'])[n_gram_index]) != \
-                            len(list(profile_dict['freq'])[n_gram_index + 1]):
+                    if len(n_gram) != len(list(profile_dict['freq'])[n_gram_index + 1]):
                         n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
                         sep_index = n_gram_index
                 else:
                     n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
-            n_grams_tuple = tuple(tuple(tuple(n_grams)))
             # 3
-            self.storage.update(n_grams_tuple)
+            self.storage.update(tuple(tuple(tuple(n_grams))))
             # 4
             n_grams_dict = {}
             for n_gram, freq in profile_dict['freq'].items():
