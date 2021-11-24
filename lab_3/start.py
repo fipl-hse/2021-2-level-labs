@@ -44,6 +44,8 @@ if __name__ == '__main__':
 
     # score 8, k = 5, trie_level = 3
     # predict UNKNOWN_SAMPLE
+
+
     # print(detector.detect(profile_unk, 5, 3))
     # EXPECTED_SCORE = {'en': 24, 'de': 25}
 
