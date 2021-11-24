@@ -258,8 +258,8 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        if isinstance(self.n_grams, tuple) or self.n_grams != ():
-            return 1
+        #if isinstance(self.n_grams, tuple) or self.n_grams != ():
+            #return 1
         for n_sent in self.n_grams:
             if not isinstance(n_sent, tuple):
                 return 1
