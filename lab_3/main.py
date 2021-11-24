@@ -28,13 +28,10 @@ def tokenize_by_sentence(text: str) -> tuple:
                         '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     text = text.lower()
     special_letters = {'ü': 'ue', 'ö': 'oe', 'ä': 'ae', 'ß': 'ss'}
-    for letter in text:
-        for key, value in special_letters.items():
-            if letter == key:
-                text = text.replace(letter, value)
+    for key, value in special_letters.items():
+        text = text.replace(key, value)
     for symbols in invaluable_trash:
         text = text.replace(symbols, '')
-    # regexp = re.compile('[.!?] ?')
     sents = re.split(re.compile('[.!?] ?'), text)
     tokenized_sents = []
     for sent in sents:
@@ -387,8 +384,7 @@ class LanguageProfile:
         profile_as_dict['freq'] = decoded_freq
         profile_as_dict['n_words'] = self.n_words
         with open(name, 'w', encoding='utf-8') as file:
-            json_string = json.dumps(profile_as_dict)
-            file.write(json_string)
+            json.dump(profile_as_dict, file)
         return 0
 
     # 8
