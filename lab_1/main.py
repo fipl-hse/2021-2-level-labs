@@ -25,6 +25,32 @@ def tokenize(text: str) -> list or None:
     return tokens
 
 
+
+def tokenize_task(text: str) -> list or None:
+    """
+    Splits a text into tokens, converts the tokens into lowercase,
+    removes punctuation and other symbols from words
+    :param text: a text
+    :return: a list of lower-cased tokens without punctuation
+    """
+    if not isinstance(text, str):
+        return None
+    text = text.lower()
+    punctuation = '''`~!§№@#$%^&|*()_º-=+[{]};:'"\\,<.>/?1234567890'''
+    for symbol in text:
+        if symbol in punctuation:
+            text = text.replace(symbol, '')
+    text = text.split()
+    text = list(filter(None, text))
+    for count in range (0, len(text)):
+        if len(text[count]) < 3:
+            text[count] = text[count].upper()
+    return text
+
+
+
+
+
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     """
     Removes stop words
@@ -73,7 +99,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     # sort by keys and take the top_n tokens from the list of sorted tokens
     top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
     return top_n_words
-
 
 def create_language_profile(language: str, text: str, stop_words: list) -> dict or None:
     """
