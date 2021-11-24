@@ -254,7 +254,7 @@ class NGramTrie:
             for next_n_gram, next_freq in self.n_gram_frequencies.items():
                 if next_n_gram[:-1] == n_gram[:-1]:
                     new_freq += next_freq
-            self.n_gram_log_probabilities[n_gram] = math.log(freq/new_freq, math.e)
+            self.n_gram_log_probabilities[n_gram] = math.log(freq / new_freq, math.e)
         return 0
 
 
@@ -386,7 +386,7 @@ class LanguageProfile:
                 for letter in n_gram:
                     n_gram_tuple += (self.storage.get_id_by_letter(letter),)
                 freq_dict[n_gram_tuple] = freq
-                if n_gram == n_gram_list[n_word-1]:
+                if n_gram == n_gram_list[n_word - 1]:
                     trie = NGramTrie(len(n_gram), self.storage)
                     trie.extract_n_grams_frequencies(freq_dict)
                     self.tries.append(trie)
@@ -422,7 +422,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
             distance += len(known_n_grams)
         for k_index, k_n_gram in enumerate(known_n_grams):
             if unk_n_gram == k_n_gram:
-                distance += abs(unk_index-k_index)
+                distance += abs(unk_index - k_index)
     return distance
 
 
@@ -511,4 +511,14 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: sorted language labels with corresponding ngram size
         and their prob scores if input is correct, otherwise -1
         """
-        pass
+        if (not isinstance(unknown_profile, LanguageProfile)
+                or not isinstance(k, int)
+                or not isinstance(trie_levels, tuple)):
+            return -1
+        probability_dict = {}
+        for lang_name, known_profile in self.language_profiles.items():
+            for trie_level in trie_levels:
+                probability_dict[lang_name, trie_level] = calculate_probability(unknown_profile,
+                                                                                known_profile,
+                                                                                k, trie_level)
+        return probability_dict
