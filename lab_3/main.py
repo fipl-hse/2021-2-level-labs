@@ -6,6 +6,7 @@ Language classification using n-grams
 from typing import Dict, Tuple
 import re
 import json
+import math
 
 
 # 4
@@ -161,6 +162,7 @@ class NGramTrie:
         self.storage = letter_storage.storage
         self.n_grams = []
         self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -254,7 +256,15 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_gram_frequencies:
+            return 1
+        for n_gram, frequency in self.n_gram_frequencies.items():
+            probability = 0
+            for compare_n_gram, compare_frequency in self.n_gram_frequencies.items():
+                if n_gram[:-1] == compare_n_gram[:-1]:
+                    probability += compare_frequency
+            self.n_gram_log_probabilities[n_gram] = math.log(frequency / probability, math.e)
+        return 0
 
 
 # 6
