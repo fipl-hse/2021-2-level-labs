@@ -47,11 +47,11 @@ def tokenize_by_sentence(text: str) -> tuple:
 
         for word in sentence:
             letters = [letter for letter in word if letter.isalpha()]
-            if len(letters) != 0:
+            if letters:
                 letters.insert(0, '_')
                 letters.append('_')
                 new_words.append(tuple(letters))
-            if len(new_words) == 0:
+            if not new_words:
                 return ()
 
         sentences_tuple.append(tuple(new_words))
