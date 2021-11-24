@@ -90,7 +90,7 @@ class LetterStorage:
             return -1
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -101,6 +101,7 @@ class LetterStorage:
         for letter, id_num in self.storage.items():
             if letter_id == id_num:
                 return letter
+        return -1
 
 
     def update(self, corpus: tuple) -> int:
@@ -463,13 +464,15 @@ class LanguageDetector:
             = language_profile
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile,
+               k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and
+        their scores if input is correct, otherwise -1
         """
         if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int) \
                 or not isinstance(trie_levels, tuple) \
@@ -500,12 +503,14 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile,
+               k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding ngram
+        size and their prob scores if input is correct, otherwise -1
         """
         pass
