@@ -358,8 +358,7 @@ class LanguageProfile:
             freq[string] = freq_value
         file_w = {'freq': freq, 'n_words': self.n_words, 'name': self.language}
         with open(name, 'w', encoding='UTF-8') as file:
-            json_string = json.dumps(file_w)
-            file.write(json_string)
+            json.dump(file_w, file)
         return 0
 
     # 8
@@ -379,7 +378,7 @@ class LanguageProfile:
         self.language = language_profile['name']
         self.n_words = language_profile['n_words']
         freq = language_profile['freq']
-        size = ''
+        size = 0
         counter = -1
         for gram, value in freq.items():
             gram_correct = []
