@@ -80,7 +80,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.counter = 0
+        self.counter = 1
 
     def _put_letter(self, letter: str) -> int:
         """
