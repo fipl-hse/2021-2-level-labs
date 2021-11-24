@@ -562,4 +562,3 @@ class ProbabilityLanguageDetector(LanguageDetector):
                 probability_dict[(known_profile.language, level)] = \
                     calculate_probability(unknown_profile, known_profile, k, level)
         return probability_dict
-
