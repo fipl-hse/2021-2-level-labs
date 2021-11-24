@@ -128,7 +128,19 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+
+    encoded_corpus = ()
+    for sentence in corpus:
+        word_tuple = ()
+        for word in sentence:
+            id_letter = ()
+            for letter in word:
+                id_letter += (storage.get_id_by_letter(letter),)
+            word_tuple += (id_letter,)
+        encoded_corpus += (word_tuple,)
+    return encoded_corpus
 
 
 # 4
@@ -139,7 +151,19 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+
+    encoded_corpus = ()
+    for sentence in corpus:
+        encoded_sentence = ()
+        for token in sentence:
+            encoded_token = ()
+            for letter in token:
+                encoded_token += (storage.get_letter_by_id(letter),)
+            encoded_sentence += (encoded_token,)
+        encoded_corpus += (encoded_sentence,)
+    return encoded_corpus
 
 
 # 6
