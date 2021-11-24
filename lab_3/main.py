@@ -95,8 +95,8 @@ class LetterStorage:
         """
         if letter not in self.storage:
             return -1
-        else:
-            return self.storage[letter]
+
+        return self.storage[letter]
 
     def get_letter_by_id(self, letter_id: int) -> str or int:
         """
@@ -106,10 +106,10 @@ class LetterStorage:
         """
         if letter_id not in self.storage.values():
             return -1
-        else:
-            for key, value in self.storage.items():
-                if value == letter_id:
-                    return key
+
+        for key, value in self.storage.items():
+            if value == letter_id:
+                return key
 
     def update(self, corpus: tuple) -> int:
         """
@@ -326,8 +326,8 @@ class LanguageProfile:
         # filling n_gram with encoded corpus and frequencies
         # adding it to ties storage
         # filling n_words as well
-        for s in ngram_sizes:
-            n_gram = NGramTrie(s, self.storage)
+        for size in ngram_sizes:
+            n_gram = NGramTrie(size, self.storage)
             n_gram.extract_n_grams(encoded_corpus)
             n_gram.get_n_grams_frequencies()
             self.tries.append(n_gram)
@@ -416,7 +416,7 @@ class LanguageProfile:
         if not isinstance(file_name, str):
             return 1
 
-        with open(file_name, 'r') as file:
+        with open(file_name, 'r', encoding="utf-8") as file:
             profile_dict = json.load(file)
 
         self.n_words = profile_dict['n_words']
