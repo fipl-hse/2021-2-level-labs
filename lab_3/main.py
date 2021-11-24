@@ -90,7 +90,7 @@ class LetterStorage:
         for letter, new_letter_id in self.storage.items():
             if new_letter_id == letter_id:
                 return letter
-            return -1
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -118,9 +118,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple) and storage):
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
-    storage.update(corpus)
     encoded_corpus = []
     for s in corpus:
         encoded_s = []
@@ -129,7 +128,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             for letter in word:
                 encoded_words.append(storage.get_id_by_letter(letter))
             encoded_s.append(tuple(encoded_words))
-        encoded_s.append(tuple(encoded_s))
+        encoded_corpus.append(tuple(encoded_s))
     return tuple(encoded_corpus)
 
 # 4
@@ -142,14 +141,13 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not(isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
-    storage.update(corpus)
     decoded_corpus = []
     for s in corpus:
         decoded_s = []
         for word in s:
             decoded_words = []
-            for letter in word:
-                decoded_words.append(storage.get_letter_by_id(letter))
+            for letter_id in word:
+                decoded_words.append(storage.get_letter_by_id(letter_id))
             decoded_s.append(tuple(decoded_words))
         decoded_corpus.append(tuple(decoded_s))
     return tuple(decoded_corpus)
