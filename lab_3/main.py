@@ -473,7 +473,7 @@ class LanguageDetector:
         """
         if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int) \
                 or not isinstance(trie_levels, tuple) \
-                gitor not isinstance(trie_levels[0], int):
+                or not isinstance(trie_levels[0], int):
             return -1
         distance_dictionary = {}
         for label, lang_profile in self.language_profiles.items():
