@@ -168,7 +168,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
@@ -275,7 +275,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
@@ -293,10 +293,12 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+        <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2),
+            (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         if not isinstance(encoded_corpus, tuple) \
@@ -417,13 +419,15 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного профиля
+    - first_n_grams = ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not isinstance(unknwon_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile) \
+    if not isinstance(unknwon_profile, LanguageProfile) \
+            or not isinstance(known_profile, LanguageProfile) \
             or not isinstance(k, int) or not isinstance(trie_level, int):
         return -1
     unknown_frequency = unknwon_profile.get_top_k_n_grams(k, trie_level)
@@ -442,7 +446,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         self.language_profiles = {}
 
@@ -455,7 +459,8 @@ class LanguageDetector:
         """
         if not isinstance(language_profile, LanguageProfile):
             return 1
-        self.language_profiles[language_profile.language] = language_profile
+        self.language_profiles[language_profile.language] \
+            = language_profile
         return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
@@ -467,7 +472,8 @@ class LanguageDetector:
         :return: a dictionary with language labels and their scores if input is correct, otherwise -1
         """
         if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int) \
-                or not isinstance(trie_levels, tuple) or not isinstance(trie_levels[0], int):
+                or not isinstance(trie_levels, tuple) \
+                gitor not isinstance(trie_levels[0], int):
             return -1
         distance_dictionary = {}
         for label, lang_profile in self.language_profiles.items():
