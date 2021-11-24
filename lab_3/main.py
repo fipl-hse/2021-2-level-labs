@@ -396,7 +396,7 @@ class LanguageProfile:
         self.n_words = profile_dict['n_words']
         freq_dict = profile_dict['freq']
 
-        size_of_gram = ''
+        size_of_gram = 0
         counter = -1
 
         for gram, value in freq_dict.items():
