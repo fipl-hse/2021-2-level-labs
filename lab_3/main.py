@@ -54,9 +54,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     for x, tokenized_sentence in enumerate(tokenized_sentences):
         tokenized_sentences[x] = tokenized_sentence.split()
 
-    for x, tokenized_sentence in enumerate(tokenized_sentences):
-        tokenized_sentences[x] = tokenized_sentence.split()
-
     for tokenized_sentence in tokenized_sentences:
         for y, word in enumerate(tokenized_sentence):
             underscore.extend(word)
