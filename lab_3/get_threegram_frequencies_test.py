@@ -25,7 +25,6 @@ I wish I liked the way it talks
 And when I am introduced to one
 I wish I thought What Jolly Fun'''.lower()
         text = tokenize_by_sentence(text)
-        print(text)
         storage = LetterStorage()
         storage.update(text)
         encoded_text = encode_corpus(storage, text)
