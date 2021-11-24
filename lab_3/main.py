@@ -303,7 +303,7 @@ class LanguageProfile:
             n_trie.extract_n_grams(encoded_corpus)
             n_trie.get_n_grams_frequencies()
             self.n_words.append(len(n_trie.n_gram_frequencies))
-        return 1
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -334,7 +334,7 @@ class LanguageProfile:
         for n_trie in self.tries:
             if n_trie.size == trie_level:
                 top_grams = tuple(sorted(n_trie.n_gram_frequencies,
-                                           key=n_trie.n_gram_frequencies.get, reverse=True)[:k])
+                                           key = n_trie.n_gram_frequencies.get, reverse=True)[:k])
                 return top_grams
         return ()
 
