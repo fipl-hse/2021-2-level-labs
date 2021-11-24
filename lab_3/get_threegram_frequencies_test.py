@@ -28,7 +28,6 @@ I wish I thought What Jolly Fun'''.lower()
         storage = LetterStorage()
         storage.update(text)
         encoded_text = encode_corpus(storage, text)
-
         trie = NGramTrie(n=3, letter_storage=storage)
         trie.extract_n_grams(encoded_text)
         self.assertEqual(trie.get_n_grams_frequencies(), 0)
