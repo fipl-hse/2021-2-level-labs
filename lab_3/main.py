@@ -155,7 +155,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage.storage
@@ -262,7 +262,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
@@ -357,7 +357,7 @@ class LanguageProfile:
         language_profile['freq'] = freq_dict
         language_profile['n_words'] = self.n_words
         language_profile['name'] = self.language
-        with open(name, 'w') as file_to_save:
+        with open(name, 'w', encoding='utf-8') as file_to_save:
             json_string = json.dumps(language_profile)
             file_to_save.write(json_string)
         return 0
@@ -376,19 +376,18 @@ class LanguageProfile:
             return 1
         n_grams = []
         # 1
-        with open(file_name, 'r') as lang_profile_file:
+        with open(file_name, 'r', encoding='utf-8') as lang_profile_file:
             profile_dict = json.load(lang_profile_file)
             self.language = profile_dict['name']
             self.n_words = profile_dict['n_words']
             # 2
             sep_index = 0
-            frequencies = list(profile_dict['freq'])
             for n_gram_index, n_gram in enumerate(profile_dict['freq']):
-                if n_gram_index < len(frequencies) - 1:
-                    if len(n_gram) != len(frequencies[n_gram_index + 1]):
-                        n_grams.append(frequencies[sep_index:n_gram_index])
+                if n_gram_index < len(list(profile_dict['freq'])) - 1:
+                    if len(n_gram) != len(list(profile_dict['freq'])[n_gram_index + 1]):
+                        n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
                         sep_index = n_gram_index
-            n_grams.append(frequencies[sep_index:n_gram_index])
+            n_grams.append(list(profile_dict['freq'])[sep_index:n_gram_index])
             n_grams_tuple = tuple(tuple(tuple(n_grams)))
             # 3
             self.storage.update(n_grams_tuple)
@@ -403,9 +402,9 @@ class LanguageProfile:
                 else:
                     n_grams_dict[len(tuple(encoded_n_gram))] |= {tuple(encoded_n_gram): freq}
             # 5
-            for group in n_grams_dict:
+            for group, frequency in n_grams_dict.items():
                 trie = NGramTrie(group, self.storage)
-                trie.extract_n_grams_frequencies(n_grams_dict[group])
+                trie.extract_n_grams_frequencies(frequency)
                 self.tries.append(trie)
             return 0
 
@@ -448,7 +447,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
+
     def __init__(self):
         self.language_profiles = {}
 
