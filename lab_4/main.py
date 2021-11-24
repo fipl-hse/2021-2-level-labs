@@ -1,4 +1,3 @@
-# pylint: skip-file
 """
 Lab 4
 Language generation algorithm based on language profiles
