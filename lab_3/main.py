@@ -45,9 +45,9 @@ def tokenize_by_sentence(text: str) -> tuple:
     text_length = len(text)
 
     for i, symbol in enumerate(text):
-        if i + 1 != text_length and symbol not in punctuation:
+        if symbol not in punctuation and i + 1 != text_length:
             tokenized_sentence += symbol
-        elif i + 1 == text_length and symbol not in punctuation:
+        elif symbol not in punctuation and i + 1 == text_length:
             tokenized_sentence += symbol
             tokenized_sentences.append(tokenized_sentence)
         else:
