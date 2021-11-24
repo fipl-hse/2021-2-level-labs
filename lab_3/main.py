@@ -115,6 +115,8 @@ class LetterStorage:
             if value == letter_id:
                 return key
 
+        return 0
+
     def update(self, corpus: tuple) -> int:
         """
         Fills a storage by letters from the corpus
@@ -422,32 +424,32 @@ class LanguageProfile:
         if not isinstance(file_name, str):
             return 1
 
-        with open(file_name, 'r', encoding="utf-8") as file:
-            profile_dict = json.load(file)
+        with open(file_name, 'r', encoding='utf-8') as profile_file:
+            profile_dict = json.load(profile_file)
 
-        self.n_words = profile_dict['n_words']
         self.language = profile_dict['name']
-        self.tries = []
-        decoded_n_grams = []
+        self.n_words = profile_dict['n_words']
+        freq_dict = {}
+        count = 1
 
-        for n_gram in profile_dict['freq']:
-            tmp_n_gram = []
+        for n_gram in profile_dict['freq'].keys():
             for char in n_gram:
-                self.storage._put_letter(char)
-                tmp_n_gram.append(self.storage.get_id_by_letter(char))
-            decoded_n_grams.append((tuple(tmp_n_gram), profile_dict['freq'][n_gram]))
+                if char not in self.storage.storage:
+                    self.storage.storage[char] = count
+                    count += 1
 
-        sizes = {}
-        for n_gram in decoded_n_grams:
-            if len(n_gram[0]) in sizes:
-                sizes[len(n_gram[0])][n_gram[0]] = n_gram[1]
-            else:
-                sizes[len(n_gram[0])] = {n_gram[0]: n_gram[1]}
+        n_gram_list = list(profile_dict['freq'])
 
-        for size, frequencies in sizes.items():
-            tries = NGramTrie(size, self.storage)
-            tries.n_gram_frequencies = frequencies
-            self.tries.append(tries)
+        for n_gram, frequency in profile_dict['freq'].items():
+            for n_word in self.n_words:
+                n_gram_tuple = ()
+                for char in n_gram:
+                    n_gram_tuple += (self.storage.get_id_by_letter(char),)
+                freq_dict[n_gram_tuple] = frequency
+                if n_gram == n_gram_list[n_word-1]:
+                    trie = NGramTrie(len(n_gram), self.storage)
+                    trie.extract_n_grams_frequencies(freq_dict)
+                    self.tries.append(trie)
 
         return 0
 
