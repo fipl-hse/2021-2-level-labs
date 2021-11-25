@@ -384,7 +384,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     for i_unknown, ngrams_unknown in enumerate(top_ngrams_unknown):
         for i_known, ngrams_known in enumerate(top_ngrams_known):
             if ngrams_unknown == ngrams_known:
-                distance += i_unknown - i_known
+                distance += abs(i_unknown - i_known)
         if ngrams_unknown not in top_ngrams_known:
             distance += len(top_ngrams_known)
     return distance
