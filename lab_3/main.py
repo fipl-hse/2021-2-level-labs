@@ -266,7 +266,11 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
+
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -285,7 +289,16 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.tries.append(trie)
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
+
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -311,7 +324,15 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int) or k <= 0:
+            return ()
+        for n_gram in self.tries:
+            if n_gram.size == trie_level:
+                n_gram.get_n_grams_frequencies()
+                freq_dict = n_gram.n_gram_frequencies
+                sorted_n_grams = sorted(freq_dict, key=freq_dict.get, reverse=True)[:k]
+                return tuple(sorted_n_grams)
+        return ()
 
     # 8
     def save(self, name: str) -> int:
@@ -336,7 +357,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -351,7 +372,20 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if (not isinstance(unknown_profile, LanguageProfile)
+            or not isinstance(known_profile, LanguageProfile)
+            or not isinstance(k, int) or not isinstance(trie_level, int)):
+        return -1
+    unknown_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    dist = 0
+    for unknown_index, unknown_n_gram in enumerate(unknown_n_grams):
+        if unknown_n_gram not in known_n_grams:
+            dist += len(known_n_grams)
+        for k_index, k_n_gram in enumerate(known_n_grams):
+            if unknown_n_gram == k_n_gram:
+                dist += abs(unknown_index - k_index)
+    return dist
 
 
 # 8
