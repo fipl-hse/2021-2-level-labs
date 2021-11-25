@@ -82,9 +82,8 @@ class LetterStorage:
         """
         pass
 
-        if not isinstance(letter, str):
-            return -1
-        if letter not in self.storage.keys():
+        if not isinstance(letter, str) \
+                or letter not in self.storage.keys():
             return -1
         letter_id = self.storage[letter]
         return letter_id
@@ -209,16 +208,16 @@ class NGramTrie:
 
         if not isinstance(encoded_corpus, tuple):
             return 1
-        ngrams = []
+        n_grams = []
         for encoded_sentence in encoded_corpus:
-            ngram_sentence = []
+            n_gram_sentence = []
             for encoded_word in encoded_sentence:
-                ngram_word = []
+                n_gram_word = []
                 for i in range(len(encoded_word) - self.size + 1):
-                    ngram_word.append(tuple(encoded_word[i:i + self.size]))
-                ngram_sentence.append(tuple(ngram_word))
-            ngrams.append(tuple(ngram_sentence))
-        self.n_grams = tuple(ngrams)
+                    n_gram_word.append(tuple(encoded_word[i:i + self.size]))
+                n_gram_sentence.append(tuple(n_gram_word))
+            n_grams.append(tuple(n_gram_sentence))
+        self.n_grams = tuple(n_grams)
         return 0
 
     def get_n_grams_frequencies(self) -> int:
@@ -241,9 +240,9 @@ class NGramTrie:
 
         if not self.n_grams:
             return 1
-        for ngram_sentence in self.n_grams:
-            for ngram_word in ngram_sentence:
-                for n_gram in ngram_word:
+        for n_gram_sentence in self.n_grams:
+            for n_gram_word in n_gram_sentence:
+                for n_gram in n_gram_word:
                     if n_gram not in self.n_gram_frequencies:
                         self.n_gram_frequencies[n_gram] = 1
                     else:
@@ -357,7 +356,7 @@ class LanguageProfile:
         for trie in self.tries:
             if trie.size == trie_level:
                 sorted_n_grams_frequencies = sorted(trie.n_gram_frequencies.items(),
-                                                    key=lambda x: -x[1])
+                                                    key=lambda x: x[1], reverse=True)
                 sorted_n_grams = [i[0] for i in sorted_n_grams_frequencies]
                 return tuple(sorted_n_grams[:k])
         return ()
