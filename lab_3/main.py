@@ -267,7 +267,7 @@ class NGramTrie:
 
         if not isinstance(n_grams_dictionary, dict):
             return 1
-        for n_gram, freq in n_grams_dictionary:
+        for n_gram, freq in n_grams_dictionary.items():
             if isinstance(n_gram, tuple) and isinstance(freq, int):
                 self.n_gram_frequencies[n_gram] = freq
         return 0
@@ -524,13 +524,14 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
-                                                                                               str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int,
+               trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding ngram size
+        and their prob scores if input is correct, otherwise -1
         """
         pass
