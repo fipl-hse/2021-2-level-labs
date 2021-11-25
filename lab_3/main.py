@@ -42,14 +42,9 @@ def tokenize_by_sentence(text: str) -> tuple:
     for symbol in special_symbols:
         text = text.replace(symbol, '')
 
-    text_length = len(text)
-
-    for i, symbol in enumerate(text):
-        if symbol not in punctuation and i + 1 != text_length:
+    for symbol in text:
+        if symbol.isalpha() or symbol.isspace():
             tokenized_sentence += symbol
-        elif symbol not in punctuation and i + 1 == text_length:
-            tokenized_sentence += symbol
-            tokenized_sentences.append(tokenized_sentence)
         else:
             tokenized_sentences.append(tokenized_sentence)
             tokenized_sentence = ''
