@@ -81,10 +81,9 @@ class LetterStorage:
     Stores and manages letters
     """
 
-    free_id = 1
-
     def __init__(self):
         self.storage = {}
+        self.free_id = 1
 
     def _put_letter(self, letter: str) -> int:
         """
