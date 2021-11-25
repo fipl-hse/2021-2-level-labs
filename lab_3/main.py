@@ -341,7 +341,7 @@ class LanguageProfile:
                 return 1
             self.tries.append(trie)
             for value in trie.n_gram_frequencies.values():
-                summa += value
+                summa += 1
             self.n_words.append(summa)
         return 0
 
