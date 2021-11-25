@@ -34,13 +34,6 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     german_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
-    special_symbols = ('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
-                       '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '1', '2', '3', '4', '5', '6',
-                       '7', '8', '9', '0')
-
-    for symbol in special_symbols:
-        text = text.replace(symbol, '')
-
     for sent in text:
         for symbol in sent:
             if symbol in german_letters:
