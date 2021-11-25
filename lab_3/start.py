@@ -66,6 +66,7 @@ if __name__ == '__main__':
     unknown_grams.extract_n_grams(unknown_text_encoded)
     unknown_grams.get_n_grams_frequencies()
 
+    #создание профилей языка
     eng_profile = LanguageProfile(storage, 'en')
     eng_profile.create_from_tokens(eng_text_encoded, (3,))
 
@@ -88,4 +89,4 @@ if __name__ == '__main__':
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     EXPECTED_SCORE = {'en': 24, 'de': 25}
-    assert RESULT, 'Detection not working'
+    assert language, EXPECTED_SCORE
