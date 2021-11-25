@@ -43,7 +43,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         for token in tokens:
             list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
             if not list_of_sentences or len(sentence) == 1:
-            return tuple(list_of_sentences)
+                return tuple(list_of_sentences)
         result.append(tuple(list_of_sentences))
 
     result tuple(result)
