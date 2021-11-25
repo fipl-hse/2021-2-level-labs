@@ -47,7 +47,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     cleared_text = ''.join(list_text)
     cleared_text = cleared_text.lower()
     sentences = cleared_text.split('!!!')
-    sentences.pop(-1)
+    if not sentences[-1]:
+        sentences.pop(-1)
     for sentence in sentences:
         list_sentence = sentence.split()
         splitted_sentence = []
