@@ -22,6 +22,10 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if isinstance(text, str):
         text = text.lower()
+        text.replace("ö", "oe")
+        text.replace("ü", "ue")
+        text.replace("ä", "ae")
+        text.replace("ß", "ss")
         sentences = re.split(
             r"[.!?]", text
         )  # разбиение текста на список предложений, которые заканчиваются символами(".", "!", "?")
@@ -33,10 +37,6 @@ def tokenize_by_sentence(text: str) -> tuple:
             sentence_list = sentence.split()
             sentence_letters_list = []
             for word in sentence_list:
-                word.replace("ö", "oe")
-                word.replace("ü", "ue")
-                word.replace("ä", "ae")
-                word.replace("ß", "ss")
                 letters_list = [letter for letter in word if letter.isalpha()]
                 if letters_list:
                     letters_list.insert(0, "_")
