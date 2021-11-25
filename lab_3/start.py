@@ -12,7 +12,7 @@ if __name__ == '__main__':
     GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, " \
                     "am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
     # score 6, params: k = 5, trie_level = 2

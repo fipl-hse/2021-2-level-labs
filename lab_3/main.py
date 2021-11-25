@@ -395,7 +395,7 @@ class LanguageProfile:
             return 1
         decoded_freq_dict = {}
         for trie in self.tries:
-            for key in trie.n_gram_frequencies():
+            for key in trie.n_gram_frequencies:
                 n_gramma = []
                 for coded_letter in key:
                     letter = self.storage.get_letter_by_id(coded_letter)
