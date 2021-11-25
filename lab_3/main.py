@@ -32,12 +32,12 @@ def tokenize_by_sentence(text: str) -> tuple:
     final_text = []
     underscore = ['_']
 
-    german_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
+    umlauts = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
     for sent in text:
         for symbol in sent:
-            if symbol in german_letters:
-                tokenized_sentence += german_letters[symbol]
+            if symbol in umlauts:
+                tokenized_sentence += umlauts[symbol]
             elif symbol.isalpha() or symbol.isspace():
                 tokenized_sentence += symbol
         tokenized_sentences.append(tokenized_sentence.split())
