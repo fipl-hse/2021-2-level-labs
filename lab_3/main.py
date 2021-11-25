@@ -24,22 +24,21 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
     stop_symbols = "1234567890@#$%^&*()_-+=~`\"':;\\|/,><{}[]"
-    end_symbols = "!?."
-    changed_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
     list_text = []
     tupled_text = []
-    for key, value in changed_letters.items():
-        text = text.replace(key, value)
+    text = text.replace('ö','oe')
+    text = text.replace('ü','ue')
+    text = text.replace('ä','ae')
+    text = text.replace('ß','ss')
     for stop_symbol in stop_symbols:
         text = text.replace(stop_symbol, '')
     for symbol in text:
         list_text.append(symbol)
-    len_for_last_symbol = len(list_text) - 1
     for index, symbol in enumerate(list_text):
         if symbol == '\n':
             list_text[index] = '!!!'
-        if symbol in end_symbols:
-            if not (index == len_for_last_symbol or (list_text[index + 1] == ' ' and
+        if symbol in "!?.":
+            if not (index == len(list_text) - 1 or (list_text[index + 1] == ' ' and
                                                      list_text[index + 2].isupper() is True)):
                 list_text[index] = ''
             else:
@@ -47,10 +46,10 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     cleared_text = ''.join(list_text)
     cleared_text = cleared_text.lower()
-    sentences = cleared_text.split('!!!')
-    if not sentences[-1]:
-        sentences.pop(-1)
-    for sentence in sentences:
+    cleared_text = cleared_text.split('!!!')
+    if not  cleared_text[-1]:
+        cleared_text.pop(-1)
+    for sentence in cleared_text:
         list_sentence = sentence.split()
         splitted_sentence = []
         for word in list_sentence:
@@ -126,8 +125,6 @@ class LetterStorage:
                     if result == -1:
                         return -1
         return 0
-        pass
-
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -233,10 +230,11 @@ class NGramTrie:
                 ngram_word = []
                 idk_but_helped = self.size
                 ngrams_per_word = len(word) - self.size + 1
-                for i in range(ngrams_per_word):
+                while ngrams_per_word != 0:
                     n_gram = word[idk_but_helped - self.size:idk_but_helped]
                     ngram_word.append(tuple(n_gram))
                     idk_but_helped += 1
+                    ngrams_per_word -= 1
                 if ngram_word:
                     ngrams_in_sentence.append(tuple(ngram_word))
             if ngrams_in_sentence:
@@ -330,16 +328,18 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+        <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
             return 1
-        for n in ngram_sizes:
-            trie = NGramTrie(n, self.storage)
+        for n_n in ngram_sizes:
+            trie = NGramTrie(n_n, self.storage)
             checker_1 = trie.extract_n_grams(encoded_corpus)
             checker_2 = trie.get_n_grams_frequencies()
             if checker_1 or checker_2:
@@ -402,9 +402,10 @@ class LanguageProfile:
                     n_gramma.append(letter)
                 decoded_freq_dict[''.join(n_gramma)] = trie.n_gram_frequencies[key]
 
-        profile_as_dict = {'freq': decoded_freq_dict, 'n_words': self.n_words, 'name': self.language}
+        profile_as_dict = {'freq': decoded_freq_dict, 'n_words': self.n_words,
+                           'name': self.language}
 
-        with open(name, 'w') as file:
+        with open(name, 'w', encoding="utf-8") as file:
             json_string = json.dumps(profile_as_dict)
             file.write(json_string)
         return 0
@@ -429,7 +430,7 @@ class LanguageProfile:
                 coded_ngramma = []
                 exist_counter = 0
                 for letter in n_gramma:
-                    self.storage._put_letter(letter)
+                    self.storage.update(tokenize_by_sentence(letter))
                     coded_ngramma.append(self.storage.get_id_by_letter(letter))
                 coded_ngramma = tuple(coded_ngramma)
                 n_2 = len(coded_ngramma)
@@ -454,22 +455,26 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
-    второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
-    Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
+    Например, первый набор N-грамм для неизвестного профиля
+     - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    второй набор N-грамм для известного профиля – second_n_grams =
+    ((1, 2), (2, 3), (4, 5)).
+    Расстояние для (1, 2) равно 0, так как индекс в первом наборе –
+     0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not (isinstance(unknown_profile, LanguageProfile) and isinstance(known_profile, LanguageProfile) and
-            isinstance(k, int) and isinstance(trie_level, int)):
+    if not (isinstance(unknown_profile, LanguageProfile) and
+            isinstance(known_profile, LanguageProfile) and isinstance(k, int)
+            and isinstance(trie_level, int)):
         return -1
     distance = 0
     unknown_top_ngram = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_top_ngram = known_profile.get_top_k_n_grams(k, trie_level)
     known_ng_len = len(known_top_ngram)
-    for ng in unknown_top_ngram:
-        if ng in known_top_ngram:
-            length = known_top_ngram.index(ng) - unknown_top_ngram.index(ng)
+    for n_g in unknown_top_ngram:
+        if n_g in known_top_ngram:
+            length = known_top_ngram.index(n_g) - unknown_top_ngram.index(n_g)
             if length < 0:
                 length = length * (-1)
             distance += length
@@ -507,7 +512,8 @@ class LanguageDetector:
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and their scores
+         if input is correct, otherwise -1
         """
         if not (isinstance(unknown_profile, LanguageProfile) and
                 isinstance(k, int) and isinstance(trie_levels, tuple)):
@@ -541,13 +547,15 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
-                                                                                               str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile,
+               k: int, trie_levels: tuple) -> \
+            Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size
-        :return: sorted language labels with corresponding ngram size and their prob scores if input is correct, otherwise -1
+        :return: sorted language labels with corresponding ngram
+         size and their prob scores if input is correct, otherwise -1
         """
         pass
