@@ -45,8 +45,8 @@ def tokenize_by_sentence(text: str) -> tuple:
             if not list_of_sentences or len(sentence) == 1:
                 return tuple(list_of_sentences)
         result.append(tuple(list_of_sentences))
-
-      result = tuple(result)
+        
+     result = tuple(result)
 # 4
 class LetterStorage:
     """
