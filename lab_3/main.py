@@ -406,12 +406,22 @@ class LanguageProfile:
             profile_dict = json.load(lang_profile_file)
         self.language = profile_dict['name']
         self.n_words = profile_dict['n_words']
-        freq_dict = {}
+        for key in profile_dict['freq'].keys():
+            for letter in key:
+                if letter not in self.storage.storage:
+                    self.storage.storage[letter] = len(self.storage.storage) + 1
+        n_gram_dict = {}
+        n_gram_tuple = ()
         for n_gram, freq in profile_dict['freq'].items():
-            n_gram_tuple = ()
+            if len(n_gram) not in n_gram_dict:
+                n_gram_dict[len(n_gram)] = {}
             for letter in n_gram:
                 n_gram_tuple += (self.storage.get_id_by_letter(letter),)
-            freq_dict[n_gram_tuple] = freq
+            n_gram_dict[len(n_gram)][n_gram_tuple] = freq
+        for size, freq_dict in n_gram_dict.items():
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams_frequencies(freq_dict)
+            self.tries.append(trie)
         return 0
 
 
