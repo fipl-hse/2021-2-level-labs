@@ -97,9 +97,8 @@ class LetterStorage:
         """
         pass
 
-        if not isinstance(letter_id, int):
-            return -1
-        if letter_id not in self.storage.values():
+        if not isinstance(letter_id, int) \
+                or letter_id not in self.storage.values():
             return -1
         for letter, id_letter in self.storage.items():
             if id_letter == letter_id:
