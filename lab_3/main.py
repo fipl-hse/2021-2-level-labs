@@ -23,8 +23,10 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str) or not text:
         return ()
+    sentences = re.compile(r'[.!?]')
+    sentences = filter(lambda t: t, [t.strip() for t in sentences.split(text)])
+    result = []
 
-    result=[]
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
@@ -44,7 +46,7 @@ def tokenize_by_sentence(text: str) -> tuple:
             list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
             if not list_of_sentences or len(sentence) == 1:
                 return tuple(list_of_sentences)
-        result.append(tuple(list_of_sentences))        
+        result.append(tuple(list_of_sentences))
     result = tuple(result)
 # 4
 class LetterStorage:
@@ -285,7 +287,7 @@ class LanguageProfile:
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
 
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, 
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
         <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
@@ -332,7 +334,7 @@ class LanguageProfile:
                or not isinstance(trie_level, int)\
                or k <= 0:
             return()
-        for n_grams_trie in self.tries:
+        for n_gram_trie in self.tries:
             if n_gram_trie.size == trie_level:
                 frequency = n_gram_trie.n_gram_frequencies
                 top_k_n_grams = tuple(sorted(frequency, key=frequency.get, reverse = True)[:k])
@@ -412,7 +414,7 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = 
+    Например, первый набор N-грамм для неизвестного профиля - first_n_grams =
     ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
