@@ -23,7 +23,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or not text:
         return ()
 
-    umlauts= ('ö', 'ü', 'ä', 'ß')
+    umlauts = ('ö', 'ü', 'ä', 'ß')
     replacements = ('oe', 'ue', 'ae', 'ss')
     text = text.lower()
     final_text = []
@@ -33,18 +33,20 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentence = sentence.split()
         new_sentence = []
         clean_sentence = []
+
         for word in sentence:
             for umlaut, replacement in zip(umlauts, replacements):
                 word.replace(umlaut, replacement)
-                clean_sentence.append(word)
-        for word in clean_sentence:
-            letters = [letter for letter in word if letter.isalpha()]
+            clean_sentence.append(word)
+
+        for clean_word in clean_sentence:
+            letters = [letter for letter in clean_word if letter.isalpha()]
             if letters:
                 letters.insert(0, '_')
                 letters.append('_')
                 new_sentence.append(tuple(letters))
-            if not new_sentence:
-                return ()
+        if not new_sentence:
+            return ()
         final_text.append(tuple(new_sentence))
     return tuple(final_text)
 
