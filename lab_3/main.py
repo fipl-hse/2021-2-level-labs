@@ -374,7 +374,22 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
+    if not (isinstance(unknown_profile, LanguageProfile)
+            and isinstance(known_profile, LanguageProfile)
+            and isinstance(k, int)
+            and isinstance(trie_level, int)):
+        return -1
 
+    distance = 0
+    unknown_freq = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_freq = known_profile.get_top_k_n_grams(k, trie_level)
+    for index_unk, gram_unk in enumerate(unknown_freq):
+        if gram_unk not in known_freq:
+            distance += len(known_freq)
+        for index_kn, gram_kn in enumerate(known_freq):
+            if gram_unk == gram_kn:
+                distance += abs(index_unk - index_kn)
+    return distance
 
 
 # 8
