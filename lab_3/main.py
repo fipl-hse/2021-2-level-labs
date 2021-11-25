@@ -456,7 +456,7 @@ class LanguageDetector:
         """
         if not isinstance(language_profile, LanguageProfile):
             return 1
-        self.language_profiles[language_profiles.language] = language_profile
+        self.language_profiles[language_profile.language] = language_profile
         return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int])\
