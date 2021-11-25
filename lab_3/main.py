@@ -45,9 +45,6 @@ def tokenize_by_sentence(text: str) -> tuple:
             list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
             
     result tuple(result)
-
-
-
 # 4
 class LetterStorage:
     """
