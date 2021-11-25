@@ -24,8 +24,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or not text:
         return ()
     
-    sentences = re
-    
+    result=[]
     invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
@@ -43,7 +42,10 @@ def tokenize_by_sentence(text: str) -> tuple:
         list_of_sentences = []
         for token in tokens:
             list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
-            
+            if not list_of_sentences or len(sentence) == 1:
+            return tuple(list_of_sentences)
+        result.append(tuple(list_of_sentences))
+
     result tuple(result)
 # 4
 class LetterStorage:
