@@ -11,12 +11,6 @@ import json
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
-    Splits a text into sentences, sentences into tokens, tokens into letters
-    Tokens are framed with '_'
-    :param text: a text
-    :return: a list of sentence with lists of tokens split into letters
-    e.g.
-    text = 'She is happy. He is happy.'
     -->  (
          (('_', 's', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_')),
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
