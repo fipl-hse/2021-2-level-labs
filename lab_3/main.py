@@ -51,7 +51,7 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokenized_sentence += symbol
             tokenized_sentences.append(tokenized_sentence)
         else:
-            tokenized_sentence.append(tokenized_sentence)
+            tokenized_sentences.append(tokenized_sentence)
             tokenized_sentence = ''
 
     for x, tokenized_sentence in enumerate(tokenized_sentences):
