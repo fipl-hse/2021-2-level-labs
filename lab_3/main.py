@@ -323,9 +323,9 @@ class LanguageProfile:
             return 1
         for ngram_size in ngram_sizes:
             trie = NGramTrie(ngram_size, self.storage)
-            self.tries.append(NGramTrie(ngram_size, self.storage))
             trie.extract_n_grams(encoded_corpus)
             trie.get_n_grams_frequencies()
+            self.tries.append(trie)
             self.n_words.append(len(trie.n_gram_frequencies))
         return 0
 
