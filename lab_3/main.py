@@ -269,8 +269,7 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-
-
+        pass
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
