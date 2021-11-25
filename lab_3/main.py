@@ -25,7 +25,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
 
     text = text.lower()
-    text = re.split(r'[.!?] ', text)
+    text = re.split(r'[.!?] |\n', text)
 
     tokenized_sentence = ''
     tokenized_sentences = []
@@ -43,12 +43,15 @@ def tokenize_by_sentence(text: str) -> tuple:
         tokenized_sentences.append(tokenized_sentence.split())
         tokenized_sentence = ''
 
-    for tokenized_sentence in tokenized_sentences:
+    for sent in tokenized_sentences:
         tokens = []
-        for word in tokenized_sentence:
-            underscore.extend(word)
-            underscore.append('_')
-            tokens.append(tuple(underscore))
+        for word in sent:
+            token = []
+            token += underscore
+            for letter in word:
+                token += letter
+            token += underscore
+            tokens.append(tuple(token))
         if tokens:
             final_text.append(tuple(tokens))
 
