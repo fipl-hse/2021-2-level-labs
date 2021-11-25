@@ -33,7 +33,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     replacements = ('oe', 'ue', 'ae', 'ss')
     if text:
         last_letter = text[-1]
-        if last_letter == '.' or last_letter == '!' or last_letter == '?':
+        if last_letter in ('.', '!', '?'):
             text = text[:-1]
     for symbol in useless_symbols:
         text = text.replace(symbol, '')
@@ -311,10 +311,12 @@ class LanguageProfile:
         e.g.
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
-        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>, <__main__.NGramTrie object at 0x09DB9A48>]
+        self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
+        <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)),
+            ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
         pass
@@ -361,7 +363,8 @@ class LanguageProfile:
             return ()
         for trie in self.tries:
             if trie.size == trie_level:
-                sorted_n_grams_frequencies = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
+                sorted_n_grams_frequencies = sorted(trie.n_gram_frequencies.items(),
+                                                    key=lambda x: -x[1])
                 sorted_n_grams = [i[0] for i in sorted_n_grams_frequencies]
                 return tuple(sorted_n_grams[:k])
         return ()
@@ -381,7 +384,8 @@ class LanguageProfile:
         freq_dict = {}
         for trie in self.tries:
             for n_gram, freq in trie.n_gram_frequencies.items():
-                decoded_n_grams = ''.join(self.storage.get_letter_by_id(letter_id) for letter_id in n_gram)
+                decoded_n_grams = ''.join(self.storage.get_letter_by_id(letter_id)
+                                          for letter_id in n_gram)
                 freq_dict.update({decoded_n_grams: freq})
         profile_dict['freq'] = freq_dict
         profile_dict['n_words'] = self.n_words
@@ -427,7 +431,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного профиля
+    - first_n_grams = ((1, 2), (4, 5), (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
@@ -435,8 +440,10 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     """
     pass
 
-    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile) \
-            or not isinstance(k, int) or not isinstance(trie_level, int):
+    if not isinstance(unknown_profile, LanguageProfile) \
+            or not isinstance(known_profile, LanguageProfile) \
+            or not isinstance(k, int) \
+            or not isinstance(trie_level, int):
         return -1
     unknown_top_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_top_n_grams = known_profile.get_top_k_n_grams(k, trie_level)

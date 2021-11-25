@@ -115,7 +115,7 @@ def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int
     # find common tokens WITHOUT creating list
     common_things = set(top_n_words_unknown) & set(top_n_words_compare)
     # find share of common tokens
-    share_of_common_things = round(len(common_things)/len(top_n_words_unknown), 2)
+    share_of_common_things = round(len(common_things) / len(top_n_words_unknown), 2)
     return share_of_common_things
 
 
@@ -180,7 +180,7 @@ def compare_profiles_advanced(unknown_profile: dict,
     length_of_tokens = []
     for token in profile_to_compare["freq"].keys():
         length_of_tokens.append(len(token))
-    average_token_length = sum(length_of_tokens)/len(profile_to_compare["freq"].keys())
+    average_token_length = sum(length_of_tokens) / len(profile_to_compare["freq"].keys())
     # get a report
     report = {'name': profile_to_compare["name"],
               'common': common,
