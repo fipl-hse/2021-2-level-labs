@@ -25,7 +25,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
 
     text = text.lower()
-    text = re.split(r'[.!?] |\n', text)
+    text = re.split(r'[.!?] ', text)
 
     tokenized_sentence = ''
     tokenized_sentences = []
