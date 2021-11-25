@@ -54,7 +54,7 @@ if __name__ == '__main__':
     german_tokenize_decoded = decode_corpus(storage, german_tokenize_encoded)
     unknown_tokenize_decoded = decode_corpus(storage, unknown_tokenize_encoded)
 
-    RESULT = ''
+    RESULT = f'{eng_tokenize_decoded}, {german_tokenize_decoded}, {unknown_tokenize_decoded}'
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
 
