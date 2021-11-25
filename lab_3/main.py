@@ -23,21 +23,19 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    text = text.lower()
-
     tokenized_sentence = ''
     tokenized_sentences = []
     underscore = ['_']
-    punctuation = ['.', '?', '!', '…']
+    punctuation = ('.', '?', '!', '…')
 
     german_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
     for k, v in german_letters.items():
         text = text.replace(k, v)
 
-    special_symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
+    special_symbols = ('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[', ']',
                        '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.', '?', '/', '1', '2', '3', '4', '5', '6',
-                       '7', '8', '9', '0']
+                       '7', '8', '9', '0')
 
     for symbol in special_symbols:
         text = text.replace(symbol, '')
@@ -49,9 +47,9 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokenized_sentence += symbol
         elif i + 1 == text_length and symbol not in punctuation:
             tokenized_sentence += symbol
-            tokenized_sentences.append(tokenized_sentence)
+            tokenized_sentences.append(tokenized_sentence.lower())
         else:
-            tokenized_sentences.append(tokenized_sentence)
+            tokenized_sentences.append(tokenized_sentence.lower())
             tokenized_sentence = ''
 
     for x, tokenized_sentence in enumerate(tokenized_sentences):
