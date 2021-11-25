@@ -3,7 +3,7 @@ Language detection starter
 """
 import os
 from lab_3.main import tokenize_by_sentence, LetterStorage,\
-    encode_corpus, LanguageProfile, calculate_distance
+    encode_corpus, LanguageProfile, calculate_distance, LanguageDetector
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
@@ -53,6 +53,22 @@ if __name__ == '__main__':
     # predict UNKNOWN_SAMPLE
     # print(detector.detect(profile_unk, 5, 3))
     # EXPECTED_SCORE = {'en': 24, 'de': 25}
+
+    unknown_profile.save('unknown_profile.json')
+    profile_unk = LanguageProfile(letters, "unk")
+    profile_unk.open('unknown_profile.json')
+
+    detector = LanguageDetector()
+    detector.register_language(eng_profile)
+    detector.register_language(de_profile)
+
+    ngram_sizes = tuple([3])
+
+    eng_profile.create_from_tokens(encoded_eng, ngram_sizes)
+    de_profile.create_from_tokens(encoded_ge, ngram_sizes)
+    profile_unk.create_from_tokens(encoded_unk, ngram_sizes)
+
+    print(detector.detect(profile_unk, 5, ngram_sizes))
 
     # score 10, k = 1000, trie_levels = (2,)
     # predict SECRET_SAMPLE
