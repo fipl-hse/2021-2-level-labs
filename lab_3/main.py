@@ -5,6 +5,7 @@ Language classification using n-grams
 
 from typing import Dict, Tuple
 import json
+import re
 
 
 # 4
@@ -44,8 +45,8 @@ def tokenize_by_sentence(text: str) -> tuple:
         list_of_sentences = []
         for token in tokens:
             list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
-            if not list_of_sentences or len(sentence) == 1:
-                return tuple(list_of_sentences)
+        if not list_of_sentences or len(sentence) == 1:
+            return tuple(list_of_sentences)
         result.append(tuple(list_of_sentences))
     result = tuple(result)
 # 4
