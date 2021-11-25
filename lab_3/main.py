@@ -383,7 +383,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     for unknown_index, unknown_n_gram in enumerate(unknown_profile):
         for known_index, known_n_gram in enumerate(known_profile):
             if unknown_n_gram == known_n_gram:
-                distance += unknown_index - known_index
+                distance += abs(unknown_index - known_index)
         if unknown_n_gram not in known_profile:
             distance += len(known_profile)
     return distance
