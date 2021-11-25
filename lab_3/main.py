@@ -15,9 +15,9 @@ def split_words(token: str) -> tuple:
     :param token: a token
     :return: a token split into letters
     """
-    deutsch_letters = {"ä": "ae", "ü": "ue", "ß": "ss", "ö": "oe"}
-    for key in deutsch_letters.items():
-        token = token.replace(key[0], key[1])
+    # deutsch_letters = {"ä": "ae", "ü": "ue", "ß": "ss", "ö": "oe"}
+    # for key in deutsch_letters.items():
+    #    token = token.replace(key[0], key[1])
     skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º"]
     token_list = []
     for sign in skip_signs:
