@@ -1,7 +1,7 @@
 """
 Language detection starter
 """
-
+from main import tokenize_by_sentence, LetterStorage, encode_corpus, LanguageProfile, calculate_distance
 import os
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +18,40 @@ if __name__ == '__main__':
     # print(calculate_distance(unknown_profile, en_profile, 5, 2))
     # print(calculate_distance(unknown_profile, de_profile, 5, 2))
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
+
+    eng_tokens = tokenize_by_sentence(ENG_SAMPLE)
+    ge_tokens = tokenize_by_sentence(GERMAN_SAMPLE)
+    unk_tokens = tokenize_by_sentence(UNKNOWN_SAMPLE)
+
+    letters = LetterStorage()
+    letters.update(eng_tokens)
+    letters.update(ge_tokens)
+    letters.update(unk_tokens)
+
+    encoded_eng = encode_corpus(letters, eng_tokens)
+    encoded_ge = encode_corpus(letters, ge_tokens)
+    encoded_unk = encode_corpus(letters, unk_tokens)
+
+    eng_profile = LanguageProfile(letters, "eng")
+    de_profile = LanguageProfile(letters, "ge")
+    unknown_profile = LanguageProfile(letters, "unk")
+
+    ngram_sizes = tuple([2])
+
+    eng_profile.create_from_tokens(encoded_eng, ngram_sizes)
+    de_profile.create_from_tokens(encoded_ge, ngram_sizes)
+    unknown_profile.create_from_tokens(encoded_unk, ngram_sizes)
+
+
+
+    #result_for_eng = calculate_distance(unknown_profile,eng_profile, k, trie_level)
+    print(calculate_distance(unknown_profile, eng_profile, 5, 2))
+    print(calculate_distance(unknown_profile, de_profile, 5, 2))
+
+
+
+
+
 
     # score 8, k = 5, trie_level = 3
     # predict UNKNOWN_SAMPLE
