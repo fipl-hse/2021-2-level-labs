@@ -52,6 +52,7 @@ def tokenize_by_sentence(text: str) -> tuple:
                 token += letter
             token += underscore
             tokens.append(tuple(token))
+        if tokens:
             final_text.append(tuple(tokens))
 
     return tuple(final_text)
