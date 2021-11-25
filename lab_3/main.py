@@ -46,9 +46,12 @@ def tokenize_by_sentence(text: str) -> tuple:
     for sent in tokenized_sentences:
         tokens = []
         for word in sent:
-            underscore.extend(word)
-            underscore.append('_')
-            tokens.append(tuple(underscore))
+            token = []
+            token += underscore
+            for letter in word:
+                token += letter
+            token += underscore
+            tokens.append(tuple(token))
         if tokens:
             final_text.append(tuple(tokens))
 
