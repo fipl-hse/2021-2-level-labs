@@ -28,7 +28,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     tokenized_sentence = ''
     tokenized_sentences = []
     underscore = ['_']
-    punctuation = ['!', '?', '.', '...']
+    punctuation = ['.', '?', '!', '…']
 
     german_letters = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
 
@@ -42,18 +42,23 @@ def tokenize_by_sentence(text: str) -> tuple:
     for symbol in special_symbols:
         text = text.replace(symbol, '')
 
-    for symbol in text:
-        if symbol.isalpha() or symbol.isspace():
+    text_length = len(text)
+
+    for i, symbol in enumerate(text):
+        if symbol not in punctuation and i + 1 != text_length:
             tokenized_sentence += symbol
-        else:
+        elif i + 1 == text_length and symbol not in punctuation:
+            tokenized_sentence += symbol
             tokenized_sentences.append(tokenized_sentence)
+        else:
+            tokenized_sentence.append(tokenized_sentence)
             tokenized_sentence = ''
 
     for x, tokenized_sentence in enumerate(tokenized_sentences):
         tokenized_sentences[x] = tokenized_sentence.split()
 
     for tokenized_sentence in tokenized_sentences:
-        for y, word in enumerate(tokenized_sentence):
+        for y, word in enumerate(tokenized_sentences):
             underscore.extend(word)
             underscore.append('_')
             tokenized_sentence[y] = underscore
