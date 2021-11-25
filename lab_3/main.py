@@ -194,15 +194,8 @@ class NGramTrie:
             sentences = []
             for word in sentence:
                 words = []
-
-                first_letter = 0
-
-                last_letter = first_letter + self.size
-                while last_letter <= len(word):
-                    n_gram = word[first_letter: last_letter]
-                    first_letter += 1
-                    last_letter += 1
-                    words.append(tuple(n_gram))
+                for index in range(len(word) - self.size + 1):
+                    words.append(tuple(word[index:index + self.size]))
                 sentences.append(tuple(words))
             n_grams_list.append(tuple(sentences))
         self.n_grams = tuple(n_grams_list)
