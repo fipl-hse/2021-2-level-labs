@@ -4,7 +4,8 @@ Language detection starter
 
 import os
 
-from lab_3.main import tokenize_by_sentence, LetterStorage, encode_corpus, LanguageProfile, calculate_distance
+from lab_3.main import tokenize_by_sentence, LetterStorage, \
+    encode_corpus, LanguageProfile, calculate_distance
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -35,15 +36,18 @@ def score_6():
 
     distance_en_to_unknown = calculate_distance(unknown_profile, en_profile, 5, 2)
     distance_de_to_unknown = calculate_distance(unknown_profile, de_profile, 5, 2)
-    print(f"DISTANCE_TO_EN_DE_PROFILES = {str(distance_en_to_unknown)}, {str(distance_de_to_unknown)}")
+    print(f"DISTANCE_TO_EN_DE_PROFILES = {str(distance_en_to_unknown)}, "
+          f"{str(distance_de_to_unknown)}")
 
 
 if __name__ == '__main__':
-    ENG_SAMPLE = "Helium is the byproduct of millennia of radioactive decay from the elements thorium and uranium."
-    GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, am Arbeitsplatz schon mal gar nicht."
+    ENG_SAMPLE = "Helium is the byproduct of millennia of radioactive decay " \
+                 "from the elements thorium and uranium."
+    GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen, " \
+                    "am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. И пее, а плаче од болка. 
-    Дали е ова контраст, можеби – живот?"""
+    SECRET_SAMPLE = " Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. " \
+                    "И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"
 
     # score 6, params: k = 5, trie_level = 2
     # predict UNKNOWN_SAMPLE

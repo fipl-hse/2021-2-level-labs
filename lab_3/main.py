@@ -481,18 +481,22 @@ class LanguageDetector:
             self.language_profiles[language_profile.language] = language_profile
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int,
+               trie_levels: Tuple[int]) -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and their scores
+        if input is correct, otherwise -1
         """
         pass
 
-        if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int) \
-                or not isinstance(trie_levels, tuple) or not all(isinstance(i, int) for i in trie_levels):
+        if not isinstance(unknown_profile, LanguageProfile) \
+                or not isinstance(k, int) \
+                or not isinstance(trie_levels, tuple) \
+                or not all(isinstance(i, int) for i in trie_levels):
             return -1
         lang_distance = {}
         for lang_name, lang_profile in self.language_profiles.items():
