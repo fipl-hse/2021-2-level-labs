@@ -26,9 +26,8 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     umlauts = {"ü": "ue", "ö": "oe", "ä": "ae", "ß": "ss"}
     text = text.lower()
-    end_new_text = []
     sentences = re.split(r'[.!?]\s', text)
-
+    end_new_text = []
     for sentence in sentences:
         sentence = sentence.split()
         new_sent = []
@@ -110,8 +109,7 @@ class LetterStorage:
         for sent in corpus:
             for word in sent:
                 for letter in word:
-                    if self._put_letter(letter) == -1:
-                        return -1
+                    self._put_letter(letter)
         return 0
 
 # 4
