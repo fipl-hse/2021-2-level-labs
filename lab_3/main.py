@@ -62,7 +62,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.unique_id = 0
+        # self.unique_id = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -74,8 +74,9 @@ class LetterStorage:
             return -1
 
         if letter not in self.storage:
-            self.storage[letter] = self.unique_id
-            self.unique_id += 1
+            # self.storage[letter] = self.unique_id
+            # self.unique_id += 1
+            self.storage[letter] = len(self.storage) + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -173,11 +174,12 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
-    # 8 - threeGrams
-    # 10 - nGrams
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
@@ -195,7 +197,16 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+
+        for sentence in encoded_corpus:
+            word_with_n_grams = ()
+            for word in sentence:
+                n_gram = tuple(zip(*[word[i:] for i in range(self.size)]))
+                word_with_n_grams += (n_gram,)
+            self.n_grams += (word_with_n_grams,)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -213,7 +224,17 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not (self.n_grams and isinstance(self.n_grams, tuple)):
+            return 1
+
+        for sentence in self.n_grams:
+            for word in sentence:
+                for gram in word:
+                    if gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[gram] = 1
+                    else:
+                        self.n_gram_frequencies[gram] += 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
