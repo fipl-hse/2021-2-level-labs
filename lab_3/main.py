@@ -406,7 +406,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
