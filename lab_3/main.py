@@ -90,7 +90,7 @@ class LetterStorage:
 
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -172,11 +172,10 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
-    
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
-        self.n_grams = []
+        self.n_grams = ()
         self.n_gram_frequencies = {}
 
     # 6 - biGrams
@@ -268,7 +267,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -287,7 +289,16 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
+            return 1
+        # but i had only one size - 2
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            self.tries.append(trie)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -313,7 +324,17 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        # my trie_level is 2 as size, so only for bi-grams
+        if not (isinstance(k, int) and isinstance(trie_level, int) and k >= 1):
+            return ()
+
+        for trie in self.tries:
+            if trie.size == trie_level:
+                trie.get_n_grams_frequencies()
+                top_k = sorted(trie.n_gram_frequencies,
+                               key=trie.n_gram_frequencies.get, reverse=True)[:k]
+                return tuple(top_k)
+        return ()
 
     # 8
     def save(self, name: str) -> int:
@@ -338,7 +359,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -353,7 +374,7 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+
 
 
 # 8
