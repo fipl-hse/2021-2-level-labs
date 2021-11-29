@@ -20,9 +20,36 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
 
+    if not isinstance(text, str) or not text:
+        return ()
 
+    sentences = re.compile(r'[.!?]')
+    sentences = filter(lambda t: t, [t.strip() for t in sentences.split(text)])
+    result = []
+    punctiation = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                   '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                   '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+
+    for sentence in sentences:
+        sentence = sentence.lower()
+        for symbols in punctuation:
+            sentence = sentence.replace(symbols, '')
+        tokens = sentence.split()
+        for word in tokens:
+            for letter in word:
+                letter.replace('ö', 'oe')
+                letter.replace('ü', 'ue')
+                letter.replace('ä', 'ae')
+                letter.replace('ß', 'ss')
+        list_of_sentences = []
+        for token in tokens:
+            list_of_sentences.append(tuple(['_'] + list(token) + ['_']))
+        if not list_of_sentences or len(sentence) == 1:
+            return tuple(list_of_sentences)
+        result.append(tuple(list_of_sentences))
+
+    return tuple(result)
 # 4
 class LetterStorage:
     """
