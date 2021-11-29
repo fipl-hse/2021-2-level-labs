@@ -223,7 +223,13 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, freq in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple):
+                self.n_gram_frequencies[n_gram] = freq
+        return 0
+ 
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
