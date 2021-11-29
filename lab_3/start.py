@@ -5,7 +5,7 @@ Language detection starter
 import os
 
 from lab_3.main import tokenize_by_sentence, LetterStorage, \
-    encode_corpus, LanguageProfile, calculate_distance, LanguageDetector
+    encode_corpus, LanguageProfile, calculate_distance, LanguageDetector, ProbabilityLanguageDetector
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -21,15 +21,18 @@ if __name__ == '__main__':
     en_text = tokenize_by_sentence(ENG_SAMPLE)
     de_text = tokenize_by_sentence(GERMAN_SAMPLE)
     unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
+    secret_text = tokenize_by_sentence(SECRET_SAMPLE)
 
     storage = LetterStorage()
     storage.update(en_text)
     storage.update(de_text)
     storage.update(unknown_text)
+    storage.update(secret_text)
 
     encoded_en_text = encode_corpus(storage, en_text)
     encoded_de_text = encode_corpus(storage, de_text)
     encoded_unknown_text = encode_corpus(storage, unknown_text)
+    encoded_secret_text = encode_corpus(storage, secret_text)
 
     # score 6, params: k = 5, trie_level = 2
     # predict UNKNOWN_SAMPLE
@@ -83,6 +86,20 @@ if __name__ == '__main__':
     # print(detector.detect(unknown_profile, 1000, (2,)))
     # EXPECTED_LANGUAGE = ?
     # EXPECTED_MIN_DISTANCE = ?
+
+    secret_profile = LanguageProfile(letter_storage=storage, language_name='secret')
+    secret_profile.create_from_tokens(encoded_secret_text, (2,))
+    detector = ProbabilityLanguageDetector()
+
+    for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
+        profile = LanguageProfile(storage,file_name)
+        profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'profiles', file_name))
+        detector.register_language(profile)
+
+    probabilities = detector.detect(secret_profile, 1000, (2,))
+    predicted_language = min(probabilities, key=probabilities.get)
+
+    print(f'EXPECTED_LANGUAGE = {predicted_language[0]}. EXPECTED_MIN_DISTANCE = {probabilities[predicted_language]}')
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
