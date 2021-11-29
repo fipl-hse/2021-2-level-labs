@@ -24,10 +24,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return ()
-    deutsch_replacement = {'ö': 'oe',
-                           'ü': 'ue',
-                           'ä': 'ae',
-                           'ß': 'ss'}
     # start level - 'sentences'
     sentences_raw = re.split(r"[!.?]\W(?=[\wöüäßÜÖÄẞ])", text)
     # delete empty strings
@@ -39,8 +35,6 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentence_tuple = []
         for word_raw in words_raw:
             # start level - 'letters'
-            for key, value in deutsch_replacement.items():
-                word_raw = word_raw.replace(key, value)
             word_tuple = [letter for letter in word_raw if letter.isalpha()]
             if word_tuple:
                 word_tuple.append('_')
