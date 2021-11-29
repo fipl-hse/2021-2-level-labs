@@ -138,6 +138,20 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
+    if not isinstance(storage, LetterStorage)\
+           or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for sentence in corpus:
+        encoded_sentences = []
+        for token in sentence:
+            encoded_tokens = []
+            for letter in token:
+                encoded_tokens.append(storage.get_letter_by_id(letter))
+            encoded_sentences.append(tuple(encoded_tokens))
+        encoded_corpus.append(tuple(encoded_sentences))
+    return tuple(encoded_corpus)
     pass
 
 
@@ -148,7 +162,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -223,7 +240,12 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-        pass
+        if not isinstance(n_grams_dictionary, dict):
+            return 1
+        for n_gram, freq in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple):
+                self.n_gram_frequencies[n_gram] = freq
+        return 0
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
