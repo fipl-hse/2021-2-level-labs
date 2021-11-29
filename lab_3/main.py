@@ -436,9 +436,8 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
-    
     def __init__(self):
-        pass
+        self.language_profiles = {}
 
     def register_language(self, language_profile: LanguageProfile) -> int:
         """
@@ -447,18 +446,29 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(language_profile, LanguageProfile):
+            return 1
+        self.language_profiles[language_profile.language] = language_profile
+        return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int])\
+    -> Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: a dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and their scores if input is correct,
+        otherwise -1
         """
-        pass
-
+        if not isinstance(unknown_profile, LanguageProfile) or not isinstance(k, int)\
+                or not isinstance(trie_levels, Tuple):
+            return -1
+        language_distances = {}
+        for element in self.language_profiles.values():
+            distance = calculate_distance(unknown_profile, element, k, trie_levels[0])
+            language_distances[element.language] = distance
+        return language_distances
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                                k: int, trie_level: int) -> float or int:
