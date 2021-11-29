@@ -290,9 +290,9 @@ class NGramTrie:
 
         if not self.n_gram_frequencies:
             return 1
-        for n_gram in self.n_gram_frequencies.keys():
+        for n_gram in self.n_gram_frequencies.items():
             amount = 0
-            for other_n_gram in self.n_gram_frequencies.keys():
+            for other_n_gram in self.n_gram_frequencies.items():
                 if n_gram[:self.size - 1] == other_n_gram[:self.size - 1]:
                     amount += self.n_gram_frequencies[other_n_gram]
             probability = self.n_gram_frequencies[n_gram] / amount
