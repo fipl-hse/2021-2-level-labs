@@ -5,7 +5,8 @@ Language detection starter
 import os
 
 from lab_3.main import tokenize_by_sentence, LetterStorage, \
-    encode_corpus, LanguageProfile, calculate_distance, LanguageDetector, ProbabilityLanguageDetector
+    encode_corpus, LanguageProfile, calculate_distance, \
+    LanguageDetector, ProbabilityLanguageDetector
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -99,7 +100,8 @@ if __name__ == '__main__':
     probabilities = detector.detect(secret_profile, 1000, (2,))
     predicted_language = min(probabilities, key=probabilities.get)
 
-    print(f'EXPECTED_LANGUAGE = {predicted_language[0]}. EXPECTED_MIN_DISTANCE = {probabilities[predicted_language]}')
+    print(f'EXPECTED_LANGUAGE = {predicted_language[0]}. '
+          f'EXPECTED_MIN_DISTANCE = {probabilities[predicted_language]}')
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
