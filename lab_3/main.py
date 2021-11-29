@@ -153,7 +153,7 @@ class NGramTrie:
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-    def extract_n_grams(self, encoded_corpus: tuple) -> int:
+     def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
@@ -170,7 +170,25 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        list_n_grams = []
+        for sentence in encoded_corpus:
+            n_grams_sentence = []
+            for token in sentence:
+                n_grams_token = []
+                if self.size >= len(token):
+                    special_tokens = [token]
+                    n_grams_sentence.append(tuple(special_tokens))
+                else:
+                    i = 0
+                    while i <= (len(token) - self.size):
+                        n_grams_token.append(tuple(token[i:(i + self.size)]))
+                        i += 1
+                    n_grams_sentence.append(tuple(n_grams_token))
+            list_n_grams.append(tuple(n_grams_sentence))
+            self.n_grams = tuple(list_n_grams)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -188,8 +206,17 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
-
+        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
+            return 1
+        for sentence in self.n_grams:
+            for token in sentence:
+                for gram in token:
+                    if gram not in self.n_gram_frequencies.keys():
+                        self.n_gram_frequencies[gram] = 1
+                    else:
+                        self.n_gram_frequencies[gram] += 1
+        return 0
+    
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
         """
