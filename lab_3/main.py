@@ -2,7 +2,8 @@
 Lab 3
 Language classification using n-grams
 """
-
+import re
+import json
 from typing import Dict, Tuple
 
 
@@ -271,7 +272,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.tries = []
+        self.n_words = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -290,7 +294,16 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if (not isinstance(encoded_corpus, tuple)
+                or not isinstance(ngram_sizes, tuple)):
+            return 1
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.tries.append(trie)
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -316,7 +329,16 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int)\
+               or not isinstance(trie_level, int)\
+               or k <= 0:
+            return()
+        for n_gram_trie in self.tries:
+            if n_gram_trie.size == trie_level:
+                frequency = n_gram_trie.n_gram_frequencies
+                top_k_n_grams = tuple(sorted(frequency, key=frequency.get, reverse = True)[:k])
+                return top_k_n_grams
+        return()
 
     # 8
     def save(self, name: str) -> int:
@@ -325,7 +347,24 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
-        pass
+         if not isinstance(name, str):
+            return 1
+        profile_as_dict = {}
+        freq_dict = {}
+
+        for trie in self.tries:
+            for key, value in trie.n_gram_frequencies.items():
+                string_for_file = ''
+                for element in key:
+                    string_for_file += self.storage.get_letter_by_id(element)
+                freq_dict[string_for_file] = value
+
+        profile_as_dict['freq'] = freq_dict
+        profile_as_dict['n_words'] = self.n_words
+        profile_as_dict['name'] = self.language
+        with open(name, 'w', encoding="UTF-8") as file:
+            json.dump(profile_as_dict, file)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
@@ -337,9 +376,31 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name, 'r', encoding="UTF-8") as file:
+            profile_dict = json.load(file)
+        self.language = profile_dict['name']
+        self.n_words = profile_dict['n_words']
+        freq_dict = profile_dict['freq']
 
+        size_of_gram = 0
+        counter = -1
 
+        for gram, value in freq_dict.items():
+            gram_correct = []
+            for letter in gram:
+                self.storage.update(tokenize_by_sentence(letter))
+                gram_correct.append(self.storage.get_id_by_letter(letter))
+            if len(gram) != size_of_gram:
+                size_of_gram = len(gram)
+                counter += 1
+                self.tries.append(NGramTrie(size_of_gram, self.storage))
+                self.tries[counter].n_gram_frequencies[tuple(gram_correct)] = value
+            else:
+                self.tries[counter].n_gram_frequencies[tuple(gram_correct)] = value
+        return 0
+       
 # 6
 def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
@@ -356,9 +417,20 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
-
-
+    if not isinstance(unknown_profile, LanguageProfile)\
+            or not isinstance(known_profile, LanguageProfile)\
+            or not isinstance(k, int)\
+            or not isinstance(trie_level, int):
+        return -1
+    top_known = known_profile.get_top_k_n_grams(k, trie_level)
+    top_unknown = unknown_profile.get_top_k_n_grams(k, trie_level)
+    distance = 0
+    for gram in top_unknown:
+        if gram in top_known:
+            distance += abs(top_unknown.index(gram) - top_known.index(gram))
+        else:
+            distance += len(top_known)
+    return distance
 # 8
 class LanguageDetector:
     """
