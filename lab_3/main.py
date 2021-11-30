@@ -8,6 +8,7 @@ from typing import Dict, Tuple
 import re
 
 
+# 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
     Splits a text into sentences, sentences into tokens, tokens into letters
@@ -51,6 +52,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     return text_tuple
 
 
+# 4
 class LetterStorage:
     """
     Stores and manages letters
@@ -123,12 +125,13 @@ class LetterStorage:
         return 0
 
 
+# 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
-    Decodes sentences by replacing letters with their ids
+    Encodes sentences by replacing letters with their ids
     :param storage: an instance of the LetterStorage class
-    :param corpus: an encoded tuple of sentences
-    :return: a tuple of the decoded sentences
+    :param corpus: a tuple of sentences
+    :return: a tuple of the encoded sentences
     """
     if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
@@ -140,6 +143,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     return encoded_sentences
 
 
+# 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     Decodes sentences by replacing letters with their ids
