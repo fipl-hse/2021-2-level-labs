@@ -59,7 +59,6 @@ class LetterStorage:
     """
 
     def __init__(self):
-        self.count = 1
         self.storage = {}
         self.counter = 1
 
