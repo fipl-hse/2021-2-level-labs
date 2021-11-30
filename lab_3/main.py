@@ -24,10 +24,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return ()
-    deutsch_replacement = {'ö': 'oe',
-                           'ü': 'ue',
-                           'ä': 'ae',
-                           'ß': 'ss'}
     # start level - 'sentences'
     sentences_raw = re.split(r"[!.?]\W(?=[\wöüäßÜÖÄẞ])", text)
     # delete empty strings
@@ -39,8 +35,6 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentence_tuple = []
         for word_raw in words_raw:
             # start level - 'letters'
-            for key, value in deutsch_replacement.items():
-                word_raw = word_raw.replace(key, value)
             word_tuple = [letter for letter in word_raw if letter.isalpha()]
             if word_tuple:
                 word_tuple.append('_')
@@ -72,7 +66,7 @@ class LetterStorage:
         """
         Puts a letter into storage, assigns a unique id
         :param letter: a letter
-        :return: 0 if succeeds, 1 if not
+        :return: 0 if succeeds, -1 if not
         """
         if not isinstance(letter, str):
             return -1
@@ -292,7 +286,7 @@ class LanguageProfile:
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
-        :param letters: a tuple of encoded letters
+        :param encoded_corpus: a tuple of encoded letters
         :param ngram_sizes: a tuple of ngram sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
