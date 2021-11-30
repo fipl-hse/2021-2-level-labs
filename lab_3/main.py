@@ -51,42 +51,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     text_tuple = tuple(sentence_tuple for sentence_tuple in text_tuple if sentence_tuple)
     return text_tuple
 
-    if not isinstance(text, str):
-        return ()
-    invaluable_trash = ('`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
-                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
-                        '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
-    for symbol in invaluable_trash:
-        text = text.replace(symbol, '')
-    for key, value in {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}.items():
-        text = text.replace(key, value)
-    sentence = ''
-    all_sentences = []
-    end_punctuation_marks = ('.', '?', '!', '…')
-    for number, symbol in enumerate(text):
-        if symbol not in end_punctuation_marks and number + 1 != len(text):
-            sentence += symbol
-        elif number + 1 == len(text) and symbol not in end_punctuation_marks:
-            sentence += symbol
-            all_sentences.append(sentence.lower())
-        else:
-            all_sentences.append(sentence.lower())
-            sentence = ''
-    for i, sentence in enumerate(all_sentences):
-        all_sentences[i] = sentence.split()
-    new_word = ['_']
-    for sentence in all_sentences:
-        for i, word in enumerate(sentence):
-            new_word.extend(word)
-            new_word.append('_')
-            sentence[i] = new_word
-            new_word = ['_']
-    for i, sentence in enumerate(all_sentences):
-        for j, word in enumerate(sentence):
-            sentence[j] = tuple(word)
-        all_sentences[i] = tuple(sentence)
-    all_sentences = tuple(all_sentences)
-    return all_sentences
 
 # 4
 class LetterStorage:
@@ -213,7 +177,6 @@ class NGramTrie:
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
