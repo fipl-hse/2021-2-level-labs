@@ -41,29 +41,30 @@ if __name__ == '__main__':
         UNKNOWN_SAMPLES = file_to_read.read().split('[TEXT]')[1:]
 
     EXPECTED = ['de', 'eng', 'lat']
-    STOP_WORDS = []
-    texts_corpus = []
+    stop_words = []
+    corpus = []
     language_labels = []
     for text in DE_SAMPLES:
-        texts_corpus.append(remove_stop_words(tokenize(text), STOP_WORDS))
+        corpus.append(remove_stop_words(tokenize(text), stop_words))
         language_labels.append('de')
     for text in EN_SAMPLES:
-        texts_corpus.append(remove_stop_words(tokenize(text), STOP_WORDS))
+        corpus.append(remove_stop_words(tokenize(text), stop_words))
         language_labels.append('eng')
     for text in LAT_SAMPLES:
-        texts_corpus.append(remove_stop_words(tokenize(text), STOP_WORDS))
+        corpus.append(remove_stop_words(tokenize(text), stop_words))
         language_labels.append('lat')
-    language_profiles = get_language_profiles(texts_corpus, language_labels)
+    language_profiles = get_language_profiles(corpus, language_labels)
     known_text_vectors = []
-    for text in texts_corpus:
+    for text in corpus:
         known_text_vectors.append(get_sparse_vector(text, language_profiles))
-    KNN = 3
+    k = 3
     RESULT = []
     for text in UNKNOWN_SAMPLES:
-        unknown_text = remove_stop_words(tokenize(text), STOP_WORDS)
+        unknown_text = remove_stop_words(tokenize(text), stop_words)
         unknown_text_vector = get_sparse_vector(unknown_text, language_profiles)
         predicted_lang = predict_language_knn_sparse(unknown_text_vector, known_text_vectors,
-                                                     language_labels, KNN)
+                                                     language_labels, k)
         RESULT.append(predicted_lang[0])
+    print(f"{RESULT} are possible languages")
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == EXPECTED, 'Detection not working'
