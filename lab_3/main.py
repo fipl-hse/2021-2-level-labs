@@ -62,7 +62,6 @@ class LetterStorage:
         self.storage = {}
         self.counter = 1
 
-
     def _put_letter(self, letter: str) -> int:
         """
         Puts a letter into storage, assigns a unique id
