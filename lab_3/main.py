@@ -352,10 +352,10 @@ class LanguageProfile:
         return ()
 
     # 8
-    def save(self, file_name: str) -> int:
+    def save(self, name: str) -> int:
         """
         Saves language profile into json file
-        :param file_name: name of the json file with .json format
+        :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
         if not isinstance(name, str):

@@ -6,20 +6,6 @@ from math import sqrt, fabs
 from lab_1.main import tokenize, remove_stop_words
 
 
-def list_elements_isinstance(this_list: list, this_type: type) -> bool:
-    """
-    Checks elements' types in a list - saves space
-    :param this_list: any list
-    :param this_type: any type
-    :return: true if the list contains elements of only this_type
-    """
-    for element in this_list:
-        if not isinstance(element, this_type):
-            return False
-
-    return True
-
-
 # 4
 def get_freq_dict(tokens: list) -> dict or None:
     """
@@ -27,26 +13,20 @@ def get_freq_dict(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-
-    if not isinstance(tokens, list):
+    if not (
+            isinstance(tokens, list)
+            and all(isinstance(t, str) for t in tokens)
+    ):
         return None
 
     freq_dict = {}
-
     for token in tokens:
-        if not isinstance(token, str):
-            return None
-
-        if token in freq_dict.keys():
-            freq_dict[token] = freq_dict[token] + 1
-        else:
+        if token not in freq_dict:
             freq_dict[token] = 1
-
-    tokens_length = len(tokens)
-
+        else:
+            freq_dict[token] += 1
     for token in freq_dict:
-        freq_dict[token] = round(freq_dict[token] / tokens_length, 5)
-
+        freq_dict[token] = round(freq_dict[token] / len(tokens), 5)
     return freq_dict
 
 
@@ -58,18 +38,17 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
     :param language_labels: a list of given language labels
     :return: a dictionary of dictionaries - language profiles
     """
-
-    if not isinstance(texts_corpus, list) or not isinstance(language_labels, list):
+    if not (
+            isinstance(texts_corpus, list)
+            and all(isinstance(i, list) for i in texts_corpus)
+            and isinstance(language_labels, list)
+            and all(isinstance(s, str) for s in language_labels)
+    ):
         return None
 
-    language_profiles = {}
-
-    for index, language_label in enumerate(language_labels):
-        if not isinstance(language_label, str) or not isinstance(texts_corpus[index], list):
-            return None
-
-        language_profiles[language_label] = get_freq_dict(texts_corpus[index])
-
+    language_profiles = dict.fromkeys(language_labels)
+    for i, lang in enumerate(language_profiles):
+        language_profiles[lang] = get_freq_dict(texts_corpus[i])
     return language_profiles
 
 
@@ -79,22 +58,18 @@ def get_language_features(language_profiles: dict) -> list or None:
         and sorts them in alphabetical order
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-
-    if not isinstance(language_profiles, dict) or not language_profiles:
+    if not (
+            isinstance(language_profiles, dict)
+            and language_profiles
+    ):
         return None
 
-    all_words = []
-
-    for language_profile in language_profiles:
-        for word in language_profiles[language_profile]:
-            if word in all_words:
-                all_words.remove(word)
-            else:
-                all_words.append(word)
-
-    all_words.sort()
-
-    return all_words
+    unique_tokens = []
+    for profile in language_profiles.values():
+        for i in profile.keys():
+            unique_tokens.append(i)
+    features = list(set(unique_tokens))
+    return sorted(features)
 
 
 def get_text_vector(original_text: list, language_profiles: dict) -> list or None:
@@ -104,44 +79,24 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-
-    if not isinstance(language_profiles, dict) or not language_profiles\
-            or not isinstance(original_text, list):
+    if not (
+            isinstance(original_text, list)
+            and all(isinstance(i, str) for i in original_text)
+            and isinstance(language_profiles, dict)
+            and language_profiles
+    ):
         return None
 
-    for word in original_text:
-        if not isinstance(word, str):
-            return None
-
+    features = get_language_features(language_profiles)
     text_vector = []
-
-    unique_words = get_language_features(language_profiles)
-
-    for word in unique_words:
-        if word in original_text:
-            text_vector.append(get_word_freq_value(word, language_profiles))
-        else:
+    for i in features:
+        if i not in original_text:
             text_vector.append(0)
-
+        else:
+            for profile in language_profiles.values():
+                if i in profile.keys():
+                    text_vector.append(profile[i])
     return text_vector
-
-
-def get_word_freq_value(word: str, language_profiles: dict) -> float or int:
-    """
-    Returns word frequency from multiple given language profiles
-    :param word: given word
-    :param language_profiles: a dictionary of dictionaries - language profiles
-    :return: word frequency
-    """
-
-    freq_value = 0
-
-    for language_profile in language_profiles:
-        if word in language_profiles[language_profile]:
-            if language_profiles[language_profile][word] > freq_value:
-                freq_value = language_profiles[language_profile][word]
-
-    return freq_value
 
 
 # 6
@@ -151,18 +106,18 @@ def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> fl
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list)\
-            or not list_elements_isinstance(unknown_text_vector, (int, float))\
-            or not list_elements_isinstance(known_text_vector, (int, float)):
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vector, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, (int, float)) for i in known_text_vector)
+    ):
         return None
 
-    distance = 0
-
-    for index, unknown_text_vector_value in enumerate(unknown_text_vector):
-        distance += pow(unknown_text_vector_value - known_text_vector[index], 2)
-
-    return round(pow(distance, 1/2), 5)
+    euclidean_distance = 0
+    for index, vector in enumerate(unknown_text_vector):
+        euclidean_distance += ((vector - known_text_vector[index]) ** 2)
+    return round(sqrt(euclidean_distance), 5)
 
 
 def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
@@ -173,31 +128,24 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-
-    if not isinstance(unknown_text_vector, list)\
-            or not isinstance(unknown_text_vector, list)\
-            or not isinstance(language_labels, list):
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, list) for i in known_text_vectors)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)
+            and len(known_text_vectors) == len(language_labels)
+    ):
         return None
 
-    if not list_elements_isinstance(unknown_text_vector, (int, float))\
-            or not list_elements_isinstance(known_text_vectors, list)\
-            or not list_elements_isinstance(language_labels, str):
-        return None
-
-    if len(language_labels) != len(known_text_vectors):
-        return None
-
-    result_language_score = []
-
-    for index, known_text_vector in enumerate(known_text_vectors):
-        distance = calculate_distance(unknown_text_vector, known_text_vector)
-        if not result_language_score:
-            result_language_score = [language_labels[index], distance]
-        else:
-            if distance < result_language_score[1]:
-                result_language_score = [language_labels[index], distance]
-
-    return result_language_score
+    distances = []
+    for i in known_text_vectors:
+        distances.append(calculate_distance(unknown_text_vector, i))
+    closest_distance = distances.index(min(distances))
+    closest_label = language_labels[closest_distance]
+    prediction = [closest_label, min(distances)]
+    return prediction
 
 
 # 8
@@ -208,34 +156,18 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     :param unknown_text_vector: vector for unknown text
     :param known_text_vector: vector for known text
     """
-
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list) \
-            or not list_elements_isinstance(unknown_text_vector, (int, float)) \
-            or not list_elements_isinstance(known_text_vector, (int, float)):
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vector, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, (int, float)) for i in known_text_vector)
+    ):
         return None
 
-    distance = 0
-
-    for index, unknown_text_vector_value in enumerate(unknown_text_vector):
-        distance += abs(unknown_text_vector_value - known_text_vector[index])
-
-    return round(distance, 5)
-
-
-def calculate_distance_metric(unknown_text_vector: list,
-                              known_text_vector: list,
-                              metric: str) -> float or None:
-    """
-    Calculates distance based on given metric
-    :param unknown_text_vector: vector for unknown text
-    :param known_text_vector: vector for known text
-    :param metric: specific metric to use while calculating distance
-    """
-    if metric == 'manhattan':
-        return calculate_distance_manhattan(unknown_text_vector, known_text_vector)
-
-    return calculate_distance(unknown_text_vector, known_text_vector)
-
+    manhattan_distance = 0
+    for index, vector in enumerate(unknown_text_vector):
+        manhattan_distance += fabs(vector - known_text_vector[index])
+    return round(manhattan_distance, 5)
 
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
@@ -249,55 +181,42 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-
-    if not isinstance(unknown_text_vector, list) or not isinstance(unknown_text_vector, list)\
-            or not isinstance(language_labels, list)\
-            or not isinstance(k, int)\
-            or not isinstance(metric, str):
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and all(isinstance(i, (int, float)) for i in unknown_text_vector)
+            and all(isinstance(i, list) for i in known_text_vectors)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)
+            and len(known_text_vectors) == len(language_labels)
+            and isinstance(k, int)
+    ):
         return None
 
-    if not list_elements_isinstance(unknown_text_vector, (int, float))\
-            or not list_elements_isinstance(known_text_vectors, list)\
-            or not list_elements_isinstance(language_labels, str)\
-            or len(language_labels) != len(known_text_vectors):
-        return None
+    distances = []
+    if metric == 'euclid':
+        for i in known_text_vectors:
+            distances.append(calculate_distance(unknown_text_vector, i))
+    else:
+        for i in known_text_vectors:
+            distances.append(calculate_distance_manhattan(unknown_text_vector, i))
 
-    nearest_language_distances = []
+    knn_distances = sorted(distances)[:k]
+    closest_languages = []
+    for i in knn_distances:
+        ind = distances.index(i)
+        label = language_labels[ind]
+        closest_languages.append(label)
 
-    for index, known_text_vector in enumerate(known_text_vectors):
-        nearest_language_distances.append([language_labels[index],
-                                          calculate_distance_metric(unknown_text_vector,
-                                                                    known_text_vector,
-                                                                    metric)])
-
-    nearest_language_distances.sort(key=lambda x: x[1])
-    nearest_language_distances = nearest_language_distances[:k]
-
-    results_freq_dict = {}
-
-    for index, nearest_language_distance in enumerate(nearest_language_distances):
-        if nearest_language_distance[0] not in results_freq_dict.keys():
-            results_freq_dict[nearest_language_distance[0]] = 1
+    predict_label = {}
+    for language in closest_languages:
+        if language not in predict_label:
+            predict_label[language] = 1
         else:
-            results_freq_dict[nearest_language_distance[0]] += 1
-
-    highest_results = []
-
-    for result_freq in results_freq_dict.items():
-        if not highest_results:
-            highest_results = [result_freq]
-        elif result_freq[1] > highest_results[0][1]:
-            highest_results = [result_freq]
-        elif result_freq[1] == highest_results[0][1]:
-            highest_results.append(result_freq)
-
-    highest_results_labels = [highest_result[0] for highest_result in highest_results]
-
-    for nearest_language_distance in nearest_language_distances:
-        if nearest_language_distance[0] in highest_results_labels:
-            return [nearest_language_distance[0], nearest_language_distances[0][1]]
-
-    return None
+            predict_label[language] += 1
+    predict_language = max(predict_label, key=predict_label.get)
+    prediction = [predict_language, min(distances)]
+    return prediction
 
 
 # 10 implementation
@@ -308,24 +227,25 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
     :param original_text: any tokenized text
     :param language_profiles: a dictionary of dictionaries - language profiles
     """
-
-    if not isinstance(language_profiles, dict) or not language_profiles \
-            or not isinstance(original_text, list):
+    if not (
+            isinstance(original_text, list)
+            and all(isinstance(i, str) for i in original_text)
+            and isinstance(language_profiles, dict)
+            and language_profiles
+    ):
         return None
 
-    for word in original_text:
-        if not isinstance(word, str):
-            return None
+    features = get_language_features(language_profiles)
+    sparse_vector = []
 
-    text_vector = []
-
-    unique_words = get_language_features(language_profiles)
-
-    for index, word in enumerate(unique_words):
-        if word in original_text:
-            text_vector.append([index, get_word_freq_value(word, language_profiles)])
-
-    return text_vector
+    vector = dict.fromkeys(features, 0)
+    for language_profile in language_profiles.values():
+        for word, freq in language_profile.items():
+            vector[word] = freq
+    for index, feature in enumerate(features):
+        if feature in original_text:
+            sparse_vector.append([index, vector[feature]])
+    return sparse_vector
 
 
 def calculate_distance_sparse(unknown_text_vector: list,
@@ -335,29 +255,25 @@ def calculate_distance_sparse(unknown_text_vector: list,
     :param unknown_text_vector: sparse vector for unknown text
     :param known_text_vector: sparse vector for known text
     """
-
-    if not isinstance(unknown_text_vector, list) or not isinstance(known_text_vector, list)\
-            or not list_elements_isinstance(unknown_text_vector, list)\
-            or not list_elements_isinstance(known_text_vector, list):
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vector, list)
+            and all(isinstance(i, list) for i in unknown_text_vector)
+            and all(isinstance(i, list) for i in known_text_vector)
+    ):
         return None
 
-    distance = 0
+    unknown_text_dict = dict(unknown_text_vector)
+    known_text_dict = dict(known_text_vector)
+    mixed_dict = {**unknown_text_dict, **known_text_dict}
 
-    unknown_text_vector_dict = dict(unknown_text_vector)
-
-    for element in known_text_vector:
-        index = element[0]
-        value = element[1]
-
-        if index not in unknown_text_vector_dict.keys():
-            unknown_text_vector_dict[index] = value
-        else:
-            unknown_text_vector_dict[index] -= value
-
-    for element in unknown_text_vector_dict.values():
-        distance += pow(element, 2)
-
-    return round(pow(distance, 1/2), 5)
+    for key, value in unknown_text_dict.items():
+        if key in known_text_dict:
+            mixed_dict[key] = value - known_text_dict[key]
+    euclidean_distance = 0
+    for value in mixed_dict.values():
+        euclidean_distance += value ** 2
+    return round(sqrt(euclidean_distance), 5)
 
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
@@ -370,50 +286,35 @@ def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: l
     :param language_labels: language labels for each known text
     :param k: the number of neighbors to choose label from
     """
-
-    if not isinstance(unknown_text_vector, list) or not isinstance(unknown_text_vector, list)\
-            or not isinstance(language_labels, list)\
-            or not isinstance(k, int):
+    if not (
+            isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and all(isinstance(i, list) for i in unknown_text_vector)
+            and all(isinstance(i, list) for i in known_text_vectors)
+            and isinstance(language_labels, list)
+            and all(isinstance(i, str) for i in language_labels)
+            and len(known_text_vectors) == len(language_labels)
+            and isinstance(k, int)
+    ):
         return None
 
-    if not list_elements_isinstance(unknown_text_vector, list) \
-            or not list_elements_isinstance(known_text_vectors, list) \
-            or not list_elements_isinstance(language_labels, str)\
-            or len(language_labels) != len(known_text_vectors):
-        return None
+    distances = []
+    for i in known_text_vectors:
+        distances.append(calculate_distance_sparse(unknown_text_vector, i))
 
-    nearest_language_distances = []
+    knn_distances_sparse = sorted(distances)[:k]
+    closest_languages = []
+    for i in knn_distances_sparse:
+        ind = distances.index(i)
+        label = language_labels[ind]
+        closest_languages.append(label)
 
-    for index, known_text_vector in enumerate(known_text_vectors):
-        nearest_language_distances.append(
-            [language_labels[index],
-             calculate_distance_sparse(unknown_text_vector, known_text_vector)])
-
-    nearest_language_distances.sort(key=lambda x: x[1])
-    nearest_language_distances = nearest_language_distances[:k]
-
-    results_freq_dict = {}
-
-    for index, nearest_language_distance in enumerate(nearest_language_distances):
-        if nearest_language_distance[0] not in results_freq_dict.keys():
-            results_freq_dict[nearest_language_distance[0]] = 1
+    predict_label = {}
+    for language in closest_languages:
+        if language not in predict_label:
+            predict_label[language] = 1
         else:
-            results_freq_dict[nearest_language_distance[0]] += 1
-
-    highest_results = []
-
-    for result_freq in results_freq_dict.items():
-        if not highest_results:
-            highest_results = [result_freq]
-        elif result_freq[1] > highest_results[0][1]:
-            highest_results = [result_freq]
-        elif result_freq[1] == highest_results[0][1]:
-            highest_results.append(result_freq)
-
-    highest_results_labels = [highest_result[0] for highest_result in highest_results]
-
-    for nearest_language_distance in nearest_language_distances:
-        if nearest_language_distance[0] in highest_results_labels:
-            return [nearest_language_distance[0], nearest_language_distances[0][1]]
-
-    return None
+            predict_label[language] += 1
+    predict_language = max(predict_label, key=predict_label.get)
+    prediction = [predict_language, min(distances)]
+    return prediction
