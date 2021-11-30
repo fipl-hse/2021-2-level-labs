@@ -9,8 +9,6 @@ import re
 
 
 # 4
-
-
 def tokenize_by_sentence(text: str) -> tuple:
     """
     Splits a text into sentences, sentences into tokens, tokens into letters
@@ -57,7 +55,6 @@ def tokenize_by_sentence(text: str) -> tuple:
 # 4
 class LetterStorage:
     """
-
     Stores and manages letters
     """
 
