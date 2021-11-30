@@ -177,8 +177,6 @@ class NGramTrie:
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-
-
     def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
