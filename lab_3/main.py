@@ -2,10 +2,9 @@
 Lab 3
 Language classification using n-grams
 """
-
-from typing import Dict, Tuple
-from math import log
 import json
+import math
+from typing import Dict, Tuple
 import re
 
 
@@ -25,20 +24,32 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return ()
-    replace_german = {'ö': 'oe', 'ü': 'ue', 'ä': 'ae', 'ß': 'ss'}
-    sent_dirty = list(s for s in re.split(r'(?<=[\!\?\.])\s(?=[a-zа-я])', text.lower()))
-    sentences_tuples = []
-    for sentence in sent_dirty:
-        for symbol in sentence:
-            if not (symbol.isalpha() or symbol.isspace()):
-                sentence = sentence.replace(symbol, '')
-            if symbol in replace_german:
-                sentence = sentence.replace(symbol, replace_german[symbol])
-        sentence_tuples = tuple((('_', *list(token), '_')
-                                 for token in sentence.lower().split()))
-        sentences_tuples.append(sentence_tuples)
-    sentences_tuples = tuple(s_t for s_t in sentences_tuples if sentence_tuples)
-    return sentences_tuples
+    # start level - 'sentences'
+    sentences_raw = re.split(r"[!.?]\W(?=[\wöüäßÜÖÄẞ])", text)
+    # delete empty strings
+    sentences_raw = [sentence_raw.lower().strip() for sentence_raw in sentences_raw if sentence_raw]
+    text_tuple = []
+    for sentence_raw in sentences_raw:
+        # start level - 'words'
+        words_raw = sentence_raw.split()
+        sentence_tuple = []
+        for word_raw in words_raw:
+            # start level - 'letters'
+            word_tuple = [letter for letter in word_raw if letter.isalpha()]
+            if word_tuple:
+                word_tuple.append('_')
+                word_tuple.insert(0, '_')
+            word_tuple = tuple(word_tuple)
+            # end level - 'letters'
+            sentence_tuple.append(word_tuple)
+        # end level - 'words'
+        # delete empty tuples
+        sentence_tuple = tuple(word_tuple for word_tuple in sentence_tuple if word_tuple)
+        text_tuple.append(sentence_tuple)
+    # end level - 'sentences'
+    # delete empty tuples
+    text_tuple = tuple(sentence_tuple for sentence_tuple in text_tuple if sentence_tuple)
+    return text_tuple
 
 
 # 4
@@ -55,9 +66,9 @@ class LetterStorage:
         """
         Puts a letter into storage, assigns a unique id
         :param letter: a letter
-        :return: 0 if succeeds, 1 if not
+        :return: 0 if succeeds, -1 if not
         """
-        if not isinstance(letter, str) or letter == '':
+        if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
             self.storage[letter] = self.counter
@@ -74,16 +85,16 @@ class LetterStorage:
             return -1
         return self.storage[letter]
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
         :return: letter
         """
-        if not isinstance(letter_id, int) or letter_id not in self.storage.values():
+        storage_upside_down = dict(zip(self.storage.values(), self.storage.keys()))
+        if not isinstance(letter_id, int) or letter_id not in storage_upside_down:
             return -1
-        storage_backwards = dict(zip(self.storage.values(), self.storage.keys()))
-        return storage_backwards[letter_id]
+        return storage_upside_down[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -94,10 +105,23 @@ class LetterStorage:
         if not isinstance(corpus, tuple):
             return -1
         for sentence in corpus:
-            for token in sentence:
-                for letter in token:
+            for word in sentence:
+                for letter in word:
                     if self._put_letter(letter) == -1:
                         return -1
+        return 0
+
+    def update_string(self, text: str) -> int:
+        """
+        Fills a storage by letters from the glued_letters
+        :param text: a string with glued_letters
+        :return: 0 if succeeds, 1 if not
+        """
+        if not isinstance(text, str):
+            return -1
+        for letter in text:
+            if self._put_letter(letter) == -1:
+                return -1
         return 0
 
 
@@ -109,14 +133,14 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
     storage.update(corpus)
-    encoded_corpus = tuple(tuple(tuple(storage.get_id_by_letter(letter)
-                                       for letter in token)
-                                 for token in sentence)
-                           for sentence in corpus)
-    return encoded_corpus
+    encoded_sentences = tuple(tuple(tuple(storage.get_id_by_letter(letter)
+                                          for letter in word)
+                                    for word in sentence)
+                              for sentence in corpus)
+    return encoded_sentences
 
 
 # 4
@@ -127,13 +151,14 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
-    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
-    decoded_corpus = tuple(tuple(tuple(storage.get_letter_by_id(letter_id)
-                                       for letter_id in token_id)
-                                 for token_id in sentence_id)
-                           for sentence_id in corpus)
-    return decoded_corpus
+    storage.update(corpus)
+    decoded_sentences = tuple(tuple(tuple(storage.get_letter_by_id(letter)
+                                          for letter in word)
+                                    for word in sentence)
+                              for sentence in corpus)
+    return decoded_sentences
 
 
 # 6
@@ -141,6 +166,7 @@ class NGramTrie:
     """
     Stores and manages ngrams
     """
+
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
@@ -170,18 +196,12 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-        corpus_permutations = []
-        for sentence in encoded_corpus:
-            sent_permutations = []
-            for token in sentence:
-                token_permutations = []
-                for index, _ in enumerate(token):
-                    if index + self.size <= len(token):
-                        token_permutations.append(tuple(token[index:index + self.size]))
-                if token_permutations:
-                    sent_permutations.append(tuple(token_permutations))
-            corpus_permutations.append(tuple(sent_permutations))
-        self.n_grams = tuple(corpus_permutations)
+        n_grams = tuple(tuple(tuple(word[i:i + self.size]
+                                    for i in range(len(word) - self.size + 1))
+                              for word in sent)
+                        for sent in encoded_corpus)
+        n_grams = tuple(tuple(word for word in sent if word) for sent in n_grams if sent)
+        self.n_grams = tuple(n_grams)
         return 0
 
     def get_n_grams_frequencies(self) -> int:
@@ -200,12 +220,12 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        if not isinstance(self.n_grams, tuple) or self.n_grams == ():
+        if not self.n_grams:
             return 1
         for sentence in self.n_grams:
-            for token in sentence:
-                for ngram in token:
-                    self.n_gram_frequencies[ngram] = self.n_gram_frequencies.get(ngram, 0) + 1
+            for word in sentence:
+                for n_gram in word:
+                    self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
         return 0
 
     # 8
@@ -216,9 +236,9 @@ class NGramTrie:
         """
         if not isinstance(n_grams_dictionary, dict):
             return 1
-        for ngram, freq in n_grams_dictionary.items():
-            if isinstance(ngram, tuple) and isinstance(freq, int):
-                self.n_gram_frequencies[ngram] = freq
+        for key, value in n_grams_dictionary.items():
+            if isinstance(key, tuple) and isinstance(value, int):
+                self.n_gram_frequencies[key] = value
         return 0
 
     # 10
@@ -229,9 +249,9 @@ class NGramTrie:
         """
         if not isinstance(n_grams_dictionary, dict):
             return 1
-        for ngram, log_prob in n_grams_dictionary.items():
-            if isinstance(ngram, tuple) and isinstance(log_prob, float):
-                self.n_gram_log_probabilities[ngram] = log_prob
+        for n_gram, log_probability in n_grams_dictionary.items():
+            if isinstance(n_gram, tuple) and isinstance(log_probability, float):
+                self.n_gram_log_probabilities[n_gram] = log_probability
         return 0
 
     # 10
@@ -240,16 +260,14 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if self.n_gram_frequencies == {}:
+        if not self.n_gram_frequencies:
             return 1
-        starts = {}
-        for ngram, freq in self.n_gram_frequencies.items():
-            temp = tuple(ngram[0:self.size - 1])
-            starts[temp] = starts.get(temp, 0) + freq
-        for ngram, freq in self.n_gram_frequencies.items():
-            for key, value in starts.items():
-                if key == ngram[0:self.size - 1]:
-                    self.n_gram_log_probabilities[ngram] = log(freq / value)
+        for n_gram, frequency in self.n_gram_frequencies.items():
+            amount = 0
+            for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
+                if n_gram[:-1] == n_gram_neighbour[:-1]:
+                    amount += frequency_neighbour
+            self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
         return 0
 
 
@@ -258,6 +276,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
@@ -267,28 +286,32 @@ class LanguageProfile:
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
-        :param letters: a tuple of encoded letters
+        :param encoded_corpus: a tuple of encoded letters
         :param ngram_sizes: a tuple of ngram sizes,
             e.g. (1, 2, 3) will indicate the function to create 1,2,3-grams
         :return: 0 if succeeds, 1 if not
         e.g.
         encoded_corpus = (((1, 2, 3, 1), (1, 4, 5, 1), (1, 2, 6, 7, 7, 8, 1)),)
         ngram_sizes = (2, 3)
+
         self.tries --> [<__main__.NGramTrie object at 0x09DB9BB0>,
         <__main__.NGramTrie object at 0x09DB9A48>]
         self.n_words --> [11, 9]
         self.tries[0].n_grams --> (
-            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6),
-            (6, 7), (7, 7), (7, 8), (8, 1))),)
+            (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7),
+            (7, 8), (8, 1))),
+        )
         """
-        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+        if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
             return 1
-        for size in ngram_sizes:
-            ngram_trie = NGramTrie(size, self.storage)
-            ngram_trie.extract_n_grams(encoded_corpus)
-            ngram_trie.get_n_grams_frequencies()
-            self.tries.append(ngram_trie)
-            self.n_words.append(len(ngram_trie.n_gram_frequencies))
+        for ngram_size in ngram_sizes:
+            n_gram_trie = NGramTrie(ngram_size, self.storage)
+            extraction_failure = n_gram_trie.extract_n_grams(encoded_corpus)
+            frequencies_failure = n_gram_trie.get_n_grams_frequencies()
+            if extraction_failure or frequencies_failure:
+                return 1
+            self.tries.append(n_gram_trie)
+            self.n_words.append(len(n_gram_trie.n_gram_frequencies))
         return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
@@ -315,17 +338,17 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        if not (isinstance(k, int)
-                and isinstance(trie_level, int)
-                and k > 0):
+        if not (isinstance(k, int) and isinstance(trie_level, int)):
             return ()
-        for trie in self.tries:
-            if trie.size == trie_level:
-                trie.get_n_grams_frequencies()
-                sorted_freq = sorted(trie.n_gram_frequencies.items(),
-                                     key=lambda x: x[1], reverse=True)[:k]
-                top_k = tuple((ngram[0] for ngram in sorted_freq))
-                return top_k
+        if k <= 0:
+            return ()
+        for n_gram_trie in self.tries:
+            if n_gram_trie.size == trie_level:
+                # object NGramTrie with n_gram_frequencies
+                frequency = n_gram_trie.n_gram_frequencies
+                # .get for returning value from key in dictionary
+                top_k_n_grams = tuple(sorted(frequency, key=frequency.get, reverse=True)[:k])
+                return top_k_n_grams
         return ()
 
     # 8
@@ -337,20 +360,18 @@ class LanguageProfile:
         """
         if not isinstance(name, str):
             return 1
-        freq_dict = {}
-        for profile in self.tries:
-            profile.get_n_grams_frequencies()
-            for key, value in profile.n_gram_frequencies.items():
-                letters = ''
-                for letter_id in key:
-                    letters += profile.storage.get_letter_by_id(letter_id)
-                freq_dict[letters] = value
-        profile_as_dict = {'freq': freq_dict,
-                           'n_words': self.n_words,
-                           'name': self.language}
-        with open(name, 'w', encoding='utf-8') as file:
-            json.dump(profile_as_dict, file)
-            return 0
+        freq = {}
+        profile_as_dict = {}
+        for n_gram_trie in self.tries:
+            freq.update(((''.join(map(self.storage.get_letter_by_id, k)), v)
+                         for k, v in n_gram_trie.n_gram_frequencies.items()))
+        profile_as_dict["freq"] = freq
+        profile_as_dict["n_words"] = self.n_words
+        profile_as_dict["name"] = self.language
+        # changes for name 'file'
+        with open(name, "w", encoding="utf-8") as lang_profile_file:
+            json.dump(profile_as_dict, lang_profile_file)
+        return 0
 
     # 8
     def open(self, file_name: str) -> int:
@@ -364,28 +385,28 @@ class LanguageProfile:
         """
         if not isinstance(file_name, str):
             return 1
-        with open(file_name, 'r', encoding='utf-8') as lang_profile_file:
+        with open(file_name, encoding="utf-8") as lang_profile_file:
             profile_dict = json.load(lang_profile_file)
-        self.language = profile_dict['name']
-        self.n_words = profile_dict['n_words']
-        letter_id = 1
-        for ngram in profile_dict['freq']:
-            for letter in ngram:
-                if letter not in self.storage.storage:
-                    self.storage.storage[letter] = letter_id
-                    letter_id += 1
-        sorted_by_size = {}
-        decoded_ids = ()
-        for ngram, freq in profile_dict['freq'].items():
-            if len(ngram) not in sorted_by_size:
-                sorted_by_size[len(ngram)] = {}
-            for letter in ngram:
-                decoded_ids += (self.storage.get_id_by_letter(letter),)
-            sorted_by_size[len(ngram)][decoded_ids] = freq
-            decoded_ids = ()
-        for ngram, freq in sorted_by_size.items():
-            trie = NGramTrie(ngram, self.storage)
-            trie.extract_n_grams_frequencies(freq)
+        # task 1: name and n_words
+        self.language = profile_dict["name"]
+        self.n_words = profile_dict["n_words"]
+
+        self.tries = []
+
+        # task 3: fill the storage
+        for glued_letter in "".join(profile_dict["freq"]):
+            self.storage.update_string(glued_letter)
+
+        # task 2, 4, 5: get {2: {"ab": 1, "bd": 2}, 3: {"abc": 5, "cde": 6}}
+        tries_dict = {}
+        for n_gram, frequency in profile_dict["freq"].items():
+            if len(n_gram) not in tries_dict:
+                tries_dict[len(n_gram)] = {}
+            tries_dict[len(n_gram)][tuple(map(self.storage.get_id_by_letter, n_gram))] = frequency
+            # fill self.tries
+        for size, freq_dict in tries_dict.items():
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams_frequencies(freq_dict)
             self.tries.append(trie)
         return 0
 
@@ -400,8 +421,8 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     :param k: number of frequent N-grams to take into consideration
     :param trie_level: N-gram sizes to use in comparison
     :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля -
-    first_n_grams = ((1, 2), (4, 5), (2, 3)),
+    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5),
+    (2, 3)),
     второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
     Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
@@ -412,14 +433,15 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
             and isinstance(k, int)
             and isinstance(trie_level, int)):
         return -1
-    topk_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
-    topk_kn = known_profile.get_top_k_n_grams(k, trie_level)
     distance = 0
-    for index_unk, ngram_unk in enumerate(topk_unk):
-        if ngram_unk in topk_kn:
-            distance += abs(index_unk - topk_kn.index(ngram_unk))
-        else:
-            distance += len(topk_kn)
+    frequency_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
+    frequency_kn = known_profile.get_top_k_n_grams(k, trie_level)
+    for index_unk, element_unk in enumerate(frequency_unk):
+        if element_unk not in frequency_kn:
+            distance += len(frequency_kn)
+        for index_kn, element_kn in enumerate(frequency_kn):
+            if element_unk == element_kn:
+                distance += abs(index_unk - index_kn)
     return distance
 
 
@@ -428,6 +450,7 @@ class LanguageDetector:
     """
     Detects profile language using distance
     """
+
     def __init__(self):
         self.language_profiles = {}
 
@@ -444,30 +467,32 @@ class LanguageDetector:
             self.language_profiles[language_profile.language] = language_profile
         return 0
 
-    def detect(self, unknown_profile: LanguageProfile, k: int,
-               trie_levels: Tuple[int]) -> Dict[str, int] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> \
+            Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
         :param k: a number of the most common n-grams
         :param trie_levels: N-gram size - tuple with one int for score 8
-        :return: dictionary with language labels and their scores if input is correct, otherwise -1
+        :return: a dictionary with language labels and their scores if input is correct, otherwise
+        -1
         """
         if not (isinstance(unknown_profile, LanguageProfile)
                 and isinstance(k, int)
                 and isinstance(trie_levels, tuple)):
             return -1
-        lang_score_detection = {}
-        for kn_label, kn_profile in self.language_profiles.items():
-            lang_score_detection[kn_label] = calculate_distance(unknown_profile,
-                                                                kn_profile,
+        dict_label_score = {}
+        for language, language_profile in self.language_profiles.items():
+            for trie_level in trie_levels:
+                dict_label_score[language] = calculate_distance(unknown_profile,
+                                                                language_profile,
                                                                 k,
-                                                                trie_levels[0])
-        return lang_score_detection
+                                                                trie_level)
+        return dict_label_score
 
 
 def calculate_probability(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                               k: int, trie_level: int) -> float or int:
+                          k: int, trie_level: int) -> float or int:
     """
     Calculates probability of unknown_profile top_k ngrams in relation to known_profile
     :param unknown_profile: an instance of unknown profile
@@ -481,16 +506,17 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
             and isinstance(k, int)
             and isinstance(trie_level, int)):
         return -1
-    for trie_kn in known_profile.tries:
-        if trie_kn.size == trie_level:
-            ngrams_kn = trie_kn.n_gram_frequencies
+
     probability = 0
-    for ngram in unknown_profile.get_top_k_n_grams(k, trie_level):
-        if ngram in ngrams_kn:
-            for trie in known_profile.tries:
-                if trie.size == trie_level:
-                    trie.calculate_log_probabilities()
-                    probability += trie.n_gram_log_probabilities[ngram]
+
+    for n_gram_trie in known_profile.tries:
+        if n_gram_trie.size == trie_level:
+            n_gram_trie.calculate_log_probabilities()
+
+            for n_gram in unknown_profile.get_top_k_n_grams(k, trie_level):
+                if n_gram in n_gram_trie.n_gram_log_probabilities:
+                    probability += n_gram_trie.n_gram_log_probabilities[n_gram]
+
     return probability
 
 
@@ -500,8 +526,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
     Detects profile language using probabilities
     """
 
-    def detect(self, unknown_profile: LanguageProfile,
-               k: int, trie_levels: tuple) -> Dict[Tuple[str, int], int or float] or int:
+    def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> \
+            Dict[Tuple[str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
@@ -514,11 +540,11 @@ class ProbabilityLanguageDetector(LanguageDetector):
                 and isinstance(k, int)
                 and isinstance(trie_levels, tuple)):
             return -1
-        lang_detection = {}
-        for level in trie_levels:
-            for lang_label, known_profile in self.language_profiles.items():
-                lang_detection[(lang_label, level)] = calculate_probability(unknown_profile,
-                                                                            known_profile,
-                                                                            k,
-                                                                            level)
-        return lang_detection
+        lang_probabilities = {}
+        for language, language_profile in self.language_profiles.items():
+            for trie_level in trie_levels:
+                lang_probabilities[language, trie_level] = calculate_probability(unknown_profile,
+                                                                                 language_profile,
+                                                                                 k,
+                                                                                 trie_level)
+        return lang_probabilities
