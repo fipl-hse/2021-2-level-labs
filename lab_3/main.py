@@ -36,6 +36,9 @@ def tokenize_by_sentence(text: str) -> tuple:
         elif symbol in '~!@#№$;%^:&?*(){}[]-+=\\|/,\'0123456789':
             text = text.replace(symbol, '')
 
+    if text == '':
+        return ()
+
     token_sentence = ''
     token_sentences = []
 
