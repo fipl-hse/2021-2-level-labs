@@ -70,11 +70,12 @@ def tokenize_by_sentence(text: str) -> tuple:
 # 4
 class LetterStorage:
     """
-    Stores and manages letters
-    """
+        Stores and manages letters
+        """
 
     def __init__(self):
         self.storage = {}
+        self.count = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -82,7 +83,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+
+        if letter not in self.storage:
+            self.count += 1
+            self.storage[letter] = self.count
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -90,15 +97,27 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        if letter not in self.storage.keys():
+            return -1
+        letter_id = self.storage[letter]
+        return letter_id
 
-    def get_letter_by_id(self, letter_id: int) ->str or int:
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
         :return: letter
         """
-        pass
+        if not isinstance(letter_id, int):
+            return -1
+        if letter_id not in self.storage.values():
+            return -1
+        for letter, character_id in self.storage.items():
+            if character_id == letter_id:
+                return letter
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -106,7 +125,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return -1
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 
 # 4
