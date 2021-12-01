@@ -23,6 +23,46 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
+
+    for symbol in text:
+        if symbol == 'ä':
+            text = text.replace(symbol, 'ae')
+        elif symbol == 'ö':
+            text = text.replace(symbol, 'oe')
+        elif symbol == 'ß':
+            text = text.replace(symbol, 'ss')
+        elif symbol == 'ü':
+            text = text.replace(symbol, 'ue')
+        elif symbol in '~!@#№$;%^:&?*(){}[]-+=\\|/,\'0123456789':
+            text = text.replace(symbol, '')
+
+    token_sentence = ''
+    token_sentences = []
+
+    for symbol in text:
+        if symbol.isalpha() or symbol == ' ':
+            token_sentence += symbol
+        else:
+            token_sentences.append(token_sentence.lower())
+            token_sentence = ''
+
+    for x, token_sentence in enumerate(token_sentences):
+        token_sentences[x] = token_sentence.split()
+
+    for token_sentence in token_sentences:
+        for i, word in enumerate(token_sentence):
+            underscore.extend(word)
+            underscore.append('_')
+            token_sentence[i] = underscore
+            underscore = ['_']
+
+    for x, token_sentence in enumerate(token_sentences):
+        for y, word in enumerate(token_sentence):
+            token_sentence[y] = tuple(word)
+        token_sentences[x] = tuple(token_sentence)
+
+    return token_sentence
+
 # 4
 class LetterStorage:
     """
