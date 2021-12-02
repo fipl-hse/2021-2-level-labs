@@ -154,10 +154,10 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     for sentence in corpus:
         word_tuple = ()
         for word in sentence:
-            id_letter = ()
-            for letter in word:
-                id_letter += (storage.get_letter_by_id(letter),)
-            word_tuple += (id_letter,)
+            letter_tuple = ()
+            for letter_id in word:
+                letter_tuple += (storage.get_letter_by_id(letter_id),)
+            word_tuple += (letter_tuple,)
         decoded_corpus += (word_tuple,)
     return decoded_corpus
 
@@ -394,7 +394,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -409,11 +409,11 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not isinstance(unknwon_profile, LanguageProfile) \
+    if not isinstance(unknown_profile, LanguageProfile) \
             or not isinstance(known_profile, LanguageProfile) \
             or not isinstance(k, int) or not isinstance(trie_level, int):
         return -1
-    unknown_frequency = unknwon_profile.get_top_k_n_grams(k, trie_level)
+    unknown_frequency = unknown_profile.get_top_k_n_grams(k, trie_level)
     known_frequency = known_profile.get_top_k_n_grams(k, trie_level)
     distance = 0
     for n_gram in unknown_frequency:
