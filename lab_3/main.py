@@ -184,8 +184,10 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-
-
+        self.n_grams = tuple(tuple(tuple(tuple(word[i:i + self.size])
+                                         for i in range(len(word) - (self.size - 1)))
+                                   for word in sentence) for sentence in encoded_corpus)
+        return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -211,7 +213,7 @@ class NGramTrie:
                     if n_gram in self.n_gram_frequencies:
                         self.n_gram_frequencies[n_gram] += 1
                     else:
-                        self.n_gram_frequencies[n_gram] = 0
+                        self.n_gram_frequencies[n_gram] = 1
         return 0
 
     # 8
