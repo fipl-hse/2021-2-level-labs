@@ -205,6 +205,14 @@ class NGramTrie:
         """
         if not self.n_grams:
             return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    if n_gram in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] += 1
+                    else:
+                        self.n_gram_frequencies[n_gram] = 0
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
