@@ -19,8 +19,10 @@ if __name__ == '__main__':
     GERMAN_SAMPLE = "Zwei Begriffe, die nicht unbedingt zueinander passen," \
                     " am Arbeitsplatz schon mal gar nicht."
     UNKNOWN_SAMPLE = "Helium is material."
-    SECRET_SAMPLE = " Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. " \
-                    "И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"
+    #SECRET_SAMPLE = " Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. " \
+                    #"И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"
+    SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
+    И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
     en_tokens = tokenize_by_sentence(ENG_SAMPLE)
     de_tokens = tokenize_by_sentence(GERMAN_SAMPLE)
@@ -83,9 +85,11 @@ if __name__ == '__main__':
 
     for file_name in os.listdir("profiles"):
         profile = LanguageProfile(storage, file_name)
-        profile.open(f"profiles/{file_name}")
+        profile.open(f'profiles/{file_name}')
         detector.register_language(profile)
+
     probabilities_dict = detector.detect(secret_profile, 1000, (2,))
+    print(probabilities_dict)
     secret_language = min(probabilities_dict, key=probabilities_dict.get)
     print('Language:', secret_language[0])
     print('Probability:', probabilities_dict[secret_language])
