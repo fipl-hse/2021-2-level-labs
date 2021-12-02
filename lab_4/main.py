@@ -13,7 +13,8 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text,str):
+        return ()
 
 
 # 4
