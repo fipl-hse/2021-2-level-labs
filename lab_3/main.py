@@ -215,9 +215,11 @@ class NGramTrie:
             n_gram_sentence = []
             for encoded_word in encoded_sentence:
                 n_gram_word = []
-                for i in range(len(encoded_word) - self.size + 1):
-                    n_gram_word.append(tuple(encoded_word[i:i + self.size]))
-                n_gram_sentence.append(tuple(n_gram_word))
+                for i, num in enumerate(encoded_word):
+                    if i + self.size <= len(encoded_word):
+                        n_gram_word.append(tuple(encoded_word[i:i + self.size]))
+                if n_gram_word:
+                    n_gram_sentence.append(tuple(n_gram_word))
             n_grams.append(tuple(n_gram_sentence))
         self.n_grams = tuple(n_grams)
         return 0
@@ -521,8 +523,11 @@ class LanguageDetector:
             return -1
         lang_distance = {}
         for lang_name, lang_profile in self.language_profiles.items():
-            distance = calculate_distance(unknown_profile, lang_profile, k, trie_levels[0])
-            lang_distance[lang_name] = distance
+            for trie_level in trie_levels:
+                lang_distance[lang_name] = calculate_distance(unknown_profile,
+                                                              lang_profile,
+                                                              k,
+                                                              trie_level)
         return lang_distance
 
 

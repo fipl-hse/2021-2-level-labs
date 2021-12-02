@@ -93,7 +93,7 @@ if __name__ == '__main__':
     detector = ProbabilityLanguageDetector()
 
     for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
-        profile = LanguageProfile(storage,file_name)
+        profile = LanguageProfile(storage, file_name)
         profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'profiles', file_name))
         detector.register_language(profile)
 
