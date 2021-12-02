@@ -248,7 +248,10 @@ class LanguageProfile:
     """
     
     def __init__(self, letter_storage: LetterStorage, language_name: str):
-        pass
+        self.storage = letter_storage
+        self.language = language_name
+        self.n_words = []
+        self.tries = []
 
     def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
@@ -301,8 +304,8 @@ class LanguageProfile:
 
         for trie in self.tries:
             if trie.size == trie_level:
-                sorted_ngrams_freqs = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
-                sorted_ngrams, _ = zip(*sorted_ngrams_freqs)
+                sorted_ngrams_frequencies = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
+                sorted_ngrams, _ = zip(*sorted_ngrams_frequencies)
                 return tuple(sorted_ngrams[:k])
 
         return ()
