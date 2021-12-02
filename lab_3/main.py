@@ -130,7 +130,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         encoded_corpus.append(tuple(encoded_sentences))
 
     return tuple(encoded_corpus)
-
 # 4
 def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
