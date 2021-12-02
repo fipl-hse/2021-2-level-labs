@@ -4,7 +4,7 @@ Language classification using n-grams
 """
 
 from typing import Dict, Tuple
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -20,9 +20,8 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str):
+    if not isinstance(text, str) or not text:
         return ()
-
 
     for symbol in text:
         if symbol == 'ä':
@@ -36,35 +35,14 @@ def tokenize_by_sentence(text: str) -> tuple:
         elif symbol in '~!@#№$;%^:&?*(){}[]-+=\\|/,\'0123456789':
             text = text.replace(symbol, '')
 
-    if text == '':
-        return ()
-
-    token_sentence = ''
-    token_sentences = []
-
-    for symbol in text:
-        if symbol.isalpha() or symbol == ' ':
-            token_sentence += symbol
-        else:
-            token_sentences.append(token_sentence.lower())
-            token_sentence = ''
-
-    for x, token_sentence in enumerate(token_sentences):
-        token_sentences[x] = token_sentence.split()
-
-    underscore = ['_']
-
-    for token_sentence in token_sentences:
-        for i, word in enumerate(token_sentence):
-            underscore.extend(word)
-            underscore.append('_')
-            token_sentence[i] = underscore
-
-    for x, token_sentence in enumerate(token_sentences):
-        for y, word in enumerate(token_sentence):
-            token_sentence[y] = tuple(word)
-        token_sentences[x] = tuple(token_sentence)
-
+    sentences = re.split(r"[!.?]\s*", text)
+    letters = []
+    for sentence in sentences:
+        list_tokens = re.sub('[^\n a-z]', '', sentence.lower()).split()
+        if list_tokens:
+            tokens = tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens)
+            letters.append(tokens)
+    token_sentence = tuple(letters)
     return token_sentence
 
 # 4
