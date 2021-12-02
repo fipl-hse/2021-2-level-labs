@@ -157,7 +157,10 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -179,7 +182,10 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+
+
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -197,7 +203,8 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not self.n_grams:
+            return 1
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -276,7 +283,19 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
+        if not isinstance(k, int) or not isinstance(trie_level, int):
+            return ()
+
+        if k < 1 or trie_level < 1:
+            return ()
+
+        for trie in self.tries:
+            if trie.size == trie_level:
+                sorted_ngrams_freqs = sorted(trie.n_gram_frequencies.items(), key=lambda x: -x[1])
+                sorted_ngrams, _ = zip(*sorted_ngrams_freqs)
+                return tuple(sorted_ngrams[:k])
+
+        return ()
 
     # 8
     def save(self, name: str) -> int:
