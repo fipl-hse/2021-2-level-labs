@@ -2,7 +2,7 @@
 Lab 4
 Language generation algorithm based on language profiles
 """
-
+import re
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
@@ -13,7 +13,8 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
 
 
 # 4
