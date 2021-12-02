@@ -53,7 +53,9 @@ if __name__ == '__main__':
         prediction_dist_eng = calculate_distance(unk_profile, eng_profile, k, trie_level)
         prediction_dist_de = calculate_distance(unk_profile, de_profile, k, trie_level)
 
+        print(prediction_dist_eng, prediction_dist_de)
         return prediction_dist_eng, prediction_dist_de
+
 
     ACTUAL_6 = score_6()
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
