@@ -270,7 +270,18 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance((encoded_corpus, ngram_sizes), tuple):
+            return 1
+
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            self.tries.append(trie)
+
+        for trie in self.tries:
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -333,7 +344,7 @@ class LanguageProfile:
 
 
 # 6
-def calculate_distance(unknwon_profile: LanguageProfile, known_profile: LanguageProfile,
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
     Calculates distance between top_k n-grams of unknown profile and known profile
@@ -348,8 +359,22 @@ def calculate_distance(unknwon_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile, LanguageProfile) or not isinstance(k, int) or not isinstance(trie_level, int):
+        return -1
+    distance = 0
 
+    top_unknown = unknown_profile.get_top_k_n_grams(k, trie_level)
+    top_known = known_profile.get_top_k_n_grams(k, trie_level)
+
+    top_known_len = len(top_known)
+
+    for g in top_unknown:
+        if g in top_known:
+            distance += abs(top_known.index(g) - top_unknown.index(g))
+        else:
+            distance += top_known_len
+
+    return distance
 
 # 8
 class LanguageDetector:
