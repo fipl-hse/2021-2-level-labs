@@ -270,7 +270,7 @@ class LanguageProfile:
             (((1, 2), (2, 3), (3, 1)), ((1, 4), (4, 5), (5, 1)), ((1, 2), (2, 6), (6, 7), (7, 7), (7, 8), (8, 1))),
         )
         """
-        if not isinstance((encoded_corpus, ngram_sizes), tuple):
+        if not isinstance(encoded_corpus, tuple) and not isinstance(ngram_sizes, tuple):
             return 1
 
         for size in ngram_sizes:
