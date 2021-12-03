@@ -59,9 +59,9 @@ if __name__ == '__main__':
     eng_profile_8 = LanguageProfile(storage, 'en')
     de_profile_8 = LanguageProfile(storage, 'de')
 
-    unknown_profile_8.create_from_tokens(unk_enc, (3,))
-    eng_profile_8.create_from_tokens(eng_enc, (3,))
-    de_profile_8.create_from_tokens(de_enc, (3,))
+    unknown_profile_8.create_from_tokens(unk_enc, (3, 2))
+    eng_profile_8.create_from_tokens(eng_enc, (3, 2))
+    de_profile_8.create_from_tokens(de_enc, (3, 2))
 
     calculate_distance(unknown_profile_8, eng_profile_8, 5, 3)
     calculate_distance(unknown_profile_8, de_profile_8, 5, 3)
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     detector.register_language(eng_profile_8)
     detector.register_language(de_profile_8)
-    RESULT_FOR_8 = detector.detect(profile_unk, 5, (3,))
+    RESULT_FOR_8 = detector.detect(profile_unk, 5, (3, 2))
     EXPECTED_SCORE = {'en': 24, 'de': 25}
     print(RESULT_FOR_8)
 
