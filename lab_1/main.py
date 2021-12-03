@@ -136,14 +136,14 @@ def detect_language(unknown_profile: dict,
     name1 = profile_1['name']
     name2 = profile_2['name']
     if profile_1_words > profile_2_words:
-        return name1
-    if profile_2_words > profile_1_words:
-        return name2
-    if profile_2_words == profile_1_words:
+        return_name = name1
+    elif profile_2_words > profile_1_words:
+        return_name = name2
+    else:
         names = [name1, name2]
         names.sort()
-        name1 = names[0]
-        return name1
+        return_name = names[0]
+        return return_name
 
 
 def compare_profiles_advanced(unknown_profile: dict,
