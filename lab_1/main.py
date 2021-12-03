@@ -143,7 +143,7 @@ def detect_language(unknown_profile: dict,
         names = [name1, name2]
         names.sort()
         return_name = names[0]
-        return return_name
+    return return_name
 
 
 def compare_profiles_advanced(unknown_profile: dict,
