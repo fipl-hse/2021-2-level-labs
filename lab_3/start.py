@@ -67,18 +67,18 @@ if __name__ == '__main__':
         encoded_de_text = encode_corpus(letter_storage, de_text)
         encoded_unknown_text = encode_corpus(letter_storage, unknown_text)
         profile_en = LanguageProfile(letter_storage=letter_storage, language_name='en')
-        profile_en.create_from_tokens(encoded_eng_text, (3,))
+        profile_en.create_from_tokens(encoded_eng_text, (3,2))
         profile_de = LanguageProfile(letter_storage=letter_storage, language_name='de')
-        profile_de.create_from_tokens(encoded_de_text, (3,))
+        profile_de.create_from_tokens(encoded_de_text, (3,2))
         unknown_profile_1 = LanguageProfile(letter_storage=letter_storage, language_name='unk')
-        unknown_profile_1.create_from_tokens(encoded_unknown_text, (3,))
+        unknown_profile_1.create_from_tokens(encoded_unknown_text, (3,2))
         unknown_profile_1.save('unknown_profile.json')
         unknown_profile_2 = LanguageProfile(letter_storage=letter_storage, language_name='unk')
         unknown_profile_2.open('unknown_profile.json')
         language_detector = LanguageDetector()
         language_detector.register_language(profile_en)
         language_detector.register_language(profile_de)
-        result = language_detector.detect(unknown_profile_2, 5, (3,))
+        result = language_detector.detect(unknown_profile_2, 5, (3,2))
         return result
 
     # score 10, k = 1000, trie_levels = (2,)
@@ -88,5 +88,6 @@ if __name__ == '__main__':
     # EXPECTED_MIN_DISTANCE = ?
 
     RESULT = get_8_score()
+    print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == EXPECTED, 'Detection not working'
