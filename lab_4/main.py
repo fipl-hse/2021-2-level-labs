@@ -13,7 +13,19 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+
+    clean_text = ''
+    for symbol in text.lower():
+        if symbol.isalpha() or symbol.isspace():
+            clean_text += symbol
+
+    tokens = []
+    for word in clean_text.split():
+        split_word = [letter for letter in '_'+word+'_']
+        tokens.append(tuple(split_word))
+    return tuple(tokens)
 
 
 # 4
@@ -28,13 +40,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for element in elements:
+            for symbol in element:
+                self._put(symbol)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +64,11 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_text = tuple(tuple(storage.storage[letter] for letter in element) for element in corpus)
+    return encoded_text
 
 
 # 4
@@ -56,7 +79,11 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
+        return ()
+    inverted_storage = {value: key for key, value in storage.storage.items()}
+    decoded_text = tuple(tuple(inverted_storage[letter] for letter in element) for element in sentence)
+    return decoded_text
 
 
 # 6
