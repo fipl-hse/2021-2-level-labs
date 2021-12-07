@@ -156,7 +156,7 @@ class NGramTrie:
     """
 
     def __init__(self, n: int, letter_storage: LetterStorage):
-        self.size = 2
+        self.size = n
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
