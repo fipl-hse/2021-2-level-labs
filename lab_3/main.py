@@ -156,7 +156,7 @@ class NGramTrie:
     """
 
     def __init__(self, n: int, letter_storage: LetterStorage):
-        self.size = n
+        self.size = 2
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
@@ -182,7 +182,22 @@ class NGramTrie:
             )
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple):
+            return 1
+        biGrams_list = []
+        for sentence in encoded_corpus:
+            biGrams_sentence = []
+            for word in sentence:
+                biGrams_word = []
+                for length in range(len(word)):
+                    biGram = word[length:length + self.size]
+                    if len(biGram) == self.size:
+                        biGrams_word.append(biGram)
+                biGrams_sentence.append(tuple(biGrams_word))
+            biGrams_list.append(tuple(biGrams_sentence))
+        self.n_grams = tuple(biGrams_list)
+        return 0
+
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -200,7 +215,16 @@ class NGramTrie:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
-        pass
+        if not isinstance(self.n_grams, tuple) or not self.n_grams:
+            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for bigrams in word:
+                    if bigrams not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[bigrams] = 1
+                    else:
+                        self.n_gram_frequencies[bigrams] += 1
+        return 0
 
     # 8
     def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
@@ -208,7 +232,7 @@ class NGramTrie:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
-
+        pass
 
     # 10
     def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
@@ -258,7 +282,15 @@ class LanguageProfile:
             (7, 8), (8, 1))),
         )
         """
-        pass
+        if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
+            return 1
+        for size in ngram_sizes:
+            trie = NGramTrie(size, self.storage)
+            trie.extract_n_grams(encoded_corpus)
+            trie.get_n_grams_frequencies()
+            self.tries.append(trie)
+            self.n_words.append(len(trie.n_gram_frequencies))
+        return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
@@ -284,8 +316,16 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
-        pass
-
+        if not isinstance(k, int) or not isinstance(trie_level, int)\
+                or k <= 0:
+            return ()
+        for n_gram_trie in self.tries:
+            if n_gram_trie.size == trie_level:
+                n_gram_trie.get_n_grams_frequencies()
+                freq_dict = n_gram_trie.n_gram_frequencies
+                sorted_k_grams = sorted(freq_dict, key=freq_dict.get, reverse=True)[:k]
+                return tuple(sorted_k_grams)
+        return ()
     # 8
     def save(self, name: str) -> int:
         """
@@ -324,7 +364,20 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    pass
+    if not isinstance(unknown_profile, LanguageProfile)\
+            or not isinstance(known_profile, LanguageProfile)\
+            or not isinstance(k, int) or not isinstance(trie_level, int)\
+            or k <= 0 or trie_level <= 0:
+        return -1
+    known_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    unknown_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    dist = 0
+    for grams in unknown_grams:
+        if grams in known_grams:
+            dist += abs(unknown_grams.index(grams) - known_grams.index(grams))
+        else:
+            dist += len(known_grams)
+    return dist
 
 # 8
 class LanguageDetector:
