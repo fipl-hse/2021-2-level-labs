@@ -13,7 +13,12 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    # remove punctuation
+    text = "".join(letter for letter in text if letter.isalpha() or letter.isspace())
+    # tokenize
+    return tuple(tuple(f"_{word}_") for word in text.lower().split())
 
 
 # 4
@@ -28,13 +33,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for token in elements:
+            for letter in token:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +57,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    storage.update(corpus)
+    return tuple(tuple(storage.get_id(letter) for letter in token) for token in corpus)
 
 
 # 4
@@ -56,7 +71,9 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+    return tuple(tuple(storage.get_element(letter) for letter in token) for token in sentence)
 
 
 # 6
@@ -66,7 +83,19 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self.profile = language_profile
+        self._used_n_grams = []
+
+    def get_trie_by_level(self, trie_level: int):
+        """
+        Gets NGramTrie of the requested N-gram size
+        :param trie_level: N-gram size
+        :return: NGramTrie if succeeds, None if not
+        """
+        for trie in self.profile.tries:
+            if trie.size == trie_level:
+                return trie
+        return None
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -74,13 +103,58 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple):
+            return -1
+        trie = self.get_trie_by_level(len(context) + 1)
+        if not trie:
+            return -1
+        # exclude N-gram frequencies that do not abide by the context
+        # or that have already been used
+        frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
+                       if n_gram[:-1] == context and n_gram not in self._used_n_grams}
+        # print(frequencies)
+        # print(self.profile.storage.storage)
+        if not frequencies:
+            # ignore context
+            frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
+                           if n_gram not in self._used_n_grams}
+        # print(frequencies)
+        # print(self.profile.storage.storage)
+        if not frequencies:
+            # clear self._used_n_grams, try again
+            self._used_n_grams = []
+            frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
+                           if n_gram[:-1] == context}
+        if not frequencies:
+            return -1
+        # print(frequencies)
+        # print(self.profile.storage.storage)
+        # if not frequencies:
+            # ignore context again. is this necessary? no idea.
+            # it seems like something that might occur, though.
+            # frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()}
+        # print(frequencies)
+        # print(self.profile.storage.storage)
+        n_gram = max(frequencies, key=frequencies.get)
+        self._used_n_grams.append(n_gram)
+        return n_gram[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
+            return ()
+        token = [*context]
+        letter = None
+        print(self.profile.storage.storage)
+        while not (letter == self.profile.storage.get_special_token_id()
+                   or len(token) > word_max_length + 1):
+            letter = self._generate_letter(context)
+            context = *context[1:], letter
+            token.append(letter)
+            print(context)
+        return tuple(token)
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
