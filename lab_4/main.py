@@ -15,6 +15,24 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     if not isinstance(text, str):
         return -1
+    words = []
+    text = text.lower()
+    text = re.split(r'[.!?]', text)
+    new_text = ''
+    for sentence in text:
+        for symbol in sentence:
+            if symbol.isalpha() or symbol.isspace():
+                new_text += symbol
+    new_text = new_text.split()
+    for word in new_text:
+        framed_letters = []
+        for letter in word:
+            framed_letters.append(letter)
+        framed_letters.insert(0, '_')
+        framed_letters.append('_')
+        words.append(framed_letters)
+    text_tuple = (tuple(word) for word in words)
+    return tuple(text_tuple)
 
 
 # 4
@@ -29,14 +47,19 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        super().update(elements)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
-
+        length = len(self.storage.keys())
+        if length == 0:
+            return -1
+        return length
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -46,7 +69,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    storage.update(corpus)
+    encoded_sentences = tuple(tuple(storage.get_id(letter)
+                                    for letter in word)
+                              for word in corpus)
+    return encoded_sentences
 
 
 # 4
@@ -57,7 +86,12 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+    decoded_sentences = tuple(tuple(storage.get_element(letter)
+                                    for letter in word)
+                              for word in sentence)
+    return decoded_sentences
 
 
 # 6
@@ -67,7 +101,7 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self.language_profile = language_profile
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -75,7 +109,8 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple):
+            return -1
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
