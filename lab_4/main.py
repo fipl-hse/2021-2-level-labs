@@ -13,8 +13,25 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    if not isinstance(text,str):
-        return ()
+    if not isinstance(text, str):
+        return -1
+
+    words = []
+    new_text = ''
+    text = text.lower()
+    underscore = ['_']
+
+    for i in text:
+        if i.isalpha() or i.isspace():
+            new_text += i
+
+    for token in new_text.split():
+        letters = []
+        letters += underscore
+        letters += token
+        letters += underscore
+        words.append(tuple(letters))
+    return tuple(words)
 
 
 # 4
