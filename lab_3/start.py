@@ -119,9 +119,40 @@ if __name__ == '__main__':
 
     ACTUAL_6 = score_6()
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
+<<<<<<< HEAD
+    RESULT_FOR_6 = distance_unk_eng, distance_unk_de
+    print(RESULT_FOR_6)
+
+    # score 8, k = 5, trie_level = 3
+    # predict UNKNOWN_SAMPLE
+    # print(detector.detect(profile_unk, 5, 3))
+    # EXPECTED_SCORE = {'en': 24, 'de': 25}
+
+    unknown_profile_8 = LanguageProfile(storage, 'unk')
+    eng_profile_8 = LanguageProfile(storage, 'en')
+    de_profile_8 = LanguageProfile(storage, 'de')
+
+    unknown_profile_8.create_from_tokens(unk_enc, (3, 2))
+    eng_profile_8.create_from_tokens(eng_enc, (3, 2))
+    de_profile_8.create_from_tokens(de_enc, (3, 2))
+
+    calculate_distance(unknown_profile_8, eng_profile_8, 5, 3)
+    calculate_distance(unknown_profile_8, de_profile_8, 5, 3)
+
+    unknown_profile_8.save('unknown_profile.json')
+    profile_unk = LanguageProfile(storage, 'unk')
+    profile_unk.open('unknown_profile.json')
+
+    detector = LanguageDetector()
+
+    detector.register_language(eng_profile_8)
+    detector.register_language(de_profile_8)
+    RESULT_FOR_8 = detector.detect(profile_unk, 5, (3, 2))
+=======
     assert ACTUAL_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
 
     ACTUAL_8 = score_8()
+>>>>>>> b01e5e9536d704be9bc34c9d45f04732b2d3e7a7
     EXPECTED_SCORE = {'en': 24, 'de': 25}
     assert ACTUAL_8 == EXPECTED_SCORE, 'Detection not working'
 

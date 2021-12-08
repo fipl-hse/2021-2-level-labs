@@ -1,1 +1,1 @@
-{"freq": {"_he": 3, "hel": 3, "eli": 3, "liu": 3, "ium": 3, "um_": 3, "_is": 3, "is_": 3, "_ma": 3, "mat": 3, "ate": 3, "ter": 3, "eri": 3, "ria": 3, "ial": 3, "al_": 3}, "n_words": [16], "name": "unk"}
+{"freq": {"_he": 3, "hel": 3, "eli": 3, "liu": 3, "ium": 3, "um_": 3, "_is": 3, "is_": 3, "_ma": 3, "mat": 3, "ate": 3, "ter": 3, "eri": 3, "ria": 3, "ial": 3, "al_": 3, "_h": 1, "he": 1, "el": 1, "li": 1, "iu": 1, "um": 1, "m_": 1, "_i": 1, "is": 1, "s_": 1, "_m": 1, "ma": 1, "at": 1, "te": 1, "er": 1, "ri": 1, "ia": 1, "al": 1, "l_": 1}, "n_words": [16, 19], "name": "unk"}
