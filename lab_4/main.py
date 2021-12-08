@@ -13,7 +13,13 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+
+    text = "".join(char for char in text if char.isalpha() or char.isspace())
+    text_tupled = tuple(tuple("_" + word + "_") for word in text.lower().strip().split())
+
+    return text_tupled
 
 
 # 4
@@ -28,13 +34,22 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+
+        for word in elements:
+            for letter in word:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+
+        return len(self.storage)
 
 
 # 4
