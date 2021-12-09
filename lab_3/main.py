@@ -6,7 +6,6 @@ import re
 from typing import Dict, Tuple
 
 
-
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
