@@ -83,7 +83,7 @@ I wish I thought What Jolly Fun'''.lower()
         actual_multi = detector.detect(profile_unk, 4, (1, 2, 3))
         self.assertEqual(len(actual_multi), 6)
         self.assertAlmostEqual(actual_multi[('en', 1)], -9.674308785927618, 5)
-        self.assertAlmostEqual(actual_multi[('de', 1)], -9.478501661670569, 5)
+        self.assertAlmostEqual(actual_multi[('de', 1)], -9.392476840786713, 5)
 
     def test_bad_input(self):
         """
