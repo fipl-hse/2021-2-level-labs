@@ -168,14 +168,10 @@ class NGramTrie:
         self.storage = letter_storage
         self.n_grams = []
         self.n_gram_frequencies = {}
-
-    # 6 - biGrams
-    # 8 - threeGrams
-    # 10 - nGrams
-     def extract_n_grams(self, encoded_corpus: tuple) -> int:
-        """
+    def extract_n_grams(self, encoded_corpus: tuple) -> int:
+      """
         Extracts n-grams from the given sentence, fills the field n_grams
-        :return: 0 if succeeds, 1 if not
+        :return 0 if succeeds, 1 if not
         e.g.
         encoded_corpus = (
             ((1, 2, 3, 4, 1), (1, 5, 2, 1)),
