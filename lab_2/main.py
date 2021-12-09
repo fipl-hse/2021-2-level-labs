@@ -51,6 +51,7 @@ def get_language_profiles(texts_corpus: list, language_labels: list) -> dict or 
         language_profiles[lang] = get_freq_dict(texts_corpus[i])
     return language_profiles
 
+
 def get_language_features(language_profiles: dict) -> list or None:
     """
     Gets all unique words from language profiles
@@ -96,6 +97,7 @@ def get_text_vector(original_text: list, language_profiles: dict) -> list or Non
                 if i in profile.keys():
                     text_vector.append(profile[i])
     return text_vector
+
 
 # 6
 def calculate_distance(unknown_text_vector: list, known_text_vector: list) -> float or None:
@@ -145,6 +147,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     prediction = [closest_label, min(distances)]
     return prediction
 
+
 # 8
 def calculate_distance_manhattan(unknown_text_vector: list,
                                  known_text_vector: list) -> float or None:
@@ -165,6 +168,7 @@ def calculate_distance_manhattan(unknown_text_vector: list,
     for index, vector in enumerate(unknown_text_vector):
         manhattan_distance += fabs(vector - known_text_vector[index])
     return round(manhattan_distance, 5)
+
 
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
@@ -214,6 +218,7 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     prediction = [predict_language, min(distances)]
     return prediction
 
+
 # 10 implementation
 def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
     """
@@ -242,6 +247,7 @@ def get_sparse_vector(original_text: list, language_profiles: dict) -> list or N
             sparse_vector.append([index, vector[feature]])
     return sparse_vector
 
+
 def calculate_distance_sparse(unknown_text_vector: list,
                               known_text_vector: list) -> float or None:
     """
@@ -268,6 +274,7 @@ def calculate_distance_sparse(unknown_text_vector: list,
     for value in mixed_dict.values():
         euclidean_distance += value ** 2
     return round(sqrt(euclidean_distance), 5)
+
 
 def predict_language_knn_sparse(unknown_text_vector: list, known_text_vectors: list,
                                 language_labels: list, k=1) -> [str, int] or None:
