@@ -1,3 +1,4 @@
+
 from lab_4.main import tokenize_by_letters, LetterStorage
 
 with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
