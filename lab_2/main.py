@@ -144,7 +144,7 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
             and isinstance_for_elem(unknown_text_vector, (int, float))
             and isinstance_for_elem(known_text_vectors, list)
             and isinstance_for_elem(language_labels, str)
-            and len(known_text_vectors) != len(language_labels)):
+            and len(known_text_vectors) == len(language_labels)):
         return None
     distance = 1
     label = ''
@@ -255,6 +255,17 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
 
 
 # 10
+
+def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
+    """
+    Builds a sparse vector representation of a given text
+        using dictionary with language profiles
+    :param original_text: any tokenized text
+    :param language_profiles: a dictionary of dictionaries - language profiles
+    """
+    pass
+
+
 def calculate_distance_sparse(unknown_text_vector: list,
                               known_text_vector: list) -> float or None:
     """
