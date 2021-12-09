@@ -13,7 +13,30 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str) or not text:
+        return -1
+
+    for symbol in text:
+        if symbol == 'ä':
+            text = text.replace(symbol, 'ae')
+        elif symbol == 'ö':
+            text = text.replace(symbol, 'oe')
+        elif symbol == 'ß':
+            text = text.replace(symbol, 'ss')
+        elif symbol == 'ü':
+            text = text.replace(symbol, 'ue')
+        elif symbol in '~!@#№$;%^:&?*(){}[]-+=\\|/,\'0123456789':
+            text = text.replace(symbol, '')
+
+    sentences = re.split(r"[!.?]\s*", text)
+    letters = []
+    for sentence in sentences:
+        list_tokens = re.sub('[^\n a-z]', '', sentence.lower()).split()
+        if list_tokens:
+            tokens = tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens)
+            letters.append(tokens)
+    token_sentence = tuple(letters)
+    return token_sentence
 
 
 # 4
