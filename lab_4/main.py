@@ -3,6 +3,7 @@ Lab 4
 Language generation algorithm based on language profiles
 """
 
+import re
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
@@ -13,7 +14,25 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+
+    text = text.lower()
+    cleaned_text = ''
+    for x in text:
+        if x.isalpha() or x.isspace():
+            cleaned_text += x
+    words_list = cleaned_text.split()
+
+    prepared_text = []
+    for word in words_list:
+        list_word = []
+        list_word += '_'
+        for letter in word:
+            list_word += letter
+        list_word += '_'
+        prepared_text.append(tuple(list_word))
+    return tuple(prepared_text)
 
 
 # 4
@@ -28,13 +47,22 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+
+        for word in elements:
+            for letter in word:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +73,16 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+
+    encoded_corpus = ()
+    for token in corpus:
+        encoded_token = ()
+        for letter in token:
+            encoded_token += (storage.get_id(letter),)
+        encoded_corpus += (encoded_token,)
+    return encoded_corpus
 
 
 # 4
@@ -56,7 +93,16 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+
+    decoded_sentence = ()
+    for token in sentence:
+        encoded_token = ()
+        for element_id in token:
+            encoded_token += (storage.get_element(element_id),)
+        decoded_sentence += (encoded_token,)
+    return decoded_sentence
 
 
 # 6
