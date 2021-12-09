@@ -138,13 +138,13 @@ def predict_language_score(unknown_text_vector: list, known_text_vectors: list,
     :param known_text_vectors: a list of vectors for known texts
     :param language_labels: language labels for each known text
     """
-    if not isinstance(unknown_text_vector, list) \
-            or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list) \
-            or not isinstance_for_elem(unknown_text_vector, (int, float)) \
-            or not isinstance_for_elem(known_text_vectors, list) \
-            or not isinstance_for_elem(language_labels, str) \
-            or len(known_text_vectors) != len(language_labels):
+    if not (isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and isinstance(language_labels, list)
+            and isinstance_for_elem(unknown_text_vector, (int, float))
+            and isinstance_for_elem(known_text_vectors, list)
+            and isinstance_for_elem(language_labels, str)
+            and len(known_text_vectors) != len(language_labels)):
         return None
     distance = 1
     label = ''
@@ -189,6 +189,21 @@ def min_distance_in_label(elements: list, label: str) -> float:
     return min_distance
 
 
+def freq_dict_for_labels(labels) -> dict:
+    """
+    Calculates frequencies of given labels
+    :param labels: a list of labels
+    :return: a dictionary with frequencies
+    """
+    count_labels = {}
+    for label in labels:
+        if label['label'] in count_labels:
+            count_labels[label['label']] += 1
+        else:
+            count_labels[label['label']] = 1
+    return count_labels
+
+
 def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
                          language_labels: list, k=1, metric='manhattan') -> [str, int] or None:
     """
@@ -200,19 +215,20 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
     :param k: the number of neighbors to choose label from
     :param metric: specific metric to use while calculating distance
     """
-    if not isinstance(unknown_text_vector, list) \
-            or not isinstance(known_text_vectors, list) \
-            or not isinstance(language_labels, list) \
-            or not isinstance(k, int) \
-            or not isinstance_for_elem(unknown_text_vector, (int, float)) \
-            or not isinstance_for_elem(known_text_vectors, list) \
-            or len(known_text_vectors) != len(language_labels) \
-            or not isinstance_for_elem(language_labels, str):
+    if not (isinstance(unknown_text_vector, list)
+            and isinstance(known_text_vectors, list)
+            and isinstance(language_labels, list)
+            and isinstance(k, int)
+            and isinstance_for_elem(unknown_text_vector, (int, float))
+            and isinstance_for_elem(known_text_vectors, list)
+            and len(known_text_vectors) == len(language_labels)
+            and isinstance_for_elem(language_labels, str)):
         return None
     distance_of_vectors = []
     if metric == 'manhattan':
         for known_vector in known_text_vectors:
-            distance_of_vectors.append(calculate_distance_manhattan(unknown_text_vector, known_vector))
+            distance_of_vectors.append(calculate_distance_manhattan(unknown_text_vector,
+                                                                    known_vector))
     elif metric == 'euclid':
         for known_vector in known_text_vectors:
             distance_of_vectors.append(calculate_distance(unknown_text_vector, known_vector))
@@ -220,22 +236,18 @@ def predict_language_knn(unknown_text_vector: list, known_text_vectors: list,
         return None
     elements = []
     for distance_of_vector in enumerate(distance_of_vectors):
-        elements.append({'distance': distance_of_vector[1], 'label': language_labels[distance_of_vector[0]]})
+        elements.append({'distance': distance_of_vector[1],
+                         'label': language_labels[distance_of_vector[0]]})
     elements = sorted(elements, key=lambda x: x['distance'])
     elements = elements[:k]
-    count_labels = {}
-    for element in elements:
-        if element['label'] in count_labels:
-            count_labels[element['label']] += 1
-        else:
-            count_labels[element['label']] = 1
+    count_labels = freq_dict_for_labels(elements)
     min_labels_dist = 0
     result_label = ''
-    for key in count_labels:
-        if count_labels[key] > min_labels_dist:
-            min_labels_dist = count_labels[key]
+    for key, value in count_labels.items():
+        if value > min_labels_dist:
+            min_labels_dist = value
             result_label = key
-        if count_labels[key] == min_labels_dist:
+        if value == min_labels_dist:
             if min_distance_in_label(elements, key) < min_distance_in_label(elements, result_label):
                 result_label = key
     returning = [result_label, elements[0]['distance']]
