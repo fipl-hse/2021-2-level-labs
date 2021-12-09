@@ -46,13 +46,24 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+
+        for element in elements:
+            for i in element:
+                self._put(i)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+
+        storage_length = len(self.storage)
+
+        return storage_length
 
 
 # 4
