@@ -158,7 +158,11 @@ class NGramTrie:
     """
     
     def __init__(self, n: int, letter_storage: LetterStorage):
-        pass
+        self.size = n
+        self.storage = letter_storage
+        self.n_grams = []
+        self.n_gram_frequencies = {}
+
 
     # 6 - biGrams
     # 8 - threeGrams
@@ -181,6 +185,10 @@ class NGramTrie:
         )
         """
         pass
+                
+
+
+
 
     def get_n_grams_frequencies(self) -> int:
         """
