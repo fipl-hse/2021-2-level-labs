@@ -19,10 +19,10 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     for symbol in text.lower():
         if symbol.isalpha() or symbol.isspace():
             clear_text += symbol
-    text_tuple = ()
+    text_list = []
     for word in clear_text.split():
-        text_tuple += (('_',) + tuple(letter for letter in word) + ('_',),)
-    return text_tuple
+        text_list.append(tuple([letter for letter in '_' + word + '_']))
+    return tuple(text_list)
 
 
 # 4
