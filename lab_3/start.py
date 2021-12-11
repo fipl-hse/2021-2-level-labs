@@ -89,12 +89,13 @@ if __name__ == '__main__':
         detector = LanguageDetector()
         detector.register_language(profile_en)
         detector.register_language(profile_de)
-        print(detector.detect(unknown_profile_2, 5, (3,)))
+        return detector.detect(unknown_profile_2, 5, (3,))
 
 
     get_8_score()
 
-    RESULT = ''
+    RESULT = get_8_score()
+    print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
 

@@ -516,7 +516,7 @@ class LanguageDetector:
         detection = {}
         for language, profile in self.language_profiles.items():
             detection[language] = calculate_distance(unknown_profile, profile, k, trie_levels[0])
-            # print(detection)
+
         return detection
 
 
