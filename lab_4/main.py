@@ -16,7 +16,8 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     if isinstance(text, str):
         good_text = ""
         for symbol in text.lower():
-            good_text += symbol
+            if symbol.isalpha() or symbol.isspace():
+                good_text += symbol
         result = []
         for word in good_text.split():
             split_word = "" + word + "_"
