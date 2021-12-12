@@ -13,7 +13,23 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    clear_text = ''
+
+    text = text.lower()
+    for letter in text:
+        if letter.isalpha() or letter.isspace():
+            clear_text += letter
+
+    list_of_tokens = []
+    clear_text = clear_text.split()
+    for word in clear_text:
+        tokens = ''
+        for letter in word:
+            tokens += letter
+        list_of_tokens.append(tuple(['_'] + list(tokens) + ['_']))
+    return tuple(list_of_tokens)
 
 
 # 4
@@ -28,13 +44,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for word in elements:
+            for letter in word:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +68,19 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for word in corpus:
+        encoded_word = []
+        for letter in word:
+            encoded_word.append(storage.get_id(letter))
+        encoded_corpus.append(tuple(encoded_word))
+    return tuple(encoded_corpus)
+    # i know that there is a simpler way to do it in one string,
+    # but i prefer to describe in more detail
+    # to understand the program better
 
 
 # 4
@@ -56,7 +91,16 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
+        return ()
+    decoded_corpus = []
+    for word in sentence:
+        decoded_word = []
+        for letter in word:
+            decoded_word.append(storage.get_element(letter))
+        decoded_corpus.append(tuple(decoded_word))
+    return tuple(decoded_corpus)
+    # the same remark as in the previous function
 
 
 # 6
@@ -66,7 +110,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self.profile = language_profile
+        self._n_grams = []
 
     def _generate_letter(self, context: tuple) -> int:
         """
