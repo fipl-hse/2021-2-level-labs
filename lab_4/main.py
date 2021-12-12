@@ -130,6 +130,10 @@ class NGramTextGenerator:
             return ()
 
         generated_word = list(context)
+        if word_max_length == 1:
+            generated_word.append(self.profile.storage.get_special_token_id())
+            return tuple(generated_word)
+
         while len(generated_word) != word_max_length:
             letter = self._generate_letter(context)
             generated_word.append(letter)
@@ -162,8 +166,8 @@ class NGramTextGenerator:
             return ''
 
         sentence = self.generate_sentence(context, word_limit)
-
         raw_string = ''
+
         for element in sentence:
             for symbol in element:
                 letter = self.profile.storage.get_element(symbol)
