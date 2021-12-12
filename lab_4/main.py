@@ -110,8 +110,7 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        self.profile = language_profile
-        self._n_grams = []
+        pass
 
     def _generate_letter(self, context: tuple) -> int:
         """
