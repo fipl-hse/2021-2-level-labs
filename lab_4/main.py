@@ -93,7 +93,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
         return ()
 
-    decoded_corpus = tuple(tuple(storage.get_element(element_id) for element_id in token) for token in sentence)
+    decoded_corpus = tuple(tuple(storage.get_element(element_id) for element_id in token)
+                           for token in sentence)
 
     return decoded_corpus
 
