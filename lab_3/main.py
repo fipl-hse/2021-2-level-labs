@@ -3,7 +3,6 @@ Lab 3
 Language classification using n-grams
 """
 import json
-from string import punctuation
 from typing import Dict, Tuple
 import re
 
@@ -51,7 +50,6 @@ def tokenize_by_sentence(text: str) -> tuple:
         result.append(tuple(list_of_sentences))
 
     return tuple(result)
-
 
 
 class LetterStorage:
@@ -270,7 +268,7 @@ class NGramTrie:
         """
 
 
-
+# 6
 class LanguageProfile:
     """
     Stores and manages language profile information
@@ -344,8 +342,8 @@ class LanguageProfile:
                 return top_k_n_grams
         return ()
 
-
-def save(self, name: str) -> int:
+    # 8
+    def save(self, name: str) -> int:
         """
         Saves language profile into json file
         :param name: name of the json file with .json format
@@ -366,12 +364,12 @@ def save(self, name: str) -> int:
         profile_as_dict['freq'] = freq_dict
         profile_as_dict['n_words'] = self.n_words
         profile_as_dict['name'] = self.language
-        with open(name, 'w') as file:
+        with open(name, 'w', encoding="UTF-8") as file:
             json.dump(profile_as_dict, file)
         return 0
 
-
-def open(self, file_name: str) -> int:
+    # 8
+    def open(self, file_name: str) -> int:
         """
         Opens language profile from json file and writes output to
             self.language,
@@ -406,7 +404,7 @@ def open(self, file_name: str) -> int:
         return 0
 
 
-
+# 6
 def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
                        k: int, trie_level: int) -> int:
     """
@@ -439,7 +437,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     return distance
 
 
-
+# 8
 class LanguageDetector:
     """
     Detects profile language using distance
@@ -493,6 +491,7 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     pass
 
 
+# 10
 class ProbabilityLanguageDetector(LanguageDetector):
     """
     Detects profile language using probabilities
