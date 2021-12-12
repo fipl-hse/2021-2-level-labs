@@ -12,4 +12,3 @@ storage.update(TOKENIZED_TEXT)
 print('the number of letters in the storage:', storage.get_letter_count())
 print('top 5 with lowest id:', list(storage.storage.keys())[:5])
 print('top 5 with highest id:', list(storage.storage.keys())[-5:])
-
