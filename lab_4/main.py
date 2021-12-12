@@ -85,7 +85,17 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
+        return ()
+    storage.update(sentence)
+    text_corpus = []
+    for word_id in sentence:
+        word = []
+        for letter_id in word_id:
+            if letter_id in storage.storage.values():
+                word.append(storage.get_element(letter_id))
+        text_corpus.append(tuple(word))
+    return tuple(text_corpus)
 
 
 # 6
