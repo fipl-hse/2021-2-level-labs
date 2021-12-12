@@ -154,7 +154,9 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
+
         generated_sentence = []
+
         while len(generated_sentence) != word_limit:
             generated_word = self._generate_word(context, word_max_length=15)
             generated_sentence.append(generated_word)
