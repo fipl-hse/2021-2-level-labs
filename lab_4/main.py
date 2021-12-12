@@ -77,7 +77,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
 
-    encoded_corpus = tuple(tuple(storage.update(corpus) for letter in element) for element in corpus)
+    encoded_corpus = tuple(tuple(storage.get_id(element) for element in token) for token in corpus)
 
     return encoded_corpus
 
@@ -96,6 +96,7 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     decoded_corpus = tuple(tuple(storage.get_element(element_id) for element_id in token) for token in sentence)
 
     return decoded_corpus
+
 
 # 6
 class NGramTextGenerator:
