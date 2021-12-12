@@ -171,11 +171,10 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ''
-        letter_storage = LetterStorage()
         sentence = self.generate_sentence(context, word_limit)
-        decode = decode_sentence(letter_storage, sentence)
-        print(decode)
-
+        letters = [self.language_profile.storage.get_element(i) for word in sentence for i in word]
+        text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
+        return text
 # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
