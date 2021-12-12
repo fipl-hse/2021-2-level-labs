@@ -48,9 +48,10 @@ class LetterStorage(Storage):
         """
         if not isinstance(elements, tuple):
             return -1
-        for token in elements:
-            for letter in token:
-                self._put(letter)
+        for sentence in elements:
+            for token in sentence:
+                for letter in token:
+                    self._put(letter)
         return 0
         pass
 
@@ -60,6 +61,7 @@ class LetterStorage(Storage):
         """
         if not self.storage:
             return -1
+        return len(self.storage)
         pass
 
 
