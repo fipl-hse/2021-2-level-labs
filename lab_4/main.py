@@ -6,6 +6,7 @@ Language generation algorithm based on language profiles
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
+import re
 
 
 # 4
@@ -13,7 +14,28 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    text = text.lower()
+    text = re.split(r'[.!?]\s', text)
+    new_text = []
+    for sentence in text:
+        sentence = sentence.split()
+        clear_sent = []
+        for word in sentence:
+            clear_sent.append(word)
+        for word in clear_sent:
+            letters = [letter for letter in word if letter.isalpha()]
+            if letters:
+                letters.insert(0, '_')
+                letters.append('_')
+                new_text.append(tuple(letters))
+            if not new_text:
+                return ()
+    return tuple(new_text)
+
+
+
 
 
 # 4
@@ -28,13 +50,21 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for element in elements:
+            for letter in element:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
+
 
 
 # 4
@@ -45,7 +75,18 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for word in corpus:
+        enc_word = []
+        for letter in word:
+            if letter in storage.storage:
+                enc_word.append(storage.get_id(letter))
+        encoded_corpus.append(tuple(enc_word))
+    return tuple(encoded_corpus)
+
 
 
 # 4
@@ -56,7 +97,19 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
+        return ()
+    storage.update(sentence)
+    decoded_sentences = []
+    for word in sentence:
+        dec_words = []
+        for letter in word:
+            if letter in storage.storage.values():
+                dec_words.append(storage.get_element(letter))
+        decoded_sentences.append(tuple(dec_words))
+    return tuple(decoded_sentences)
+
+
 
 
 # 6
