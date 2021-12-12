@@ -13,6 +13,24 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
+    if not isinstance(text, str):
+        return -1
+
+    invaluable_trash = ['!', '.', '?','`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+
+    for symbols in invaluable_trash:
+        text = text.replace(symbols, '')
+    text = text.lower().split()
+    new_character = ['_']
+    new_tokens = []
+    for character in text:
+        new_character.extend(character)
+        new_character.append('_')
+        new_tokens.append(tuple(new_character))
+        new_character = ['_']
+    return tuple(new_tokens)
     pass
 
 
@@ -28,12 +46,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
+        if not isinstance(elements, tuple):
+            return -1
+        for token in elements:
+            for letter in token:
+                self._put(letter)
+        return 0
         pass
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
+        if not self.storage:
+            return -1
         pass
 
 
@@ -45,6 +71,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
+
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    encoded_corpus = tuple(tuple(storage.get_id(letter)
+                                          for letter in word)
+                                    for word in corpus)
+    return tuple(encoded_corpus)
     pass
 
 
@@ -56,6 +89,12 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+    decoded_sentences = tuple(tuple(storage.get_element(letter_id)
+                                          for letter_id in word_id)
+                                    for word_id in sentence)
+    return tuple(decoded_sentences)
     pass
 
 
@@ -66,6 +105,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
+        self.language_profile = language_profile
+        self.used_n_grams = []
         pass
 
     def _generate_letter(self, context: tuple) -> int:
@@ -74,7 +115,40 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple) or not self.language_profile.tries:
+            return -1
+
+        for letter in context:
+            if self.language_profile.storage.get_element(letter) == -1:
+                pass
+
+        no_used_ngrams = {}
+        all_no_used_ngrams = {}
+        all_ngrams = {}
+        context_length = len(context)
+        for trie in self.language_profile.tries:
+            for ngram in trie.n_gram_frequencies:
+                if len(ngram) == context_length + 1:
+                    all_ngrams[ngram] = trie.n_gram_frequencies[ngram]
+                    if ngram[:-1] == context:
+                        all_no_used_ngrams[ngram] = trie.n_gram_frequencies[ngram]
+                        if ngram not in self._used_n_grams:
+                            no_used_ngrams[ngram] = trie.n_gram_frequencies[ngram]
+
+        if no_used_ngrams:
+            next_ngram = max(no_used_ngrams, key=no_used_ngrams.get)
+        elif all_no_used_ngrams:
+            self._used_n_grams = []
+            next_ngram = max(all_no_used_ngrams, key=all_no_used_ngrams.get)
+        elif all_ngrams:
+            next_ngram = max(all_ngrams, key=all_ngrams.get)
+        else:
+            return -1
+        self._used_n_grams.append(next_ngram)
+
+        return next_ngram[- 1]
+
+    pass
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
