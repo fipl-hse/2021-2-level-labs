@@ -6,6 +6,7 @@ Language generation algorithm based on language profiles
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
+import re
 
 
 # 4
@@ -15,11 +16,9 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     if not isinstance(text, str):
         return -1
-    symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890"""
     processing_text = text.lower()
-    for character in processing_text:
-        if character in symbols:
-            processing_text = processing_text.replace(character, '')
+    processing_text = re.sub(r'[.\'!@#$%^&*()\-_=+/|"№;:?><,`~’…—\[\]{}1234567890]', '',
+                             processing_text)
     processing_text = processing_text.split()
     if not processing_text:
         return ()
