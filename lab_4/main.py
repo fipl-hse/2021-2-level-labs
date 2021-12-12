@@ -74,7 +74,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
 
 
 # 4
@@ -132,55 +133,9 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     pass
 
 
-# 8
-class LikelihoodBasedTextGenerator(NGramTextGenerator):
-    """
-    Language model for likelihood based text generation
-    """
-
-    def _calculate_maximum_likelihood(self, letter: int, context: tuple) -> float:
-        """
-        Calculates maximum likelihood for a given letter
-        :param letter: a letter given
-        :param context: a context for the letter given
-        :return: float number, that indicates maximum likelihood
-        """
-        pass
-
-    def _generate_letter(self, context: tuple) -> int:
-        """
-        Generates the next letter.
-            Takes the letter with highest
-            maximum likelihood frequency.
-        """
-        pass
 
 
-# 10
-class BackOffGenerator(NGramTextGenerator):
-    """
-    Language model for back-off based text generation
-    """
-
-    def _generate_letter(self, context: tuple) -> int:
-        """
-        Generates the next letter.
-            Takes the letter with highest
-            available frequency for the corresponding context.
-            if no context can be found, reduces the context size by 1.
-        """
-        pass
 
 
-# 10
-class PublicLanguageProfile(LanguageProfile):
-    """
-    Language Profile to work with public language profiles
-    """
 
-    def open(self, file_name: str) -> int:
-        """
-        Opens public profile and adapts it.
-        :return: o if succeeds, 1 otherwise
-        """
-        pass
+
