@@ -184,6 +184,7 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
         return ''
+
     decoded_sentence = ''
     for word in decoded_corpus:
         for letter in word:
