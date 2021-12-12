@@ -13,7 +13,24 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if isinstance(text, str):
+        good_text = ""
+        for symbol in text.lower():
+            good_text += symbol
+        result = []
+        for word in good_text.split():
+            split_word = "" + word + "_"
+            result.append(tuple(split_word))
+        return tuple(result)
+    else:
+        return -1
+
+
+# 4
+class LetterStorage(Storage):
+    """
+    Stores letters and their ids
+    """
 
 
 # 4
@@ -28,13 +45,22 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if isinstance(elements, tuple):
+            for element in elements:
+                for symbol in element:
+                    self._put(symbol)
+            return 0
+        else:
+            return -1
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if self.storage:
+            return len(self.storage)
+        else:
+            return -1
 
 
 # 4
@@ -45,10 +71,14 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if isinstance(storage, LetterStorage) and isinstance(corpus, tuple):
+        storage.update(corpus)
+        encoded_text = tuple(tuple(storage.get_id(letter) for letter in element) for element in corpus)
+        return encoded_text
+    else:
+        return ()
 
 
-# 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     """
     Decodes sentence by replacing letters with their ids
@@ -56,7 +86,11 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if isinstance(storage, LetterStorage) and isinstance(sentence, tuple):
+        decoded_text = tuple(tuple(storage.get_element(letter) for letter in element) for element in sentence)
+        return decoded_text
+    else:
+        return ()
 
 
 # 6
