@@ -170,18 +170,22 @@ class NGramTextGenerator:
         Generates full sentence and decodes it
         """
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
-            return ''
+            return ""
         sentence = self.generate_sentence(context, word_limit)
         letters = [self.language_profile.storage.get_element(i) for word in sentence for i in word]
         text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
         return text
+
 # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
-
+    if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
+        return ""
+    letters = [letter for word in decoded_corpus for letter in word]
+    text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
+    return text
 
 # 8
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
