@@ -64,7 +64,17 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    corpus_id = []
+    for word in corpus:
+        word_id = []
+        for letter in word:
+            if letter in storage.storage:
+                word_id.append(storage.get_id(letter))
+        corpus_id.append(tuple(word_id))
+    return tuple(corpus_id)
 
 
 # 4
