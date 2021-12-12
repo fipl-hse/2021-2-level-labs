@@ -13,7 +13,21 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str) or not text:
+        return ()
+    symbols = """'!@#$%^&*()-_=+/|"№;%:?><,.`~’…—[]{}1234567890"""
+    processing_text = text.lower()
+    for character in processing_text:
+        if character in symbols:
+            processing_text = processing_text.replace(character, '')
+    processing_text = processing_text.split()
+    if not processing_text:
+        return ()
+    for word_index, word in enumerate(processing_text):
+        new_word = '_' + word + '_'
+        processing_text[word_index] = tuple(new_word)
+        # processed_text = tuple(split_text)
+    return tuple(processing_text)
 
 
 # 4
