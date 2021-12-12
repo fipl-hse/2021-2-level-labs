@@ -163,7 +163,6 @@ class NGramTextGenerator:
         while len(generated_sentence) != word_limit:
             word = self._generate_word(context)
             generated_sentence.append(word)
-        print(tuple(generated_sentence))
         return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
