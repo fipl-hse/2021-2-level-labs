@@ -128,6 +128,7 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
+
         if not isinstance(context, tuple) or not isinstance(word_max_length, int):
             return ()
 
@@ -142,7 +143,7 @@ class NGramTextGenerator:
             generated_word.append(generated_letter)
             if generated_letter == self.profile.storage.get_special_token_id():
                 break
-            context = tuple(generated_word[1:])
+            context = tuple(generated_word[-len(context):])
             if len(generated_word) == word_max_length:
                 generated_word.append(self.profile.storage.get_special_token_id())
         return tuple(generated_word)
