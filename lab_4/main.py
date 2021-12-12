@@ -104,7 +104,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self._used_n_grams = []
+        self.language_profile = language_profile
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -112,7 +113,21 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple) or len(context) != 1:
+            return -1
+        for trie in self.language_profile.tries:
+            if trie.size == 2:
+                possible_n_grams = trie.n_gram_frequencies
+        possible_n_grams = sorted(possible_n_grams, key=possible_n_grams.get, reverse=True)
+        for n_gram_index, possible_n_gram in enumerate(possible_n_grams):
+            if possible_n_gram not in self._used_n_grams:
+                if possible_n_gram[0] == context[0]:
+                    self._used_n_grams.append(possible_n_gram)
+                    return possible_n_gram[-1]
+            elif n_gram_index == len(possible_n_grams) - 1 and self._used_n_grams:
+                self._used_n_grams.clear()
+                continue
+        return -1
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
