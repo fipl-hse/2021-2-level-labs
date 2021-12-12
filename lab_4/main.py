@@ -176,6 +176,7 @@ class NGramTextGenerator:
         text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
         return text
 
+
 # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
@@ -186,6 +187,7 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     letters = [letter for word in decoded_corpus for letter in word]
     text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
     return text
+
 
 # 8
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
