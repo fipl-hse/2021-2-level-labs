@@ -490,9 +490,3 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     """
     pass
 
-
-# 10
-class ProbabilityLanguageDetector(LanguageDetector):
-    """
-    Detects profile language using probabilities
-    """
