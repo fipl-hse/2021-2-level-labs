@@ -167,6 +167,7 @@ class NGramTextGenerator:
         """
         Generates full sentence and decodes it
         """
+
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ""
 
