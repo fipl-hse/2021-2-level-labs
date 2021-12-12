@@ -77,6 +77,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
 
+    encoded = tuple(tuple(storage.update(corpus) for letter in element) for element in corpus)
+
+    return encoded
+
 
 # 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
