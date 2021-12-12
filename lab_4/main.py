@@ -113,15 +113,14 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        if not isinstance(context, tuple) or len(context) != 1:
+        if not isinstance(context, tuple):
             return -1
         for trie in self.profile.tries:
             if trie.size == 2:
                 possible_n_grams = trie.n_gram_frequencies
         possible_n_grams = sorted(possible_n_grams, key=possible_n_grams.get, reverse=True)
         for n_gram_index, possible_n_gram in enumerate(possible_n_grams):
-            if possible_n_gram not in self._used_n_grams:
-                if possible_n_gram[0] == context[0]:
+            if possible_n_gram not in self._used_n_grams and possible_n_gram[0] == context[0]:
                     self._used_n_grams.append(possible_n_gram)
                     return possible_n_gram[-1]
             elif n_gram_index == len(possible_n_grams) - 1 and self._used_n_grams:
@@ -144,7 +143,7 @@ class NGramTextGenerator:
 
         word = [context[0]]
         for letter_id in word:
-            word.append(self._generate_letter(context))
+            word.append(self._generate_letter(tuple([letter_id])))
             if word[-1] == self.profile.storage.get_special_token_id():
                 return tuple(word)
             elif len(word) == word_max_length:
@@ -156,7 +155,12 @@ class NGramTextGenerator:
         """
         Generates full sentence with fixed number of words given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_limit, int) or word_limit <= 0:
+            return ()
+        sentence = []
+        while len(sentence) < word_limit:
+            sentence.append(self._generate_word(context))
+        return tuple(sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
