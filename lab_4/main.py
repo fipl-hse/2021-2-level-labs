@@ -92,7 +92,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self.language_profile = language_profile
+        self._used_n_grams = []
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -100,26 +101,81 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple):
+            return -1
+
+        if len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
+            return -1
+
+        frequencies = {}
+
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:-1] == context and n_gram not in self._used_n_grams:
+                        frequencies[n_gram] = freq
+
+                if not frequencies:
+                    for n_gram, freq in trie.n_gram_frequencies.items():
+                        if n_gram not in self._used_n_grams:
+                            frequencies[n_gram] = freq
+
+                if not frequencies:
+                    self._used_n_grams = []
+                    for n_gram, freq in trie.n_gram_frequencies.items():
+                        if n_gram[:-1] == context:
+                            frequencies[n_gram] = freq
+
+                n_gram = max(frequencies, key=frequencies.get)
+                self._used_n_grams.append(n_gram)
+                return n_gram[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        pass
+        if not (isinstance(context, tuple) and isinstance(word_max_length, int)):
+            return ()
+
+        generated_word = list(context)
+
+        letter = None
+
+        while not (len(generated_word) == word_max_length
+                   or letter == self.language_profile.storage.get_special_token_id()):
+            letter = self._generate_letter(context)
+            context = *context[1:], letter
+            generated_word.append(letter)
+
+        if word_max_length == 1:
+            generated_word.append(self.language_profile.storage.get_special_token_id())
+
+        return tuple(generated_word)
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ()
+
+        generated_sentence = []
+        while len(generated_sentence) != word_limit:
+            word = self._generate_word(context)
+            generated_sentence.append(word)
+        print(tuple(generated_sentence))
+        return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
-        pass
-
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ''
+        letter_storage = LetterStorage()
+        sentence = self.generate_sentence(context, word_limit)
+        decode = decode_sentence(letter_storage, sentence)
+        print(decode)
 
 # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
