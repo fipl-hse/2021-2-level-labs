@@ -13,7 +13,24 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    invaluable_trash = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+                        '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
+                        '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    text = text.lower()
+    for symbols in invaluable_trash:
+        text = text.replace(symbols, '')
+    tokens = text.split()
+    tokenized_text = []
+    for token in tokens:
+        word = [letter for letter in token if letter.isalpha()]
+        word.append('_')
+        word.insert(0, '_')
+        word_tuple = tuple(word)
+        tokenized_text.append(word_tuple)
+    return tuple(tokenized_text)
+
 
 
 # 4
@@ -28,13 +45,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for token in elements:
+            for letter in token:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if len(self.storage) == 0:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +69,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    encoded_corpus = tuple(tuple(storage.get_id(letter) for letter in word) for word in corpus)
+    return encoded_corpus
 
 
 # 4
@@ -56,7 +83,10 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+    decoded_corpus = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
+    return decoded_corpus
 
 
 # 6
@@ -66,7 +96,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self.language_profile = language_profile
+        self._used_n_grams = []
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -74,7 +105,19 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        # if not isinstance(context, tuple):
+        #     return -1
+        # freq = self.language_profile['freq']
+        # new_dict = {}
+        # for n_gram, frequency in freq.items():
+        #     if n_gram[0] == context[0]:
+        #         self._used_n_grams.append(n_gram)
+        #         new_dict[n_gram] = frequency
+        # freq_dict = sorted(new_dict, key=new_dict.get, reverse=True)
+        # list_keys = list(freq_dict.keys())
+        # predict = list_keys[0]
+        # return 0
+
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
