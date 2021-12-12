@@ -13,7 +13,23 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    trash_symbols = '1234567890-=!@#$%^&*()_+{}[]":;?/>.<,\'\|/'
+
+    text = text.lower()
+    for letter in text:
+        if letter in trash_symbols:
+            text = text.replace(letter, '')
+
+    list_of_tokens = []
+    clear_text = text.split()
+    for word in clear_text:
+        tokens = ''
+        for letter in word:
+            tokens += letter
+        list_of_tokens.append(tuple(['_'] + list(tokens) + ['_']))
+    return tuple(list_of_tokens)
 
 
 # 4
@@ -28,13 +44,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for element in elements:
+            for letter in element:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +68,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    storage.update(corpus)
+    encoded_sentences = tuple(tuple(storage.get_id(letter)
+                                    for letter in word)
+                              for word in corpus)
+    return encoded_sentences
 
 
 # 4
@@ -56,7 +85,14 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+    storage.update(sentence)
+    encoded_sentences = tuple(tuple(storage.get_element(number)
+                                    for number in word)
+                              for word in sentence)
+    return encoded_sentences
+
 
 
 # 6
