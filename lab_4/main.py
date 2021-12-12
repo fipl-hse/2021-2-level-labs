@@ -20,7 +20,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
                 good_text += symbol
         result = []
         for word in good_text.split():
-            split_word = "" + word + "_"
+            split_word = "_" + word + "_"
             result.append(tuple(split_word))
         return tuple(result)
     else:
