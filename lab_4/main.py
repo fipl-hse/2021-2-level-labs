@@ -105,7 +105,7 @@ class NGramTextGenerator:
 
     def __init__(self, language_profile: LanguageProfile):
         self._used_n_grams = []
-        self.language_profile = language_profile
+        self.profile = language_profile
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -115,7 +115,7 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple) or len(context) != 1:
             return -1
-        for trie in self.language_profile.tries:
+        for trie in self.profile.tries:
             if trie.size == 2:
                 possible_n_grams = trie.n_gram_frequencies
         possible_n_grams = sorted(possible_n_grams, key=possible_n_grams.get, reverse=True)
@@ -133,7 +133,24 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
-        pass
+        if not isinstance(context, tuple):
+            return ()
+        if len(context) >= word_max_length:
+            return_context = []
+            for letter_id in context:
+                return_context.append(letter_id)
+            return_context.append(self.profile.storage.get_special_token_id())
+            return tuple(return_context)
+
+        word = [context[0]]
+        for letter_id in word:
+            word.append(self._generate_letter(context))
+            if word[-1] == self.profile.storage.get_special_token_id():
+                return tuple(word)
+            elif len(word) == word_max_length:
+                word.append(self.profile.storage.get_special_token_id())
+                return tuple(word)
+        return ()
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
