@@ -169,6 +169,7 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ""
+
         sentence_to_decode = self.generate_sentence(context, word_limit)
         decoded_sentence = ''
         for word in sentence_to_decode:
