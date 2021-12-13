@@ -21,9 +21,9 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     text = text.lower()
     underscore = ['_']
 
-    for i in text:
-        if i.isalpha() or i.isspace():
-            new_text += i
+    for symbol in text:
+        if symbol.isalpha() or symbol.isspace():
+            new_text += symbol
 
     for token in new_text.split():
         letters = []
