@@ -13,7 +13,22 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    new_text = []
+    text = text.lower()
+    for letter in text:
+        if letter.isalpha() or letter.isspace():
+            new_text.append(letter)
+    new_text = "".join(new_text)
+    words = []
+    for word in new_text.split():
+        letters = ['_']
+        for symbol in word:
+            letters.append(symbol)
+        letters.append("_")
+        words.append(tuple(letters))
+    return tuple(words)
 
 
 # 4
@@ -28,13 +43,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for token in elements:
+            for letter in token:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +67,16 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or \
+            not isinstance(corpus, tuple):
+        return ()
+    encoded_corpus = []
+    for token in corpus:
+        encoded_token = []
+        for letter in token:
+            encoded_token.append(storage.get_id(letter))
+        encoded_corpus.append(tuple(encoded_token))
+    return tuple(encoded_corpus)
 
 
 # 4
@@ -56,7 +87,16 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not isinstance(storage, LetterStorage) or \
+            not isinstance(sentence, tuple):
+        return ()
+    decoded_sentence = []
+    for token in sentence:
+        decoded_token = []
+        for letter in token:
+            decoded_token.append(storage.get_element(letter))
+        decoded_sentence.append(tuple(decoded_token))
+    return tuple(decoded_sentence)
 
 
 # 6
@@ -66,7 +106,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self.profile = language_profile
+        self._used_n_grams = []
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -74,7 +115,13 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple):
+            return -1
+        variants = {}
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+
+
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
