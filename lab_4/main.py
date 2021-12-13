@@ -207,7 +207,23 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
+            return -1
+
+        context_freq = {}
+        freq_sum = 0
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for key, value in trie.n_gram_frequencies.items():
+                    if context == key[:-1]:
+                        context_freq[key] = value
+                        if letter == key[-1]:
+                            freq_sum += value
+
+        if sum(context_freq.values()) == 0:
+            return 0.0
+        likelihood = freq_sum / sum(context_freq.values())
+        return likelihood
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -215,7 +231,24 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
+        if not isinstance(context, tuple) or not context:
+            return -1
+
+        context_letter = []
+        likelihoods = {}
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for key in trie.n_gram_frequencies:
+                    if context == key[:-1]:
+                        context_letter.append(key)
+        for ngram in context_letter:
+            likelihoods[ngram] = self._calculate_maximum_likelihood(ngram[-1], ngram[:-1])
+
+        if not likelihoods:
+            return 0?????????????????????????????????????????
+
+        possible_letter = max(likelihoods, key=likelihoods.get)[-1]
+        return possible_letter
 
 
 # 10
