@@ -154,12 +154,4 @@ if __name__ == '__main__':
     ACTUAL_8 = score_8()
 >>>>>>> b01e5e9536d704be9bc34c9d45f04732b2d3e7a7
     EXPECTED_SCORE = {'en': 24, 'de': 25}
-    assert ACTUAL_8 == EXPECTED_SCORE, 'Detection not working'
-
-    EXPECTED_LANGUAGE = score_10()[0]
-    EXPECTED_MIN_DISTANCE = score_10()[1]
-    print(EXPECTED_LANGUAGE, EXPECTED_MIN_DISTANCE)
-
-    # RESULT = ''
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    # assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED_SCORE, 'Detection not working'
