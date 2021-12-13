@@ -1,7 +1,7 @@
 export PYTHONPATH="$(pwd)/lab_1:$(pwd)/lab_2:$(pwd)/lab_3:$(pwd)/lab_4:$(pwd):${PYTHONPATH}"
 echo "Running start.py checks..."
 
-LABS=$(cat config/labs.txt)
+LABS=$(cat automation/labs.txt)
 WAS_FAILED=0
 
 for lab in $LABS; do
