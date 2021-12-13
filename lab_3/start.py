@@ -129,7 +129,6 @@ if __name__ == '__main__':
     EXPECTED_MIN_DISTANCE = score_10()[1]
     print(EXPECTED_LANGUAGE, EXPECTED_MIN_DISTANCE)
 
-<<<<<<< HEAD
     def get_6_score():
         """ score 6, params: k = 5, trie_level = 2
             predict UNKNOWN_SAMPLE
@@ -197,8 +196,8 @@ if __name__ == '__main__':
 
     RESULT = get_8_score()
     print(RESULT)
-=======
+
     # RESULT = ''
->>>>>>> c25476abf0de1109654e5871c3e582003725333e
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     # assert RESULT, 'Detection not working'
