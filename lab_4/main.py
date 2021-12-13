@@ -264,7 +264,8 @@ class NGramTextGenerator:
             sentence.append(self._generate_word(new_context))
 
             # #Start with special token
-            # sentence.append(self._generate_word((self.language_profile.storage.get_special_token_id(),)))
+            # special_token_id = self.language_profile.storage.get_special_token_id()
+            # sentence.append(self._generate_word((special_token_id,)))
 
             # #Start with the last generated context of context length of the last word
             # sentence.append(self._generate_word(sentence[len(sentence) - 1][-context_length:]))
