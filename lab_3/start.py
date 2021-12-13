@@ -20,29 +20,29 @@ if __name__ == '__main__':
     # print(calculate_distance(unknown_profile, en_profile, 5, 2))
     # print(calculate_distance(unknown_profile, de_profile, 5, 2))
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
+    k = 5
+    trie_level = 2
+    storage = LetterStorage()
     tokenized_unk = tokenize_by_sentence(UNKNOWN_SAMPLE)
-    unknown_storage = LetterStorage()
-    unknown_storage.update(tokenized_unk)
-    encoded_unk_corpus = encode_corpus(unknown_storage, tokenized_unk)
-    unknown_profile = LanguageProfile(letter_storage=unknown_storage, language_name='unk')
-    unknown_profile.create_from_tokens(encoded_unk_corpus, (2,))
+    storage.update(tokenized_unk)
+    encoded_unk_corpus = encode_corpus(storage, tokenized_unk)
+    unknown_profile = LanguageProfile(letter_storage=storage, language_name='unk')
+    unknown_profile.create_from_tokens(encoded_unk_corpus, (trie_level,))
 
     tokenized_eng = tokenize_by_sentence(ENG_SAMPLE)
-    eng_storage = LetterStorage()
-    eng_storage.update(tokenized_eng)
-    encoded_eng_corpus = encode_corpus(eng_storage, tokenized_eng)
-    eng_profile = LanguageProfile(letter_storage=eng_storage, language_name='eng')
-    eng_profile.create_from_tokens(encoded_eng_corpus, (2,))
+    storage.update(tokenized_eng)
+    encoded_eng_corpus = encode_corpus(storage, tokenized_eng)
+    eng_profile = LanguageProfile(letter_storage=storage, language_name='eng')
+    eng_profile.create_from_tokens(encoded_eng_corpus, (trie_level,))
 
     tokenized_ger = tokenize_by_sentence(GERMAN_SAMPLE)
-    ger_storage = LetterStorage()
-    ger_storage.update(tokenized_ger)
-    encoded_ger_corpus = encode_corpus(ger_storage, tokenized_ger)
-    ger_profile = LanguageProfile(letter_storage=ger_storage, language_name='ger')
-    ger_profile.create_from_tokens(encoded_ger_corpus, (2,))
+    storage.update(tokenized_ger)
+    encoded_ger_corpus = encode_corpus(storage, tokenized_ger)
+    ger_profile = LanguageProfile(letter_storage=storage, language_name='ger')
+    ger_profile.create_from_tokens(encoded_ger_corpus, (trie_level,))
 
-    eng_distance = calculate_distance(unknown_profile, eng_profile, 5, 2)
-    ger_distance = calculate_distance(unknown_profile,ger_profile, 5, 2)
+    eng_distance = calculate_distance(unknown_profile, eng_profile, k, trie_level)
+    ger_distance = calculate_distance(unknown_profile,ger_profile, k, trie_level)
     if eng_distance == EXPECTED_DISTANCE_TO_EN_DE_PROFILES[0] and\
         ger_distance == EXPECTED_DISTANCE_TO_EN_DE_PROFILES[1]:
         print('You are awesome!')
