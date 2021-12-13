@@ -3,11 +3,11 @@ Lab 4
 Language generation algorithm based on language profiles
 """
 
+import json
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
 from lab_4.language_profile import NGramTrie
-import json
 
 
 # 4
@@ -214,7 +214,8 @@ class NGramTextGenerator:
 
         context_length = len(context)
 
-        if context_length > 1 and context[-1] == self.language_profile.storage.get_special_token_id():
+        if context_length > 1 \
+                and context[-1] == self.language_profile.storage.get_special_token_id():
             context = (self.language_profile.storage.get_special_token_id(),)
 
         for character in context:
@@ -259,10 +260,14 @@ class NGramTextGenerator:
 
             new_context = tuple(all_generated_characters[-context_length:])
 
-            sentence.append(self._generate_word(new_context))  # Start with the last generated context of context length
+            # Start with the last generated context of context length
+            sentence.append(self._generate_word(new_context))
 
-            # sentence.append(self._generate_word((self.language_profile.storage.get_special_token_id(),))) #Start with special token
-            # sentence.append(self._generate_word(sentence[len(sentence) - 1][-context_length:])) #Start with the last generated context of context length of the last word
+            # #Start with special token
+            # sentence.append(self._generate_word((self.language_profile.storage.get_special_token_id(),)))
+
+            # #Start with the last generated context of context length of the last word
+            # sentence.append(self._generate_word(sentence[len(sentence) - 1][-context_length:]))
 
         return tuple(sentence)
 
@@ -276,7 +281,8 @@ class NGramTextGenerator:
 
         sentence = self.generate_sentence(context, word_limit)
 
-        return translate_sentence_to_plain_text(decode_sentence(self.language_profile.storage, sentence))
+        return translate_sentence_to_plain_text(decode_sentence(self.language_profile.storage,
+                                                                sentence))
 
 
 # 6
@@ -345,8 +351,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         if all_appropriate_context_frequency != 0.0:
             return required_letter_context_frequency / all_appropriate_context_frequency
-        else:
-            return 0.0
+
+        return 0.0
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -368,11 +374,11 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         if letters_likelihood:
             return max(letters_likelihood, key=letters_likelihood.get)
-        else:
-            for trie in self.language_profile.tries:
-                if trie.size == 1:
-                    next_ngram = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
-                    return next_ngram[len(next_ngram) - 1]
+
+        for trie in self.language_profile.tries:
+            if trie.size == 1:
+                next_ngram = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
+                return next_ngram[len(next_ngram) - 1]
 
         return -1
 
@@ -396,7 +402,8 @@ class BackOffGenerator(NGramTextGenerator):
 
         context_size = len(context)
 
-        tries_sorted_by_size_in_reverse = sorted(self.language_profile.tries, key=lambda ngram_trie: -ngram_trie.size)
+        tries_sorted_by_size_in_reverse = sorted(self.language_profile.tries,
+                                                 key=lambda ngram_trie: -ngram_trie.size)
 
         for trie in tries_sorted_by_size_in_reverse:
             if trie.size <= context_size + 1:
@@ -459,19 +466,19 @@ class PublicLanguageProfile(LanguageProfile):
                     decoded_ngram.append(self.storage.get_id(processed_letter))
 
                 if tuple(decoded_ngram) in decoded_ngrams:
-                    decoded_ngrams[tuple(decoded_ngram)] = decoded_ngrams[tuple(decoded_ngram)] + data['freq'][ngram]
+                    decoded_ngrams[tuple(decoded_ngram)] += data['freq'][ngram]
                 else:
                     decoded_ngrams[tuple(decoded_ngram)] = data['freq'][ngram]
 
             ngram_sizes_dict = {}
 
-            for ngram in decoded_ngrams:
+            for ngram, freq in decoded_ngrams.items():
                 size = len(ngram)
 
                 if size not in ngram_sizes_dict:
                     ngram_sizes_dict[size] = {}
 
-                ngram_sizes_dict[size][ngram] = decoded_ngrams[ngram]
+                ngram_sizes_dict[size][ngram] = freq
 
             for size, group in ngram_sizes_dict.items():
                 trie = NGramTrie(size, self.storage)

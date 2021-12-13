@@ -18,7 +18,11 @@ PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 if __name__ == '__main__':
 
     def score_4():
-        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") as file:
+        """
+        Score 4
+        """
+        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
+                as file:
             text = file.read()
 
         tokenized = tokenize_by_letters(text)
@@ -32,7 +36,11 @@ if __name__ == '__main__':
         print("")
 
     def score_6():
-        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") as file:
+        """
+        Score 6
+        """
+        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
+                as file:
             text = file.read()
 
         tokenized = tokenize_by_letters(text)
@@ -56,7 +64,11 @@ if __name__ == '__main__':
         print("")
 
     def score_8():
-        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") as file:
+        """
+        Score 8
+        """
+        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
+                as file:
             text = file.read()
 
         tokenized = tokenize_by_letters(text)
@@ -80,6 +92,9 @@ if __name__ == '__main__':
         print("")
 
     def score_10():
+        """
+        Score 10
+        """
         storage = LetterStorage()
 
         profile = PublicLanguageProfile(storage, 'ne')
@@ -89,9 +104,12 @@ if __name__ == '__main__':
         likelihood_text_generator = LikelihoodBasedTextGenerator(profile)
         backoff_text_generator = BackOffGenerator(profile)
         print("Score 10!")
-        print(text_generator.generate_decoded_sentence((storage.get_special_token_id(),), 5))
-        print(likelihood_text_generator.generate_decoded_sentence((storage.get_special_token_id(),), 5))
-        print(backoff_text_generator.generate_decoded_sentence((storage.get_special_token_id(),), 5))
+        print(text_generator.generate_decoded_sentence(
+            (storage.get_special_token_id(),), 5))
+        print(likelihood_text_generator.generate_decoded_sentence(
+            (storage.get_special_token_id(),), 5))
+        print(backoff_text_generator.generate_decoded_sentence(
+            (storage.get_special_token_id(),), 5))
 
 
     #score_4()
