@@ -115,24 +115,30 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple):
             return -1
+        possible_n_grams = {}
         for trie in self.profile.tries:
-            if trie.size == 2:
+            if trie.size == len(context) + 1:
                 possible_n_grams = trie.n_gram_frequencies
+        if not possible_n_grams:
+            return -1
         possible_n_grams = sorted(possible_n_grams, key=possible_n_grams.get, reverse=True)
-        for n_gram_index, possible_n_gram in enumerate(possible_n_grams):
-            if possible_n_gram not in self._used_n_grams and possible_n_gram[0] == context[0]:
+        while True:
+            for n_gram_index, possible_n_gram in enumerate(possible_n_grams):
+                if possible_n_gram not in self._used_n_grams and possible_n_gram[0] == context[0]:
                     self._used_n_grams.append(possible_n_gram)
                     return possible_n_gram[-1]
-            elif n_gram_index == len(possible_n_grams) - 1 and self._used_n_grams:
-                self._used_n_grams.clear()
-                continue
-        return -1
+                elif n_gram_index == len(possible_n_grams) - 1 and self._used_n_grams:
+                    self._used_n_grams.clear()
+                    n_gram_index = 0
+            if n_gram_index == len(possible_n_grams) - 1 and not self._used_n_grams:
+                break
+        return possible_n_grams[0][-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        if not isinstance(context, tuple):
+        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
             return ()
         if len(context) >= word_max_length:
             return_context = []
@@ -166,7 +172,14 @@ class NGramTextGenerator:
         """
         Generates full sentence and decodes it
         """
-        pass
+        sentence = self.generate_sentence(context, word_limit)
+        decoded_sentence = []
+        for word in sentence:
+            decoded_word = []
+            for letter_id in word:
+                decoded_word.append(self.profile.storage.get_element(letter_id))
+            decoded_sentence.append(decoded_word)
+        return translate_sentence_to_plain_text(tuple(decoded_sentence))
 
 
 # 6
@@ -186,7 +199,6 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     decoded_sentence = ''.join(sentence)
     decoded_sentence = decoded_sentence.replace('__', ' ')
     return decoded_sentence.capitalize()
-
 
 
 # 8
