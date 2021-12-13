@@ -115,11 +115,11 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        if not isinstance(context, tuple):
+        """if not isinstance(context, tuple):
             return -1
         variants = {}
         for trie in self.profile.tries:
-            if trie.size == len(context) + 1:
+            if trie.size == len(context) + 1:"""
 
 
 
