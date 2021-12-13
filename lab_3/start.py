@@ -95,63 +95,10 @@ if __name__ == '__main__':
 
         return detector.detect(unk_profile, k, (trie_level,))
 
-    def score_10(k=1000, trie_levels=(2,)):
-        """
-        score 10, params: k = 1000, trie_levels = (2,)
-        predict SECRET_SAMPLE
-        EXPECTED_LANGUAGE = ?
-        EXPECTED_MIN_DISTANCE = ?
-        """
-        # use create_from_tokens
-        secret_profile.create_from_tokens(encoded_secret_text, trie_levels)
-
-        detector = ProbabilityLanguageDetector()
-
-        for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
-            profile = LanguageProfile(storage, file_name)
-            profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'profiles', file_name))
-            detector.register_language(profile)
-
-        probabilities = detector.detect(secret_profile, k, trie_levels)
-        predicted_language = min(probabilities, key=probabilities.get)
-
-        return predicted_language[0], probabilities[predicted_language]
-
     ACTUAL_6 = score_6()
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
-
-    RESULT_FOR_6 = distance_unk_eng, distance_unk_de
-    print(RESULT_FOR_6)
-
-    # score 8, k = 5, trie_level = 3
-    # predict UNKNOWN_SAMPLE
-    # print(detector.detect(profile_unk, 5, 3))
-    # EXPECTED_SCORE = {'en': 24, 'de': 25}
-
-    unknown_profile_8 = LanguageProfile(storage, 'unk')
-    eng_profile_8 = LanguageProfile(storage, 'en')
-    de_profile_8 = LanguageProfile(storage, 'de')
-
-    unknown_profile_8.create_from_tokens(unk_enc, (3, 2))
-    eng_profile_8.create_from_tokens(eng_enc, (3, 2))
-    de_profile_8.create_from_tokens(de_enc, (3, 2))
-
-    calculate_distance(unknown_profile_8, eng_profile_8, 5, 3)
-    calculate_distance(unknown_profile_8, de_profile_8, 5, 3)
-
-    unknown_profile_8.save('unknown_profile.json')
-    profile_unk = LanguageProfile(storage, 'unk')
-    profile_unk.open('unknown_profile.json')
-
-    detector = LanguageDetector()
-
-    detector.register_language(eng_profile_8)
-    detector.register_language(de_profile_8)
-    RESULT_FOR_8 = detector.detect(profile_unk, 5, (3, 2))
-
     assert ACTUAL_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
 
-    ACTUAL_8 = score_8()
-
+    RESULT = score_8()
     EXPECTED_SCORE = {'en': 24, 'de': 25}
     assert RESULT == EXPECTED_SCORE, 'Detection not working'
