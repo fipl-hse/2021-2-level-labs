@@ -174,7 +174,19 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
+    if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
+        return ''
+    sentence = []
+    for word in decoded_corpus:
+        sentence.extend(word)
+    if sentence[0] == '_':
+        sentence[0] = ''
+    if sentence[-1] == '_':
+        sentence[-1] = '.'
+    decoded_sentence = ''.join(sentence)
+    decoded_sentence = decoded_sentence.replace('__', ' ')
+    return decoded_sentence.capitalize()
+
 
 
 # 8
