@@ -7,13 +7,13 @@ from lab_4.main import tokenize_by_letters, LetterStorage
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
-    whole_text = file_to_read.read()
-
 if __name__ == '__main__':
 
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
+
+    with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
+        whole_text = file_to_read.read()
 
     token_text = tokenize_by_letters(whole_text)
     storage = LetterStorage()
