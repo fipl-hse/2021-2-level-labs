@@ -117,10 +117,11 @@ class NGramTextGenerator:
         for trie in self.profile.tries:
             if trie.size == len(context) + 1:
                 for key, value in trie.n_gram_frequencies.items():
-                    if key[:len(context)] == context and key not in self._used_n_grams:
-                        result_dict[key] = value
                     if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
                         self._used_n_grams = []
+                    if key[:len(context)] == context and key not in self._used_n_grams:
+                        result_dict[key] = value
+
                 if result_dict:
                     result = max(result_dict.keys(), key=result_dict.get)
                     self._used_n_grams.append(result)
@@ -185,13 +186,14 @@ class NGramTextGenerator:
         decoded = raw_decoded.replace('__', ' ').replace('_', '').capitalize() + '.'
         return decoded
 
+
 # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
     if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
-        return ''
+        return ""
 
     raw_result = ""
 
