@@ -95,15 +95,32 @@ if __name__ == '__main__':
 
         return detector.detect(unk_profile, k, (trie_level,))
 
+    def score_10(k=1000, trie_levels=(2,)):
+        """
+        score 10, params: k = 1000, trie_levels = (2,)
+        predict SECRET_SAMPLE
+        EXPECTED_LANGUAGE = ?
+        EXPECTED_MIN_DISTANCE = ?
+        """
+        # use create_from_tokens
+        secret_profile.create_from_tokens(encoded_secret_text, trie_levels)
+
+        detector = ProbabilityLanguageDetector()
+
+        for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
+            profile = LanguageProfile(storage, file_name)
+            profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'profiles', file_name))
+            detector.register_language(profile)
+
+        probabilities = detector.detect(secret_profile, k, trie_levels)
+        predicted_language = min(probabilities, key=probabilities.get)
+
+        return predicted_language[0], probabilities[predicted_language]
 
     ACTUAL_6 = score_6()
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
     assert ACTUAL_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
 
-    ACTUAL_8 = score_8()
+    RESULT = score_8()
     EXPECTED_SCORE = {'en': 24, 'de': 25}
-    assert ACTUAL_8 == EXPECTED_SCORE, 'Detection not working'
-
-    # RESULT = ''
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    # assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED_SCORE, 'Detection not working'
