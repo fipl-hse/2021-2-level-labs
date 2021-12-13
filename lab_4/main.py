@@ -117,10 +117,10 @@ class NGramTextGenerator:
         for trie in self.profile.tries:
             if trie.size == len(context) + 1:
                 for key, value in trie.n_gram_frequencies.items():
-                    if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
-                        self._used_n_grams = []
                     if key[:len(context)] == context and key not in self._used_n_grams:
                         result_dict[key] = value
+                    if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
+                        self._used_n_grams = []
 
                 if result_dict:
                     result = max(result_dict.keys(), key=result_dict.get)
@@ -157,7 +157,6 @@ class NGramTextGenerator:
         """
         Generates full sentence with fixed number of words given.
         """
-
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
 
@@ -167,24 +166,24 @@ class NGramTextGenerator:
             sentence.append(word)
             context = tuple(word[-len(context):])
 
+
         return tuple(sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
-        if not isinstance(context, tuple) or isinstance(word_limit, int):
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ""
 
         sentence = self.generate_sentence(context, word_limit)
-        raw_decoded = ""
+        decoded = []
 
         for word in sentence:
-            for id_symbol in word:
-                raw_decoded += self.profile.storage.get_element(id_symbol)
+            for letter_id in word:
+                decoded.append(self.profile.storage.get_element(letter_id))
 
-        decoded = raw_decoded.replace('__', ' ').replace('_', '').capitalize() + '.'
-        return decoded
+        return translate_sentence_to_plain_text(tuple(decoded))
 
 
 # 6
