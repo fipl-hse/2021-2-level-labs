@@ -39,6 +39,5 @@ if __name__ == '__main__':
     print('Generated sentences for 8:', RESULT_8)
 
     RESULT = RESULT_8
-    print(RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
