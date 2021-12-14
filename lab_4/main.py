@@ -233,8 +233,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         likelihoods = {}
         for letter in self.profile.storage.storage.values():
             letter_likelihood = self._calculate_maximum_likelihood(letter, context)
-            if letter_likelihood > 0.0:
-                likelihoods[letter] = letter_likelihood
+            likelihoods[letter] = letter_likelihood
         if not likelihoods:
             for trie in self.profile.tries:
                 ngram = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[-1]
