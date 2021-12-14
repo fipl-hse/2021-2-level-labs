@@ -5,9 +5,9 @@ Language generation starter
 import os
 from lab_4.main import tokenize_by_letters, LetterStorage
 
-PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(file))
+PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-if name == 'main':
+if __name__ == '__main__':
     with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as fin:
         text = fin.read()
 
