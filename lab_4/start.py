@@ -1,17 +1,23 @@
+"""
+Language generation starter
+"""
+
+import os
 from lab_4.main import tokenize_by_letters, LetterStorage
 
-with open('reference_text.txt', 'r', encoding='utf-8') as fin:
-    INPUT_TEXT = fin.read()
+PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(file))
 
+if name == 'main':
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as fin:
+        text = fin.read()
 
-storage = LetterStorage()
-TOKENIZED_TEXT = tokenize_by_letters(INPUT_TEXT)
-storage.update(TOKENIZED_TEXT)
+    tokenized_text = tokenize_by_letters(text)
+    storage = LetterStorage()
+    storage.update(tokenized_text)
 
-letters_count = storage.get_letter_count()
-storage_keys_list = list(storage.storage.keys())
+    print('Count of letters: ', storage.get_letter_count())
+    print('Top 5 lowest ids: ', list(storage.storage.items())[:5])
+    print('Top 5 highest ids: ', list(storage.storage.items())[-5:])
 
-
-print("Letters  count: {letters_count}")
-print("5 lowest letters id: {storage_keys_list[:5]}")
-print("5 highest letters id: {storage_keys_list[-5:]}")
+    RESULT = storage.get_letter_count(), list(storage.storage.items())[:5], list(storage.storage.items())[-5:]
+    assert RESULT, 'Detection not working'
