@@ -129,8 +129,7 @@ class NGramTextGenerator:
                     accurate_prediction = max(trie.n_gram_frequencies.keys(),
                                           key=trie.n_gram_frequencies.get)
                 return accurate_prediction[-1]
-        else:
-            return -1
+        return -1
 
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
