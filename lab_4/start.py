@@ -4,7 +4,6 @@ Language generation starter
 
 import os
 from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, \
-    decode_sentence, translate_sentence_to_plain_text, \
     LanguageProfile, NGramTextGenerator, LikelihoodBasedTextGenerator
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
