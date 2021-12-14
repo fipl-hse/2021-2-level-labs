@@ -216,7 +216,23 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not isinstance(letter, int) or not isinstance(context, tuple):
+            return -1
+        likelihood = {}
+        pattern_probability = 0.0
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, frequency in trie.n_gram_frequencies:
+                    if n_gram[:-1] == context:
+                        likelihood[n_gram] = frequency
+                        if n_gram[-1] == letter:
+                            pattern_probability = frequency
+        if not likelihood:
+            return pattern_probability
+        context_frequency = 0
+        for freq in likelihood.values():
+            context_frequency += freq
+        return pattern_probability / context_frequency
 
     def _generate_letter(self, context: tuple) -> int:
         """
