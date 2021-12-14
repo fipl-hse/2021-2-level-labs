@@ -40,7 +40,6 @@ class LetterStorage(Storage):
     """
     Stores letters and their ids
     """
-
     def update(self, elements: tuple) -> int:
         """
         Fills a storage by letters from the tuple
@@ -121,10 +120,11 @@ class NGramTextGenerator:
                     accurate_prediction = max(prediction.keys(), key=prediction.get)
                     self._used_n_grams.append(accurate_prediction)
                 else:
-                    accurate_prediction = max(trie.n_gram_frequencies.keys(), key=trie.n_gram_frequencies.get)
+                    accurate_prediction = max(trie.n_gram_frequencies.keys(),
+                                              key=trie.n_gram_frequencies.get)
                 return accurate_prediction[-1]
-            else:
-                return -1
+        else:
+            return -1
 
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
@@ -136,14 +136,14 @@ class NGramTextGenerator:
             return ()
         generated_word = list(context)
         while len(generated_word) <= word_max_length:
-            if word_max_length == 1:
-                generated_word.append(self.profile.storage.get_special_token_id())
-                return tuple(generated_word)
-            else:
+            if word_max_length != 1:
                 letter = self._generate_letter(context)
                 generated_word.append(letter)
                 if letter == self.profile.storage.get_special_token_id():
                     break
+            else:
+                generated_word.append(self.profile.storage.get_special_token_id())
+                return tuple(generated_word)
             context = tuple(generated_word[-1:])
         return tuple(generated_word)
 
