@@ -11,7 +11,8 @@ from lab_4.main import (tokenize_by_letters, LetterStorage,
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
-    with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8')\
+                                                                              as file_to_read:
         text = file_to_read.read()
 
     tokenized_text = tokenize_by_letters(text)
