@@ -5,18 +5,19 @@ Language generation algorithm based on language profiles
 
 from typing import Tuple
 from lab_4.storage import Storage
-from lab_4.language_profile import LanguageProfile, NGramTrie
+from lab_4.language_profile import LanguageProfile
+
 
 # 4
 def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    if not isinstance(text,str):
+    if not isinstance(text, str):
         return -1
     not_letters = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*',
                    '(', ')', '_', '-', '+', '=', '{', '[', ']', '}',
-                   '|', '\\', ':', ';', '"', "'", '<', ',', '>','.',
+                   '|', '\\', ':', ';', '"', "'", '<', ',', '>', '.',
                    '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     for not_letter in not_letters:
         text = text.replace(not_letter, "")
@@ -30,6 +31,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
         word_by_letter.append('_')
         tokenized_text.append(tuple(word_by_letter))
     return tuple(tokenized_text)
+
 
 # 4
 class LetterStorage(Storage):
@@ -46,9 +48,9 @@ class LetterStorage(Storage):
         if not isinstance(elements, tuple):
             return -1
         indexes = list(self.storage.values())
-        #if indexes != []:
-            #index = max(indexes) + 1
-        #else:
+        # if indexes != []:
+        # index = max(indexes) + 1
+        # else:
         index = 1
         for word in elements:
             for letter in word:
@@ -85,6 +87,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         encoded_corpus.append(tuple(encoded_word))
     return tuple(encoded_corpus)
 
+
 # 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     """
@@ -120,68 +123,96 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        if not (isinstance(context, tuple) and len(context) != 1):
+        possible_n_grams = []
+        if (not isinstance(context, tuple)) or len(context) < 1 or self.language_profile.tries == []:
             return -1
-        possible_n_grams = {}
-        all_is_possible = {}
+        all_n_grams = []
+        found_tries = 1
+        used_n_grams = self._used_n_grams
+        result = ()
         for trie in self.language_profile.tries:
-            all_is_possible = sorted(trie.n_gram_frequencies, key=lambda x: x[1], reverse=True)
-            if trie.n_grams in self._used_n_grams:
+            if trie.size == len(context) + 1:
+                found_tries = 0
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram not in used_n_grams:
+                        all_n_grams.append((freq, n_gram))
+            if all_n_grams == []:
                 self._used_n_grams = []
-            for n_gram in trie.n_gram_frequencies:
-                if n_gram not in self._used_n_grams and len(n_gram) > len(context):
-                    counter = 0
-                    for index, letter in enumerate(context):
-                        if context[index] != n_gram[index]:
-                            counter +=1
-                            break
-                    if counter == 0:
-                        possible_n_grams[n_gram] = trie.n_gram_frequencies[n_gram]
-        if possible_n_grams == {}:
-            used_n_gram = all_is_possible[0]
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    all_n_grams.append((freq, n_gram))
+        if found_tries:
+            return -1
+        for n_gram_n_fr in all_n_grams:
+            counter = 0
+            for index, letter in enumerate(context):
+                if letter != n_gram_n_fr[1][index]:
+                    counter -= 1
+            if counter == 0:
+                possible_n_grams.append(n_gram_n_fr)
+        if possible_n_grams == []:
+            all_n_grams = sorted(all_n_grams)
+            result = all_n_grams[-1][1]
         else:
-            possible_n_grams_tuple = sorted(possible_n_grams, key=lambda x: x[1], reverse=True)
-            used_n_gram = possible_n_grams_tuple[0]
-        self._used_n_grams.append(used_n_gram)
-        result = used_n_gram[len(context)]
-        return result
+            possible_n_grams = sorted(possible_n_grams, key=lambda x: x[0], reverse=True)
+            result = possible_n_grams[0][1]
+        self._used_n_grams.append(result)
+        return result[-1]
+
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        if not (isinstance(context,tuple) and isinstance(word_max_length, int)):
+        if not (isinstance(context, tuple) and isinstance(word_max_length, int)):
             return ()
         generated_word = []
+        stop = -len(context)-1
         for number in context:
             generated_word.append(number)
         while len(generated_word) < word_max_length:
             letter = self._generate_letter(context)
             generated_word.append(letter)
+            if len(generated_word) <= len(context):
+                new_context = generated_word[-1::-1]
+            else:
+                new_context = generated_word[-1:stop:-1]
+            context = tuple(new_context[::-1])
             if letter == 1:
                 break
+        if generated_word[-1] != 1:
+            generated_word.append(1)
         return tuple(generated_word)
-
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
-        if not (isinstance(context,tuple) and isinstance(word_limit, int)):
+        if not (isinstance(context, tuple) and isinstance(word_limit, int)):
             return ()
         generated_sentence = []
+        stop = -1 - len(context)
         while len(generated_sentence) < word_limit:
             generated_word = self._generate_word(context)
             generated_sentence.append(generated_word)
-            context = generated_word[-1]
+            new_context = generated_word[-1:stop:-1]
+            context = tuple(new_context[::-1])
         return tuple(generated_sentence)
-
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
-        pass
+        if not (isinstance(context, tuple) and isinstance(word_limit, int)):
+            return ""
+        encoded_corpus = self.generate_sentence(context, word_limit)
+        decoded_sentence = []
+        for word in encoded_corpus:
+            encoded_word = []
+            for id in word:
+                encoded_word.append(self.language_profile.storage.get_element(id))
+            decoded_sentence.append(tuple(encoded_word))
+        normal_sentence = translate_sentence_to_plain_text(tuple(decoded_sentence))
+        return normal_sentence
 
 
 # 6
@@ -189,7 +220,22 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
+    if not isinstance(decoded_corpus,tuple):
+        return ''
+    list_of_symbols = []
+    for word in decoded_corpus:
+        for symbol in word:
+            list_of_symbols.append(symbol)
+    if list_of_symbols[0] == '_':
+        del list_of_symbols[0]
+    first_letter = list_of_symbols[0]
+    first_letter = first_letter.upper()
+    list_of_symbols[0] = first_letter
+    list_of_symbols[-1] = '.'
+    string_version = ''.join(list_of_symbols)
+    string_version = string_version.replace('__', ' ')
+    return string_version
+
 
 
 # 8
