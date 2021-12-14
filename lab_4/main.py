@@ -13,7 +13,20 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str):
+        return -1
+    text = text.lower()
+    sentences = ''
+    for symbol in text:
+        if symbol.isalpha() or symbol.isspace():
+            sentences += symbol
+    sentences_list = []
+    for word in sentences.split():
+        word_list = []
+        for letter in word:
+            word_list.append(letter)
+        sentences_list.append(tuple(['_'] + word_list + ['_']))
+    return tuple(sentences_list)
 
 
 # 4
@@ -28,13 +41,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for word in elements:
+            for letter in word:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if len(self.storage) == 0:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +65,16 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
+    storage.update(corpus)
+    encoded_corpus_list = []
+    for word in corpus:
+        word_list = []
+        for letter in word:
+            word_list.append(storage.get_id(letter))
+        encoded_corpus_list.append(tuple(word_list))
+    return tuple(encoded_corpus_list)
 
 
 # 4
@@ -56,7 +85,15 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
+        return ()
+    decoded_corpus_list = []
+    for word in sentence:
+        word_list = []
+        for letter in word:
+            word_list.append(storage.get_element(letter))
+        decoded_corpus_list.append(tuple(word_list))
+    return tuple(decoded_corpus_list)
 
 
 # 6
