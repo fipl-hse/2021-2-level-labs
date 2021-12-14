@@ -121,7 +121,7 @@ if __name__ == '__main__':
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
     assert ACTUAL_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
 
-    RESULT = score_8()
+    ACTUAL_8 = score_8()
     EXPECTED_SCORE = {'en': 24, 'de': 25}
     assert ACTUAL_8 == EXPECTED_SCORE, 'Detection not working'
 
