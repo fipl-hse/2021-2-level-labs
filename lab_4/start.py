@@ -46,7 +46,7 @@ if __name__ == '__main__':
         RESULT_8.append(text_generator_8.generate_decoded_sentence((8,), length))
 
     # score 8
-    print('Generated sentence for 8:', RESULT_8)
+    print('Generated sentences for 8:', RESULT_8)
 
     RESULT = RESULT_8
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
