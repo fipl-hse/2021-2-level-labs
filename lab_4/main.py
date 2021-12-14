@@ -6,14 +6,31 @@ Language generation algorithm based on language profiles
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-
+import re
 
 # 4
 def tokenize_by_letters(text: str) -> Tuple or int:
     """
-    Tokenizes given sequence by letters
-    """
+        Tokenizes given sequence by letters
+        """
     pass
+
+    if not isinstance(text, str):
+        return -1
+    new_text = ''
+    for element in text.lower():
+        if element.isalpha() or element.isspace():
+            new_text = new_text + element
+    token_list = []
+    for token in new_text.split():
+        tokens = '_'
+        for element in token:
+            tokens = tokens + element
+        tokens += '_'
+        token_list.append(tuple(tokens))
+    return tuple(token_list)
+
+
 
 
 # 4
@@ -29,12 +46,24 @@ class LetterStorage(Storage):
         :return: 0 if succeeds, -1 if not
         """
         pass
+        if not isinstance(elements, tuple):
+            return -1
+        for token in elements:
+            for element in token:
+                self._put(element)
+        return 0
+
+
+
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
         pass
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -46,7 +75,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :return: a tuple of the encoded letters
     """
     pass
-
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = tuple(tuple(storage.get_id(element)
+                                 for element in token)
+                           for token in corpus)
+    return encoded_corpus
 
 # 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
