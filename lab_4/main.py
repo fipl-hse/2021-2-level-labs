@@ -161,12 +161,8 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ''
         sentence = self.generate_sentence(context, word_limit)
-        raw_string = ''
-        for word in sentence:
-            for element_id in word:
-                letter = self.profile.storage.get_element(element_id)
-                raw_string += letter
-        final_sentence = raw_string.replace('__', ' ').replace('_', '').capitalize() + '.'
+        final_sentence = translate_sentence_to_plain_text(decode_sentence(self.profile.storage.storage,
+                                                                          sentence))
         return final_sentence
 
 
