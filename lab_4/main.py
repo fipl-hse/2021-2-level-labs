@@ -13,7 +13,27 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text, str) and text != '':
+        return -1
+
+    text = list(text)
+    new_text = ''
+
+    for i, item in enumerate(text):
+        if item.isalpha() or item.isdigit() or item == ' ' or item == '\n':
+            if item == '\n':
+                new_text = new_text + " "
+            else:
+                new_text = new_text + item
+    new_text = new_text.lower().split()
+    for i, word in enumerate(new_text):
+        new_word = ['_']
+        for j, letter in enumerate(word):
+            new_word.append(letter)
+        new_word.append('_')
+        new_text[i] = tuple(new_word)
+    text_tuple = tuple(new_text)
+    return text_tuple
 
 
 # 4
@@ -28,13 +48,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for word in elements:
+            for letter in word:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
+        if len(self.storage) == 0:
+            return -1
+        return len(self.storage)
 
 
 # 4
@@ -45,7 +72,16 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    empty_tuple = ()
+    if (not isinstance(storage, LetterStorage)) or (not isinstance(corpus, tuple)):
+        return empty_tuple
+    corpus = list(corpus)
+    for i, word in enumerate(corpus):
+        word = list(word)
+        for j, letter in enumerate(word):
+            word[j] = storage.get_id(letter)
+        corpus[i] = tuple(word)
+    return tuple(corpus)
 
 
 # 4
@@ -56,7 +92,16 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    empty_tuple = ()
+    if (not isinstance(storage, LetterStorage)) or (not isinstance(sentence, tuple)):
+        return empty_tuple
+    sentence = list(sentence)
+    for i, word in enumerate(sentence):
+        word = list(word)
+        for j, letter in enumerate(word):
+            word[j] = storage.get_element(letter)
+        sentence[i] = tuple(word)
+    return tuple(sentence)
 
 
 # 6
