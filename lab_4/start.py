@@ -15,7 +15,8 @@ if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
-    with open(os.path.join(PATH_TO_TEXT_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
+    with open(os.path.join(PATH_TO_TEXT_FOLDER, 'reference_text.txt'), 'r',
+              encoding='utf-8') as file_to_read:
         reference_text = file_to_read.read()
 
     #score 4
@@ -45,8 +46,3 @@ if __name__ == '__main__':
     print(RESULT_FOR_6)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT_FOR_6, 'Detection not working'
-
-
-
-
-

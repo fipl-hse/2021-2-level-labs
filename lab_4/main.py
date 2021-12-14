@@ -122,7 +122,8 @@ class NGramTextGenerator:
                     generate_letter = max(letters.keys(), key=letters.get)
                     self._used_n_grams.append(generate_letter)
                 else:
-                    generate_letter = max(trie.n_gram_frequencies.keys(), key=trie.n_gram_frequencies.get)
+                    generate_letter = max(trie.n_gram_frequencies.keys(),
+                                          key=trie.n_gram_frequencies.get)
         return generate_letter[-1]
 
 
