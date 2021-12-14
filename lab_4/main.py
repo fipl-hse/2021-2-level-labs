@@ -7,7 +7,6 @@ from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
 
-
 # 4
 def tokenize_by_letters(text: str) -> Tuple or int:
     """
@@ -104,6 +103,7 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
+
         if not (isinstance(context, tuple)
                 and len(context)+1 in [trie.size for trie in self.profile.tries]):
             return -1
@@ -160,7 +160,7 @@ class NGramTextGenerator:
         while len(generated_sentence) != word_limit:
             generated_word = self._generate_word(context, word_max_length=15)
             generated_sentence.append(generated_word)
-            context = tuple(generated_word[-len(context):])
+            context = tuple(generated_word[-1:])
         return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
@@ -209,7 +209,22 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
+            return -1
+
+        numerator = 0
+        denominator = 0
+        for trie in self.profile.tries:
+            if trie.size - 1 == len(context):
+                for key, value in trie.n_gram_frequencies.items():
+                    if key[:-1] == context:
+                        denominator += value
+                        if key[-1] == letter:
+                            numerator += value
+        if denominator == 0:
+            return 0.0
+        else:
+            return numerator/denominator
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -217,8 +232,24 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
 
+        if not isinstance(context, tuple) or not self.profile.tries or not context:
+            return -1
+
+        likelihood_dict = {}
+        for trie in self.profile.tries:
+            if trie.size - 1 == len(context):
+                for key in trie.n_gram_frequencies:
+                    if key[:-1] == context:
+                        likelihood_dict[key] = self._calculate_maximum_likelihood(key[-1], context)
+        if not likelihood_dict:
+            for trie in self.profile.tries:
+                if trie.size == 1:
+                    generated_letter = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[-1]
+        else:
+            generated_letter = max(likelihood_dict, key=likelihood_dict.get)[-1]
+
+        return generated_letter
 
 # 10
 class BackOffGenerator(NGramTextGenerator):
