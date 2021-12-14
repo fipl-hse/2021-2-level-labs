@@ -226,6 +226,8 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     for word in decoded_corpus:
         for symbol in word:
             list_of_symbols.append(symbol)
+    if list_of_symbols == []:
+        return ''
     if list_of_symbols[0] == '_':
         del list_of_symbols[0]
     first_letter = list_of_symbols[0]
