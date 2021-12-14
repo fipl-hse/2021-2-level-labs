@@ -6,7 +6,6 @@ Language generation algorithm based on language profiles
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
 
 # 4
 def tokenize_by_letters(text: str) -> Tuple or int:
@@ -188,7 +187,15 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
+    if not isinstance (decoded_corpus, tuple) or not decoded_corpus:
+        return ''
+
+    decoded_sentence = ''
+    for word in decoded_corpus:
+        for letter in word:
+            decoded_sentence += letter
+    decoded_sentence = decoded_sentence.replace('__', ' ').replace('_', '').capitalize() + '.'
+    return decoded_sentence
 
 
 # 8
