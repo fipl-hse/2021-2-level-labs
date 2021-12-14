@@ -85,7 +85,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     """
     if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
         return ()
-    decoded_corpus = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
+    decoded_corpus = tuple(tuple(storage.get_element(letter) for letter in word)
+                           for word in sentence)
     return decoded_corpus
 
 
@@ -123,8 +124,7 @@ class NGramTextGenerator:
                     prediction = max(trie.n_gram_frequencies.keys(),
                                      key=trie.n_gram_frequencies.get)
                 return prediction[-1]
-            else:
-                return -1
+            return -1
 
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
@@ -137,7 +137,6 @@ class NGramTextGenerator:
         while len(word) <= word_max_length:
             if word_max_length == 1:
                 word.append(self.language_profile.storage.get_special_token_id())
-                return tuple(word)
             else:
                 letter = self._generate_letter(context)
                 word.append(letter)
