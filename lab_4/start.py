@@ -35,9 +35,6 @@ if __name__ == '__main__':
     plain_text = translate_sentence_to_plain_text(decoded_sentence)
     print('generated sentence:', plain_text)
 
-    '''
     RESULT = ''
-
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
-    '''

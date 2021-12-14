@@ -83,7 +83,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
         return ()
-    decoded_corpus = tuple(tuple(storage.get_element(number) for number in word) for word in sentence)
+    decoded_corpus = tuple(tuple(storage.get_element(number)
+                                 for number in word) for word in sentence)
     return decoded_corpus
 
 
@@ -118,7 +119,8 @@ class NGramTextGenerator:
                     if key[:len(context)] == context and key not in self._used_n_grams:
                         possible_n_grams[key] = value
                 if possible_n_grams == {}:
-                    n_gram_for_generation = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
+                    n_gram_for_generation = max(trie.n_gram_frequencies,
+                                                key=trie.n_gram_frequencies.get)
                 else:
                     n_gram_for_generation = max(possible_n_grams, key=possible_n_grams.get)
                 self._used_n_grams.append(n_gram_for_generation)
@@ -223,8 +225,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                             numerator += value
         if denominator == 0:
             return 0.0
-        else:
-            return numerator/denominator
+        return numerator/denominator
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -245,7 +246,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not likelihood_dict:
             for trie in self.profile.tries:
                 if trie.size == 1:
-                    generated_letter = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[-1]
+                    generated_letter = max(trie.n_gram_frequencies,
+                                           key=trie.n_gram_frequencies.get)[-1]
         else:
             generated_letter = max(likelihood_dict, key=likelihood_dict.get)[-1]
 
