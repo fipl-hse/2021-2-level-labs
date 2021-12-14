@@ -19,9 +19,8 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     invaluable_trash = ('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
-    for symbol in text:
-        if symbol in invaluable_trash:
-            text = text.replace(symbol, '')
+    for symbol in invaluable_trash:
+        text = text.replace(symbol, '')
     text = text.lower().split()
     for word in text:
         word_by_letter = []
