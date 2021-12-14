@@ -103,18 +103,29 @@ if __name__ == '__main__':
         text_generator = NGramTextGenerator(profile)
         likelihood_text_generator = LikelihoodBasedTextGenerator(profile)
         backoff_text_generator = BackOffGenerator(profile)
+
+        generated_sentences = []
+
+        generated_sentences.append(text_generator.generate_decoded_sentence(
+            (storage.get_special_token_id(),), 5))
+        generated_sentences.append(likelihood_text_generator.generate_decoded_sentence(
+            (storage.get_special_token_id(),), 5))
+        generated_sentences.append(backoff_text_generator.generate_decoded_sentence(
+            (storage.get_special_token_id(),), 5))
+
+        global RESULT
+        RESULT = []
+
         print("Score 10!")
-        print(text_generator.generate_decoded_sentence(
-            (storage.get_special_token_id(),), 5))
-        print(likelihood_text_generator.generate_decoded_sentence(
-            (storage.get_special_token_id(),), 5))
-        print(backoff_text_generator.generate_decoded_sentence(
-            (storage.get_special_token_id(),), 5))
+
+        for sentence in generated_sentences:
+            RESULT.append(sentence)
+            print(sentence)
 
 
-    #score_4()
-    #score_6()
-    #score_8()
+    score_4()
+    score_6()
+    score_8()
     score_10()
 
     RESULT = ''
