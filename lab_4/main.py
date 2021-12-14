@@ -251,7 +251,32 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
+            return -1
+
+        the_number_of_letter_occurs = 0
+        the_number_of_sequence_occurs = 0
+
+        for trie in self.language_profile.tries:
+            for ngram in trie.n_gram_frequencies:
+                ngram_without_last = ngram[:-1]
+                last_character = ngram[-1]
+
+                if ngram_without_last == context:
+                    ngram_frequency = trie.n_gram_frequencies[ngram]
+
+                    the_number_of_sequence_occurs += ngram_frequency
+
+                    if last_character == letter:
+                        the_number_of_letter_occurs += ngram_frequency
+
+        if the_number_of_sequence_occurs != 0:
+            likelihood = the_number_of_letter_occurs / the_number_of_sequence_occurs
+            return likelihood
+
+        return 0
+
+    pass
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -259,6 +284,25 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
+        if not isinstance(context, tuple) or not self.language_profile.tries or not context:
+            return -1
+
+        all_likelihood = {}
+
+        for letter in self.language_profile.storage.storage.values():
+            likelihood = self._calculate_maximum_likelihood(letter, context)
+
+            if likelihood > 0:
+                all_likelihood[letter] = likelihood
+
+        if all_likelihood:
+            return max(all_likelihood, key=all_likelihood.get)
+
+        for trie in self.language_profile.tries:
+            if trie.size == 1:
+                return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[0]
+
+        return -1
         pass
 
 
