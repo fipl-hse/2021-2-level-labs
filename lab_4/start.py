@@ -7,13 +7,13 @@ from lab_4 import main
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
-    reference_text = file_to_read.read()
-
 if __name__ == '__main__':
 
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
+
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
+        reference_text = file_to_read.read()
 
     # 4
     tokenized_text = main.tokenize_by_letters(reference_text)
