@@ -46,7 +46,13 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        return super().update(elements)
+        if not isinstance(elements, tuple):
+            return -1
+        for sentence in elements:
+            for token in sentence:
+                for letter in token:
+                    self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
@@ -121,7 +127,7 @@ class NGramTextGenerator:
                     self._used_n_grams.append(accurate_prediction)
                 else:
                     accurate_prediction = max(trie.n_gram_frequencies.keys(),
-                                              key=trie.n_gram_frequencies.get)
+                                          key=trie.n_gram_frequencies.get)
                 return accurate_prediction[-1]
         else:
             return -1
