@@ -34,18 +34,18 @@ if __name__ == '__main__':
     en_profile.create_from_tokens(encoded, (2,))
 
     text_generator_6 = NGramTextGenerator(en_profile)
-    sentence_6 = text_generator_6.generate_decoded_sentence((5,), 8)
+    sentence_6 = text_generator_6.generate_decoded_sentence((4,), 8)
 
     # score 6
     RESULT_6 = sentence_6
     print('Generated sentence for 6:', RESULT_6)
 
+    RESULT_8 = []
     text_generator_8 = LikelihoodBasedTextGenerator(en_profile)
-    first_sentence_8 = text_generator_8.generate_decoded_sentence((8,), 8)
-    second_sentence_8 = text_generator_8.generate_decoded_sentence((3,), 6)
+    for length in range(5, 10):
+        RESULT_8.append(text_generator_8.generate_decoded_sentence((8,), length))
 
     # score 8
-    RESULT_8 = [first_sentence_8, second_sentence_8]
     print('Generated sentence for 8:', RESULT_8)
 
     RESULT = RESULT_8
