@@ -121,7 +121,7 @@ if __name__ == '__main__':
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
     assert ACTUAL_6 == EXPECTED_DISTANCE_TO_EN_DE_PROFILES, 'Detection not working'
 
-    RESULT = score_8()
+    ACTUAL_8 = score_8()
     EXPECTED_SCORE = {'en': 24, 'de': 25}
     assert ACTUAL_8 == EXPECTED_SCORE, 'Detection not working'
 
@@ -134,20 +134,20 @@ if __name__ == '__main__':
             predict UNKNOWN_SAMPLE
             print(calculate_distance(unknown_profile, en_profile, 5, 2))
             print(calculate_distance(unknown_profile, de_profile, 5, 2))"""
-        eng_text = tokenize_by_sentence(ENG_SAMPLE)
-        de_text = tokenize_by_sentence(GERMAN_SAMPLE)
+        english_text = tokenize_by_sentence(ENG_SAMPLE)
+        deutsch_text = tokenize_by_sentence(GERMAN_SAMPLE)
         unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
         letter_storage = LetterStorage()
-        letter_storage.update(eng_text)
-        letter_storage.update(de_text)
+        letter_storage.update(english_text)
+        letter_storage.update(deutsch_text)
         letter_storage.update(unknown_text)
-        encoded_eng_text = encode_corpus(letter_storage, eng_text)
-        encoded_de_text = encode_corpus(letter_storage, de_text)
+        encoded_english_text = encode_corpus(letter_storage, english_text)
+        encoded_deutsch_text = encode_corpus(letter_storage, deutsch_text)
         encoded_unknown_text = encode_corpus(letter_storage, unknown_text)
         profile_en = LanguageProfile(letter_storage=letter_storage, language_name='en')
-        profile_en.create_from_tokens(encoded_eng_text, (2,))
+        profile_en.create_from_tokens(encoded_english_text, (2,))
         profile_de = LanguageProfile(letter_storage=letter_storage, language_name='de')
-        profile_de.create_from_tokens(encoded_de_text, (2,))
+        profile_de.create_from_tokens(encoded_deutsch_text, (2,))
         unknown_profile = LanguageProfile(letter_storage=letter_storage, language_name='unk')
         unknown_profile.create_from_tokens(encoded_unknown_text, (2,))
         distance_en = calculate_distance(unknown_profile, profile_en, 5, 2)
@@ -163,20 +163,20 @@ if __name__ == '__main__':
             # predict UNKNOWN_SAMPLE
             # print(detector.detect(profile_unk, 5, 3))
             # EXPECTED_SCORE = {'en': 24, 'de': 25}"""
-        eng_text = tokenize_by_sentence(ENG_SAMPLE)
-        de_text = tokenize_by_sentence(GERMAN_SAMPLE)
+        english_text = tokenize_by_sentence(ENG_SAMPLE)
+        deutsch_text = tokenize_by_sentence(GERMAN_SAMPLE)
         unknown_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
         letter_storage = LetterStorage()
-        letter_storage.update(eng_text)
-        letter_storage.update(de_text)
+        letter_storage.update(english_text)
+        letter_storage.update(deutsch_text)
         letter_storage.update(unknown_text)
-        encoded_eng_text = encode_corpus(letter_storage, eng_text)
-        encoded_de_text = encode_corpus(letter_storage, de_text)
+        encoded_english_text = encode_corpus(letter_storage, english_text)
+        encoded_deutsch_text = encode_corpus(letter_storage, deutsch_text)
         encoded_unknown_text = encode_corpus(letter_storage, unknown_text)
         profile_en = LanguageProfile(letter_storage=letter_storage, language_name='en')
-        profile_en.create_from_tokens(encoded_eng_text, (3,2))
+        profile_en.create_from_tokens(encoded_english_text, (3,2))
         profile_de = LanguageProfile(letter_storage=letter_storage, language_name='de')
-        profile_de.create_from_tokens(encoded_de_text, (3,2))
+        profile_de.create_from_tokens(encoded_deutsch_text, (3,2))
         unknown_profile_1 = LanguageProfile(letter_storage=letter_storage, language_name='unk')
         unknown_profile_1.create_from_tokens(encoded_unknown_text, (3,2))
         unknown_profile_1.save('unknown_profile.json')
@@ -185,7 +185,7 @@ if __name__ == '__main__':
         language_detector = LanguageDetector()
         language_detector.register_language(profile_en)
         language_detector.register_language(profile_de)
-        result = language_detector.detect(unknown_profile_2, 5, (3,2))
+        result = language_detector.detect(unknown_profile_2, 5, (3,))
         return result
 
     # score 10, k = 1000, trie_levels = (2,)
