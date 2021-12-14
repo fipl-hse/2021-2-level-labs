@@ -8,14 +8,15 @@ from lab_4.main import tokenize_by_letters, LetterStorage, LanguageProfile, \
 
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
-with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
-    reference_text = file_to_read.read()
+PATH_TO_TEXT_FOLDER = os.path.join(PATH_TO_LAB_FOLDER)
 
 if __name__ == '__main__':
 
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
+    with open(os.path.join(PATH_TO_TEXT_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
+        reference_text = file_to_read.read()
 
     #score 4
     tokenized_text = tokenize_by_letters(reference_text)
@@ -41,6 +42,7 @@ if __name__ == '__main__':
     decoded = decode_sentence(storage, generated_text)
 
     RESULT_FOR_6 = translate_sentence_to_plain_text(decoded)
+    print(RESULT_FOR_6)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT_FOR_6, 'Detection not working'
 
