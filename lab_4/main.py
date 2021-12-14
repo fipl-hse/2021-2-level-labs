@@ -340,7 +340,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         for trie in self.language_profile.tries:
             for ngram in trie.n_gram_frequencies:
                 ngram_without_closing_character = ngram[:-1]
-                closing_ngram_character = ngram[len(ngram)-1]
+                closing_ngram_character = ngram[-1]
 
                 if ngram_without_closing_character == context:
                     ngram_frequency = trie.n_gram_frequencies[ngram]
@@ -376,10 +376,20 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if letters_likelihood:
             return max(letters_likelihood, key=letters_likelihood.get)
 
+        special_character_id = self.language_profile.storage.get_special_token_id()
+
         for trie in self.language_profile.tries:
+            unigrams = {}
+
             if trie.size == 1:
-                next_ngram = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
-                return next_ngram[len(next_ngram) - 1]
+                for ngram in trie.n_gram_frequencies:
+                    if context[-1] == special_character_id and ngram[0] == special_character_id:
+                        continue
+
+                    unigrams[ngram] = trie.n_gram_frequencies[ngram]
+
+                next_ngram = max(unigrams, key=unigrams.get)
+                return next_ngram[-1]
 
         return -1
 
