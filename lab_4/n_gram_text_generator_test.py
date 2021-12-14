@@ -34,7 +34,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
         decoded = text_generator.generate_decoded_sentence((1,), 3)
         expected_decoded = 'Yosth casatrite meetwiu.'
-        self.assertEqual(decoded, expected_decoded)
+        self.assertEqual(expected_decoded, decoded)
 
     def test_incorrect_input(self):
         """
