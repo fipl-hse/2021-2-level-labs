@@ -161,7 +161,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ''
         sentence = self.generate_sentence(context, word_limit)
-        final_sentence = translate_sentence_to_plain_text(decode_sentence(self.profile.storage.storage,
+        final_sentence = translate_sentence_to_plain_text(decode_sentence(self.profile.storage,
                                                                           sentence))
         return final_sentence
 
