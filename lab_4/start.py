@@ -3,7 +3,9 @@ Language generation starter
 """
 
 import os
-from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, decode_sentence,translate_sentence_to_plain_text, LanguageProfile, NGramTextGenerator, LikelihoodBasedTextGenerator
+from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, decode_sentence, \
+    translate_sentence_to_plain_text, LanguageProfile, \
+    NGramTextGenerator, LikelihoodBasedTextGenerator
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 # find the appropriate start.py task in your lab_4 description file
 # your code goes here
@@ -50,7 +52,7 @@ if __name__ == '__main__':
             sentences.append(text_generator.generate_sentence((1,), length))
             decoded_corpus = decode_sentence(storage, sentences)
             result.append(translate_sentence_to_plain_text(decoded_corpus))
-        return result
+        print(result)
 
 
     def score_8():

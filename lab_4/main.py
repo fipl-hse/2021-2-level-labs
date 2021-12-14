@@ -16,7 +16,8 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     if not isinstance(text, str):
         return -1
 
-    invaluable_trash = ['!', '.', '?','`', '~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+    invaluable_trash = ['!', '.', '?','`', '~', '@', '#', '$', '%', '^',
+                        '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
@@ -31,7 +32,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
         new_tokens.append(tuple(new_character))
         new_character = ['_']
     return tuple(new_tokens)
-    pass
+
 
 
 # 4
@@ -53,7 +54,6 @@ class LetterStorage(Storage):
                 for letter in token:
                     self._put(letter)
         return 0
-        pass
 
     def get_letter_count(self) -> int:
         """
@@ -62,7 +62,7 @@ class LetterStorage(Storage):
         if not self.storage:
             return -1
         return len(self.storage)
-        pass
+
 
 
 # 4
@@ -80,7 +80,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                                           for letter in word)
                                     for word in corpus)
     return tuple(encoded_corpus)
-    pass
+
 
 
 # 4
@@ -97,7 +97,7 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
                                           for letter_id in word_id)
                                     for word_id in sentence)
     return tuple(decoded_sentences)
-    pass
+
 
 
 # 6
@@ -150,7 +150,7 @@ class NGramTextGenerator:
 
         return next_ngram[- 1]
 
-    pass
+
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
@@ -179,7 +179,7 @@ class NGramTextGenerator:
 
         return tuple(word)
 
-        pass
+
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
@@ -194,7 +194,7 @@ class NGramTextGenerator:
             context = tuple(word[-1:])
         return tuple(generated_sentence)
 
-        pass
+
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
@@ -203,12 +203,12 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             return ()
         sentence = self.generate_sentence(context, word_limit)
-        return translate_sentence_to_plain_text(decode_sentence(self.language_profile.storage, sentence))
-
-        pass
-
+        return translate_sentence_to_plain_text\
+            (decode_sentence(self.language_profile.storage, sentence))
 
 # 6
+
+
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
@@ -230,12 +230,6 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     decoded_string = decoded_string.replace('_', '')
     decoded_string += '.'
     return decoded_string
-
-
-
-
-
-    pass
 
 
 # 8
@@ -276,7 +270,6 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         return 0
 
-    pass
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -303,7 +296,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[0]
 
         return -1
-        pass
+
 
 
 # 10
