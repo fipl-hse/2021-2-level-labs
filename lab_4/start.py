@@ -5,7 +5,7 @@ Language generation starter
 import os
 from lab_4.main import tokenize_by_letters, LetterStorage, \
     encode_corpus, decode_sentence, LanguageProfile, NGramTextGenerator,\
-    LikelihoodBasedTextGenerator
+    LikelihoodBasedTextGenerator, translate_sentence_to_plain_text
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,9 +20,14 @@ if __name__ == '__main__':
         tokenized_text = tokenize_by_letters(text)
         storage = LetterStorage()
         storage.update(tokenized_text)
-        print('Number of letters = {} '.format(storage.get_letter_count()))
-        print('Letters with the lowest id: {}'.format(list(storage.storage.items())[:5]))
-        print('Letters with the highest id: {}'.format(list(storage.storage.items())[-5:]))
+        #RETURN
+        number_of_letters = storage.get_letter_count()
+        the_lowest_id = list(storage.storage.items())[:5]
+        the_highest_id = list(storage.storage.items())[-5:]
+        print('Number of letters = {} '.format(number_of_letters))
+        print('Letters with the lowest id: {}'.format(the_lowest_id))
+        print('Letters with the highest id: {}'.format(the_highest_id))
+        return number_of_letters, the_lowest_id, the_highest_id
 
     def score_6():
         """
@@ -42,13 +47,18 @@ if __name__ == '__main__':
         #GENERATION
         generate_text = NGramTextGenerator(profile)
         sentences = []
+        decoded_sentences = []
         for length in range(5, 10):
             sentences.append(generate_text.generate_decoded_sentence((1,), length))
+            decoded_corpus = decode_sentence(storage, sentences)
+            decoded_sentences.append(translate_sentence_to_plain_text(decoded_corpus))
         #PRINT
-        for sentence in sentences:
-            print(sentence)
+        return decoded_sentences
 
     def score_8():
+        """
+        8
+        """
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
             as file:
             text = file.read()
@@ -66,11 +76,12 @@ if __name__ == '__main__':
         for length in range(5, 10):
             sentences.append(generate_text.generate_decoded_sentence((1,), length))
         # PRINT
-        for sentence in sentences:
-            print(sentence)
+        return sentences
+
 
     score_4()
     score_6()
-    RESULT = score_6()
+    score_8()
+    RESULT = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
