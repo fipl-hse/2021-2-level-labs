@@ -255,6 +255,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         return max(frequencies_m_l.keys(), key=frequencies_m_l.get)[-1]
 
+
 # 10
 class BackOffGenerator(NGramTextGenerator):
     """
