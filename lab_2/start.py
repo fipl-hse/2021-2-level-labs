@@ -3,7 +3,9 @@ Language detection starter
 """
 
 import os
-import main
+from lab_2.main import (tokenize, remove_stop_words,
+                        get_language_profiles, get_sparse_vector,
+                        predict_language_knn_sparse)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles')
@@ -64,6 +66,5 @@ if __name__ == '__main__':
                                                      language_labels, k)
         RESULT.append(predicted_lang[0])
     print(f"{RESULT} are possible languages")
-
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == EXPECTED, 'Detection not working'
