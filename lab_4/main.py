@@ -92,6 +92,13 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :return: a tuple of the decoded sentence
     """
     pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+    storage.update(sentence)
+    decoded_corpus = tuple(tuple(storage.get_element(num)
+                                 for num in token)
+                           for token in sentence)
+    return decoded_corpus
 
 
 # 6
