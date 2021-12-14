@@ -56,10 +56,9 @@ class LetterStorage(Storage):
         """
         Gets the number of letters in the storage
         """
-        length = len(self.storage)
-        if length == 0:
+        if len(self.storage) == 0:
             return -1
-        return length
+        return len(self.storage)
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
