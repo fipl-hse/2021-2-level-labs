@@ -120,7 +120,6 @@ class NGramTextGenerator:
                         if n_gram not in self._used_n_grams:
                             frequencies[n_gram] = freq
 
-                if not frequencies:
                     self._used_n_grams = []
                     for n_gram, freq in trie.n_gram_frequencies.items():
                         if n_gram[:-1] == context:
