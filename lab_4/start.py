@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # your code goes here
     def process_text():
         # opened file
-        f = open('reference_text.txt', 'r')
+        f = open('./reference_text.txt', 'r')
         # read file
         text = f.read()
         # tokenized text
