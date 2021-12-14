@@ -27,9 +27,9 @@ if __name__ == '__main__':
         storage = LetterStorage()
         storage.update(tokenization)
 
-        #print("Number of letters: ", storage.get_letter_count())
-        #print("Letters with the lowest identifier: ", list(storage.storage.items())[:5])
-        #print("Letters with the highest identifier: ", list(storage.storage.items())[-5:])
+        print("Number of letters: ", storage.get_letter_count())
+        print("Letters with the lowest identifier: ", list(storage.storage.items())[:5])
+        print("Letters with the highest identifier: ", list(storage.storage.items())[-5:])
 
 
     def score_6():
@@ -76,4 +76,4 @@ if __name__ == '__main__':
     #score_6()
     RESULT = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT == score_8(), 'Detection not working'
