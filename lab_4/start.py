@@ -113,21 +113,18 @@ if __name__ == '__main__':
         generated_sentences.append(backoff_text_generator.generate_decoded_sentence(
             (storage.get_special_token_id(),), 5))
 
-        global RESULT
-        RESULT = []
-
         print("Score 10!")
-
         for sentence in generated_sentences:
-            RESULT.append(sentence)
             print(sentence)
 
+        return generated_sentences
+
+    RESULT = ''
 
     score_4()
     score_6()
     score_8()
-    score_10()
+    RESULT = score_10()
 
-    RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
