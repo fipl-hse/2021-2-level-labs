@@ -126,9 +126,12 @@ class NGramTextGenerator:
                         if n_gram[:-1] == context:
                             frequencies[n_gram] = freq
 
-                n_gram = max(frequencies, key=frequencies.get)
-                self._used_n_grams.append(n_gram)
-                return n_gram[-1]
+                if not frequencies:
+                    return -1
+
+        n_gram = max(frequencies, key=frequencies.get)
+        self._used_n_grams.append(n_gram)
+        return n_gram[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
@@ -160,9 +163,12 @@ class NGramTextGenerator:
             return ()
 
         generated_sentence = []
+
         while len(generated_sentence) != word_limit:
             word = self._generate_word(context)
             generated_sentence.append(word)
+            context = tuple(word[-1:])
+
         return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
@@ -171,9 +177,11 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ""
+
         sentence = self.generate_sentence(context, word_limit)
         letters = [self.language_profile.storage.get_element(i) for word in sentence for i in word]
         text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
+
         return text
 
 
@@ -184,8 +192,10 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
         return ""
+
     letters = [letter for word in decoded_corpus for letter in word]
     text = "".join(letters).replace("__", " ").replace("_", "").capitalize() + "."
+
     return text
 
 
@@ -202,7 +212,23 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not (isinstance(letter, int) and isinstance(context, tuple) and context):
+            return -1
+
+        letter_freq = 0
+        sequence_freq = 0
+
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, frequency in trie.n_gram_frequencies.items():
+                    if n_gram[:len(context)] == context and n_gram[-1] == letter:
+                        letter_freq += frequency
+                    if n_gram[:len(context)] == context:
+                        sequence_freq += frequency
+            if sequence_freq == 0:
+                return 0.0
+
+        return letter_freq / sequence_freq
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -210,7 +236,24 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
+        if not (isinstance(context, tuple) and self.language_profile.tries and context):
+            return -1
+
+        frequencies_m_l = {}
+
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:-1] == context:
+                        frequencies_m_l[n_gram] = self._calculate_maximum_likelihood(n_gram[-1],
+                                                                                     context)
+
+        if not frequencies_m_l:
+            for trie in self.language_profile.tries:
+                if trie.size == 1:
+                    return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[-1]
+        else:
+            return max(frequencies_m_l.keys(), key=frequencies_m_l.get)[-1]
 
 
 # 10
