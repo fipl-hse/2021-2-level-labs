@@ -154,7 +154,7 @@ class NGramTextGenerator:
         while len(generated_sentence) != word_limit:
             word = self._generate_word(context, word_max_length=15)
             generated_sentence.append(word)
-            context = tuple(word[-len(context):])
+            context = tuple(word[-1:])
 
         return tuple(generated_sentence)
 
@@ -243,9 +243,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                         context_letter.append(key)
         for ngram in context_letter:
             likelihoods[ngram] = self._calculate_maximum_likelihood(ngram[-1], ngram[:-1])
-
         if not likelihoods:
-            return 0?????????????????????????????????????????
+            return 1
 
         possible_letter = max(likelihoods, key=likelihoods.get)[-1]
         return possible_letter
