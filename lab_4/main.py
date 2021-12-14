@@ -221,9 +221,8 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
         for character in word:
             if not decoded_string and character == '_':
                 continue
-            elif not decoded_string:
+            if not decoded_string:
                 decoded_string += character.upper()
-
             else:
                 decoded_string += character
     decoded_string = decoded_string.replace('__', ' ')

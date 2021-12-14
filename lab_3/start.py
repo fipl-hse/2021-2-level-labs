@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
         probabilities = detector.detect(secret_profile, k, trie_levels)
         predicted_language = min(probabilities, key=probabilities.get)
-
+        return predicted_language
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
 
 

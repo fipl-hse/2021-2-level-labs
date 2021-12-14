@@ -517,4 +517,3 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: sorted language labels with corresponding ngram size and their prob scores
         if input is correct, otherwise -1
         """
-
