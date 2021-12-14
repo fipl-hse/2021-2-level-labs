@@ -14,9 +14,8 @@ if __name__ == '__main__':
     # your code goes here
     def process_text():
         # opened file
-        f = open('./reference_text.txt', 'r')
-        # read file
-        text = f.read()
+        with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
+            text = file_to_read.read()
         # tokenized text
         text = tokenize_by_letters(text)
         # created object
