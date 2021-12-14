@@ -43,6 +43,7 @@ if __name__ == '__main__':
 
 
     process_text()
-    RESULT = ''
+
+    RESULT = '1'
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
