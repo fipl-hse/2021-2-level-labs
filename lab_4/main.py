@@ -243,7 +243,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         for trie in self.language_profile.tries:
             if trie.size == len(context) + 1:
-                for n_gram, freq in trie.n_gram_frequencies.items():
+                for n_gram in trie.n_gram_frequencies:
                     if n_gram[:-1] == context:
                         frequencies_m_l[n_gram] = self._calculate_maximum_likelihood(n_gram[-1],
                                                                                      context)
@@ -252,9 +252,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             for trie in self.language_profile.tries:
                 if trie.size == 1:
                     return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[-1]
-        else:
-            return max(frequencies_m_l.keys(), key=frequencies_m_l.get)[-1]
 
+        return max(frequencies_m_l.keys(), key=frequencies_m_l.get)[-1]
 
 # 10
 class BackOffGenerator(NGramTextGenerator):
