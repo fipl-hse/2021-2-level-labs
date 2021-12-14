@@ -6,10 +6,8 @@ import os
 from lab_4.main import (tokenize_by_letters,
                         LetterStorage,
                         encode_corpus,
-                        decode_sentence,
                         LanguageProfile,
                         NGramTextGenerator,
-                        translate_sentence_to_plain_text,
                         LikelihoodBasedTextGenerator)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +17,7 @@ if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
-    with open('reference_text.txt', 'r', encoding='utf-8') as file_to_read:
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
         reference_text = file_to_read.read()
 
     tokenized = tokenize_by_letters(reference_text)
