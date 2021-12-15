@@ -67,11 +67,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+    if not isinstance(storage, LetterStorage) or not \
+            isinstance(corpus, tuple):
         return ()
 
     storage.update(corpus)
-    encoded_letters = tuple(tuple(storage.get_id(letter) for letter in word) for word in corpus)
+    encoded_letters = tuple(tuple(storage.get_id(letter) for
+                                  letter in word) for word in corpus)
     return encoded_letters
 
 
@@ -83,10 +85,12 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
+    if not isinstance(storage, LetterStorage) or not \
+            isinstance(sentence, tuple):
         return ()
 
-    decoded_sentence = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
+    decoded_sentence = tuple(tuple(storage.get_element(letter)
+                                   for letter in word) for word in sentence)
     return decoded_sentence
 
 
@@ -116,14 +120,16 @@ class NGramTextGenerator:
                 for key, value in trie.n_gram_frequencies.items():
                     if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
                         self._used_n_grams = []
-                    elif key[:len(context)] == context and key not in self._used_n_grams:
+                    elif key[:len(context)] == context and key not \
+                            in self._used_n_grams:
                         predictions[key] = value
 
                 if predictions:
                     max_prediction = max(predictions.keys(), key = predictions.get)
                     self._used_n_grams.append(max_prediction)
                 else:
-                    max_prediction = max(trie.n_gram_frequencies.keys(), key = trie.n_gram_frequencies.get)
+                    max_prediction = max(trie.n_gram_frequencies.keys(),
+                                         key = trie.n_gram_frequencies.get)
                 return max_prediction[-1]
             else:
                 return -1
@@ -132,7 +138,8 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
-        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
+        if not isinstance(context, tuple) or not \
+                isinstance(word_max_length, int):
             return ()
 
         generated_word = list(context)
@@ -168,7 +175,8 @@ class NGramTextGenerator:
         """
         Generates full sentence and decodes it
         """
-        if not isinstance (context, tuple) or not isinstance(word_limit, int):
+        if not isinstance (context, tuple) or not \
+                isinstance(word_limit, int):
             return ()
 
         generated_sentence = self.generate_sentence(context, word_limit)
@@ -211,7 +219,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
+        if not isinstance(letter, int) or not \
+                isinstance(context, tuple) or not context:
             return -1
         letter_freq = 0
         context_freq = 0
@@ -246,7 +255,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             return max(need_likelihood, key=need_likelihood.get)
         for trie in self.profile.tries:
             if trie.size == 1:
-                return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[0]
+                return max(trie.n_gram_frequencies,
+                           key=trie.n_gram_frequencies.get)[0]
         return -1
 
 
