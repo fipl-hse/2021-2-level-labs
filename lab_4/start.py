@@ -22,10 +22,10 @@ if __name__ == '__main__':
     text_tokens = tokenize_by_letters(text)
     text_storage = LetterStorage()
     text_storage.update(text_tokens)
-    number_of_letters_text = text_storage.get_letter_count()
+    NUMBER_OF_LETTERS_TEXT = text_storage.get_letter_count()
     the_least_id = list(text_storage.storage)[:5]
     the_most_id = list(text_storage.storage)[-5:]
-    print(number_of_letters_text, "\n", the_least_id, "\n", the_most_id)
+    print(NUMBER_OF_LETTERS_TEXT, "\n", the_least_id, "\n", the_most_id)
     # 6
     encoded_text = encode_corpus(text_storage, text_tokens)
     text_profile = LanguageProfile(text_storage, "en")
