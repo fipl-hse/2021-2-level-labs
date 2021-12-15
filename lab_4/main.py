@@ -104,7 +104,6 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-
         if not (isinstance(context, tuple)
                 and len(context)+1 in [trie.size for trie in self.profile.tries]):
             return -1
@@ -130,24 +129,32 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
-
         if not isinstance(context, tuple) or not isinstance(word_max_length, int):
             return ()
 
-        generated_word = list(context)
+        generated_word = []
+        context_length = len(context)
+        special_token = self.profile.storage.get_special_token_id()
 
-        if len(generated_word) >= word_max_length:
-            generated_word.append(self.profile.storage.get_special_token_id())
-            return tuple(generated_word)
+        if context[-1] == special_token:
+            context = (special_token,)
 
-        while len(generated_word) != word_max_length:
-            generated_letter = self._generate_letter(context)
+        for character in context:
+            generated_word.append(character)
+
+        generated_letter = None
+
+        while generated_letter != special_token:
+            if generated_word:
+                context = tuple(generated_word[-context_length:])
+
+            if len(generated_word) >= word_max_length:
+                generated_letter = special_token
+            else:
+                generated_letter = self._generate_letter(context)
+
             generated_word.append(generated_letter)
-            if generated_letter == self.profile.storage.get_special_token_id():
-                break
-            context = tuple(generated_word[-len(context):])
-            if len(generated_word) == word_max_length:
-                generated_word.append(self.profile.storage.get_special_token_id())
+
         return tuple(generated_word)
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
@@ -162,7 +169,7 @@ class NGramTextGenerator:
         while len(generated_sentence) != word_limit:
             generated_word = self._generate_word(context, word_max_length=15)
             generated_sentence.append(generated_word)
-            context = tuple(generated_word[-1:])
+            context = tuple(generated_word[-len(context):])
         return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
