@@ -189,17 +189,17 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-        list_n_gramms = []
-        final_list = []
+        list_n_grams = []
+        return_list = []
         for i in encoded_corpus:
             for element in i:
                 seq = [element[q:] for q in range(self.size)]
-                n_gramm = tuple(zip(*seq))
-                if n_gramm == ():
+                n_gram = tuple(zip(*seq))
+                if n_gram == ():
                     continue
-                list_n_gramms.append(n_gramm)
-        final_list.append(tuple(list_n_gramms))
-        self.n_grams = tuple(final_list)
+                list_n_grams.append(n_gram)
+        return_list.append(tuple(list_n_grams))
+        self.n_grams = tuple(return_list)
         if self.n_grams[0] == ():
             self.n_grams = []
         return 0
@@ -222,9 +222,9 @@ class NGramTrie:
         """
         if not self.n_grams:
             return 1
-        for i in self.n_grams:
-            for n_gramm in i:
-                for element in n_gramm:
+        for tuple_with_ngrams in self.n_grams:
+            for n_gram in tuple_with_ngrams:
+                for element in n_gram:
                     if element in self.n_gram_frequencies:
                         self.n_gram_frequencies[element] += 1
                     else:
@@ -291,11 +291,11 @@ class LanguageProfile:
         if not isinstance(encoded_corpus, tuple) or not isinstance(ngram_sizes, tuple):
             return 1
         for size in ngram_sizes:
-            n_gramm = NGramTrie(size, self.storage)
-            self.tries.append(n_gramm)
-            n_gramm.extract_n_grams(encoded_corpus)
-            n_gramm.get_n_grams_frequencies()
-            self.n_words.append(len(n_gramm.n_gram_frequencies))
+            n_gram = NGramTrie(size, self.storage)
+            self.tries.append(n_gram)
+            n_gram.extract_n_grams(encoded_corpus)
+            n_gram.get_n_grams_frequencies()
+            self.n_words.append(len(n_gram.n_gram_frequencies))
         return 0
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
@@ -325,9 +325,9 @@ class LanguageProfile:
         if not isinstance(k, int) or not isinstance(trie_level, int) or k <= 0:
             return ()
         some_ngram = ''
-        for i in self.tries:
-            if i.size == trie_level:
-                some_ngram = i
+        for trie in self.tries:
+            if trie.size == trie_level:
+                some_ngram = trie
         if some_ngram == '':
             return ()
         some_ngram.get_n_grams_frequencies()
@@ -380,16 +380,16 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
             or not isinstance(known_profile, LanguageProfile) \
             or not isinstance(k, int) or not isinstance(trie_level, int):
         return -1
-    unknown_k_n_grams = unknown_profile.get_top_k_n_grams(k, trie_level)
-    known_k_n_grams = known_profile.get_top_k_n_grams(k, trie_level)
+    unknown_k_ngrams = unknown_profile.get_top_k_n_grams(k, trie_level)
+    known_k_ngrams = known_profile.get_top_k_n_grams(k, trie_level)
     distance = 0
-    for i in enumerate(unknown_k_n_grams):
-        for element in enumerate(known_k_n_grams):
-            if i[1] not in known_k_n_grams:
-                distance += len(known_k_n_grams)
+    for kn_index, unk_ngram in enumerate(unknown_k_ngrams):
+        for unk_index, kn_ngram in enumerate(known_k_ngrams):
+            if unk_ngram not in known_k_ngrams:
+                distance += len(known_k_ngrams)
                 break
-            if i[1] == element[1]:
-                distance += fabs(i[0] - element[0])
+            if unk_ngram == kn_ngram:
+                distance += fabs(kn_index - unk_index)
     return int(distance)
 
 
