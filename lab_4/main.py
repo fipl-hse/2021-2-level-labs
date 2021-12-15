@@ -122,7 +122,8 @@ class NGramTextGenerator:
             frequent ngram corresponding to the context given.
         """
         pass
-        if not isinstance(context, tuple) or len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
+        if not isinstance(context, tuple) or len(context) + 1 not in [trie.size for trie in
+                                                                      self.language_profile.tries]:
             return -1
         possible_ngrams = {}
         for trie in self.language_profile.tries:
@@ -168,7 +169,7 @@ class NGramTextGenerator:
         Generates full sentence with fixed number of words given.
         """
         pass
-        if not isinstance(context, tuple) or not isinstance(word_limit,int):
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
         generated_sentence = []
         while len(generated_sentence) != word_limit:
@@ -193,14 +194,15 @@ class NGramTextGenerator:
         result = decoded_sentence.replace("__", " ").replace("_", "").capitalize() + "."
         return result
 
-
     # 6
+
+
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
     pass
-    if not isinstance(decoded_corpus, tuple):
+    if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
         return ""
     decoded_sentence = ""
     for word in decoded_corpus:
