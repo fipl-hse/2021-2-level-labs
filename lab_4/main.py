@@ -16,9 +16,6 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     if not isinstance(text, str):
         return -1
 
-    # words = [word.lower().strip() for word in text.split(" ") if word]
-    # text_tuple = tuple(tuple(letter for letter in word if letter.isalpha()) for word in words)
-
     text = "".join(letter for letter in text if letter.isalpha() or letter.isspace())
     text_tuple = tuple(tuple("_"+word+"_") for word in text.lower().strip().split())
     return text_tuple
@@ -101,10 +98,8 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        if not isinstance(context, tuple):
-            return -1
-
-        if len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
+        if (not isinstance(context, tuple) or
+                len(context) + 1 not in [trie.size for trie in self.language_profile.tries]):
             return -1
 
         frequencies = {}
@@ -136,26 +131,28 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
-        # ПРОБЛЕМА
 
         if not (isinstance(context, tuple) and isinstance(word_max_length, int)):
             return ()
+
+        special_token_id = self.language_profile.storage.get_special_token_id()
+
+        trie_size = len(context)
+
+        if context[-1] == special_token_id:
+            context = (special_token_id,)
 
         generated_word = list(context)
 
         letter = None
 
-        while not (len(generated_word) == word_max_length
-                   or letter == self.language_profile.storage.get_special_token_id()):
+        while not (len(generated_word) == word_max_length or letter == special_token_id):
+            context = tuple(generated_word[-trie_size:])
             letter = self._generate_letter(context)
-            context = *context[1:], letter
             generated_word.append(letter)
 
-        if word_max_length == 1:
-            generated_word.append(self.language_profile.storage.get_special_token_id())
-
-        if len(generated_word) == word_max_length:
-            generated_word.append(self.language_profile.storage.get_special_token_id())
+        if len(generated_word) >= word_max_length and generated_word[-1] != special_token_id:
+            generated_word.append(special_token_id)
 
         return tuple(generated_word)
 
@@ -163,17 +160,16 @@ class NGramTextGenerator:
         """
         Generates full sentence with fixed number of words given.
         """
-        # ПРОБЛЕМА
 
-        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+        if not (isinstance(context, tuple) and isinstance(word_limit, int)):
             return ()
 
         generated_sentence = []
 
-        while len(generated_sentence) != word_limit:
+        for _ in range(word_limit):
             word = self._generate_word(context)
             generated_sentence.append(word)
-            context = tuple(word[-1:])
+            context = tuple(word[-len(context):])
 
         return tuple(generated_sentence)
 
@@ -275,7 +271,30 @@ class BackOffGenerator(NGramTextGenerator):
             available frequency for the corresponding context.
             if no context can be found, reduces the context size by 1.
         """
-        pass
+
+        if not isinstance(context, tuple):
+            return -1
+
+        # trie_size = {trie: trie.size for trie in self.language_profile.tries}
+        # trie_size_reverse = sorted(trie_size, key=trie_size.get, reverse=True)
+
+        trie_size_reverse = sorted(self.language_profile.tries,
+                                   key=lambda ngram_trie: -ngram_trie.size)
+
+        frequencies = {}
+
+        for trie in trie_size_reverse:
+            if trie.size == len(context) + 1:
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:-1] == context and n_gram not in self._used_n_grams:
+                        frequencies[n_gram] = freq
+
+                if not frequencies:
+                    return self._generate_letter(context[1:])
+
+        n_gram = max(frequencies, key=frequencies.get)
+        self._used_n_grams.append(n_gram)
+        return n_gram[-1]
 
 
 # 10
@@ -289,4 +308,32 @@ class PublicLanguageProfile(LanguageProfile):
         Opens public profile and adapts it.
         :return: o if succeeds, 1 otherwise
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+
+        with open(file_name, encoding="utf-8") as file:
+            data = json.load(file)
+
+        self.language = data["name"]
+        self.n_words = data["n_words"]
+        self.tries = []
+
+        for trie_level in set(map(len, data["freq"])):
+
+            n_gram_trie = NGramTrie(trie_level, self.storage)
+
+            for n_gram_raw, freq in data["freq"].items():
+
+                if len(n_gram_raw) == trie_level:
+                    n_gram = n_gram_raw.lower().replace("", "_")
+                    self.storage.update(tuple(n_gram))
+                    n_gram = tuple(map(self.storage.get_id, n_gram))
+
+                    if n_gram not in n_gram_trie.n_gram_frequencies:
+                        n_gram_trie.n_gram_frequencies[n_gram] = 0
+
+                    n_gram_trie.n_gram_frequencies[n_gram] += freq
+
+            self.tries.append(n_gram_trie)
+
+        return 0

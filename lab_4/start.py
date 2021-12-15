@@ -9,7 +9,9 @@ from lab_4.main import (tokenize_by_letters,
                         decode_sentence,
                         LanguageProfile,
                         NGramTextGenerator,
-                        LikelihoodBasedTextGenerator)
+                        LikelihoodBasedTextGenerator,
+                        BackOffGenerator,
+                        PublicLanguageProfile)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -26,8 +28,7 @@ if __name__ == '__main__':
 
     # score 6-8
     encoded_text = encode_corpus(storage, tokenized_text)
-    language_profile = LanguageProfile(storage, "en")
-    language_profile.create_from_tokens(encoded_text, (2,))
+
 
     def score_4():
         """
@@ -43,6 +44,9 @@ if __name__ == '__main__':
         """
         score 6
         """
+        language_profile = LanguageProfile(storage, "en")
+        language_profile.create_from_tokens(encoded_text, (2,))
+
         text_generator = NGramTextGenerator(language_profile)
 
         sent_one = text_generator.generate_decoded_sentence((1,), 5)
@@ -55,6 +59,9 @@ if __name__ == '__main__':
         """
         score 8
         """
+        language_profile = LanguageProfile(storage, "en")
+        language_profile.create_from_tokens(encoded_text, (2,))
+
         text_generator = LikelihoodBasedTextGenerator(language_profile)
 
         sent_one = text_generator.generate_decoded_sentence((1,), 5)
@@ -63,8 +70,20 @@ if __name__ == '__main__':
 
         return sent_one, sent_two, sent_three
 
+    def score_10():
+        """
+        score 10
+        """
+        language_profile = PublicLanguageProfile(storage, 'ne')
+        language_profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'ne'))
+        text_generator = BackOffGenerator(language_profile)
+
+        sent = text_generator.generate_decoded_sentence((1,), 5)
+
+        return sent
+
     RESULT_4 = score_4()
     RESULT_6 = score_6()
     RESULT_8 = score_8()
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT_8, 'Detection not working'
+    RESULT_10 = score_10()
+
