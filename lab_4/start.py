@@ -6,7 +6,6 @@ import os
 from lab_4.main import (tokenize_by_letters,
                         LetterStorage,
                         encode_corpus,
-                        decode_sentence,
                         LanguageProfile,
                         NGramTextGenerator,
                         LikelihoodBasedTextGenerator,
@@ -84,3 +83,4 @@ if __name__ == '__main__':
     RESULT_4 = score_4()
     RESULT_6 = score_6()
     RESULT_8 = score_8()
+    assert RESULT_8, 'Detection is not working'
