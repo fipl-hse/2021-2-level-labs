@@ -83,7 +83,5 @@ if __name__ == '__main__':
 
     RESULT = score_8()
 
-    # find the appropriate start.py task in your lab_4 description file
-    # your code goes here
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
