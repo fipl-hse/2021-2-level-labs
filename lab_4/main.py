@@ -238,16 +238,22 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             return -1
 
         likelihood_dict = {}
+        special_token = self.profile.storage.get_special_token_id()
+
         for trie in self.profile.tries:
             if trie.size - 1 == len(context):
                 for key in trie.n_gram_frequencies:
                     if key[:-1] == context:
                         likelihood_dict[key] = self._calculate_maximum_likelihood(key[-1], context)
+
         if not likelihood_dict:
             for trie in self.profile.tries:
                 if trie.size == 1:
-                    generated_letter = max(trie.n_gram_frequencies,
-                                           key=trie.n_gram_frequencies.get)[-1]
+                    sorted_keys = sorted(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get, reverse=True)
+                    if context[-1] == special_token and sorted_keys[0][0] == special_token:
+                        generated_letter = sorted_keys[1][0]
+                    else:
+                        generated_letter = sorted_keys[0][0]
         else:
             generated_letter = max(likelihood_dict, key=likelihood_dict.get)[-1]
 
