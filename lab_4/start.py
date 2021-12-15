@@ -17,14 +17,11 @@ if __name__ == '__main__':
     tokenized_text = tokenize_by_letters(text)
     storage = LetterStorage()
     storage.update(tokenized_text)
-    number_of_letters = storage.get_letter_count()
-    the_lowest_id = list(storage.storage.items())[:5]
-    the_highest_id = list(storage.storage.items())[-5:]
-    print('Number of letters = {} '.format(number_of_letters))
-    print('Letters with the lowest id: {}'.format(the_lowest_id))
-    print('Letters with the highest id: {}'.format(the_highest_id))
+    print('Number of letters = {} '.format(storage.get_letter_count()))
+    print('Letters with the lowest id: {}'.format(list(storage.storage.items())[:5]))
+    print('Letters with the highest id: {}'.format(list(storage.storage.items())[-5:]))
 
-    print ('--point 6--')
+    print('--point 6--')
     with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") \
             as file:
         text = file.read()
@@ -34,7 +31,6 @@ if __name__ == '__main__':
     encoded_text = encode_corpus(storage, tokenized_text)
     language_profile = LanguageProfile(storage, 'en')
     language_profile.create_from_tokens(encoded_text, (2,))
-
     generator = NGramTextGenerator(language_profile)
     for length in range(5, 10):
         generated_text = generator.generate_sentence((1,), length)
@@ -57,6 +53,7 @@ if __name__ == '__main__':
         sentences.append(generated_text.generate_decoded_sentence((1,), length))
     print(sentences)
     RESULT = sentences
+
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
