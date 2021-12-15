@@ -49,7 +49,6 @@ class LetterStorage:
     """
     Stores and manages letters
     """
-
     def __init__(self):
         self.storage = {}
         self.count = 1
@@ -158,7 +157,7 @@ class NGramTrie:
     def __init__(self, n: int, letter_storage: LetterStorage):
         self.size = n
         self.storage = letter_storage
-        self._n_grams = []
+        self.n_grams = []
         self.n_gram_frequencies = {}
 
 
@@ -184,21 +183,17 @@ class NGramTrie:
         """
         if not isinstance(encoded_corpus, tuple):
             return 1
-        n_grams = []
-        for encoded_sentence in encoded_corpus:
+        list_n_grams = []
+        for sentence in encoded_corpus:
             n_gram_sentence = []
-            for encoded_word in encoded_sentence:
+            for word in sentence:
                 n_gram_word = []
-                for i, num in  enumerate(encoded_word):
-                    if i + self.size <= len(encoded_word):
-                        n_gram_word.append(tuple(encoded_word[i:i + self.size]))
-                if n_gram_word:
-                    n_gram_sentence.append(tuple(n_gram_word))
-        self.n_grams = tuple(n_grams)
-        return 0
-
-                
-
+                for i in range(len(word) - (self.size - 1)):
+                    new_word = word[i:i + self.size]
+                    n_gram_word.append(tuple(new_word))
+                list_n_grams.append(tuple(n_gram_sentence))
+            self.n_grams = tuple(list_n_grams)
+            return 0
 
     def get_n_grams_frequencies(self) -> int:
         """
@@ -295,6 +290,7 @@ class LanguageProfile:
 
 
     def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
+
         """
         Returns the most common n-grams
         :param k: a number of the most common n-grams
