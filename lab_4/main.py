@@ -4,9 +4,9 @@ Language generation algorithm based on language profiles
 """
 
 from typing import Tuple
+import re
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
 
 
 # 4
@@ -124,10 +124,10 @@ class NGramTextGenerator:
                     prediction = max(dict_result.keys(), key=dict_result.get)
                     self._used_n_grams.append(prediction)
                 else:
-                    prediction = max(instance.n_gram_frequencies.keys(), key=instance.n_gram_frequencies.get)
+                    prediction = max(instance.n_gram_frequencies.keys(),
+                                     key=instance.n_gram_frequencies.get)
                 return prediction[-1]
-            else:
-                return -1
+            return -1
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
