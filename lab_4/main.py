@@ -23,7 +23,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
 
     tokens = []
     for word in clean_text.split():
-        split_word = [letter for letter in '_'+word+'_']
+        split_word = [letter for letter in list('_'+word+'_')]
         tokens.append(tuple(split_word))
     return tuple(tokens)
 
@@ -81,7 +81,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     """
     if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
         return ()
-    decoded_text = tuple(tuple(storage.get_element(letter) for letter in element) for element in sentence)
+    decoded_text = tuple(tuple(storage.get_element(letter) for letter in element)
+                         for element in sentence)
     return decoded_text
 
 
@@ -119,7 +120,8 @@ class NGramTextGenerator:
                     prediction = max(possibles.keys(), key=possibles.get)
                     self._used_n_grams.append(prediction)
                 else:
-                    prediction = max(trie.n_gram_frequencies.keys(), key=trie.n_gram_frequencies.get)
+                    prediction = max(trie.n_gram_frequencies.keys(),
+                                     key=trie.n_gram_frequencies.get)
         return prediction[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
