@@ -2,7 +2,7 @@
 Lab 4
 Language generation algorithm based on language profiles
 """
-
+import re
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
@@ -148,12 +148,15 @@ class NGramTextGenerator:
             return ()
 
         special_id = self.profile.storage.get_special_token_id()
+        trie_level = len(context)
+        if context[-1] == special_id:
+            context = (special_id,)
         token = [*context]
         letter = None
 
         while not (letter == special_id or len(token) >= word_max_length):
+            context = tuple(token[-trie_level:])
             letter = self._generate_letter(context)
-            context = *context[1:], letter
             token.append(letter)
 
         if len(token) >= word_max_length and token[-1] != special_id:
@@ -199,7 +202,7 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
             sentence[0] = sentence[0].upper()
         if sentence[-1] == "_":
             sentence[-1] = "."
-    sentence = "".join(sentence).replace("__", " ")
+    sentence = re.sub("_+", " ", "".join(sentence))
     return sentence
 
 
@@ -216,7 +219,15 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not (isinstance(letter, int) and isinstance(context, tuple) and context):
+            return -1
+        n_gram = (*context, letter)
+        trie = self.get_trie_by_level(len(context) + 1)
+        contexts = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
+                    if n_gram[:-1] == context}
+        if not (contexts and n_gram in contexts):
+            return 0.0
+        return contexts[n_gram] / sum(contexts.values())
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -224,7 +235,18 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
+        if not (isinstance(context, tuple) and context):
+            return -1
+        trie = self.get_trie_by_level(len(context) + 1)
+        probabilities = {}
+        contexts = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
+                    if n_gram[:-1] == context}
+        if not contexts:
+            trie = self.get_trie_by_level(1)
+            contexts = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()}
+        for n_gram in contexts:
+            probabilities[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], n_gram[:-1])
+        return max(probabilities, key=probabilities.get)[-1]
 
 
 # 10
