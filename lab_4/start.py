@@ -82,5 +82,5 @@ if __name__ == '__main__':
     RESULT_4 = score_4()
     RESULT_6 = score_6()
     RESULT_8 = score_8()
-    score_10()
-    assert score_10(), 'Detection is not working'
+    RESULT = score_10()
+    assert RESULT, 'Detection is not working'
