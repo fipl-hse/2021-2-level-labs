@@ -4,9 +4,9 @@ Language generation algorithm based on language profiles
 """
 
 from typing import Tuple
+import re
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
 
 
 # 4
@@ -100,7 +100,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     pass
     if not isinstance(storage, LetterStorage) or not isinstance(sentence, tuple):
         return ()
-    decoded_sentences = tuple(tuple(storage.get_element(element_id) for element_id in word) for word in sentence)
+    decoded_sentences = tuple(tuple(storage.get_element(element_id)
+                                    for element_id in word) for word in sentence)
     return decoded_sentences
 
 
@@ -254,7 +255,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             if trie.size == len(context) + 1:
                 for n_gram in trie.n_gram_frequencies:
                     if n_gram[:-1] == context:
-                        letter_likelihood[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], context)
+                        letter_likelihood[n_gram] = self._calculate_maximum_likelihood \
+                            (n_gram[-1], context)
         if not letter_likelihood:
             for trie in self.language_profile.tries:
                 if trie.size == 1:

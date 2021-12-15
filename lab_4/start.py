@@ -5,15 +5,16 @@ Language generation starter
 import os
 
 from lab_4.language_profile import LanguageProfile
-from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, NGramTextGenerator, decode_sentence, \
-    translate_sentence_to_plain_text, LikelihoodBasedTextGenerator
+from lab_4.main import tokenize_by_letters, LetterStorage, \
+    encode_corpus, NGramTextGenerator, LikelihoodBasedTextGenerator
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
-    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") as file:
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'),
+              'r', encoding="utf-8") as file:
         text = file.read()
     tokenized = tokenize_by_letters(text)
     storage = LetterStorage()
