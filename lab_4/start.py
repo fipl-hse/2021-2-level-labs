@@ -1,3 +1,7 @@
+"""
+Language generator starter
+"""
+
 import os
 from lab_4.main import tokenize_by_letters, LetterStorage, LanguageProfile, \
     NGramTextGenerator, encode_corpus, LikelihoodBasedTextGenerator
@@ -5,7 +9,8 @@ from lab_4.main import tokenize_by_letters, LetterStorage, LanguageProfile, \
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
-    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'),
+              'r', encoding='utf-8') as file_to_read:
         REFERENCE_TEXT = file_to_read.read()
 
     TOKENIZED_TEXT = tokenize_by_letters(REFERENCE_TEXT)
