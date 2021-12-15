@@ -275,9 +275,6 @@ class BackOffGenerator(NGramTextGenerator):
         if not isinstance(context, tuple):
             return -1
 
-        # trie_size = {trie: trie.size for trie in self.language_profile.tries}
-        # trie_size_reverse = sorted(trie_size, key=trie_size.get, reverse=True)
-
         frequencies = {}
 
         for trie in self.language_profile.tries:
