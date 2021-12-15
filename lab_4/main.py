@@ -6,7 +6,6 @@ Language generation algorithm based on language profiles
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
 
 
 # 4
@@ -129,7 +128,8 @@ class NGramTextGenerator:
                     if n_gram[:len(context)] == context and n_gram not in self._used_n_grams:
                         variants[n_gram] = freq
                 if len(variants.keys()) == 0:
-                    variant = sorted(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get, reverse=True)[0]
+                    variant = sorted(trie.n_gram_frequencies,
+                                     key=trie.n_gram_frequencies.get, reverse=True)[0]
                 else:
                     variant = sorted(variants, key=variants.get, reverse=True)[0]
                     self._used_n_grams.append(variant)
@@ -245,19 +245,19 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         all_n_grams = {}
         for trie in self.profile.tries:
             if trie.size == len(context) + 1:
-                for n_gram, freq in trie.n_gram_frequencies.items():
+                for n_gram, _ in trie.n_gram_frequencies.items():
                     if n_gram[:len(context)] == context:
                         all_n_grams[n_gram] = self._calculate_maximum_likelihood(n_gram[-1],
                                                                                  context)
+        variant = 0
         if all_n_grams:
-            variant = sorted(all_n_grams, key=all_n_grams.get, reverse=True)[0][-1]
-            return variant
+            variant += sorted(all_n_grams, key=all_n_grams.get, reverse=True)[0][-1]
         else:
             for trie in self.profile.tries:
                 if trie.size == 1:
-                    variant = sorted(trie.n_gram_frequencies,
+                    variant += sorted(trie.n_gram_frequencies,
                                      key=trie.n_gram_frequencies.get, reverse=True)[0][0]
-                    return variant
+        return variant
 
 
 # 10
