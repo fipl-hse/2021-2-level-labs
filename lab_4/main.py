@@ -3,9 +3,11 @@ Lab 4
 Language generation algorithm based on language profiles
 """
 import re
+import json
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
+from lab_4.language_profile import NGramTrie
 
 
 # 4
@@ -262,7 +264,16 @@ class BackOffGenerator(NGramTextGenerator):
             available frequency for the corresponding context.
             if no context can be found, reduces the context size by 1.
         """
-        pass
+        if not isinstance(context, tuple):
+            return -1
+        trie = self.get_trie_by_level(len(context) + 1)
+        contexts = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
+                    if n_gram[:-1] == context and n_gram not in self._used_n_grams}
+        if not contexts:
+            return self._generate_letter(context[1:])
+        n_gram = max(contexts, key=contexts.get)
+        self._used_n_grams.append(n_gram)
+        return n_gram[-1]
 
 
 # 10
@@ -276,4 +287,30 @@ class PublicLanguageProfile(LanguageProfile):
         Opens public profile and adapts it.
         :return: o if succeeds, 1 otherwise
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+        with open(file_name, encoding="utf-8") as f:
+            data = json.load(f)
+        self.language = data["name"]
+        self.n_words = data["n_words"]
+        self.tries = [self._build_n_gram_trie(data["freq"], trie_level)
+                      for trie_level in set(map(len, data["freq"]))]
+        return 0
+
+    def _build_n_gram_trie(self, n_gram_frequencies: dict, trie_level: int) -> NGramTrie:
+        """
+        Helper function to build N-Gram tries from imported dictionaries.
+        :param n_gram_frequencies: a dictionary of N-gram frequencies
+        :param trie_level: trie level
+        :return: NGramTrie
+        """
+        n_gram_trie = NGramTrie(trie_level, self.storage)
+        for raw_n_gram, freq in n_gram_frequencies.items():
+            if len(raw_n_gram) == trie_level:
+                n_gram = raw_n_gram.replace(" ", "_").lower()
+                self.storage.update(tuple(n_gram))
+                n_gram = tuple(map(self.storage.get_id, n_gram))
+                if n_gram not in n_gram_trie.n_gram_frequencies:
+                    n_gram_trie.n_gram_frequencies[n_gram] = 0
+                n_gram_trie.n_gram_frequencies[n_gram] += freq
+        return n_gram_trie
