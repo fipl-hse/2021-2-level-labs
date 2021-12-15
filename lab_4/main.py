@@ -111,6 +111,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
+        self.language_profile = language_profile
+        self._used_n_grams = []
         pass
 
     def _generate_letter(self, context: tuple) -> int:
@@ -120,32 +122,92 @@ class NGramTextGenerator:
             frequent ngram corresponding to the context given.
         """
         pass
+        if not isinstance(context, tuple) or len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
+            return -1
+        possible_ngrams = {}
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:-1] == context and n_gram not in self._used_n_grams:
+                        possible_ngrams[n_gram] = freq
+                if not possible_ngrams:
+                    for n_gram, freq in trie.n_gram_frequencies.items():
+                        if n_gram not in self._used_n_grams:
+                            possible_ngrams[n_gram] = freq
+                    self._used_n_grams = []
+                    for n_gram, freq in trie.n_gram_frequencies.items():
+                        if n_gram[:-1] == context:
+                            possible_ngrams[n_gram] = freq
+                if not possible_ngrams:
+                    return -1
+        n_gram = max(possible_ngrams, key=possible_ngrams.get)
+        self._used_n_grams.append(n_gram)
+        return n_gram[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
         pass
+        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
+            return ()
+        generated_word = list(context)
+        if len(generated_word) >= word_max_length:
+            generated_word.append(self.language_profile.storage.get_special_token_id())
+            return tuple(generated_word)
+        while len(generated_word) != word_max_length:
+            generated_letter = self._generate_letter(context)
+            generated_word.append(generated_letter)
+            if generated_letter == self.language_profile.storage.get_special_token_id():
+                break
+            context = tuple(generated_word[-len(context):])
+        return tuple(generated_word)
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
         pass
+        if not isinstance(context, tuple) or not isinstance(word_limit,int):
+            return ()
+        generated_sentence = []
+        while len(generated_sentence) != word_limit:
+            word = self._generate_word(context)
+            generated_sentence.append(word)
+            context = tuple(word[-1:])
+        return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
         pass
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ""
+        generated_sentence = self.generate_sentence(context, word_limit)
+        decoded_sentence = ""
+        for word in generated_sentence:
+            for letter_id in word:
+                letter = self.language_profile.storage.get_element(letter_id)
+                decoded_sentence += letter
+        result = decoded_sentence.replace("__", " ").replace("_", "").capitalize() + "."
+        return result
 
 
-# 6
+    # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
     pass
+    if not isinstance(decoded_corpus, tuple):
+        return ""
+    decoded_sentence = ""
+    for word in decoded_corpus:
+        for letter in word:
+            decoded_sentence += letter
+    decoded_sentence = decoded_sentence.replace("__", " ").replace("_", "").capitalize() + "."
+    return decoded_sentence
 
 
 # 8
