@@ -25,9 +25,9 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     list_of_tokens = []
     clear_text = clear_text.split()
     for word in clear_text:
-        tokens = ''
+        tokens = []
         for letter in word:
-            tokens += letter
+            tokens.append(letter)
         list_of_tokens.append(tuple(['_'] + list(tokens) + ['_']))
     return tuple(list_of_tokens)
 
@@ -138,6 +138,8 @@ class NGramTextGenerator:
                 return accurate_prediction[-1]
             if trie.size != len(context) + 1:
                 return -1
+        else:
+            return -1
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
@@ -166,8 +168,8 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
         generated_sentence = []
-        while len(generated_sentence)!= word_limit:
-            word = self._generate_word(context, word_max_length = 15)
+        while len(generated_sentence) != word_limit:
+            word = self._generate_word(context, word_max_length=15)
             generated_sentence.append(word)
             context = tuple(word[-1:])
         return tuple(generated_sentence)
