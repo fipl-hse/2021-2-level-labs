@@ -21,7 +21,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
             clear_text += symbol
     text_list = []
     for word in clear_text.split():
-        text_list.append(tuple([letter for letter in '_' + word + '_']))
+        text_list.append(tuple(list('_' + word + '_')))
     return tuple(text_list)
 
 
@@ -225,7 +225,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         prob_dict = {}
         for trie in self.profile.tries:
             if trie.size == len(context) + 1:
-                for n_gram, freq in trie.n_gram_frequencies.items():
+                for n_gram in trie.n_gram_frequencies:
                     if n_gram[:len(context)] == context:
                         prob_dict[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], context)
         if not prob_dict:
@@ -235,7 +235,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                     return letter[0]
         else:
             letter = max(prob_dict.keys(), key=prob_dict.get)[-1]
-            return letter
+        return letter
 
 
 # 10

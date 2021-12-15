@@ -17,7 +17,8 @@ if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
-    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file_to_read:
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r',
+              encoding='utf-8') as file_to_read:
         reference_text = file_to_read.read()
 
     tokenized = tokenize_by_letters(reference_text)
