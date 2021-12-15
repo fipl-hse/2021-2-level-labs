@@ -33,5 +33,11 @@ if __name__ == '__main__':
     decoded_sentence = main.decode_sentence(text_storage, sentence)
     RESULT = main.translate_sentence_to_plain_text(decoded_sentence)
     print(RESULT)
+    # 8
+    new_text_generator = main.LikelihoodBasedTextGenerator(text_profile)
+    RESULT = []
+    for i in range(5, 10):
+        RESULT.append(new_text_generator.generate_decoded_sentence((8,), i))
+    print("".join(RESULT))
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
