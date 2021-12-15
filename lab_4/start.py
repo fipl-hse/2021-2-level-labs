@@ -7,7 +7,8 @@ PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_TEXT_FOLDER = os.path.join(PATH_TO_LAB_FOLDER)
 
 if __name__ == '__main__':
-    with open('reference_text.txt', 'r', encoding='utf-8') as text_to_read:
+    with open(os.path.join(PATH_TO_TEXT_FOLDER, 'reference_text.txt'), 'r',
+              encoding='utf-8') as text_to_read:
         reference_text = text_to_read.read()
 
 # score 4
