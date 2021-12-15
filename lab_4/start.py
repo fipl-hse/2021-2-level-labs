@@ -38,7 +38,7 @@ if __name__ == '__main__':
         Сгенерируйте несколько предложений длиной по 5-10 слов.
         Декодируйте предложения и сконвертируйте их в строковый формат.'''
         text_generator = NGramTextGenerator(profile)
-        for i in range(5, 10):
+        for i in range(5, 8):
             decoded_sentence = text_generator.generate_decoded_sentence((1,), i)
             print(decoded_sentence)
 
@@ -48,4 +48,4 @@ if __name__ == '__main__':
     RESULT_4 = function_for_grade4()
     RESULT_6 = function_for_grade6()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT_6, 'Detection not working'
