@@ -49,7 +49,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param language: a language
     :param text: a text
     :param stop_words: a list of stop words
-    :return: a dictionary with three keys – name, freq, n_words
+    :return: a dictionary with three keys – name, freq, n_words
     """
     pass
 
@@ -93,7 +93,7 @@ def create_report(unknown_profile: dict, profiles: list, languages: list) -> lis
     :param unknown_profile: a dictionary
     :param profiles: a list of dictionaries
     :param languages: a list of possible languages
-    :return: a list of dictionaries with two keys – name, score
+    :return: a list of dictionaries with two keys – name, score
     """
     pass
 
@@ -102,7 +102,7 @@ def load_profile(path_to_file: str) -> dict or None:
     """
     Loads a language profile
     :param path_to_file: a path
-    :return: a dictionary with three keys – name, freq, n_words
+    :return: a dictionary with three keys – name, freq, n_words
     """
     pass
 
@@ -114,4 +114,3 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
-
