@@ -10,15 +10,6 @@ from lab_4.language_profile import LanguageProfile
 
 
 # 4
-def delete_empty_slot(sentences: list) -> list:
-    """
-    Delete '' in list.
-    :param sentences: list of sentences
-    :return: a list without ''
-    """
-    while '' in sentences:
-        sentences.remove('')
-    return sentences
 
 
 def tokenize_by_letters(text: str) -> Tuple or int:
@@ -27,29 +18,14 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     if not isinstance(text, str):
         return -1
-    if not text:
-        return ()
-    skip_signs = ["'", "-", "%", ">", "<", "$", "@", "#", "&", "*", ",", ".", "!", ":", "º", "(", ")"]
-    text_lists = []
-    for element in text.splitlines():
-        sentences = re.split('[.?!]', element)
-        sentences = delete_empty_slot(sentences)
-        for sentence in sentences:
-            sentence = sentence.lower()
-            for sign in skip_signs:
-                sentence = sentence.replace(sign, '')
-            deutsch_letters = {"ä": "ae", "ü": "ue", "ß": "ss", "ö": "oe"}
-            for key in deutsch_letters.items():
-                sentence = sentence.replace(key[0], key[1])
-            if not sentence:
-                return ()
-            tokens = sentence.split()
-            tokens_list = []
-            for word in tokens:
-                text_lists.append(tuple(['_'] + list(word) + ['_']))
-            if len(sentence) == 1  or sentence == []:
-                return tuple(tokens_list)
-    return tuple(text_lists)
+    future_text = ""
+    future_list = []
+    for letter in text:
+        if letter.isalpha() or letter.isspace():
+            future_text += future_text.join(letter)
+    for word in future_text.lower().strip().split():
+        future_list.append(tuple("_" + word + "_"))
+    return tuple(future_list)
 
 
 # 4
@@ -192,9 +168,9 @@ class NGramTextGenerator:
         """
         Generates full sentence and decodes it
         """
-        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+        if not isinstance(context, tuple):
             return ""
-        encoded_sentence = self.generate_decoded_sentence(context, word_limit)
+        encoded_sentence = self.generate_sentence(context, word_limit)
         decoded_sentence = decode_sentence(self.language_profile.storage, encoded_sentence)
         return translate_sentence_to_plain_text(decoded_sentence)
 
