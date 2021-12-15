@@ -197,7 +197,25 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not isinstance(letter, int) or not isinstance(context, tuple) \
+                or len(context) + 1 not in [trie.size for trie in self.profile.tries] \
+                or not context:
+            return -1
+        word = context + (letter,)
+        freq_d = {}
+        freq_word = 0
+        for trie in self.profile.tries:
+            if trie.size == len(word):
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:len(context)] == context:
+                        freq_d[n_gram] = freq
+                        if n_gram[-1] == letter:
+                            freq_word = freq
+                if not freq_d:
+                    return 0.0
+        freq_context = sum(freq_d.values())
+        prob = freq_word / freq_context
+        return prob
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -205,8 +223,22 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
-
+        if not isinstance(context, tuple)\
+                or len(context) + 1 not in [trie.size for trie in self.profile.tries]\
+                or not context:
+            return -1
+        prob_dict = {}
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram in trie.n_gram_frequencies:
+                    if n_gram[:-1] == context:
+                        prob_dict[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], context)
+        if not prob_dict:
+            for trie in self.profile.tries:
+                if trie.size == 1:
+                    return max(trie.n_gram_frequencies.keys(), key=trie.n_gram_frequencies.get)[0]
+        possible_letter = max(prob_dict.keys(), key=prob_dict.get)[-1]
+        return possible_letter
 
 # 10
 class BackOffGenerator(NGramTextGenerator):
