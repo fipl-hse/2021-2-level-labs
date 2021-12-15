@@ -170,7 +170,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
         sentence = []
-        for i in range(word_limit):
+        for _ in range(word_limit):
             word = self._generate_word(context)
             context = word[-len(context):]
             sentence.append(word)
@@ -243,7 +243,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                     if n_gram[:-1] == context}
         if not contexts:
             trie = self.get_trie_by_level(1)
-            contexts = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()}
+            contexts = trie.n_gram_frequencies
         for n_gram in contexts:
             probabilities[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], n_gram[:-1])
         return max(probabilities, key=probabilities.get)[-1]

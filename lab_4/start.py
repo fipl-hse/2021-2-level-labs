@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
-    with open("reference_text.txt", encoding="utf-8") as f:
+    with open(os.path.join(PATH_TO_LAB_FOLDER, "reference_text.txt"), encoding="utf-8") as f:
         print("--- 4 ---")
         corpus = tokenize_by_letters(f.read())
         storage = LetterStorage()
