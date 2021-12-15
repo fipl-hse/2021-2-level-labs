@@ -211,24 +211,22 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        if not isinstance(letter, int) or not isinstance(context, tuple):
+        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
             return -1
-
-        letter_freq = 0.0
-        context_freq = 0.0
+        letter_freq = 0
+        context_freq = 0
         for trie in self.profile.tries:
             for n_gram in trie.n_gram_frequencies:
-                n_gram_no_last = n_gram[:1]
-                last_n_gram = n_gram[-1]
-                if n_gram_no_last == context:
-                    ngram_freq = trie.n_gram_frequencies[n_gram]
-                    context_freq += ngram_freq
-                    if last_n_gram == letter:
-                        letter_freq += ngram_freq
-        if context_freq!=0:
-            likelihood = letter_freq/context_freq
-            return likelihood
-        return 0.0
+                n_grams = n_gram[:-1]
+                last_ngram = n_gram[-1]
+                if n_grams == context:
+                    n_gram_freq = trie.n_gram_frequencies[n_gram]
+                    context_freq += n_gram_freq
+                    if last_ngram == letter:
+                        letter_freq += n_gram_freq
+        if context_freq != 0:
+            return letter_freq / context_freq
+        return 0
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -239,13 +237,13 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not isinstance(context, tuple) or not context:
             return -1
 
-        likelihoods = {}
+        need_likelihood = {}
         for letter in self.profile.storage.storage.values():
-            likelihood = self._calculate_maximum_likelihood(letter,context)
+            likelihood = self._calculate_maximum_likelihood(letter, context)
             if likelihood > 0:
-                likelihoods[letter] = likelihood
-        if likelihoods:
-            return max(likelihoods, key=likelihoods.get)
+                need_likelihood[letter] = likelihood
+        if need_likelihood:
+            return max(need_likelihood, key=need_likelihood.get)
         for trie in self.profile.tries:
             if trie.size == 1:
                 return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[0]
