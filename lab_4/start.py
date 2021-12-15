@@ -78,12 +78,9 @@ if __name__ == '__main__':
         language_profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'ne'))
         text_generator = BackOffGenerator(language_profile)
 
-        sent = text_generator.generate_decoded_sentence((1,), 5)
+        text_generator.generate_decoded_sentence((1,), 5)
 
-        return sent
 
     RESULT_4 = score_4()
     RESULT_6 = score_6()
     RESULT_8 = score_8()
-    RESULT_10 = score_10()
-
