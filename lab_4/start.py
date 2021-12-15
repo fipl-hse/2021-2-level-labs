@@ -3,10 +3,8 @@ Language generation starter
 """
 
 import os
-<<<<<<< HEAD
 from lab_4.main import tokenize_by_letters, LetterStorage
-=======
->>>>>>> 3250e425085e07bd48b6045751c2647fa2111f9a
+
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,7 +12,7 @@ if __name__ == '__main__':
 
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
-<<<<<<< HEAD
+
     with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') as file:
         text = file.read()
     tokenized_text = tokenize_by_letters(text)
@@ -27,9 +25,9 @@ if __name__ == '__main__':
     RESULT = storage.get_letter_count(), list(storage.storage.items())[:5], list(storage.storage.items())[-5:]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
-=======
+
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
->>>>>>> 3250e425085e07bd48b6045751c2647fa2111f9a
+
