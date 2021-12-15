@@ -15,6 +15,9 @@ if __name__ == '__main__':
     # your code goes here
 
     def score_4():
+        """
+        realisation for 4
+        """
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
                 as file:
             text = file.read()
@@ -31,6 +34,9 @@ if __name__ == '__main__':
         return number_of_letters, the_lowest_id, the_highest_id
 
     def score_6():
+        """
+        realisation for 6
+        """
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
                 as file:
             text = file.read()
@@ -54,6 +60,9 @@ if __name__ == '__main__':
         return decoded_sentences
 
     def score_8():
+        """
+        realisation for 8
+        """
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8")\
                 as file:
             text = file.read()
