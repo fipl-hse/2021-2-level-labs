@@ -278,19 +278,16 @@ class BackOffGenerator(NGramTextGenerator):
         # trie_size = {trie: trie.size for trie in self.language_profile.tries}
         # trie_size_reverse = sorted(trie_size, key=trie_size.get, reverse=True)
 
-        trie_size_reverse = sorted(self.language_profile.tries,
-                                   key=lambda ngram_trie: -ngram_trie.size)
-
         frequencies = {}
 
-        for trie in trie_size_reverse:
+        for trie in self.language_profile.tries:
             if trie.size == len(context) + 1:
                 for n_gram, freq in trie.n_gram_frequencies.items():
                     if n_gram[:-1] == context and n_gram not in self._used_n_grams:
                         frequencies[n_gram] = freq
 
-                if not frequencies:
-                    return self._generate_letter(context[1:])
+        if not frequencies:
+            return self._generate_letter(context[1:])
 
         n_gram = max(frequencies, key=frequencies.get)
         self._used_n_grams.append(n_gram)
@@ -325,13 +322,14 @@ class PublicLanguageProfile(LanguageProfile):
             for n_gram_raw, freq in data["freq"].items():
 
                 if len(n_gram_raw) == trie_level:
-                    n_gram = n_gram_raw.lower().replace("", "_")
+
+                    n_gram = n_gram_raw.lower().replace(" ", "_")
                     self.storage.update(tuple(n_gram))
+
                     n_gram = tuple(map(self.storage.get_id, n_gram))
 
                     if n_gram not in n_gram_trie.n_gram_frequencies:
                         n_gram_trie.n_gram_frequencies[n_gram] = 0
-
                     n_gram_trie.n_gram_frequencies[n_gram] += freq
 
             self.tries.append(n_gram_trie)

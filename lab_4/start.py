@@ -28,7 +28,6 @@ if __name__ == '__main__':
     # score 6-8
     encoded_text = encode_corpus(storage, tokenized_text)
 
-
     def score_4():
         """
         score 4
@@ -77,10 +76,11 @@ if __name__ == '__main__':
         language_profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'ne'))
         text_generator = BackOffGenerator(language_profile)
 
-        text_generator.generate_decoded_sentence((1,), 5)
+        return text_generator.generate_decoded_sentence((1,), 5)
 
 
     RESULT_4 = score_4()
     RESULT_6 = score_6()
     RESULT_8 = score_8()
-    assert RESULT_8, 'Detection is not working'
+    score_10()
+    assert score_10(), 'Detection is not working'
