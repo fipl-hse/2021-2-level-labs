@@ -51,9 +51,3 @@ if __name__ == '__main__':
     RESULT = RESULT_8
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
-
-
-
-
-
-
