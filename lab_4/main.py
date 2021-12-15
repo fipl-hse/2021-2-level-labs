@@ -23,8 +23,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
 
     tokens = []
     for word in clean_text.split():
-        word = f'_{word}_'
-        split_word = [letter for letter in word]
+        split_word = list(f'_{word}_')
         tokens.append(tuple(split_word))
     return tuple(tokens)
 
