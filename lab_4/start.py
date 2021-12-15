@@ -29,30 +29,42 @@ if __name__ == '__main__':
     language_profile = LanguageProfile(storage, "en")
     language_profile.create_from_tokens(encoded_text, (2,))
 
-
     def score_4():
-        print(f"The number of letters: {storage.get_letter_count()}")
-        print(f"The letters with the lowest ids: {list(storage.storage)[1:6]}")
-        print(f"The letters with the highest ids: {list(storage.storage)[-5:]}")
+        """
+        score 4
+        """
+        amount = f"The number of letters: {storage.get_letter_count()}"
+        low_ids = f"The letters with the lowest ids: {list(storage.storage)[1:6]}"
+        high_ids = f"The letters with the highest ids: {list(storage.storage)[-5:]}"
+
+        return amount, low_ids, high_ids
 
     def score_6():
+        """
+        score 6
+        """
         text_generator = NGramTextGenerator(language_profile)
-        print(text_generator.generate_decoded_sentence((1,), 5))
-        print(text_generator.generate_decoded_sentence((1,), 6))
-        print(text_generator.generate_decoded_sentence((1,), 7))
+
+        sent_one = text_generator.generate_decoded_sentence((1,), 5)
+        sent_two = text_generator.generate_decoded_sentence((1,), 6)
+        sent_three = text_generator.generate_decoded_sentence((1,), 7)
+
+        return sent_one, sent_two, sent_three
 
     def score_8():
+        """
+        score 8
+        """
         text_generator = LikelihoodBasedTextGenerator(language_profile)
-        print(text_generator.generate_decoded_sentence((1,), 5))
-        print(text_generator.generate_decoded_sentence((1,), 6))
-        print(text_generator.generate_decoded_sentence((1,), 7))
 
-    score_4()
+        sent_one = text_generator.generate_decoded_sentence((1,), 5)
+        sent_two = text_generator.generate_decoded_sentence((1,), 6)
+        sent_three = text_generator.generate_decoded_sentence((1,), 7)
 
-    score_6()
+        return sent_one, sent_two, sent_three
 
-    score_8()
-
-    RESULT = ''
+    RESULT_4 = score_4()
+    RESULT_6 = score_6()
+    RESULT_8 = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+    assert RESULT_8, 'Detection not working'
