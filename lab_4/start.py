@@ -40,6 +40,6 @@ if __name__ == '__main__':
     print(sentence_2)
     print(sentence_3)
 
-RESULT = ''
+RESULT = sentence_3
 # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
 assert RESULT, 'Detection not working'
