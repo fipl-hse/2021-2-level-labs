@@ -194,9 +194,8 @@ class NGramTextGenerator:
         result = decoded_sentence.replace("__", " ").replace("_", "").capitalize() + "."
         return result
 
-    # 6
 
-
+# 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
@@ -226,6 +225,20 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :return: float number, that indicates maximum likelihood
         """
         pass
+        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
+            return -1
+        letter_freq = 0
+        sequence_freq = 0
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, frequency in trie.n_gram_frequencies.items():
+                    if n_gram[:len(context)] == context and n_gram[-1] == letter:
+                        letter_freq += frequency
+                    if n_gram[:len(context)] == context:
+                        sequence_freq += frequency
+            if sequence_freq == 0:
+                return 0.0
+        return letter_freq / sequence_freq
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -234,6 +247,19 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             maximum likelihood frequency.
         """
         pass
+        if not isinstance(context, tuple) or not self.language_profile.tries or not context:
+            return -1
+        letter_likelihood = {}
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram in trie.n_gram_frequencies:
+                    if n_gram[:-1] == context:
+                        letter_likelihood[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], context)
+        if not letter_likelihood:
+            for trie in self.language_profile.tries:
+                if trie.size == 1:
+                    return max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)[-1]
+        return max(letter_likelihood.keys(), key=letter_likelihood.get)[-1]
 
 
 # 10
