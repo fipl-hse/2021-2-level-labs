@@ -103,7 +103,7 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple):
             return -1
-        if len(context)+1 not in [trie.size for trie in self.profile.tries]:
+        if len(context) + 1 not in [trie.size for trie in self.profile.tries]:
             return -1
 
         letters = {}
@@ -153,7 +153,7 @@ class NGramTextGenerator:
         while len(generated_sentence) != word_limit:
             generated_word = self._generate_word(context, word_max_length=15)
             generated_sentence.append(generated_word)
-            context = tuple(generated_word[-len(context):])
+            context = tuple(generated_word[-1:])
         return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
@@ -199,8 +199,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        if not isinstance(letter, int) or not isinstance(context, tuple) \
-                or not context:
+        if not isinstance(letter, int) or not isinstance(context, tuple) or not context:
+            return -1
+        if len(context) + 1 not in [trie.size for trie in self.profile.tries]:
             return -1
         freq_dict = {}
         frequencies = 0
@@ -225,7 +226,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         """
         if not isinstance(context, tuple) or not context:
             return -1
-
+        if len(context) + 1 not in [trie.size for trie in self.profile.tries]:
+            return -1
         freq_likelihood = {}
         letters = []
         for trie in self.profile.tries:
