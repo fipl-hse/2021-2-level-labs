@@ -3,7 +3,8 @@ Language generation starter
 """
 
 import os
-from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, NGramTextGenerator
+from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, NGramTextGenerator, \
+    LikelihoodBasedTextGenerator
 from lab_4.language_profile import LanguageProfile
 
 
@@ -36,9 +37,16 @@ if __name__ == '__main__':
     PROFILE = LanguageProfile(ENG_STORAGE, 'en')
     PROFILE.create_from_tokens(ENCODED_CORPUS, (2,))
     TEXT_GENERATOR = NGramTextGenerator(PROFILE)
-    print(TEXT_GENERATOR.generate_decoded_sentence((1,), 5))
-    print(TEXT_GENERATOR.generate_decoded_sentence((1,), 6))
-    print(TEXT_GENERATOR.generate_decoded_sentence((1,), 7))
+    print(TEXT_GENERATOR.generate_decoded_sentence((10,), 5))
+    print(TEXT_GENERATOR.generate_decoded_sentence((13,), 6))
+    print(TEXT_GENERATOR.generate_decoded_sentence((7,), 7))
+
+    # for score 8
+
+    LIKELIHOOD_TEXT_GENERATOR = LikelihoodBasedTextGenerator(PROFILE)
+    print(LIKELIHOOD_TEXT_GENERATOR.generate_decoded_sentence((6,), 6))
+    print(LIKELIHOOD_TEXT_GENERATOR.generate_decoded_sentence((2,), 5))
+    print(LIKELIHOOD_TEXT_GENERATOR.generate_decoded_sentence((1,), 7))
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
