@@ -51,8 +51,8 @@ class LetterStorage(Storage):
                 for symbol in element:
                     self._put(symbol)
             return 0
-        else:
-            return -1
+        return -1
+            
 
     def get_letter_count(self) -> int:
         """
@@ -60,8 +60,7 @@ class LetterStorage(Storage):
         """
         if self.storage:
             return len(self.storage)
-        else:
-            return -1
+        return -1
 
 
 # 4
@@ -76,8 +75,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         storage.update(corpus)
         encoded_text = tuple(tuple(storage.get_id(letter) for letter in element) for element in corpus)
         return encoded_text
-    else:
-        return ()
+    return ()
 
 
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
@@ -90,11 +88,11 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     if isinstance(storage, LetterStorage) and isinstance(sentence, tuple):
         decoded_text = tuple(tuple(storage.get_element(letter) for letter in element) for element in sentence)
         return decoded_text
-    else:
-        return ()
+    return ()
 
 
 # 6
+
 class NGramTextGenerator:
     """
     Language model for basic text generation
