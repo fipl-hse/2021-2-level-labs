@@ -209,7 +209,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 for key, value in trie.n_gram_frequencies.items():
                     if context == key[:-1]:
                         freq_dict[key] = value
-                        if letter == key[1]:
+                        if letter == key[-1]:
                             frequencies += value
         if sum(freq_dict.values()) == 0:
             return 0.0
@@ -223,20 +223,23 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        if not isinstance(context, tuple):
+        if not isinstance(context, tuple) or not context:
             return -1
 
         freq_likelihood = {}
         letters = []
         for trie in self.profile.tries:
-            if trie.size == len(context)+1:
+            if trie.size == len(context) + 1:
                 for key in trie.n_gram_frequencies:
                     if context == key[:-1]:
                         letters.append(key)
         for element in letters:
             freq_likelihood[element] = self._calculate_maximum_likelihood(element[-1], element[:-1])
         if not freq_likelihood:
-            return -1
+            for trie in self.profile.tries:
+                if trie.size == 1:
+                    likelihood_letter = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
+                    return likelihood_letter[0]
         likelihood_letter = max(freq_likelihood, key=freq_likelihood.get)[-1]
         return likelihood_letter
 
