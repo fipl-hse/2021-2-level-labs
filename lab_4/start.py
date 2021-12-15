@@ -31,15 +31,15 @@ if __name__ == '__main__':
 
     print("--- 6 ---")
     profile = LanguageProfile(storage, "idk")
-    profile.create_from_tokens(encode_corpus(storage, corpus), (1, 2, 3, 4,))
+    profile.create_from_tokens(encode_corpus(storage, corpus), (1, 2,))
     generator = NGramTextGenerator(profile)
     for length in range(5, 11):
-        print(generator.generate_decoded_sentence((1, 2, 3,), length))
+        print(generator.generate_decoded_sentence((1,), length))
 
     print("--- 8 ---")
     generator = LikelihoodBasedTextGenerator(profile)
     for length in range(5, 11):
-        print(generator.generate_decoded_sentence((1, 2, 3,), length))
+        print(generator.generate_decoded_sentence((1,), length))
 
     print("--- 10 ---")
     profile = PublicLanguageProfile(LetterStorage(), "ne")
