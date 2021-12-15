@@ -211,7 +211,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                         freq_dict[key] = value
                         if letter == key[-1]:
                             frequencies += value
-        if sum(freq_dict.values()) == 0:
+        if not freq_dict:
             return 0.0
         likelihood = frequencies / sum(freq_dict.values())
         return likelihood
@@ -238,7 +238,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not freq_likelihood:
             for trie in self.profile.tries:
                 if trie.size == 1:
-                    likelihood_letter = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
+                    likelihood_letter = max(trie.n_gram_frequencies,
+                                            key=trie.n_gram_frequencies.get)
                     return likelihood_letter[0]
         likelihood_letter = max(freq_likelihood, key=freq_likelihood.get)[-1]
         return likelihood_letter
