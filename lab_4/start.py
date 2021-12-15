@@ -81,6 +81,7 @@ if __name__ == '__main__':
     score_4()
     score_6()
     score_8()
+
     RESULT = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
