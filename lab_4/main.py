@@ -214,7 +214,23 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not isinstance(letter, int) or \
+                not isinstance(context, tuple) or \
+                len(context) + 1 not in [trie.size for trie in self.profile.tries] or \
+                len(context) == 0:
+            return -1
+        variant = context + (letter,)
+        all_n_grams = {}
+        for trie in self.profile.tries:
+            if trie.size == len(variant):
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:len(context)] == context:
+                        all_n_grams[n_gram] = freq
+                if not all_n_grams:
+                    return 0.0
+        all_n_grams_freq = sum(all_n_grams.values())
+        variant_freq = all_n_grams[variant]
+        return variant_freq/all_n_grams_freq
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -222,7 +238,26 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
+        if not isinstance(context, tuple) or \
+                len(context) + 1 not in [trie.size for trie in self.profile.tries] or \
+                len(context) < 1:
+            return -1
+        all_n_grams = {}
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram[:len(context)] == context:
+                        all_n_grams[n_gram] = self._calculate_maximum_likelihood(n_gram[-1],
+                                                                                 context)
+        if all_n_grams:
+            variant = sorted(all_n_grams, key=all_n_grams.get, reverse=True)[0][-1]
+            return variant
+        else:
+            for trie in self.profile.tries:
+                if trie.size == 1:
+                    variant = sorted(trie.n_gram_frequencies,
+                                     key=trie.n_gram_frequencies.get, reverse=True)[0][0]
+                    return variant
 
 
 # 10
