@@ -24,6 +24,9 @@ if __name__ == '__main__':
     profile = LanguageProfile(letter_storage, 'en')
     profile.create_from_tokens(encoded, (2,))
     def function_for_grade4():
+        '''
+        function_for_grade4
+        '''
         sorted_letter_storage = sorted(letter_storage.storage,
                                        key=letter_storage.storage.get, reverse=True)
         amount = f'Number of letters: {letter_storage.get_letter_count()}'
@@ -31,12 +34,18 @@ if __name__ == '__main__':
         max_ids = f'Top 5 max ids: {sorted_letter_storage[:5]}'
         return amount, min_ids, max_ids
     def function_for_grade6():
+        '''
+        function_for_grade6
+        '''
         text_generator = NGramTextGenerator(profile)
         one = text_generator.generate_decoded_sentence((1,), 5)
         two = text_generator.generate_decoded_sentence((1,), 6)
         three = text_generator.generate_decoded_sentence((1,), 7)
         return one, two, three
     def function_for_grade8():
+        '''
+        function_for_grade8
+        '''
         likelihood_text_generator = LikelihoodBasedTextGenerator(profile)
         one = likelihood_text_generator.generate_decoded_sentence((1,), 5)
         two = likelihood_text_generator.generate_decoded_sentence((1,), 6)
