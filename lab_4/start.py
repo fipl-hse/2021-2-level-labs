@@ -3,7 +3,7 @@ Language generation starter
 """
 
 import os
-from main import tokenize_by_letters, LetterStorage, encode_corpus, \
+from lab_4.main import tokenize_by_letters, LetterStorage, encode_corpus, \
     LanguageProfile, NGramTextGenerator, decode_sentence, \
     translate_sentence_to_plain_text, LikelihoodBasedTextGenerator
 
