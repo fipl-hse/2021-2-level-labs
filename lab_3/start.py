@@ -7,9 +7,7 @@ from lab_3.main import (tokenize_by_sentence,
                         LetterStorage,
                         encode_corpus,
                         LanguageProfile,
-                        calculate_distance,
-                        LanguageDetector,
-                        ProbabilityLanguageDetector)
+                        calculate_distance)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,6 +17,7 @@ if __name__ == '__main__':
     UNKNOWN_SAMPLE = "Helium is material."
     SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз. 
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
+
     eng_text = tokenize_by_sentence(ENG_SAMPLE)
     de_text = tokenize_by_sentence(GERMAN_SAMPLE)
     unk_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
