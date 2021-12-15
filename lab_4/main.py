@@ -4,9 +4,10 @@ Language generation algorithm based on language profiles
 """
 
 from typing import Tuple
+import re
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
+
 
 
 # 4
@@ -124,12 +125,13 @@ class NGramTextGenerator:
         if not possible_n_grams:
             return -1
         possible_n_grams = sorted(possible_n_grams, key=possible_n_grams.get, reverse=True)
+        n_gram_index = 0
         while True:
             for n_gram_index, possible_n_gram in enumerate(possible_n_grams):
                 if possible_n_gram not in self._used_n_grams and possible_n_gram[0] == context[0]:
                     self._used_n_grams.append(possible_n_gram)
                     return possible_n_gram[-1]
-                elif n_gram_index == len(possible_n_grams) - 1 and self._used_n_grams:
+                if n_gram_index == len(possible_n_grams) - 1 and self._used_n_grams:
                     self._used_n_grams.clear()
                     n_gram_index = 0
             if n_gram_index == len(possible_n_grams) - 1 and not self._used_n_grams:
@@ -156,7 +158,7 @@ class NGramTextGenerator:
             context = [word[-1]]
             if word[-1] == self.profile.storage.get_special_token_id():
                 return tuple(word)
-            elif len(word) == word_max_length:
+            if len(word) == word_max_length:
                 word.append(self.profile.storage.get_special_token_id())
                 return tuple(word)
         return ()
