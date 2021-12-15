@@ -35,7 +35,7 @@ I wish I thought What Jolly Fun'''.lower()
         text_generator = LikelihoodBasedTextGenerator(profile)
         actual = text_generator.generate_sentence((4,), 4)
         expected = ((4, 5, 1), (1, 2, 1), (1, 2, 1), (1, 2, 1))
-        self.assertEqual(actual, expected)
+        self.assertEqual(expected, actual)
 
     def test_incorrect_input(self):
         """
@@ -83,4 +83,4 @@ I wish I thought What Jolly Fun'''.lower()
         text_generator = LikelihoodBasedTextGenerator(profile)
         actual = text_generator.generate_sentence((4, 20), 4)
         expected = ((4, 20, 1), (1, 2, 1), (1, 2, 1), (1, 2, 1))
-        self.assertEqual(actual, expected)
+        self.assertEqual(expected, actual)
