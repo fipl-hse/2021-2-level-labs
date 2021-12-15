@@ -13,7 +13,20 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    if not isinstance(text,str):
+        return -1
+
+    new_text = ''
+    text = text.lower()
+    for symbol in text:
+        if symbol.isalpha() or symbol.isspace():
+            new_text += symbol
+    tokens_list = []
+    for word in new_text.split():
+        tokens = "_" + word + "_"
+        tokens_list.append(tuple(tokens))
+    return tuple(tokens_list)
+
 
 
 # 4
@@ -28,14 +41,20 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for word in elements:
+            for symbol in word:
+                self._put(symbol)
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
-
+        if not self.storage:
+            return -1
+        return len(self.storage)
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -45,7 +64,17 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    storage.update(corpus)
+    encoded_corpus = []
+    for token in corpus:
+        encoded_token = []
+        for letter in token:
+                encoded_token.append(storage.get_id(letter))
+
+        encoded_corpus.append(tuple(encoded_token))
+    return tuple(encoded_corpus)
 
 
 # 4
@@ -56,7 +85,19 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()
+
+    decoded_corpus = []
+    for token in sentence:
+        decoded_token = []
+        for letter in token:
+                decoded_token.append(storage.get_element(letter))
+
+        decoded_corpus.append(tuple(decoded_token))
+    return tuple(decoded_corpus)
+
+
 
 
 # 6
