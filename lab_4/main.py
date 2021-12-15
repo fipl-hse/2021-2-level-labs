@@ -2,10 +2,10 @@
 Lab 4
 Language generation algorithm based on language profiles
 """
-
+import json
 from typing import Tuple
 from lab_4.storage import Storage
-from lab_4.language_profile import LanguageProfile
+from lab_4.language_profile import LanguageProfile, NGramTrie
 
 
 # 4
@@ -136,6 +136,8 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
+        # ПРОБЛЕМА
+
         if not (isinstance(context, tuple) and isinstance(word_max_length, int)):
             return ()
 
@@ -152,12 +154,52 @@ class NGramTextGenerator:
         if word_max_length == 1:
             generated_word.append(self.language_profile.storage.get_special_token_id())
 
+        if len(generated_word) == word_max_length:
+            generated_word.append(self.language_profile.storage.get_special_token_id())
+
+        '''
+        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
+            return ()
+
+        word = []
+        word_length = 0
+        last_character_id = -1
+
+        context_length = len(context)
+
+        if context_length > 1 \
+                and context[-1] == self.language_profile.storage.get_special_token_id():
+            context = (self.language_profile.storage.get_special_token_id(),)
+
+        for character in context:
+            word.append(character)
+            word_length += 1
+
+        special_character_id = self.language_profile.storage.get_special_token_id()
+
+        while last_character_id != special_character_id:
+            if word:
+                context = tuple(word[-context_length:])
+
+            if word_length >= word_max_length:
+                generated_character_id = special_character_id
+            else:
+                generated_character_id = self._generate_letter(context)
+
+            word_length += 1
+            last_character_id = generated_character_id
+            word.append(generated_character_id)
+
+        return tuple(word)
+        '''
         return tuple(generated_word)
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
+        # ПРОБЛЕМА
+
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
 
@@ -168,6 +210,36 @@ class NGramTextGenerator:
             generated_sentence.append(word)
             context = tuple(word[-1:])
 
+
+        '''
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ()
+
+        context_length = len(context)
+
+        sentence = [self._generate_word(context)]
+
+        all_generated_characters = []
+
+        for _ in range(word_limit - 1):
+            for word in sentence:
+                for character in word:
+                    all_generated_characters.append(character)
+
+            new_context = tuple(all_generated_characters[-context_length:])
+
+            # Start with the last generated context of context length
+            sentence.append(self._generate_word(new_context))
+
+            # #Start with special token
+            # special_token_id = self.language_profile.storage.get_special_token_id()
+            # sentence.append(self._generate_word((special_token_id,)))
+
+            # #Start with the last generated context of context length of the last word
+            # sentence.append(self._generate_word(sentence[len(sentence) - 1][-context_length:]))
+
+        return tuple(sentence)
+        '''
         return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
@@ -268,7 +340,57 @@ class BackOffGenerator(NGramTextGenerator):
             available frequency for the corresponding context.
             if no context can be found, reduces the context size by 1.
         """
-        pass
+
+        if not isinstance(context, tuple) or not context:
+            return -1
+
+        # if len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
+            # return -1
+
+        # sorted from 3 to 1
+        tries_sorted_by_size_in_reverse = sorted(self.language_profile.tries,
+                                                 key=lambda ngram_trie: -ngram_trie.size)
+        frequencies = {}
+
+        for trie in tries_sorted_by_size_in_reverse:
+            if trie.size <= len(context) + 1:
+                for ngram, freq in trie.n_gram_frequencies.items():
+                    if ngram in self._used_n_grams:
+                        continue
+
+                    if trie.size != 1:
+                        if ngram[:-1] != context[-trie.size + 1:]:
+                            continue
+
+                    frequencies[ngram] = freq
+
+                if frequencies:
+                    n_gram = max(frequencies, key=frequencies.get)
+                    self._used_n_grams.append(n_gram)
+
+                    return n_gram[-1]
+                
+
+        '''
+        frequencies = {}
+        trie_size_reverse = sorted(self.language_profile.tries, key=lambda ngram_trie: -ngram_trie.size)
+        for trie in trie_size_reverse:
+            if trie.size <= len(context) + 1:
+                for n_gram, freq in trie.n_gram_frequencies.items():
+                    if n_gram not in self._used_n_grams:
+                        frequencies[n_gram] = freq
+
+                    if trie.size == 1:
+                        if n_gram[-trie.size + 1:] == context:
+                            frequencies[n_gram] = freq
+                    else:
+                        continue
+                if frequencies:
+                    n_gram = max(frequencies, key=frequencies.get)
+                    self._used_n_grams.append(n_gram)
+                    return n_gram[-1]
+        '''
+
 
 
 # 10
@@ -282,4 +404,49 @@ class PublicLanguageProfile(LanguageProfile):
         Opens public profile and adapts it.
         :return: o if succeeds, 1 otherwise
         """
-        pass
+        if not isinstance(file_name, str):
+            return 1
+
+        with open(file_name, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+            self.language = data['name']
+            self.n_words = data['n_words']
+
+            decoded_ngrams = {}
+
+            for ngram in data['freq']:
+                decoded_ngram = []
+                for letter in ngram:
+
+                    if letter == ' ':
+                        processed_letter = '_'
+                    elif letter.isupper():
+                        processed_letter = letter.lower()
+                    else:
+                        processed_letter = letter
+
+                    self.storage.update((((processed_letter,),),))
+                    decoded_ngram.append(self.storage.get_id(processed_letter))
+
+                if tuple(decoded_ngram) in decoded_ngrams:
+                    decoded_ngrams[tuple(decoded_ngram)] += data['freq'][ngram]
+                else:
+                    decoded_ngrams[tuple(decoded_ngram)] = data['freq'][ngram]
+
+            ngram_sizes_dict = {}
+
+            for ngram, freq in decoded_ngrams.items():
+                size = len(ngram)
+
+                if size not in ngram_sizes_dict:
+                    ngram_sizes_dict[size] = {}
+
+                ngram_sizes_dict[size][ngram] = freq
+
+            for size, group in ngram_sizes_dict.items():
+                trie = NGramTrie(size, self.storage)
+                trie.n_gram_frequencies = group
+                self.tries.append(trie)
+
+        return 0
