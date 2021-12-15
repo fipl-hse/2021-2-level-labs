@@ -114,14 +114,10 @@ class NGramTextGenerator:
         # or that have already been used
         frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
                        if n_gram[:-1] == context and n_gram not in self._used_n_grams}
-        # print(frequencies)
-        # print(self.profile.storage.storage)
         if not frequencies:
             # ignore context
             frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()
                            if n_gram not in self._used_n_grams}
-        # print(frequencies)
-        # print(self.profile.storage.storage)
         if not frequencies:
             # clear self._used_n_grams, try again
             self._used_n_grams = []
@@ -129,15 +125,6 @@ class NGramTextGenerator:
                            if n_gram[:-1] == context}
         if not frequencies:
             return -1
-        # print(frequencies)
-        # print(self.profile.storage.storage)
-        # if not frequencies:
-            # ignore context again. is this necessary? no idea.
-            # it seems like something that might occur, though.
-            # frequencies = {n_gram: freq for n_gram, freq in trie.n_gram_frequencies.items()}
-        # print(frequencies)
-        # print(self.profile.storage.storage)
-
         n_gram = max(frequencies, key=frequencies.get)
         self._used_n_grams.append(n_gram)
         return n_gram[-1]
@@ -289,8 +276,8 @@ class PublicLanguageProfile(LanguageProfile):
         """
         if not isinstance(file_name, str):
             return 1
-        with open(file_name, encoding="utf-8") as f:
-            data = json.load(f)
+        with open(file_name, encoding="utf-8") as file:
+            data = json.load(file)
         self.language = data["name"]
         self.n_words = data["n_words"]
         self.tries = [self._build_n_gram_trie(data["freq"], trie_level)
