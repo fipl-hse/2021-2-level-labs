@@ -103,37 +103,45 @@ class NGramTextGenerator:
                 and len(context) + 1 in [trie.size for trie in self.profile.tries]):
             return -1
         possible_n_grams = {}
-        for trie in self.profile.tries:
-            if trie.size == len(context) + 1:
-                for ngram, freq in trie.n_gram_frequencies.items():
-                    if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
-                        self._used_n_grams = []
-                    if ngram[:len(context)] == context and ngram not in self._used_n_grams:
-                        possible_n_grams[ngram] = freq
-                if not possible_n_grams:
-                    n_gram = max(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get)
-                else:
-                    n_gram = max(possible_n_grams, key=possible_n_grams.get)
-                self._used_n_grams.append(n_gram)
-        return n_gram[-1]
+        for t in self.profile.tries:
+            if t.size == len(context) + 1:
+                trie = t
+        for ngram, freq in trie.n_gram_frequencies.items():
+            if ngram[:-1] == context and ngram not in self._used_n_grams:
+                possible_n_grams[ngram] = freq
+        if not possible_n_grams:
+            for ngram, freq in trie.n_gram_frequencies.items():
+                if ngram not in self._used_n_grams:
+                    possible_n_grams[ngram] = freq
+        if not possible_n_grams:
+            self._used_n_grams = []
+            for ngram, freq in trie.n_gram_frequencies.items():
+                if ngram[:-1] == context:
+                    possible_n_grams[ngram] = freq
+        if not possible_n_grams:
+            return -1
+        ngram = max(possible_n_grams, key=possible_n_grams.get)
+        self._used_n_grams.append(ngram)
+        return ngram[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        if not (isinstance(context, tuple) and isinstance(word_max_length, int)):
+        if not (isinstance(context, tuple)
+                and isinstance(word_max_length, int)):
             return ()
-        generated_word = list(context)
-        if len(generated_word) >= word_max_length:
-            generated_word.append(self.profile.storage.get_special_token_id())
-            return tuple(generated_word)
+        generated_word = []
+        generated_word.extend(context)
         while len(generated_word) < word_max_length:
-            generated_letter = self._generate_letter(context)
-            generated_word.append(generated_letter)
-            if generated_letter == self.profile.storage.get_special_token_id():
-                break
-            context = tuple(generated_word[-1:])
-        return tuple(generated_word)
+            generated_word.append(self._generate_letter(tuple(context)))
+            context = [generated_word[-1]]
+            if generated_word[-1] == self.profile.storage.get_special_token_id():
+                return tuple(generated_word)
+            if len(generated_word) == word_max_length:
+                generated_word.append(self.profile.storage.get_special_token_id())
+                return tuple(generated_word)
+        return ()
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
@@ -143,10 +151,12 @@ class NGramTextGenerator:
                 and isinstance(word_limit, int)
                 and word_limit >= 0):
             return ()
-        sentence = []
-        while len(sentence) < word_limit:
-            sentence.append(self._generate_word(context))
-        return tuple(sentence)
+        generated_sentence = []
+        for _ in range(word_limit):
+            generated_word = self._generate_word(context)
+            context = generated_word[-len(context):]
+            generated_sentence.append(generated_word)
+        return tuple(generated_sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
@@ -195,7 +205,23 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         :param context: a context for the letter given
         :return: float number, that indicates maximum likelihood
         """
-        pass
+        if not (isinstance(letter, int)
+                and isinstance(context, tuple)
+                and context):
+            return -1
+        
+        all_possibles = {}
+        likelihood = 0.0
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for ngram, freq in trie.n_gram_frequencies.items():
+                    if ngram[:-1] == context:
+                        all_possibles[ngram] = freq
+                        if ngram[-1] == letter:
+                            likelihood = freq
+        if not all_possibles:
+            return likelihood
+        return likelihood / sum(list(all_possibles.values()))
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -219,7 +245,24 @@ class BackOffGenerator(NGramTextGenerator):
             available frequency for the corresponding context.
             if no context can be found, reduces the context size by 1.
         """
-        pass
+        if not (isinstance(context, tuple) and context):
+            return -1
+        for t in self.profile.tries:
+            if t.size == len(context) + 1:
+                trie = t
+        probabilities = {}
+        possibles = {}
+        for ngram, freq in trie.n_gram_frequencies.items():
+            if ngram[:-1] == context:
+                possibles[ngram] = freq
+        if not possibles:
+            for t in self.profile.tries:
+                if t.size == 1:
+                    trie = t
+            possibles = trie.n_gram_frequencies
+        for ngram in possibles:
+            probabilities[ngram] = self._calculate_maximum_likelihood(ngram[-1], ngram[:-1])
+        return max(probabilities, key=probabilities.get)[-1]
 
 
 # 10
