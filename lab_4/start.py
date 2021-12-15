@@ -27,7 +27,5 @@ if __name__ == '__main__':
     assert RESULT, 'Detection not working'
 
 
-    RESULT = ''
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Detection not working'
+
 

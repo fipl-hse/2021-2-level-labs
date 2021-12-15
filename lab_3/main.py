@@ -51,7 +51,7 @@ class LetterStorage:
     """
     def __init__(self):
         self.storage = {}
-        self.count = 1
+        self.counter = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -62,8 +62,8 @@ class LetterStorage:
         if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
-            self.count += 1
-            self.storage[letter] = self.count
+            self.storage[letter] = self.counter
+            self.counter += 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -85,7 +85,7 @@ class LetterStorage:
         if not isinstance(letter_id, int) or letter_id not in self.storage.values():
             return -1
         for letter, character_id in self.storage.items():
-            if character_id == letter_id:
+            if letter_id == character_id:
                 return letter
         return -1
 
@@ -365,7 +365,9 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
-    if not isinstance(unknown_profile, LanguageProfile) or not isinstance(known_profile,LanguageProfile) or not isinstance(k, int) or not isinstance(trie_level, int):
+    if not isinstance(unknown_profile, LanguageProfile) \
+            or not isinstance(known_profile, LanguageProfile) \
+            or not isinstance(k, int) or not isinstance(trie_level, int):
         return -1
     distance = 0
     top_unknown = unknown_profile.get_top_k_n_grams(k, trie_level)
@@ -375,7 +377,7 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
 
     for g in top_unknown:
         if g in top_known:
-            distance += abs(top_known.index(g) - top_unknown.index(g))
+            distance += abs(top_unknown.index(g) - top_known.index(g))
         else:
             distance += top_known_len
     return distance
