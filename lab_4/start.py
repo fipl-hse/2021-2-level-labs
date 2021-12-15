@@ -31,7 +31,7 @@ if __name__ == '__main__':
         sorted_letter_storage = sorted(letter_storage.storage, key=letter_storage.storage.get, reverse=True)
         amount = f'Number of letters: {letter_storage.get_letter_count()}'
         min_ids = f'Top 5 min ids: {sorted_letter_storage[-5:]}'
-        max_ids = f'Top 5 max ids:'  {sorted_letter_storage[:5]}'
+        max_ids = f'Top 5 max ids: {sorted_letter_storage[:5]}'
         return amount, min_ids, max_ids
         
     def function_for_grade6():
