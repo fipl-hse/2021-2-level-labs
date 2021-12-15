@@ -34,10 +34,6 @@ def tokenize_by_letters(text: str) -> Tuple or int:
                 return ()
     return tuple(new_text)
 
-
-
-
-
 # 4
 class LetterStorage(Storage):
     """
@@ -65,8 +61,6 @@ class LetterStorage(Storage):
             return -1
         return len(self.storage)
 
-
-
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -86,8 +80,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                 enc_word.append(storage.get_id(letter))
         encoded_corpus.append(tuple(enc_word))
     return tuple(encoded_corpus)
-
-
 
 # 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
@@ -109,9 +101,6 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
         decoded_sentences.append(tuple(dec_words))
     return tuple(decoded_sentences)
 
-
-
-
 # 6
 class NGramTextGenerator:
     """
@@ -119,7 +108,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
+        self._used_n_grams = []
+        self.profile = language_profile
 
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -127,33 +117,84 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+        if not isinstance(context, tuple):
+            return -1
+        prediction = {}
+        grams = ()
+        if len(context) + 1 not in [trie.size for trie in self.profile.tries]:
+            return -1
+        for trie in self.profile.tries:
+            if trie.size == len(context) + 1:
+                for key, value in trie.n_gram_frequencies.items():
+                    if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
+                        self._used_n_grams = []
+                    if key[:len(context)] == context and key not in self._used_n_grams:
+                        prediction[key] = value
+                if prediction:
+                    grams = max(prediction.keys(), key=prediction.get)
+                    self._used_n_grams.append(grams)
+                else:
+                    grams = max(trie.n_gram_frequencies.keys(), key=trie.n_gram_frequencies.get)
+        return grams[-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
+            return ()
+        word = list(context)
+        while len(word) <= word_max_length:
+            if word_max_length == 1:
+                word.append(self.profile.storage.get_special_token_id())
+                return tuple(word)
+            else:
+                letter = self._generate_letter(context)
+                word.append(letter)
+                if letter == self.profile.storage.get_special_token_id():
+                    break
+            context = tuple(word[-1:])
+        return tuple(word)
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ()
+        sentence = []
+        while len(sentence) < word_limit:
+            sentence.append(self._generate_word(context))
+        return tuple(sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
-        pass
-
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ''
+        sentence = self.generate_sentence(context, word_limit)
+        string = ''
+        for word in sentence:
+            for id_number in word:
+                letter = self.profile.storage.get_element(id_number)
+                string += letter
+        decoded_sentence = string.replace('__', ' ').replace('_', '').capitalize() + '.'
+        return decoded_sentence
 
 # 6
 def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
+    if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
+        return ''
+    string = ''
+    for word in decoded_corpus:
+        for symbol in word:
+            string += str(symbol)
+    new_text = string.replace("__", " ").replace("_", "").capitalize() + '.'
+    return new_text
 
 
 # 8
