@@ -316,20 +316,17 @@ class PublicLanguageProfile(LanguageProfile):
         self.tries = []
 
         for trie_level in set(map(len, data["freq"])):
-
             n_gram_trie = NGramTrie(trie_level, self.storage)
-
             for n_gram_raw, freq in data["freq"].items():
 
                 if len(n_gram_raw) == trie_level:
-
                     n_gram = n_gram_raw.lower().replace(" ", "_")
                     self.storage.update(tuple(n_gram))
-
                     n_gram = tuple(map(self.storage.get_id, n_gram))
 
                     if n_gram not in n_gram_trie.n_gram_frequencies:
                         n_gram_trie.n_gram_frequencies[n_gram] = 0
+
                     n_gram_trie.n_gram_frequencies[n_gram] += freq
 
             self.tries.append(n_gram_trie)
