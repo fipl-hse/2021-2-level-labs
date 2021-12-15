@@ -128,6 +128,8 @@ class NGramTextGenerator:
         """
         Generates full word for the context given.
         """
+        if not (isinstance(context, tuple) and isinstance(word_max_length, int)):
+            return ()
         generated_word = []
         generated_word.extend(context)
         if word_max_length == 1:
