@@ -29,18 +29,20 @@ if __name__ == '__main__':
         Выведите 5 букв с наименьшим идентификатором,
         а также 5 букв с наибольшим идентификатором.'''
         sorted_letter_storage = sorted(letter_storage.storage, key=letter_storage.storage.get, reverse=True)
-        print(letter_storage.get_letter_count())
-        print('Top 5 min ids:', sorted_letter_storage[-5:])
-        print('Top 5 max ids:', sorted_letter_storage[:5])
+        amount = f'Number of letters: {letter_storage.get_letter_count()}'
+        min_ids = f'Top 5 min ids: {sorted_letter_storage[-5:]}'
+        max_ids = f'Top 5 max ids:'  {sorted_letter_storage[:5]}'
+        return amount, min_ids, max_ids
         
     def function_for_grade6():
         '''Создайте экземпляр класса LanguageProfile, основанный на обработанном тексте.
         Сгенерируйте несколько предложений длиной по 5-10 слов.
         Декодируйте предложения и сконвертируйте их в строковый формат.'''
         text_generator = NGramTextGenerator(profile)
-        for i in range(5, 8):
-            decoded_sentence = text_generator.generate_decoded_sentence((1,), i)
-            print(decoded_sentence)
+        one = text_generator.generate_decoded_sentence((1,), 5)
+        two = text_generator.generate_decoded_sentence((1,), 6)
+        three = text_generator.generate_decoded_sentence((1,), 7)
+        return one, two, three
 
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
