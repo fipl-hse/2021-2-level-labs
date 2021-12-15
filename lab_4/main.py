@@ -141,7 +141,7 @@ class NGramTextGenerator:
             if len(generated_word) == word_max_length:
                 generated_word.append(self.profile.storage.get_special_token_id())
                 return tuple(generated_word)
-        return tuple(generated_word)
+        return ()
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
