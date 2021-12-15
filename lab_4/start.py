@@ -4,7 +4,8 @@ Language generation starter
 
 import os
 from lab_4.main import tokenize_by_letters, LetterStorage, LanguageProfile, \
-    NGramTextGenerator, encode_corpus, decode_sentence, translate_sentence_to_plain_text
+    NGramTextGenerator, encode_corpus, decode_sentence, translate_sentence_to_plain_text, \
+    LikelihoodBasedTextGenerator
 
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -39,13 +40,18 @@ if __name__ == '__main__':
     PROFILE.create_from_tokens(ENCODED, (2,))
 
     GENERATOR = NGramTextGenerator(PROFILE)
-    GENERATED_TEXT = GENERATOR.generate_sentence((3,), 10)
+    GENERATED_TEXT = GENERATOR.generate_sentence((8,), 10)
     DECODED = decode_sentence(STORAGE, GENERATED_TEXT)
+
+    RESULT_FOR_6 = translate_sentence_to_plain_text(DECODED)
 
     #score 8
 
+    LIKELIHOOD_GENERATOR = LikelihoodBasedTextGenerator(PROFILE)
+    RESULT_FOR_8 = LIKELIHOOD_GENERATOR.generate_decoded_sentence((8,), 10)
 
-    RESULT_FOR_6 = translate_sentence_to_plain_text(DECODED)
     print(RESULT_FOR_6)
+    print(RESULT_FOR_8)
+    RESULT = RESULT_FOR_8
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT_FOR_6, 'Detection not working'
+    assert RESULT, 'Detection not working'

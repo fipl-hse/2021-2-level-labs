@@ -21,7 +21,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
             new_text += letter
     token_list = []
     for word in new_text.split():
-        tokens = [letter for letter in '_'+word+'_']
+        tokens = list(letter for letter in '_'+word+'_')
         token_list.append(tuple(tokens))
     return tuple(token_list)
 
