@@ -249,7 +249,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not likelihood_dict:
             for trie in self.profile.tries:
                 if trie.size == 1:
-                    sorted_keys = sorted(trie.n_gram_frequencies, key=trie.n_gram_frequencies.get, reverse=True)
+                    sorted_keys = sorted(trie.n_gram_frequencies,
+                                         key=trie.n_gram_frequencies.get, reverse=True)
                     if context[-1] == special_token and sorted_keys[0][0] == special_token:
                         generated_letter = sorted_keys[1][0]
                     else:
