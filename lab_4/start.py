@@ -43,8 +43,8 @@ if __name__ == '__main__':
         for length in range(5, 10):
             generated_text = generator.generate_sentence((1,), length)
             decoded_text = decode_sentence(storage, generated_text)
-            RESULT = translate_sentence_to_plain_text(decoded_text)
-            print(RESULT)
+            plain_text = translate_sentence_to_plain_text(decoded_text)
+            print(plain_text)
 
     def score_8():
         print('--point 8--')
