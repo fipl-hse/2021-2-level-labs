@@ -4,9 +4,9 @@ Language generation algorithm based on language profiles
 """
 
 from typing import Tuple
+import re
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
 
 
 # 4
@@ -103,9 +103,9 @@ class NGramTextGenerator:
                 and len(context) + 1 in [trie.size for trie in self.profile.tries]):
             return -1
         possible_n_grams = {}
-        for t in self.profile.tries:
-            if t.size == len(context) + 1:
-                trie = t
+        for i in self.profile.tries:
+            if i.size == len(context) + 1:
+                trie = i
         for ngram, freq in trie.n_gram_frequencies.items():
             if ngram[:-1] == context and ngram not in self._used_n_grams:
                 possible_n_grams[ngram] = freq
@@ -209,7 +209,6 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 and isinstance(context, tuple)
                 and context):
             return -1
-        
         all_possibles = {}
         likelihood = 0.0
         for trie in self.profile.tries:
@@ -229,7 +228,24 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             Takes the letter with highest
             maximum likelihood frequency.
         """
-        pass
+        if not (isinstance(context, tuple) and context):
+            return -1
+        for i in self.profile.tries:
+            if i.size == len(context) + 1:
+                trie = i
+        probabilities = {}
+        possibles = {}
+        for ngram, freq in trie.n_gram_frequencies.items():
+            if ngram[:-1] == context:
+                possibles[ngram] = freq
+        if not possibles:
+            for i in self.profile.tries:
+                if i.size == 1:
+                    trie = i
+            possibles = trie.n_gram_frequencies
+        for ngram in possibles:
+            probabilities[ngram] = self._calculate_maximum_likelihood(ngram[-1], ngram[:-1])
+        return max(probabilities, key=probabilities.get)[-1]
 
 
 # 10
@@ -245,24 +261,7 @@ class BackOffGenerator(NGramTextGenerator):
             available frequency for the corresponding context.
             if no context can be found, reduces the context size by 1.
         """
-        if not (isinstance(context, tuple) and context):
-            return -1
-        for t in self.profile.tries:
-            if t.size == len(context) + 1:
-                trie = t
-        probabilities = {}
-        possibles = {}
-        for ngram, freq in trie.n_gram_frequencies.items():
-            if ngram[:-1] == context:
-                possibles[ngram] = freq
-        if not possibles:
-            for t in self.profile.tries:
-                if t.size == 1:
-                    trie = t
-            possibles = trie.n_gram_frequencies
-        for ngram in possibles:
-            probabilities[ngram] = self._calculate_maximum_likelihood(ngram[-1], ngram[:-1])
-        return max(probabilities, key=probabilities.get)[-1]
+        pass
 
 
 # 10
