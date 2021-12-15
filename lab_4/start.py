@@ -23,10 +23,6 @@ if __name__ == '__main__':
     lowest_id = list(storage.storage)[:5]
     highest_id = list(storage.storage)[-5:]
 
-    print('Letters in the storage:', number_of_letters)
-    print('Top 5 letters with the lowest ids:', lowest_id)
-    print('Top 5 letters with the highest ids:', highest_id)
-
-    RESULT = ''
+    RESULT = number_of_letters, lowest_id, highest_id
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
