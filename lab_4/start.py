@@ -41,6 +41,6 @@ if __name__ == '__main__':
     gen_sen_8 = gen_8.generate_decoded_sentence((1,), 8)
     print(gen_sen_8)
 
-    RESULT = ''
+    RESULT = gen_sen_8
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    # assert RESULT, 'Detection not working'
+    assert RESULT, 'Detection not working'
