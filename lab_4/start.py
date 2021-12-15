@@ -39,9 +39,8 @@ if __name__ == '__main__':
         Декодируйте предложения и сконвертируйте их в строковый формат.'''
         text_generator = NGramTextGenerator(profile)
         for i in range(5, 10):
-            generated_sentence = text_generator.generate_sentence((1,), i)
-            decoded = decode_sentence(letter_storage, generated_sentence)
-            print(translate_sentence_to_plain_text(decoded))
+            decoded_sentence = text_generator.generate_decoded_sentence((1,), i)
+            print(decoded_sentence)
 
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
