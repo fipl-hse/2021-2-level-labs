@@ -46,6 +46,7 @@ if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
-    RESULT = ''
+    RESULT_4 = function_for_grade4()
+    RESULT_6 = function_for_grade6()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
