@@ -20,29 +20,32 @@ if __name__ == '__main__':
         reference_text = file_to_read.read()
 
     #score 4
-    tokenized_text = tokenize_by_letters(reference_text)
-    storage = LetterStorage()
-    storage.update(tokenized_text)
+    TOKENIZED_TEXT = tokenize_by_letters(reference_text)
+    STORAGE = LetterStorage()
+    STORAGE.update(TOKENIZED_TEXT)
 
-    num_of_letters = storage.get_letter_count()
-    lowest_id = list(storage.storage.keys())
-    highest_id = list(storage.storage.keys())
+    NUM_OF_LETTERS = STORAGE.get_letter_count()
+    LOWEST_ID = list(STORAGE.storage.keys())
+    HIGHEST_ID = list(STORAGE.storage.keys())
 
-    print('The number of letters is:', num_of_letters)
-    print('5 letters with the lowest id:', lowest_id[:5])
-    print('5 letters with the highest id:', highest_id[-5:])
+    print('The number of letters is:', NUM_OF_LETTERS)
+    print('5 letters with the lowest id:', LOWEST_ID[:5])
+    print('5 letters with the highest id:', HIGHEST_ID[-5:])
 
     #score 6
 
-    encoded = encode_corpus(storage, tokenized_text)
-    profile = LanguageProfile(storage, 'en')
-    profile.create_from_tokens(encoded, (2,))
+    ENCODED = encode_corpus(STORAGE, TOKENIZED_TEXT)
+    PROFILE = LanguageProfile(STORAGE, 'en')
+    PROFILE.create_from_tokens(ENCODED, (2,))
 
-    generator = NGramTextGenerator(profile)
-    generated_text = generator.generate_sentence((3,), 10)
-    decoded = decode_sentence(storage, generated_text)
+    GENERATOR = NGramTextGenerator(PROFILE)
+    GENERATED_TEXT = GENERATOR.generate_sentence((3,), 10)
+    DECODED = decode_sentence(STORAGE, GENERATED_TEXT)
 
-    RESULT_FOR_6 = translate_sentence_to_plain_text(decoded)
+    #score 8
+
+
+    RESULT_FOR_6 = translate_sentence_to_plain_text(DECODED)
     print(RESULT_FOR_6)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT_FOR_6, 'Detection not working'
