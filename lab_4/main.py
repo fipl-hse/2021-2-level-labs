@@ -80,7 +80,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
         return ()
     storage.update(sentence)
-    decoded_sentences = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
+    decoded_sentences = tuple(tuple(storage.get_element(letter) for letter
+                                    in word) for word in sentence)
     return decoded_sentences
 
 
@@ -100,11 +101,9 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        if not isinstance(context, tuple):
+        if not isinstance(context, tuple) or len(context) + 1 not in [trie.size for trie
+                                                                      in self.language_profile.tries]:
             return -1
-        if len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
-            return -1
-
         overall_list = []
         for trie in self.language_profile.tries:
             if trie.size == len(context) + 1:
