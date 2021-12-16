@@ -98,7 +98,7 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        self.profile = language_profile
+        self.language_profile = language_profile
         self._used_n_grams = []
 
     def _generate_letter(self, context: tuple) -> int:
@@ -109,13 +109,13 @@ class NGramTextGenerator:
         """
         if not isinstance(context, tuple):
             return -1
-        for trie in self.profile.tries:
+        for trie in self.language_profile.tries:
             if not trie.size == len(context) + 1:
                 return -1
 
         predict_dict = {}
 
-        for trie in self.profile.tries:
+        for trie in self.language_profile.tries:
             for key, val in trie.n_gram_frequencies.items():
                 if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
                     self._used_n_grams = []
@@ -172,9 +172,14 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             return ''
 
-        encoded_sentence = self.generate_sentence(context, word_limit)
-        decoded_sentence = decode_sentence(self.language_profile.storage, encoded_sentence)
-        return translate_sentence_to_plain_text(decoded_sentence)
+        sentence = self.generate_sentence(context, word_limit)
+        decoded_sentence = ""
+        for word in sentence:
+            for element in word:
+                letter = self.language_profile.storage.get_element(element)
+                decoded_sentence += letter
+        decoded_sentence = decoded_sentence.replace('__', ' ').strip('_').capitalize() + '.'
+        return decoded_sentence
 
 
 # 6
