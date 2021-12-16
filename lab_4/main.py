@@ -14,19 +14,23 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    if not isinstance(text, str) or not text:
+    if not isinstance(text, str):
         return -1
 
-    sentences = re.split(r"[!.?]\s*", text)
-    letters = []
-    for sentence in sentences:
-        list_tokens = re.sub('[^\n a-z]', '', sentence.lower()).split()
-        if list_tokens:
-            tokens = tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens)
-            letters.append(tokens)
-    token_sentence = tuple(letters)
-    return token_sentence
+    new_text = ''
+    text = text.lower()
+    for letter in text:
+        if letter.isalpha() or letter.isspace():
+            new_text += letter
 
+    token_list = []
+    for word in new_text.split():
+        tokens = '_'
+        for letter in word:
+            tokens += letter
+        tokens += '_'
+        token_list.append(tuple(tokens))
+    return tuple(token_list)
 
 # 4
 class LetterStorage(Storage):
