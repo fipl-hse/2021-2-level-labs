@@ -7,6 +7,21 @@ from lab_1.main import tokenize, remove_stop_words
 
 
 # 4
+def get_sparse_vector(original_text: list, language_profiles: dict) -> list or None:
+    """
+    Builds a sparse vector representation of a given text
+        using dictionary with language profiles
+    :param original_text: any tokenized text
+    :param language_profiles: a dictionary of dictionaries - language profiles
+    """
+    pass
+    count_labels = {}
+    for label in labels:
+        if label['label'] in count_labels:
+            count_labels[label['label']] += 1
+        else:
+            count_labels[label['label']] = 1
+    return count_labels
 def get_freq_dict(tokens: list) -> dict or None:
     """
     Calculates frequencies of given tokens
