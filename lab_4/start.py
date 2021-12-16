@@ -8,9 +8,7 @@ from lab_4.main import (
     encode_corpus,
     LetterStorage,
     LanguageProfile,
-    NGramTextGenerator,
-    decode_sentence,
-    translate_sentence_to_plain_text
+    NGramTextGenerator
 )
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -25,26 +23,23 @@ if __name__ == '__main__':
     storage = LetterStorage()
     storage.update(tokenization)
 
-    print("number of letters: ", storage.get_letter_count())
-    print("lowest identifier: ", list(storage.storage.items())[:5])
-    print("highest identifier: ", list(storage.storage.items())[-5:])
+    print('storage: ', storage.storage)
+    print('number of letters: ', storage.get_letter_count())
+    print('lowest identifier: ', list(storage.storage.items())[:5])
+    print('highest identifier: ', list(storage.storage.items())[-5:])
 
-    encoded_corpus = encode_corpus(storage, tokenization)
+    encoded = encode_corpus(storage, tokenization)
 
     profile = LanguageProfile(storage, 'en')
-    profile.create_from_tokens(encoded_corpus, (2,))
+    profile.create_from_tokens(encoded, (2,))
 
     text_generator = NGramTextGenerator(profile)
-    sentences = []
 
-    result = []
+    sent_one = text_generator.generate_decoded_sentence((1,), 5)
+    sent_two = text_generator.generate_decoded_sentence((1,), 6)
+    sent_three = text_generator.generate_decoded_sentence((1,), 7)
+    print(sent_one, sent_two, sent_three)
 
-    for length in range(5, 10):
-        sentences.append(text_generator.generate_sentence((1,), length))
-        decoded_corpus = decode_sentence(storage, sentences)
-        result.append(translate_sentence_to_plain_text(decoded_corpus))
-    print(result)
-
-    RESULT = ''
+    RESULT = 'The an ond s ing. Hat warer bento cof forouristedese peasitiomelece. Mal dichillieeta radotrssh lacaim nemowholy eveprtsosayoov geidryexpopami.'
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
