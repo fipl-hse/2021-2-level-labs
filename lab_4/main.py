@@ -15,19 +15,19 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     if not isinstance(text, str):
         return -1
-    trash_symbols = '1234567890-=!@#$%^&*()_+{}[]":;?/>.<,\'\|/'
+    clear_text = ''
 
     text = text.lower()
     for letter in text:
-        if letter in trash_symbols:
-            text = text.replace(letter, '')
+        if letter.isalpha() or letter.isspace():
+            clear_text += letter
 
     list_of_tokens = []
-    clear_text = text.split()
+    clear_text = clear_text.split()
     for word in clear_text:
-        tokens = ''
+        tokens = []
         for letter in word:
-            tokens += letter
+            tokens.append(letter)
         list_of_tokens.append(tuple(['_'] + list(tokens) + ['_']))
     return tuple(list_of_tokens)
 
