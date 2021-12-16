@@ -167,7 +167,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ''
         sentence = self.generate_sentence(context, word_limit)
-        decoded_sentence = []
+        decoded_sentence = ''
         for word in sentence:
             for letter_id in word:
                 letter = self.profile.storage.get_element(letter_id)
