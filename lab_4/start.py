@@ -7,26 +7,43 @@ from lab_4.main import (
     tokenize_by_letters,
     encode_corpus,
     LetterStorage,
-    LanguageProfile
+    LanguageProfile,
+    NGramTextGenerator,
+    decode_sentence,
+    translate_sentence_to_plain_text
 )
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
 
-    # find the appropriate start.py task in your lab_4 description file
-    # your code goes here
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") \
+            as file:
+        text = file.read()
 
-    with open(os.path.join(PATH_TO_LAB_FOLDER, "reference_text.txt"), "r", encoding="utf-8") as file_to_read:
-        text = file_to_read.read()
-
-    tokenized_text = tokenize_by_letters(text)
+    tokenization = tokenize_by_letters(text)
     storage = LetterStorage()
-    storage.update(tokenized_text)
+    storage.update(tokenization)
 
-    number_of_letters = storage.get_letter_count()
-    low_id = list(storage.storage)[:5]
-    high_id = list(storage.storage)[-5:]
+    print("number of letters: ", storage.get_letter_count())
+    print("lowest identifier: ", list(storage.storage.items())[:5])
+    print("highest identifier: ", list(storage.storage.items())[-5:])
+
+    encoded_corpus = encode_corpus(storage, tokenization)
+
+    profile = LanguageProfile(storage, 'en')
+    profile.create_from_tokens(encoded_corpus, (2,))
+
+    text_generator = NGramTextGenerator(profile)
+    sentences = []
+
+    result = []
+
+    for length in range(5, 10):
+        sentences.append(text_generator.generate_sentence((1,), length))
+        decoded_corpus = decode_sentence(storage, sentences)
+        result.append(translate_sentence_to_plain_text(decoded_corpus))
+    print(result)
 
     RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
