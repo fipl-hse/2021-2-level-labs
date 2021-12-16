@@ -247,12 +247,6 @@ class NGramTrie:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
-        if not isinstance(n_grams_dictionary, dict):
-            return 1
-        for n_gram, log_probability in n_grams_dictionary.items():
-            if isinstance(n_gram, tuple) and isinstance(log_probability, float):
-                self.n_gram_log_probabilities[n_gram] = log_probability
-        return 0
 
     # 10
     def calculate_log_probabilities(self) -> int:
@@ -260,16 +254,6 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if not self.n_gram_frequencies:
-            return 1
-        for n_gram, frequency in self.n_gram_frequencies.items():
-            amount = 0
-            for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
-                if n_gram[:-1] == n_gram_neighbour[:-1]:
-                    amount += frequency_neighbour
-            self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
-        return 0
-
 
 # 6
 class LanguageProfile:
@@ -501,24 +485,6 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :param trie_level: the size of ngrams
     :return: a probability of unknown top k ngrams
     """
-    if not (isinstance(unknown_profile, LanguageProfile)
-            and isinstance(known_profile, LanguageProfile)
-            and isinstance(k, int)
-            and isinstance(trie_level, int)):
-        return -1
-
-    probability = 0
-
-    for n_gram_trie in known_profile.tries:
-        if n_gram_trie.size == trie_level:
-            n_gram_trie.calculate_log_probabilities()
-
-            for n_gram in unknown_profile.get_top_k_n_grams(k, trie_level):
-                if n_gram in n_gram_trie.n_gram_log_probabilities:
-                    probability += n_gram_trie.n_gram_log_probabilities[n_gram]
-
-    return probability
-
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
@@ -536,15 +502,3 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: sorted language labels with corresponding ngram size and their prob scores
         if input is correct, otherwise -1
         """
-        if not (isinstance(unknown_profile, LanguageProfile)
-                and isinstance(k, int)
-                and isinstance(trie_levels, tuple)):
-            return -1
-        lang_probabilities = {}
-        for language, language_profile in self.language_profiles.items():
-            for trie_level in trie_levels:
-                lang_probabilities[language, trie_level] = calculate_probability(unknown_profile,
-                                                                                 language_profile,
-                                                                                 k,
-                                                                                 trie_level)
-        return lang_probabilities
