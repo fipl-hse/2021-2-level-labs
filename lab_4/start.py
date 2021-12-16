@@ -3,43 +3,51 @@ Language generation starter
 """
 
 import os
-from lab_4.main import tokenize_by_letters, LetterStorage, LanguageProfile, \
-    NGramTextGenerator, encode_corpus, decode_sentence, translate_sentence_to_plain_text
+from lab_4.main import (tokenize_by_letters, LetterStorage, encode_corpus,
+                        LanguageProfile, NGramTextGenerator,
+                        LikelihoodBasedTextGenerator)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
-PATH_TO_TEXT_FOLDER = os.path.join(PATH_TO_LAB_FOLDER)
 
 if __name__ == '__main__':
     # find the appropriate start.py task in your lab_4 description file
     # your code goes here
 
-    with open(os.path.join(PATH_TO_TEXT_FOLDER, 'reference_text.txt'), 'r',
+    with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r',
               encoding='utf-8') as file_to_read:
         reference_text = file_to_read.read()
 
-    # score 4
     tokenized_text = tokenize_by_letters(reference_text)
     storage = LetterStorage()
     storage.update(tokenized_text)
 
-    num_of_letters = storage.get_letter_count()
-    lowest_id = list(storage.storage.keys())
-    highest_id = list(storage.storage.keys())
+    encoded_text = encode_corpus(storage, tokenized_text)
+    profile = LanguageProfile(storage, "en")
+    profile.create_from_tokens(encoded_text, (2,))
 
-    print('The number of letters is:', num_of_letters)
-    print('5 letters with the lowest id:', lowest_id[:5])
-    print('5 letters with the highest id:', highest_id[-5:])
+    # score 4
+    def score_4():
+        print('The number of letters: ', storage.get_letter_count())
+        print('The letters with the lowest ids: ', list(storage.storage)[:5])
+        print('The letters with the highest ids: ', list(storage.storage)[-5:])
 
     # score 6
+    def score_6():
+        text_generator = NGramTextGenerator(profile)
+        sentence = text_generator.generate_decoded_sentence((1,), 5)
+        print(sentence)
+        return sentence
 
-    encoded = encode_corpus(storage, tokenized_text)
-    profile = LanguageProfile(storage, 'en')
-    profile.create_from_tokens(encoded, (2,))
+    # score 8
+    def score_8():
+        text_generator = LikelihoodBasedTextGenerator(profile)
+        sentence = text_generator.generate_decoded_sentence((1,), 5)
+        print(sentence)
+        return sentence
 
-    generator = NGramTextGenerator(profile)
-    generated_text = generator.generate_sentence((3,), 10)
-    decoded = decode_sentence(storage, generated_text)
-    RESULT = translate_sentence_to_plain_text(decoded)
-    print(RESULT)
+
+    score_4()
+    score_6()
+    RESULT = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
