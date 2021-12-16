@@ -204,7 +204,7 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
         sentence.extend(word)
     if sentence[0] == '_':
         sentence[0] = ''
-    if sentence[-1] == '_':
+    elif sentence[-1] == '_':
         sentence[-1] = '.'
     decoded_sentence = ''.join(sentence)
     decoded_sentence = decoded_sentence.replace('__', ' ')
