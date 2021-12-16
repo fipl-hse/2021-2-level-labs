@@ -46,13 +46,11 @@ if __name__ == '__main__':
         profile.create_from_tokens(encoded_text, (2,))
         #GENERATION
         generate_text = NGramTextGenerator(profile)
-        sentences = []
-        decoded_sentences = []
-        for length in range(5, 10):
-            sentences.append(generate_text.generate_decoded_sentence((1,), length))
-            decoded_corpus = decode_sentence(storage, sentences)
-            decoded_sentences.append(translate_sentence_to_plain_text(decoded_corpus))
+        sentences = generate_text.generate_sentence((1,), 7)
+        decoded_corpus = decode_sentence(storage, sentences)
+        decoded_sentences = translate_sentence_to_plain_text(decoded_corpus)
         #PRINT
+        print(decoded_sentences)
         return decoded_sentences
 
     def score_8():
@@ -72,16 +70,15 @@ if __name__ == '__main__':
         profile.create_from_tokens(encoded_text, (2,))
         # GENERATION
         generate_text = LikelihoodBasedTextGenerator(profile)
-        sentences = []
-        for length in range(5, 10):
-            sentences.append(generate_text.generate_decoded_sentence((1,), length))
+        sentences = generate_text.generate_decoded_sentence((1, ), 7)
         # PRINT
+        print(sentences)
         return sentences
 
 
-    score_4()
-    score_6()
-    score_8()
+    # score_4()
+    # score_6()
+    # score_8()
     RESULT = score_8()
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
