@@ -3,7 +3,6 @@ Lab 4
 Language generation algorithm based on language profiles
 """
 
-import re
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
