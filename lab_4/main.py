@@ -101,8 +101,8 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        if not isinstance(context, tuple) or len(context) + 1 not in [trie.size for trie
-                                                                      in self.language_profile.tries]:
+        if not isinstance(context, tuple) \
+                or len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
             return -1
         overall_list = []
         for trie in self.language_profile.tries:
