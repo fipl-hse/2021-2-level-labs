@@ -15,18 +15,9 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     if not isinstance(text, str):
         return -1
-    new_text = ''
-    for letter in text.lower():
-        if letter.isalpha() or letter.isspace():
-            new_text += letter
-    token_list = []
-    for word in new_text.split():
-        tokens = '_'
-        for letter in word:
-            tokens += letter
-        tokens += '_'
-        token_list.append(tuple(tokens))
-    return tuple(token_list)
+    text = "".join(letter for letter in text if letter.isalpha() or letter.isspace())
+    text_tuple = tuple(tuple("_"+word+"_") for word in text.lower().strip().split())
+    return text_tuple
 
 
 # 4

@@ -25,21 +25,27 @@ if __name__ == '__main__':
     profile = LanguageProfile(storage, "en")
     profile.create_from_tokens(encoded_text, (2,))
 
-    # score 4
     def score_4():
+        """
+        Score 4
+        """
         print('The number of letters: ', storage.get_letter_count())
         print('The letters with the lowest ids: ', list(storage.storage)[:5])
         print('The letters with the highest ids: ', list(storage.storage)[-5:])
 
-    # score 6
     def score_6():
+        """
+        Score 6
+        """
         text_generator = NGramTextGenerator(profile)
         sentence = text_generator.generate_decoded_sentence((1,), 5)
         print(sentence)
         return sentence
 
-    # score 8
     def score_8():
+        """
+        Score 8
+        """
         text_generator = LikelihoodBasedTextGenerator(profile)
         sentence = text_generator.generate_decoded_sentence((1,), 5)
         print(sentence)
