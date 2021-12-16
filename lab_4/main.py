@@ -3,10 +3,10 @@ Lab 4
 Language generation algorithm based on language profiles
 """
 
+import re
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
-import re
 
 
 # 4
@@ -116,11 +116,11 @@ class NGramTextGenerator:
         predict_dict = {}
 
         for trie in self.profile.tries:
-            for k, v in trie.n_gram_frequencies.items():
+            for key, val in trie.n_gram_frequencies.items():
                 if self._used_n_grams == list(trie.n_gram_frequencies.keys()):
                     self._used_n_grams = []
-                elif k[:len(context)] == context and k not in self._used_n_grams:
-                    predict_dict[k] = v
+                elif key[:len(context)] == context and key not in self._used_n_grams:
+                    predict_dict[key] = val
             if predict_dict:
                 prediction = max(predict_dict.keys(), key = predict_dict.get)
                 self._used_n_grams.append(prediction)
@@ -136,17 +136,45 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(word_max_length, int):
             return ()
 
+        generated_word = []
+        for letter in context:
+            generated_word.append(letter)
+        while True:
+            if len(generated_word) == word_max_length:
+                generated_word.append(self.language_profile.storage.storage['_'])
+                break
+            following_letter = self._generate_letter(context)
+            generated_word.append(following_letter)
+            context = *context[1:], following_letter
+            if generated_word[-1] == self.language_profile.storage.storage['_']:
+                break
+        return tuple(generated_word)
+
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ()
+
+        sentence = []
+
+        while len(sentence) != word_limit:
+            word = self._generate_word(context, word_max_length=15)
+            sentence.append(word)
+            context = tuple(word[-1:])
+        return tuple(sentence)
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
-        pass
+        if not isinstance(context, tuple):
+            return ''
+
+        encoded_sentence = self.generate_sentence(context, word_limit)
+        decoded_sentence = decode_sentence(self.language_profile.storage, encoded_sentence)
+        return translate_sentence_to_plain_text(decoded_sentence)
 
 
 # 6
@@ -154,7 +182,16 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
+    if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
+        return ''
+
+    sentence = ''
+
+    for word in decoded_corpus:
+        for letter in word:
+            sentence += letter
+    decoded_sentence = sentence.replace('__', ' ').replace('_', '').capitalize() + '.'
+    return decoded_sentence
 
 
 # 8
