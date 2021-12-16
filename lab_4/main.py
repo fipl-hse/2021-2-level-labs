@@ -30,9 +30,6 @@ def tokenize_by_letters(text: str) -> Tuple or int:
         token_list.append(tuple(tokens))
     return tuple(token_list)
 
-
-
-
 # 4
 class LetterStorage(Storage):
     """
@@ -53,9 +50,6 @@ class LetterStorage(Storage):
                 self._put(element)
         return 0
 
-
-
-
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
@@ -64,7 +58,6 @@ class LetterStorage(Storage):
         if not self.storage:
             return -1
         return len(self.storage)
-
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
