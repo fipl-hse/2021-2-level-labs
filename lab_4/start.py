@@ -14,6 +14,7 @@ if __name__ == '__main__':
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') \
                 as file_to_read:
             text = file_to_read.read()
+
         tokenized_text = tokenize_by_letters(text)
         storage = LetterStorage()
         storage.update(tokenized_text)
@@ -27,7 +28,6 @@ if __name__ == '__main__':
         print('Top 5 letters with the lowest ids: {} '.format(the_lowest_id))
         print('Top 5 letters with the highest ids: {} '.format(the_highest_id))
         return number_of_letters, the_lowest_id, the_highest_id
-
 
     def score_6():
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') \
@@ -52,7 +52,6 @@ if __name__ == '__main__':
         print(decoded_corpus)
         return decoded_corpus
 
-
     def score_8():
         with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding='utf-8') \
                 as file_to_read:
@@ -75,7 +74,6 @@ if __name__ == '__main__':
         print('Score 8')
         print(decoded_corpus)
         return decoded_corpus
-
 
     score_4()
     score_6()
