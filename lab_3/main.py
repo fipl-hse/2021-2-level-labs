@@ -28,13 +28,13 @@ def tokenize_by_sentence(text: str) -> tuple:
     sentences = re.compile(r'[.!?]')
     sentences = filter(lambda t: t, [t.strip() for t in sentences.split(text)])
     result = []
-    punctiation = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
+    punct = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                    '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                    '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
     for sentence in sentences:
         sentence = sentence.lower()
-        for symbols in punctuation:
+        for symbols in punct:
             sentence = sentence.replace(symbols, '')
         tokens = sentence.split()
         for word in tokens:
@@ -96,6 +96,7 @@ class LetterStorage:
             if value == letter_id:
                 return key
         return -1
+    
 
     def update(self, corpus: tuple) -> int:
         """
