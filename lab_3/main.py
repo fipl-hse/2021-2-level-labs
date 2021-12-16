@@ -185,8 +185,8 @@ class NGramTrie:
             )
         )
         """
-        if not isinstance(encoded_corpus, tuple):
-            return 1
+    if not isinstance(encoded_corpus, tuple):
+        return 1
         list_n_grams = []
         for sentence in encoded_corpus:
             n_grams_sentence = []
