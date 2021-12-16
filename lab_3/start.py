@@ -8,8 +8,7 @@ from lab_3.main import (tokenize_by_sentence,
                         encode_corpus,
                         LanguageProfile,
                         calculate_distance,
-                        LanguageDetector,
-                        ProbabilityLanguageDetector)
+                        LanguageDetector)
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,38 +21,22 @@ if __name__ == '__main__':
     SECRET_SAMPLE = """ Некој е болен и тој не е слободен. Dлетува гол во дупка од мраз.
     И пее, а плаче од болка. Дали е ова контраст, можеби – живот?"""
 
-    # use tokenize_by_sentence
-    # score 6-8
     eng_text = tokenize_by_sentence(ENG_SAMPLE)
     de_text = tokenize_by_sentence(GERMAN_SAMPLE)
     unk_text = tokenize_by_sentence(UNKNOWN_SAMPLE)
-    # score 10 secret_text
-    secret_text = tokenize_by_sentence(SECRET_SAMPLE)
 
-    # use method update in LetterStorage
-    # score 6-8
     storage = LetterStorage()
     storage.update(eng_text)
     storage.update(de_text)
     storage.update(unk_text)
-    # score 10
-    storage.update(secret_text)
-
-    # use function encode_corpus
-    # score 6-8
     encoded_eng_text = encode_corpus(storage, eng_text)
     encoded_de_text = encode_corpus(storage, de_text)
     encoded_unk_text = encode_corpus(storage, unk_text)
-    # score 10
-    encoded_secret_text = encode_corpus(storage, secret_text)
 
-    # use LanguageProfile
-    # score 6-8
+
     eng_profile = LanguageProfile(storage, 'en')
     de_profile = LanguageProfile(storage, 'de')
     unk_profile = LanguageProfile(storage, 'unk')
-    # score 10
-    secret_profile = LanguageProfile(storage, 'secret')
 
 
     def score_6(k=5, trie_level=2):
@@ -62,7 +45,7 @@ if __name__ == '__main__':
         predict UNKNOWN_SAMPLE
         EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
         """
-        # use create_from_tokens
+
         eng_profile.create_from_tokens(encoded_eng_text, (trie_level,))
         de_profile.create_from_tokens(encoded_de_text, (trie_level,))
         unk_profile.create_from_tokens(encoded_unk_text, (trie_level,))
@@ -79,7 +62,7 @@ if __name__ == '__main__':
         predict UNKNOWN_SAMPLE
         EXPECTED_SCORE = {'en': 24, 'de': 25}
         """
-        # use create_from_tokens
+
         eng_profile.create_from_tokens(encoded_eng_text, (trie_level,))
         de_profile.create_from_tokens(encoded_de_text, (trie_level,))
         unk_profile.create_from_tokens(encoded_unk_text, (trie_level,))
@@ -94,28 +77,6 @@ if __name__ == '__main__':
         unk_profile.open('unk_profile.json')
 
         return detector.detect(unk_profile, k, (trie_level,))
-
-    def score_10(k=1000, trie_levels=(2,)):
-        """
-        score 10, params: k = 1000, trie_levels = (2,)
-        predict SECRET_SAMPLE
-        EXPECTED_LANGUAGE = ?
-        EXPECTED_MIN_DISTANCE = ?
-        """
-        # use create_from_tokens
-        secret_profile.create_from_tokens(encoded_secret_text, trie_levels)
-
-        detector = ProbabilityLanguageDetector()
-
-        for file_name in os.listdir(os.path.join(PATH_TO_LAB_FOLDER, 'profiles')):
-            profile = LanguageProfile(storage, file_name)
-            profile.open(os.path.join(PATH_TO_LAB_FOLDER, 'profiles', file_name))
-            detector.register_language(profile)
-
-        probabilities = detector.detect(secret_profile, k, trie_levels)
-        predicted_language = min(probabilities, key=probabilities.get)
-
-        return predicted_language[0], probabilities[predicted_language]
 
     ACTUAL_6 = score_6()
     EXPECTED_DISTANCE_TO_EN_DE_PROFILES = 17, 25
