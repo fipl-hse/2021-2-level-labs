@@ -35,7 +35,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     text_tuple = []
     for sentence_raw in text:
         words_raw = sentence_raw.split()
-    sentence_tuple = []
+        sentence_tuple = []
         for word_raw in words_raw:
             for key, value in umlaut_replace.items():
                 word_raw = word_raw.replace(key, value)
