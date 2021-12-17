@@ -51,6 +51,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 # 4
 class LetterStorage:    
+    
     """
     Stores and manages letters
     """   
