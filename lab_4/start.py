@@ -18,9 +18,9 @@ if __name__ == '__main__':
     storage = LetterStorage()
     storage.update(preprocessed_text)
 
-    number_of_letters = storage.get_letter_count()
+    number_letters = storage.get_letter_count()
 
-    print('The number of letters is', number_of_letters)
+    print('The number of letters is', number_letters)
     print('Top 5 letters with the lowest id is', list(storage.storage.keys())[:5])
     print('Top 5 letters with the highest id is', list(storage.storage.keys())[-5:])
 
