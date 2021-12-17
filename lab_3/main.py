@@ -59,7 +59,6 @@ class LetterStorage:
         self.uid_startval = 1
         self.uid = self.uid_startval 
 
-
     def _put_letter(self, letter: str) -> int: 
         """
         Puts a letter into storage, assigns a unique id
