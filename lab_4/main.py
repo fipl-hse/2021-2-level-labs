@@ -18,9 +18,9 @@ def tokenize_by_letters(text: str) -> Tuple or int:
 
     text = text.lower()
     cleaned_text = ''
-    for x in text:
-        if x.isalpha() or x.isspace():
-            cleaned_text += x
+    for symbol in text:
+        if symbol.isalpha() or symbol.isspace():
+            cleaned_text += symbol
     words_list = cleaned_text.split()
 
     prepared_text = []
