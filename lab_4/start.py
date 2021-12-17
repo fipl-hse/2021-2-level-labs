@@ -17,10 +17,10 @@ if __name__ == '__main__':
     preprocessed_text = tokenize_by_letters(reference_text)
     storage = LetterStorage()
     storage.update(preprocessed_text)
-    number_of_letters = storage.get_letter_count()
+    NUMBER_OF_LETTERS = storage.get_letter_count()
     the_lowest_id = list(storage.storage.items())[:5]
     the_highest_id = list(storage.storage.items())[-5:]
-    print('Number of letters = {} '.format(number_of_letters))
+    print('Number of letters = {} '.format(NUMBER_OF_LETTERS))
     print('Letters with the lowest id: {}'.format(the_lowest_id))
     print('Letters with the highest id: {}'.format(the_highest_id))
 
@@ -47,9 +47,9 @@ if __name__ == '__main__':
     #     reference_text = file_to_read.read()
     # storage = LetterStorage()
     # storage.update(tokenize_by_letters(reference_text))
-    encoded_corpus = encode_corpus(storage, tokenize_by_letters(reference_text))
+
     language_profile = LanguageProfile(storage, 'en')
-    language_profile.create_from_tokens(encoded_corpus, (2,))
+    language_profile.create_from_tokens(encoded_text, (2,))
     generated_text = LikelihoodBasedTextGenerator(language_profile)
     sentences = []
     for length in range(5, 10):
