@@ -166,11 +166,11 @@ class NGramTrie:
         Stores and manages ngrams
         """
   def __init__(self, n: int, letter_storage: LetterStorage):
-      self.size = n
-      self.storage = letter_storage
-      self.n_grams = []
-      self.n_gram_frequencies = {}
-      self.n_gram_log_probabilities = {}
+    self.size = n
+    self.storage = letter_storage
+    self.n_grams = []
+    self.n_gram_frequencies = {}
+    self.n_gram_log_probabilities = {}
 
 
     # 6 - biGrams
