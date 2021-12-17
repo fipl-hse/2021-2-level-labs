@@ -221,11 +221,11 @@ def get_n_grams_frequencies(self) -> int:
     """       
     if not self.n_grams:
         return 1
-      for sentence in self.n_grams:
-          for word in sentence:
-              for n_gram in word:
-                  self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
-      return 0
+    for sentence in self.n_grams:
+        for word in sentence:
+            for n_gram in word:
+                self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
+    return 0
 
 # 8
 def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:    
