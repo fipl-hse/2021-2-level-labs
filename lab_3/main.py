@@ -2,8 +2,8 @@
 Lab 3
 Language classification using n-grams
 """
-import json
-from math import fabs, log
+
+from math import fabs
 from typing import Dict, Tuple
 import re
 
