@@ -49,7 +49,7 @@ class LetterStorage(Storage):
         if not isinstance(elements, tuple):
             return -1
         
-        default id = 0
+        default_id = 0
         
         for word in elements:
             for letter in word:
