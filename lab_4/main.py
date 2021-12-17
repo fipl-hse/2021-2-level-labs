@@ -14,7 +14,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     Tokenizes given sequence by letters
     """
     if not isinstance(text, str):
-        return None
+        return -1
     removesymbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
