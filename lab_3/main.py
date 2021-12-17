@@ -20,6 +20,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+    
         if not isinstance(text, str):
     return ()
 umlaut_replace = {'ö': 'oe',
@@ -77,7 +78,7 @@ class LetterStorage:
             self.uid += 1
         return 0
 
-       def get_id_by_letter(self, letter: str) -> int:
+  def get_id_by_letter(self, letter: str) -> int:
         """
         Gets a unique id by a letter
         :param letter: a letter
@@ -103,7 +104,7 @@ class LetterStorage:
 
         return self.storage.keys()[poz]
 
-       def update(self, corpus: tuple) -> int:
+   def update(self, corpus: tuple) -> int:
         """
         Fills a storage by letters from the corpus
         :param corpus: a tuple of sentences
@@ -142,6 +143,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
+    
     if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
     storage.update(corpus)
@@ -161,6 +163,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: an encoded tuple of sentences
     :return: a tuple of the decoded sentences
     """
+    
     if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
         return ()
     storage.update(corpus)
@@ -188,7 +191,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-        def extract_n_grams(self, encoded_corpus: tuple) -> int:
+    def extract_n_grams(self, encoded_corpus: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
@@ -205,6 +208,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             )
         )
         """
+        
         if not isinstance(encoded_corpus, tuple):
             return 1
         n_grams = tuple(tuple(tuple(word[i:i + self.size]
@@ -231,6 +235,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
         }
         """
+        
         if not self.n_grams:
             return 1
         for sentence in self.n_grams:
@@ -245,6 +250,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         Extracts n_grams frequencies from given dictionary.
         Fills self.n_gram_frequency field.
         """
+        
         if not isinstance(n_grams_dictionary, dict):
             return 1
         for key, value in n_grams_dictionary.items():
@@ -258,6 +264,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         Extracts n_grams log-probabilities from given dictionary.
         Fills self.n_gram_log_probabilities field.
         """
+        
         if not isinstance(n_grams_dictionary, dict):
             return 1
         for n_gram, log_probability in n_grams_dictionary.items():
@@ -271,6 +278,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
+        
         if not self.n_gram_frequencies:
             return 1
         for n_gram, frequency in self.n_gram_frequencies.items():
@@ -313,6 +321,7 @@ class LanguageProfile:
             (7, 8), (8, 1))),
         )
         """
+        
         if not (isinstance(encoded_corpus, tuple) and isinstance(ngram_sizes, tuple)):
             return 1
         for ngram_size in ngram_sizes:
@@ -349,6 +358,7 @@ class LanguageProfile:
             (3, 4), (4, 1), (1, 5), (5, 2), (2, 1)
         )
         """
+        
         if not (isinstance(k, int) and isinstance(trie_level, int)):
             return ()
         if k <= 0:
@@ -367,6 +377,7 @@ class LanguageProfile:
         :param name: name of the json file with .json format
         :return: 0 if profile saves, 1 if any errors occurred
         """
+        
         if not isinstance(name, str):
             return 1
         freq = {}
@@ -391,6 +402,7 @@ class LanguageProfile:
         :param file_name: name of the json file with .json format
         :return: 0 if profile is opened, 1 if any errors occurred
         """
+        
         if not isinstance(file_name, str):
             return 1
         with open(file_name, encoding="utf-8") as lang_profile_file:
@@ -433,6 +445,7 @@ class LanguageProfile:
     Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
     Соответственно расстояние между наборами равно 2.
     """
+    
     if not (isinstance(unknown_profile, LanguageProfile)
             and isinstance(known_profile, LanguageProfile)
             and isinstance(k, int)
@@ -506,6 +519,7 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
     :param trie_level: the size of ngrams
     :return: a probability of unknown top k ngrams
     """
+    
     if not (isinstance(unknown_profile, LanguageProfile)
             and isinstance(known_profile, LanguageProfile)
             and isinstance(k, int)
