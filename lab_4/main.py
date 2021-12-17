@@ -13,7 +13,17 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
-    pass
+    
+    if not isinstance(text: str): 
+        Return 1
+    f_txt = ""
+    f_lst = []
+    for letter in text:
+        if letter.isalpha() or letter.isspace():
+            f_txt += f_txt.join(letter)
+    for word in f_txtx.lower().strip().split():
+        f_lst.append(tuple("_" + word + "_"))
+    return tuple(f_lst)
 
 
 # 4
@@ -28,14 +38,21 @@ class LetterStorage(Storage):
         :param elements: a tuple of tuples of letters
         :return: 0 if succeeds, -1 if not
         """
-        pass
+        if not isinstance(elements, tuple):
+            return -1
+        for word in elements:
+            for letter in word:
+                if self._put(letter) == -1:
+                    return -1
+        return 0
 
     def get_letter_count(self) -> int:
         """
         Gets the number of letters in the storage
         """
-        pass
-
+         if len(self.storage) == 0:
+            return -1
+        return len(self.storage)
 
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -45,8 +62,11 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of tuples
     :return: a tuple of the encoded letters
     """
-    pass
-
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+    storage.update(corpus)
+    encoded_sentences = tuple(tuple(storage.get_id(letter) for letter in word) for word in corpus)
+    return encoded_sentences
 
 # 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
@@ -56,9 +76,11 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :param sentence: a tuple of tuples-encoded words
     :return: a tuple of the decoded sentence
     """
-    pass
-
-
+    if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
+        return ()	
+    storage.update(sentence)
+    decoded_sentences = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
+    return decoded_sentences
 # 6
 class NGramTextGenerator:
     """
@@ -66,33 +88,86 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-        pass
-
+         self.language_profile = language_profile
+        self._used_n_grams = []
+        
     def _generate_letter(self, context: tuple) -> int:
         """
         Generates the next letter.
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-        pass
+         if not isinstance(context, tuple):
+            return -1
+        if len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
+            return -1
+        n_grams = []
+        for trie in self.language_profile.tries:
+            if trie.size == len(context) +1:
+                for n_gram in trie.n_gram_frequencies:	
+                    if n_gram[:-1] == context and n_gram not in self._used_n_grams:
+                        n_grams.append((n_gram, trie.n_gram_frequencies[n_gram]))
+            if not n_grams:
+                for n_gram in trie.n_gram_frequencies:
+                    if n_gram not in self._used_n_grams:
+                        n_grams.append((n_gram, trie.n_gram_frequencies[n_gram]))
+            if not n_grams:
+                self._used_n_grams = []
+                for n_gram in trie.n_gram_frequencies:
+                    if n_gram[:-1] == context and n_gram not in self._used_n_grams:
+                        n_grams.append((n_gram, trie.n_gram_frequencies[n_gram]))
+
+        if not n_grams:	
+            return -1
+        n_grams = sorted(n_grams, key=lambda x: x[1], reverse = True)
+        self._used_n_grams.append(n_grams[0][0])
+        return n_grams[0][0][-1]
 
     def _generate_word(self, context: tuple, word_max_length=15) -> tuple:
         """
         Generates full word for the context given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_max_length, int):
+            return ()
+        f_word = []
+        for letter in context:
+            future_word.append(letter)
+        while True:
+            if len(f_word) == word_max_length:
+                f_word.append(self.language_profile.storage.storage['_'])
+                break
+            following_letter = self._generate_letter(context)
+            f_word.append(following_letter)
+            context = *context[1:], following_letter
+            if f_word[-1] == self.language_profile.storage.storage['_']:
+                break
+
+        return tuple(future_word)
+
 
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
-        pass
+        if not isinstance(context, tuple) or not isinstance(word_limit, int):
+            return ()
+        f_sentence = []
+        while len(f_sentence) != word_limit:
+            following_word = self._generate_word(context)
+            f_sentence.append(following_word)
+            context = tuple(following_word[-1:])
+        return tuple(future_sentence)
+
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
         """
         Generates full sentence and decodes it
         """
-        pass
+         if not isinstance(context, tuple):	
+            return ""
+        encoded_sentence = self.generate_sentence(context, word_limit)
+        decoded_sentence = decode_sentence(self.language_profile.storage, encoded_sentence)
+        return translate_sentence_to_plain_text(decoded_sentence)
 
 
 # 6
@@ -100,8 +175,17 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-    pass
-
+     if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
+        return ''
+    result = ''	
+    for element in decoded_corpus:
+        for symbol in element:
+            result += symbol	
+    result = result.replace('__', ' ')
+    result = result.replace('_', '')
+    result = result.capitalize()
+    result += '.'
+    return result
 
 # 8
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
