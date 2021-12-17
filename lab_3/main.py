@@ -50,17 +50,17 @@ def tokenize_by_sentence(text: str) -> tuple:
     return text_tuple
 
 # 4
-class LetterStorage:    
+class LetterStorage:
     
     """
     Stores and manages letters
-    """   
+    """ 
     def __init__(self):
-        self.storage = {}  
+        self.storage = {}
         self.uid_startval = 1
-        self.uid = self.uid_startval 
+        self.uid = self.uid_startval
 
-    def _put_letter(self, letter: str) -> int: 
+    def _put_letter(self, letter: str) -> int:
         """
         Puts a letter into storage, assigns a unique id
         :param letter: a letter
@@ -84,7 +84,7 @@ class LetterStorage:
             return -1
         return self.storage[letter]
     
-    def get_letter_by_id(self, letter_id: int) -> str or int:        
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -95,7 +95,7 @@ class LetterStorage:
         poz = letter_id - self.uid_startval
         return self.storage.keys()[poz]
 
-    def update(self, corpus: tuple) -> int:        
+    def update(self, corpus: tuple) -> int:
         """
         Fills a storage by letters from the corpus
         :param corpus: a tuple of sentences
@@ -110,12 +110,12 @@ class LetterStorage:
                         return -1
         return 0
 
-    def update_string(self, text: str) -> int:       
+    def update_string(self, text: str) -> int:
         """
         Fills a storage by letters from the glued_letters
         :param text: a string with glued_letters
         :return: 0 if succeeds, 1 if not
-        """        
+        """
         if not isinstance(text, str):
             return -1
         for letter in text:
@@ -125,7 +125,7 @@ class LetterStorage:
 
 
 # 4
-def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:   
+def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     Encodes sentences by replacing letters with their ids
     :param storage: an instance of the LetterStorage class
@@ -144,7 +144,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
 
 # 4
-def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:  
+def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     Decodes sentences by replacing letters with their ids
     :param storage: an instance of the LetterStorage class
@@ -162,7 +162,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
 
 # 6
-class NGramTrie:       
+class NGramTrie:
         """
         Stores and manages ngrams
         """
@@ -177,7 +177,7 @@ def __init__(self, n: int, letter_storage: LetterStorage):
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-def extract_n_grams(self, encoded_corpus: tuple) -> int:  
+def extract_n_grams(self, encoded_corpus: tuple) -> int:
     """
     Extracts n-grams from the given sentence, fills the field n_grams
     :return: 0 if succeeds, 1 if not
@@ -204,7 +204,7 @@ def extract_n_grams(self, encoded_corpus: tuple) -> int:
     self.n_grams = tuple(n_grams)
     return 0
 
-def get_n_grams_frequencies(self) -> int:  
+def get_n_grams_frequencies(self) -> int:
     """
     Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
     :return: 0 if succeeds, 1 if not
@@ -229,7 +229,7 @@ def get_n_grams_frequencies(self) -> int:
     return 0
 
 # 8
-def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:    
+def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
     """
     Extracts n_grams frequencies from given dictionary.
     Fills self.n_gram_frequency field.
@@ -242,7 +242,7 @@ def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
     return 0
 
 # 10
-def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:    
+def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
     """
     Extracts n_grams log-probabilities from given dictionary.
     Fills self.n_gram_log_probabilities field.
@@ -255,7 +255,7 @@ def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
     return 0
 
 # 10
-def calculate_log_probabilities(self) -> int:   
+def calculate_log_probabilities(self) -> int:
     """
     Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
     :return: 0 if succeeds, 1 if not
@@ -272,7 +272,7 @@ def calculate_log_probabilities(self) -> int:
 
 
 # 6
-class LanguageProfile:  
+class LanguageProfile:
     """
     Stores and manages language profile information
     """
@@ -282,7 +282,7 @@ class LanguageProfile:
         self.tries = []
         self.n_words = []
 
-    def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:      
+    def create_from_tokens(self, encoded_corpus: tuple, ngram_sizes: tuple) -> int:
         """
         Creates a language profile
         :param letters: a tuple of encoded letters
@@ -313,7 +313,7 @@ class LanguageProfile:
             self.n_words.append(len(n_gram_trie.n_gram_frequencies))
         return 0
 
-    def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:       
+    def get_top_k_n_grams(self, k: int, trie_level: int) -> tuple:
         """
         Returns the most common n-grams
         :param k: a number of the most common n-grams
@@ -349,7 +349,7 @@ class LanguageProfile:
         return ()
 
     # 8
-    def save(self, name: str) -> int:        
+    def save(self, name: str) -> int:
         """
         Saves language profile into json file
         :param name: name of the json file with .json format
@@ -370,7 +370,7 @@ class LanguageProfile:
         return 0
 
     # 8
-    def open(self, file_name: str) -> int:        
+    def open(self, file_name: str) -> int:
         """
         Opens language profile from json file and writes output to
             self.language,
@@ -435,14 +435,14 @@ def calculate_distance(unknown_profile: LanguageProfile, known_profile: Language
 
 
 # 8
-class LanguageDetector:   
+class LanguageDetector:
     """
     Detects profile language using distance
     """
     def __init__(self):
         self.language_profiles = {}
 
-    def register_language(self, language_profile: LanguageProfile) -> int:   
+    def register_language(self, language_profile: LanguageProfile) -> int:
         """
         Adds a new language profile to the storage,
         where the storage is a dictionary like {language: language_profile}
@@ -456,7 +456,7 @@ class LanguageDetector:
         return 0
 
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: Tuple[int]) -> \
-            Dict[str, int] or int:      
+            Dict[str, int] or int:
         """
         Detects the language of an unknown profile and its score
         :param unknown_profile: a dictionary
@@ -506,12 +506,12 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
 
 
 # 10
-class ProbabilityLanguageDetector(LanguageDetector):   
+class ProbabilityLanguageDetector(LanguageDetector):
     """
     Detects profile language using probabilities
     """
     def detect(self, unknown_profile: LanguageProfile, k: int, trie_levels: tuple) -> Dict[Tuple[
-                                                                                               str, int], int or float] or int:    
+                                                                                               str, int], int or float] or int:
         """
         Detects the language of an unknown profile and its probability score
         :param unknown_profile: an instance of LanguageDetector
