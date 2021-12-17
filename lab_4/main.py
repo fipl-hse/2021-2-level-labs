@@ -61,7 +61,10 @@ class LetterStorage(Storage):
         pass
         if not isinstance(elements, tuple):
             return -1
-        return super().update(elements)
+        for word in elements:
+            for letter in word:
+                self._put(letter)
+        return 0
 
     def get_letter_count(self) -> int:
         """
@@ -136,7 +139,6 @@ class NGramTextGenerator:
                     for n_gram, freq in trie.n_gram_frequencies.items():
                         if n_gram not in self._used_n_grams:
                             possible_ngrams[n_gram] = freq
-                    self._used_n_grams = []
                     for n_gram, freq in trie.n_gram_frequencies.items():
                         if n_gram[:-1] == context:
                             possible_ngrams[n_gram] = freq
