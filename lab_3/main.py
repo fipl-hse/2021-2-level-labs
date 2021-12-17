@@ -165,7 +165,7 @@ class NGramTrie:
         """
         Stores and manages ngrams
         """
-  def __init__(self, n: int, letter_storage: LetterStorage):
+def __init__(self, n: int, letter_storage: LetterStorage):
     self.size = n
     self.storage = letter_storage
     self.n_grams = []
