@@ -176,98 +176,98 @@ def __init__(self, n: int, letter_storage: LetterStorage):
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-  def extract_n_grams(self, encoded_corpus: tuple) -> int:  
-      """
-      Extracts n-grams from the given sentence, fills the field n_grams
-      :return: 0 if succeeds, 1 if not
-      e.g.
-      encoded_corpus = (
-          ((1, 2, 3, 4, 1), (1, 5, 2, 1)),
-          ((1, 3, 4, 1), (1, 5, 2, 1))
-      )
-      self.size = 2
-      --> (
-          (
-              ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
-              (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
-          )
-      )
-        """     
-      if not isinstance(encoded_corpus, tuple):
-          return 1
-      n_grams = tuple(tuple(tuple(word[i:i + self.size]
-                                  for i in range(len(word) - self.size + 1))
-                            for word in sent)
-                      for sent in encoded_corpus)
-      n_grams = tuple(tuple(word for word in sent if word) for sent in n_grams if sent)
-      self.n_grams = tuple(n_grams)
-      return 0
+def extract_n_grams(self, encoded_corpus: tuple) -> int:  
+    """
+    Extracts n-grams from the given sentence, fills the field n_grams
+    :return: 0 if succeeds, 1 if not
+    e.g.
+    encoded_corpus = (
+        ((1, 2, 3, 4, 1), (1, 5, 2, 1)),
+        ((1, 3, 4, 1), (1, 5, 2, 1))
+    )
+    self.size = 2
+    --> (
+        (
+            ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
+            (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
+        )
+    )
+      """     
+    if not isinstance(encoded_corpus, tuple):
+        return 1
+    n_grams = tuple(tuple(tuple(word[i:i + self.size]
+                                for i in range(len(word) - self.size + 1))
+                          for word in sent)
+                    for sent in encoded_corpus)
+    n_grams = tuple(tuple(word for word in sent if word) for sent in n_grams if sent)
+    self.n_grams = tuple(n_grams)
+    return 0
 
-  def get_n_grams_frequencies(self) -> int:  
-      """
-      Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
-      :return: 0 if succeeds, 1 if not
-      e.g.
-      self.n_grams = (
-          (
-              ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
-              (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
-          )
-      )
-      --> {
-          (1, 2): 1, (2, 3): 1, (3, 4): 2, (4, 1): 2,
-          (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
-      }
-      """       
-      if not self.n_grams:
-          return 1
+def get_n_grams_frequencies(self) -> int:  
+    """
+    Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
+    :return: 0 if succeeds, 1 if not
+    e.g.
+    self.n_grams = (
+        (
+            ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
+            (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
+        )
+    )
+    --> {
+        (1, 2): 1, (2, 3): 1, (3, 4): 2, (4, 1): 2,
+        (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
+    }
+    """       
+    if not self.n_grams:
+        return 1
       for sentence in self.n_grams:
           for word in sentence:
               for n_gram in word:
                   self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
       return 0
 
-  # 8
-  def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:    
-      """
-      Extracts n_grams frequencies from given dictionary.
-      Fills self.n_gram_frequency field.
-      """       
-      if not isinstance(n_grams_dictionary, dict):
-          return 1
-      for key, value in n_grams_dictionary.items():
-          if isinstance(key, tuple) and isinstance(value, int):
-                self.n_gram_frequencies[key] = value
-      return 0
+# 8
+def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:    
+    """
+    Extracts n_grams frequencies from given dictionary.
+    Fills self.n_gram_frequency field.
+    """       
+    if not isinstance(n_grams_dictionary, dict):
+        return 1
+    for key, value in n_grams_dictionary.items():
+        if isinstance(key, tuple) and isinstance(value, int):
+              self.n_gram_frequencies[key] = value
+    return 0
 
-  # 10
-  def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:    
-      """
-      Extracts n_grams log-probabilities from given dictionary.
-      Fills self.n_gram_log_probabilities field.
-      """      
-      if not isinstance(n_grams_dictionary, dict):
-          return 1
-      for n_gram, log_probability in n_grams_dictionary.items():
-          if isinstance(n_gram, tuple) and isinstance(log_probability, float):
-              self.n_gram_log_probabilities[n_gram] = log_probability
-      return 0
+# 10
+def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:    
+    """
+    Extracts n_grams log-probabilities from given dictionary.
+    Fills self.n_gram_log_probabilities field.
+    """      
+    if not isinstance(n_grams_dictionary, dict):
+        return 1
+    for n_gram, log_probability in n_grams_dictionary.items():
+        if isinstance(n_gram, tuple) and isinstance(log_probability, float):
+            self.n_gram_log_probabilities[n_gram] = log_probability
+    return 0
 
-  # 10
-  def calculate_log_probabilities(self) -> int:   
-      """
-      Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
-      :return: 0 if succeeds, 1 if not
-      """      
-      if not self.n_gram_frequencies:
-          return 1
-      for n_gram, frequency in self.n_gram_frequencies.items():
-          amount = 0
-          for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
-              if n_gram[:-1] == n_gram_neighbour[:-1]:
-                  amount += frequency_neighbour
-          self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
-      return 0
+# 10
+def calculate_log_probabilities(self) -> int:   
+    """
+    Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
+    :return: 0 if succeeds, 1 if not
+    """      
+    if not self.n_gram_frequencies:
+        return 1
+    for n_gram, frequency in self.n_gram_frequencies.items():
+        amount = 0
+        for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
+            if n_gram[:-1] == n_gram_neighbour[:-1]:
+                amount += frequency_neighbour
+        self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
+    return 0
 
 
 # 6
