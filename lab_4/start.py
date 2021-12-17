@@ -17,12 +17,12 @@ if __name__ == '__main__':
     preprocessed_text = tokenize_by_letters(reference_text)
     storage = LetterStorage()
     storage.update(preprocessed_text)
-
-    number_letters = storage.get_letter_count()
-
-    print('The number of letters is', number_letters)
-    print('Top 5 letters with the lowest id is', list(storage.storage.keys())[:5])
-    print('Top 5 letters with the highest id is', list(storage.storage.keys())[-5:])
+    number_of_letters = storage.get_letter_count()
+    the_lowest_id = list(storage.storage.items())[:5]
+    the_highest_id = list(storage.storage.items())[-5:]
+    print('Number of letters = {} '.format(number_of_letters))
+    print('Letters with the lowest id: {}'.format(the_lowest_id))
+    print('Letters with the highest id: {}'.format(the_highest_id))
 
     print("****************SCORE 6****************")
     # with open(os.path.join(PATH_TO_LAB_FOLDER, 'reference_text.txt'), 'r', encoding="utf-8") \
