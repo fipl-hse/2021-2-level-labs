@@ -398,39 +398,39 @@ class LanguageProfile:
             self.tries.append(trie)
         return 0
 
-
- # 6
- def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
-                       k: int, trie_level: int) -> int:
-    """
-    Calculates distance between top_k n-grams of unknown profile and known profile
-    :param unknown_profile: LanguageProfile class instance
-    :param known_profile: LanguageProfile class instance
-    :param k: number of frequent N-grams to take into consideration
-    :param trie_level: N-gram sizes to use in comparison
-    :return: a distance
-    Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5),
-    (2, 3)),
-    второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
-    Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
-    Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
-    Соответственно расстояние между наборами равно 2.
-    """  
-    if not (isinstance(unknown_profile, LanguageProfile)
-            and isinstance(known_profile, LanguageProfile)
-            and isinstance(k, int)
-            and isinstance(trie_level, int)):
-        return -1
-    distance = 0
-    frequency_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
-    frequency_kn = known_profile.get_top_k_n_grams(k, trie_level)
-    for index_unk, element_unk in enumerate(frequency_unk):
-        if element_unk not in frequency_kn:
-            distance += len(frequency_kn)
-        for index_kn, element_kn in enumerate(frequency_kn):
-            if element_unk == element_kn:
-                distance += abs(index_unk - index_kn)
-    return distance
+    
+# 6
+def calculate_distance(unknown_profile: LanguageProfile, known_profile: LanguageProfile,
+                      k: int, trie_level: int) -> int:
+   """
+   Calculates distance between top_k n-grams of unknown profile and known profile
+   :param unknown_profile: LanguageProfile class instance
+   :param known_profile: LanguageProfile class instance
+   :param k: number of frequent N-grams to take into consideration
+   :param trie_level: N-gram sizes to use in comparison
+   :return: a distance
+   Например, первый набор N-грамм для неизвестного профиля - first_n_grams = ((1, 2), (4, 5),
+   (2, 3)),
+   второй набор N-грамм для известного профиля – second_n_grams = ((1, 2), (2, 3), (4, 5)).
+   Расстояние для (1, 2) равно 0, так как индекс в первом наборе – 0, во втором – 0, |0 – 0| = 0.
+   Расстояние для (4, 5) равно 1, расстояние для (2, 3) равно 1.
+   Соответственно расстояние между наборами равно 2.
+   """  
+   if not (isinstance(unknown_profile, LanguageProfile)
+           and isinstance(known_profile, LanguageProfile)
+           and isinstance(k, int)
+           and isinstance(trie_level, int)):
+       return -1
+   distance = 0
+   frequency_unk = unknown_profile.get_top_k_n_grams(k, trie_level)
+   frequency_kn = known_profile.get_top_k_n_grams(k, trie_level)
+   for index_unk, element_unk in enumerate(frequency_unk):
+       if element_unk not in frequency_kn:
+           distance += len(frequency_kn)
+       for index_kn, element_kn in enumerate(frequency_kn):
+           if element_unk == element_kn:
+               distance += abs(index_unk - index_kn)
+   return distance
 
 
 # 8
