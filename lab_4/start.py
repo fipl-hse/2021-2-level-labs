@@ -23,13 +23,12 @@ corpus = tokenize_by_letters(reference_text)
 storage = LetterStorage()
 storage.update(corpus)
 
-letter_count = storage.get_letter_count()
-print(f'total letter count: {letter_count}')
-
-top_index = sorted(storage.storage, key=storage.storage.get, reverse=True)
-print(f'letters with smallest indicators: {top_index[-1:-6:-1]}')
-print(f'letters with biggest indicators: {top_index[:5]}')
-
-    RESULT = ''
+    RESULT = storage.get_letter_count()
+    print(f'total letter count: {RESULT}')
+    
+    top_index = sorted(storage.storage, key=storage.storage.get, reverse=True)
+    print(f'letters with smallest indicators: {top_index[-1:-6:-1]}')
+    print(f'letters with biggest indicators: {top_index[:5]}')
+    
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Detection not working'
