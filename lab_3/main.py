@@ -162,7 +162,7 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
 
 # 6
- class NGramTrie:       
+class NGramTrie:       
         """
         Stores and manages ngrams
         """
