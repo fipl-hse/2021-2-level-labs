@@ -9,6 +9,8 @@ from lab_4.language_profile import LanguageProfile
 
 
 # 4
+
+
 def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
@@ -54,6 +56,7 @@ class LetterStorage(Storage):
             return -1
         return len(self.storage)
 
+    
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -68,6 +71,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     encoded_sentences = tuple(tuple(storage.get_id(letter) for letter in word) for word in corpus)
     return encoded_sentences
 
+
 # 4
 def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     """
@@ -81,6 +85,8 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     storage.update(sentence)
     decoded_sentences = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
     return decoded_sentences
+
+
 # 6
 class NGramTextGenerator:
     """
@@ -90,6 +96,8 @@ class NGramTextGenerator:
     def __init__(self, language_profile: LanguageProfile):
          self.language_profile = language_profile
         self._used_n_grams = []
+        
+        
         
     def _generate_letter(self, context: tuple) -> int:
         """
@@ -116,7 +124,6 @@ class NGramTextGenerator:
                 for n_gram in trie.n_gram_frequencies:
                     if n_gram[:-1] == context and n_gram not in self._used_n_grams:
                         n_grams.append((n_gram, trie.n_gram_frequencies[n_gram]))
-
         if not n_grams:	
             return -1
         n_grams = sorted(n_grams, key=lambda x: x[1], reverse = True)
@@ -141,10 +148,10 @@ class NGramTextGenerator:
             context = *context[1:], following_letter
             if f_word[-1] == self.language_profile.storage.storage['_']:
                 break
-
         return tuple(future_word)
 
 
+    
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
@@ -186,6 +193,7 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     result = result.capitalize()
     result += '.'
     return result
+
 
 # 8
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
