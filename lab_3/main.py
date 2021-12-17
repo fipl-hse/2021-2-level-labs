@@ -20,6 +20,15 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+        if not isinstance(text, str):
+            return ()
+        text=text.lower()
+        umlaut_replace = {'ö': 'oe',
+                           'ü': 'ue',
+                           'ä': 'ae',
+                           'ß': 'ss'}
+        text = re.sub(r'[^\w\s\d+]','',text)
+        text = re.split(r'\s', text)
     
   
 
