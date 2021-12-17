@@ -2,9 +2,10 @@
 Language detection starter
 """
 
+
 import os
 from lab_3.main import encode_corpus, LanguageProfile, LetterStorage, \
-    tokenize_by_sentence, load_profile
+    tokenize_by_sentence
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_PROFILES_FOLDER = os.path.join(PATH_TO_LAB_FOLDER, 'profiles\\')
 
@@ -77,7 +78,6 @@ if __name__ == '__main__':
     encoded_de_text = encode_corpus(storage, de_text)
     encoded_unk_text = encode_corpus(storage, unk_text)
 
-
     # score 10
     encoded_secret_text = encode_corpus(storage, secret_text)
 
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     # score 10
     secret_profile = LanguageProfile(storage, 'secret')
     RESULT = ''
-    profile_en_10 = load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'en'))
+    #profile_en_10 = load_profile(os.path.join(PATH_TO_PROFILES_FOLDER, 'en'))
     #new_profile = LanguageProfile()
     it_profile.open(os.path.join(PATH_TO_PROFILES_FOLDER, 'it'))
     sk_profile.open(os.path.join(PATH_TO_PROFILES_FOLDER, 'sk'))
