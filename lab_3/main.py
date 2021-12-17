@@ -3,6 +3,7 @@ Lab 3
 Language classification using n-grams
 """
 
+import math
 from typing import Dict, Tuple
 import re
 
@@ -66,6 +67,7 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
+        
         if not isinstance(letter, str):
             return -1
 
@@ -73,8 +75,8 @@ class LetterStorage:
             self.storage[letter] = self.uid
             self.uid += 1
         return 0
-
-  def get_id_by_letter(self, letter: str) -> int:
+    
+    def get_id_by_letter(self, letter: str) -> int:
         """
         Gets a unique id by a letter
         :param letter: a letter
@@ -83,10 +85,9 @@ class LetterStorage:
 
         if not isinstance(letter, str) or letter not in self.storage:
             return -1
-
         return self.storage[letter]
-
-        def get_letter_by_id(self, letter_id: int) -> str or int:
+    
+    def get_letter_by_id(self, letter_id: int) -> str or int:
         """
         Gets a letter by a unique id
         :param letter_id: a unique id
@@ -95,12 +96,10 @@ class LetterStorage:
 
         if not isinstance(letter_id, int) or (letter_id not in range(self.uid_startval, self.uid)):
             return -1
-
         poz = letter_id - self.uid_startval
-
         return self.storage.keys()[poz]
 
-   def update(self, corpus: tuple) -> int:
+    def update(self, corpus: tuple) -> int:
         """
         Fills a storage by letters from the corpus
         :param corpus: a tuple of sentences
@@ -109,7 +108,6 @@ class LetterStorage:
 
         if not isinstance(corpus, tuple):
             return -1
-
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
@@ -123,6 +121,7 @@ class LetterStorage:
         :param text: a string with glued_letters
         :return: 0 if succeeds, 1 if not
         """
+        
         if not isinstance(text, str):
             return -1
         for letter in text:
@@ -176,114 +175,114 @@ def decode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         Stores and manages ngrams
         """
 
-    def __init__(self, n: int, letter_storage: LetterStorage):
-        self.size = n
-        self.storage = letter_storage
-        self.n_grams = []
-        self.n_gram_frequencies = {}
-        self.n_gram_log_probabilities = {}
+ def __init__(self, n: int, letter_storage: LetterStorage):
+    self.size = n
+    self.storage = letter_storage
+    self.n_grams = []
+    self.n_gram_frequencies = {}
+    self.n_gram_log_probabilities = {}
 
 
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
-    def extract_n_grams(self, encoded_corpus: tuple) -> int:
-        """
-        Extracts n-grams from the given sentence, fills the field n_grams
-        :return: 0 if succeeds, 1 if not
-        e.g.
-        encoded_corpus = (
-            ((1, 2, 3, 4, 1), (1, 5, 2, 1)),
-            ((1, 3, 4, 1), (1, 5, 2, 1))
-        )
-        self.size = 2
-        --> (
-            (
-                ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
-                (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
-            )
-        )
+  def extract_n_grams(self, encoded_corpus: tuple) -> int:
+      """
+      Extracts n-grams from the given sentence, fills the field n_grams
+      :return: 0 if succeeds, 1 if not
+      e.g.
+      encoded_corpus = (
+          ((1, 2, 3, 4, 1), (1, 5, 2, 1)),
+          ((1, 3, 4, 1), (1, 5, 2, 1))
+      )
+      self.size = 2
+      --> (
+          (
+              ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
+              (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
+          )
+      )
         """
         
-        if not isinstance(encoded_corpus, tuple):
-            return 1
-        n_grams = tuple(tuple(tuple(word[i:i + self.size]
-                                    for i in range(len(word) - self.size + 1))
-                              for word in sent)
-                        for sent in encoded_corpus)
-        n_grams = tuple(tuple(word for word in sent if word) for sent in n_grams if sent)
-        self.n_grams = tuple(n_grams)
-        return 0
+      if not isinstance(encoded_corpus, tuple):
+          return 1
+      n_grams = tuple(tuple(tuple(word[i:i + self.size]
+                                  for i in range(len(word) - self.size + 1))
+                            for word in sent)
+                      for sent in encoded_corpus)
+      n_grams = tuple(tuple(word for word in sent if word) for sent in n_grams if sent)
+      self.n_grams = tuple(n_grams)
+      return 0
 
-    def get_n_grams_frequencies(self) -> int:
-        """
-        Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
-        :return: 0 if succeeds, 1 if not
-        e.g.
-        self.n_grams = (
-            (
-                ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
-                (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
-            )
-        )
-        --> {
-            (1, 2): 1, (2, 3): 1, (3, 4): 2, (4, 1): 2,
-            (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
-        }
-        """
+  def get_n_grams_frequencies(self) -> int:
+      """
+      Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
+      :return: 0 if succeeds, 1 if not
+      e.g.
+      self.n_grams = (
+          (
+              ((1, 2), (2, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))),
+              (((1, 3), (3, 4), (4, 1)), ((1, 5), (5, 2), (2, 1))
+          )
+      )
+      --> {
+          (1, 2): 1, (2, 3): 1, (3, 4): 2, (4, 1): 2,
+          (1, 5): 2, (5, 2): 2, (2, 1): 2, (1, 3): 1
+      }
+      """
         
-        if not self.n_grams:
-            return 1
-        for sentence in self.n_grams:
-            for word in sentence:
-                for n_gram in word:
-                    self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
-        return 0
+      if not self.n_grams:
+          return 1
+      for sentence in self.n_grams:
+          for word in sentence:
+              for n_gram in word:
+                  self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
+      return 0
 
-    # 8
-    def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
-        """
-        Extracts n_grams frequencies from given dictionary.
-        Fills self.n_gram_frequency field.
-        """
+  # 8
+  def extract_n_grams_frequencies(self, n_grams_dictionary: dict) -> int:
+      """
+      Extracts n_grams frequencies from given dictionary.
+      Fills self.n_gram_frequency field.
+      """
         
-        if not isinstance(n_grams_dictionary, dict):
-            return 1
-        for key, value in n_grams_dictionary.items():
-            if isinstance(key, tuple) and isinstance(value, int):
+      if not isinstance(n_grams_dictionary, dict):
+          return 1
+      for key, value in n_grams_dictionary.items():
+          if isinstance(key, tuple) and isinstance(value, int):
                 self.n_gram_frequencies[key] = value
-        return 0
+      return 0
 
-    # 10
-    def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
-        """
-        Extracts n_grams log-probabilities from given dictionary.
-        Fills self.n_gram_log_probabilities field.
-        """
+  # 10
+  def extract_n_grams_log_probabilities(self, n_grams_dictionary: dict) -> int:
+      """
+      Extracts n_grams log-probabilities from given dictionary.
+      Fills self.n_gram_log_probabilities field.
+      """
         
-        if not isinstance(n_grams_dictionary, dict):
-            return 1
-        for n_gram, log_probability in n_grams_dictionary.items():
-            if isinstance(n_gram, tuple) and isinstance(log_probability, float):
-                self.n_gram_log_probabilities[n_gram] = log_probability
-        return 0
+      if not isinstance(n_grams_dictionary, dict):
+          return 1
+      for n_gram, log_probability in n_grams_dictionary.items():
+          if isinstance(n_gram, tuple) and isinstance(log_probability, float):
+              self.n_gram_log_probabilities[n_gram] = log_probability
+      return 0
 
-    # 10
-    def calculate_log_probabilities(self) -> int:
-        """
-        Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
-        :return: 0 if succeeds, 1 if not
-        """
+  # 10
+  def calculate_log_probabilities(self) -> int:
+      """
+      Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
+      :return: 0 if succeeds, 1 if not
+      """
         
-        if not self.n_gram_frequencies:
-            return 1
-        for n_gram, frequency in self.n_gram_frequencies.items():
-            amount = 0
-            for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
-                if n_gram[:-1] == n_gram_neighbour[:-1]:
-                    amount += frequency_neighbour
-            self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
-        return 0
+      if not self.n_gram_frequencies:
+          return 1
+      for n_gram, frequency in self.n_gram_frequencies.items():
+          amount = 0
+          for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
+              if n_gram[:-1] == n_gram_neighbour[:-1]:
+                  amount += frequency_neighbour
+          self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
+      return 0
 
 
 # 6
@@ -405,18 +404,14 @@ class LanguageProfile:
             profile_dict = json.load(lang_profile_file)
         self.language = profile_dict["name"]
         self.n_words = profile_dict["n_words"]
-
         self.tries = []
-        
         for glued_letter in "".join(profile_dict["freq"]):
             self.storage.update_string(glued_letter)
-
         tries_dict = {}
         for n_gram, frequency in profile_dict["freq"].items():
             if len(n_gram) not in tries_dict:
                 tries_dict[len(n_gram)] = {}
-            tries_dict[len(n_gram)][tuple(map(self.storage.get_id_by_letter, n_gram))] = frequency
-            
+            tries_dict[len(n_gram)][tuple(map(self.storage.get_id_by_letter, n_gram))] = frequency 
         for size, freq_dict in tries_dict.items():
             trie = NGramTrie(size, self.storage)
             trie.extract_n_grams_frequencies(freq_dict)
@@ -475,6 +470,7 @@ class LanguageDetector:
         :param language_profile: a language profile
         :return: 0 if succeeds, 1 if not
         """
+        
         if not isinstance(language_profile, LanguageProfile):
             return 1
         if language_profile not in self.language_profiles:
@@ -491,6 +487,7 @@ class LanguageDetector:
         :return: a dictionary with language labels and their scores if input is correct, otherwise
         -1
         """
+        
         if not (isinstance(unknown_profile, LanguageProfile)
                 and isinstance(k, int)
                 and isinstance(trie_levels, tuple)):
@@ -521,17 +518,13 @@ def calculate_probability(unknown_profile: LanguageProfile, known_profile: Langu
             and isinstance(k, int)
             and isinstance(trie_level, int)):
         return -1
-
     probability = 0
-
     for n_gram_trie in known_profile.tries:
         if n_gram_trie.size == trie_level:
             n_gram_trie.calculate_log_probabilities()
-
             for n_gram in unknown_profile.get_top_k_n_grams(k, trie_level):
                 if n_gram in n_gram_trie.n_gram_log_probabilities:
                     probability += n_gram_trie.n_gram_log_probabilities[n_gram]
-
     return probability
 
 
