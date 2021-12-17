@@ -22,6 +22,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     for symbols in removesymbols:
         text = text.replace(symbols, '')
     tokens = text.split()
+    tokenized_text = []
     for token in tokens:
         word = [letter for letter in token if letter.isalpha()]
         word.append('_')

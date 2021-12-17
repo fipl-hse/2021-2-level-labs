@@ -4,7 +4,7 @@ Language detection starter
 
 import os
 from lab_3.main import tokenize_by_sentence, LetterStorage, encode_corpus, \
-    LanguageProfile, calculate_distance, LanguageDetector,
+    LanguageProfile, calculate_distance, LanguageDetector
 
 PATH_TO_LAB_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
