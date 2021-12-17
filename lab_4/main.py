@@ -18,18 +18,18 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     removesymbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+',
                         '=', '{', '[', ']', '}', '|', '\\', ':', ';', '"', "'", '<', ',', '>',
                         '.', '?', '/', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-    text = text.lower()
     for symbols in removesymbols:
         text = text.replace(symbols, '')
-    tokens = text.split()
+    text = text.lower().split()
+    new_word = ['_']
     tokenized_text = []
-    for token in tokens:
-        word = [letter for letter in token if letter.isalpha()]
-        word.append('_')
-        word.insert(0, '_')
-        word_tuple = tuple(word)
-        tokenized_text.append(word_tuple)
-    return tuple(tokenized_text)
+    for word in text:
+        new_word.extend(word)
+        new_word.append('_')
+        tokenized_text.append(tuple(new_word))
+        new_word = ['_']
+    tokenizedbyletters = tuple(tokenized_text)
+    return tokenizedbyletters
 
 
 # 4
