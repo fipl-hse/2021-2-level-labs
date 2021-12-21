@@ -53,7 +53,7 @@ class LetterStorage(Storage):
         """
         Gets the number of letters in the storage
         """
-         if len(self.storage) == 0:
+        if len(self.storage) == 0:
             return -1
         return len(self.storage)
 
