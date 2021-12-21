@@ -124,7 +124,7 @@ class NGramTextGenerator:
                 for n_gram in trie.n_gram_frequencies:
                     if n_gram[:-1] == context and n_gram not in self._used_n_grams:
                         n_grams.append((n_gram, trie.n_gram_frequencies[n_gram]))
-        if not n_grams:	
+        if not n_grams:
             return -1
         n_grams = sorted(n_grams, key=lambda x: x[1], reverse = True)
         self._used_n_grams.append(n_grams[0][0])
@@ -171,7 +171,7 @@ class NGramTextGenerator:
         """
         Generates full sentence and decodes it
         """
-        if not isinstance(context, tuple):	
+        if not isinstance(context, tuple):
             return ""
         encoded_sentence = self.generate_sentence(context, word_limit)
         decoded_sentence = decode_sentence(self.language_profile.storage, encoded_sentence)
