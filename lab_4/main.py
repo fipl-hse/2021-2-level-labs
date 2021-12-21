@@ -9,8 +9,6 @@ from lab_4.language_profile import LanguageProfile
 
 
 # 4
-
-
 def tokenize_by_letters(text, str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
@@ -92,6 +90,7 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
 class NGramTextGenerator:
     """
     Language model for basic text generation
+    
     """
 
     def __init__(self, language_profile: LanguageProfile):
