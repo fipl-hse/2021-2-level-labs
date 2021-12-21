@@ -9,20 +9,22 @@ from lab_4.language_profile import LanguageProfile
 
 
 # 4
+
+
 def tokenize_by_letters(text, str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
-    
+
     """
-    
+
     if not isinstance(text, str):
-        Return -1
+        return -1
     f_txt = ""
     f_lst = []
     for letter in text:
         if letter.isalpha() or letter.isspace():
             f_txt += f_txt.join(letter)
-    for word in f_txtx.lower().strip().split():
+    for word in f_txt.lower().strip().split():
         f_lst.append(tuple("_" + word + "_"))
     return tuple(f_lst)
 
@@ -55,7 +57,7 @@ class LetterStorage(Storage):
             return -1
         return len(self.storage)
 
-    
+
 # 4
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -80,9 +82,11 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
     :return: a tuple of the decoded sentence
     """
     if not (isinstance(storage, LetterStorage) and isinstance(sentence, tuple)):
-        return ()	
+        return ()
     storage.update(sentence)
-    decoded_sentences = tuple(tuple(storage.get_element(letter) for letter in word) for word in sentence)
+    decoded_sentences = tuple(tuple(storage.get_element(letter)
+				    for letter in word)
+			      for word in sentence)
     return decoded_sentences
 
 
@@ -90,15 +94,15 @@ def decode_sentence(storage: LetterStorage, sentence: tuple) -> tuple:
 class NGramTextGenerator:
     """
     Language model for basic text generation
-    
+
     """
 
     def __init__(self, language_profile: LanguageProfile):
         self.language_profile = language_profile
         self._used_n_grams = []
-        
-        
-        
+
+
+
     def _generate_letter(self, context: tuple) -> int:
         """
         Generates the next letter.
@@ -112,7 +116,7 @@ class NGramTextGenerator:
         n_grams = []
         for trie in self.language_profile.tries:
             if trie.size == len(context) +1:
-                for n_gram in trie.n_gram_frequencies:	
+                for n_gram in trie.n_gram_frequencies:
                     if n_gram[:-1] == context and n_gram not in self._used_n_grams:
                         n_grams.append((n_gram, trie.n_gram_frequencies[n_gram]))
             if not n_grams:
@@ -151,12 +155,12 @@ class NGramTextGenerator:
         return tuple(future_word)
 
 
-    
+
     def generate_sentence(self, context: tuple, word_limit: int) -> tuple:
         """
         Generates full sentence with fixed number of words given.
         """
-        
+
         if not isinstance(context, tuple) or not isinstance(word_limit, int):
             return ()
         f_sentence = []
@@ -185,10 +189,10 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
         return ''
-    result = ''	
+    result = ''
     for element in decoded_corpus:
         for symbol in element:
-            result += symbol	
+            result += symbol
     result = result.replace('__', ' ')
     result = result.replace('_', '')
     result = result.capitalize()
@@ -204,10 +208,10 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
     Language model for likelihood based text generation
     """
 
-	
+
     def _calculate_maximum_likelihood(self, letter: int, context: tuple) -> float:
 
-	
+
         """
         Calculates maximum likelihood for a given letter
 
@@ -222,7 +226,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 or len(context) + 1 not in [trie.size for trie in self.profile.tries] \
                 or not context:
             return -1
-        word = context + (letter,)	
+        word = context + (letter,)
         freq_d = {}
         freq_word = 0
         for trie in self.profile.tries:
@@ -238,11 +242,11 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         prob = freq_word / freq_context
         return prob
 
-	
+
 
     def _generate_letter(self, context: tuple) -> int:
 
-	
+
         """
             Generates the next letter.
 
@@ -250,7 +254,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
             maximum likelihood frequency.
         """
-    
+ 
         if not isinstance(context, tuple)\
                 or len(context) + 1 not in [trie.size for trie in self.profile.tries]\
                 or not context:
