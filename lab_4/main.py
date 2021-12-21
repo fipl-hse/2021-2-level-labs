@@ -3,6 +3,7 @@ Lab 4
 Language generation algorithm based on language profiles
 """
 
+import re
 from typing import Tuple
 from lab_4.storage import Storage
 from lab_4.language_profile import LanguageProfile
@@ -11,7 +12,7 @@ from lab_4.language_profile import LanguageProfile
 # 4
 
 
-def tokenize_by_letters(text, str) -> Tuple or int:
+def tokenize_by_letters(text: str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
 
@@ -100,7 +101,6 @@ class NGramTextGenerator:
     def __init__(self, language_profile: LanguageProfile):
         self.language_profile = language_profile
         self._used_n_grams = []
-
 
 
     def _generate_letter(self, context: tuple) -> int:
