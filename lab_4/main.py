@@ -11,7 +11,7 @@ from lab_4.language_profile import LanguageProfile
 # 4
 
 
-def tokenize_by_letters(text: str) -> Tuple or int:
+def tokenize_by_letters(text, str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
     """
