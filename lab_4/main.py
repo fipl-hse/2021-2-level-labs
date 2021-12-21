@@ -14,10 +14,11 @@ from lab_4.language_profile import LanguageProfile
 def tokenize_by_letters(text, str) -> Tuple or int:
     """
     Tokenizes given sequence by letters
+    
     """
     
     if not isinstance(text: str):
-        Return 1
+        Return -1
     f_txt = ""
     f_lst = []
     for letter in text:
