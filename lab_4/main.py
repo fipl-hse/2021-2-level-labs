@@ -16,7 +16,7 @@ def tokenize_by_letters(text: str) -> Tuple or int:
     Tokenizes given sequence by letters
     """
     
-    if not isinstance(text: str): 
+    if not isinstance(text: str):
         Return 1
     f_txt = ""
     f_lst = []
