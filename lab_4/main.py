@@ -223,13 +223,13 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         """
 
         if not isinstance(letter, int) or not isinstance(context, tuple) \
-                or len(context) + 1 not in [trie.size for trie in self.profile.tries] \
+                or len(context) + 1 not in [trie.size for trie in self.language_profile.tries] \
                 or not context:
             return -1
         word = context + (letter,)
         freq_d = {}
         freq_word = 0
-        for trie in self.profile.tries:
+        for trie in self.language_profile.tries:
             if trie.size == len(word):
                 for n_gram, freq in trie.n_gram_frequencies.items():
                     if n_gram[:len(context)] == context:
@@ -256,17 +256,17 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         """
 
         if not isinstance(context, tuple)\
-                or len(context) + 1 not in [trie.size for trie in self.profile.tries]\
+                or len(context) + 1 not in [trie.size for trie in self.language_profile.tries]\
                 or not context:
             return -1
         prob_dict = {}
-        for trie in self.profile.tries:
+        for trie in self.language_profile.tries:
             if trie.size == len(context) + 1:
                 for n_gram in trie.n_gram_frequencies:
                     if n_gram[:-1] == context:
                         prob_dict[n_gram] = self._calculate_maximum_likelihood(n_gram[-1], context)
         if not prob_dict:
-            for trie in self.profile.tries:
+            for trie in self.language_profile.tries:
                 if trie.size == 1:
                     return max(trie.n_gram_frequencies.keys(), key=trie.n_gram_frequencies.get)[0]
         possible_letter = max(prob_dict.keys(), key=prob_dict.get)[-1]
