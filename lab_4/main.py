@@ -95,8 +95,8 @@ class NGramTextGenerator:
     """
 
     def __init__(self, language_profile: LanguageProfile):
-         self.language_profile = language_profile
-	 self._used_n_grams = []
+        self.language_profile = language_profile
+	self._used_n_grams = []
         
         
         
