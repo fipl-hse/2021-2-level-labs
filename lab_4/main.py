@@ -96,7 +96,7 @@ class NGramTextGenerator:
 
     def __init__(self, language_profile: LanguageProfile):
          self.language_profile = language_profile
-        self._used_n_grams = []
+	 self._used_n_grams = []
         
         
         
@@ -106,7 +106,7 @@ class NGramTextGenerator:
             Takes the letter from the most
             frequent ngram corresponding to the context given.
         """
-         if not isinstance(context, tuple):
+        if not isinstance(context, tuple):
             return -1
         if len(context) + 1 not in [trie.size for trie in self.language_profile.tries]:
             return -1
@@ -172,7 +172,7 @@ class NGramTextGenerator:
         """
         Generates full sentence and decodes it
         """
-         if not isinstance(context, tuple):	
+        if not isinstance(context, tuple):	
             return ""
         encoded_sentence = self.generate_sentence(context, word_limit)
         decoded_sentence = decode_sentence(self.language_profile.storage, encoded_sentence)
@@ -184,7 +184,7 @@ def translate_sentence_to_plain_text(decoded_corpus: tuple) -> str:
     """
     Converts decoded sentence into the string sequence
     """
-     if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
+    if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
         return ''
     result = ''	
     for element in decoded_corpus:
