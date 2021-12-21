@@ -142,7 +142,7 @@ class NGramTextGenerator:
             return ()
         f_word = []
         for letter in context:
-            future_word.append(letter)
+            f_word.append(letter)
         while True:
             if len(f_word) == word_max_length:
                 f_word.append(self.language_profile.storage.storage['_'])
@@ -152,7 +152,7 @@ class NGramTextGenerator:
             context = *context[1:], following_letter
             if f_word[-1] == self.language_profile.storage.storage['_']:
                 break
-        return tuple(future_word)
+        return tuple(f_word)
 
 
 
@@ -168,7 +168,7 @@ class NGramTextGenerator:
             following_word = self._generate_word(context)
             f_sentence.append(following_word)
             context = tuple(following_word[-1:])
-        return tuple(future_sentence)
+        return tuple(f_sentence)
 
 
     def generate_decoded_sentence(self, context: tuple, word_limit: int) -> str:
@@ -254,7 +254,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
             maximum likelihood frequency.
         """
- 
+
         if not isinstance(context, tuple)\
                 or len(context) + 1 not in [trie.size for trie in self.profile.tries]\
                 or not context:
