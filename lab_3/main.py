@@ -276,6 +276,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
+    
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
