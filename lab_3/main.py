@@ -254,21 +254,21 @@ def __init__(self, x_values: int, letter_storage: LetterStorage):
                 self.n_gram_log_probabilities[n_gram] = log_probability
         return 0
 
-# 10
-def calculate_log_probabilities(self) -> int:
-    """
-    Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
-    :return: 0 if succeeds, 1 if not
-    """
-    if not self.n_gram_frequencies:
-        return 1
-    for n_gram, frequency in self.n_gram_frequencies.items():
-        amount = 0
-        for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
-            if n_gram[:-1] == n_gram_neighbour[:-1]:
-                amount += frequency_neighbour
-        self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
-    return 0
+    # 10
+    def calculate_log_probabilities(self) -> int:
+        """
+        Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
+        :return: 0 if succeeds, 1 if not
+        """
+        if not self.n_gram_frequencies:
+            return 1
+        for n_gram, frequency in self.n_gram_frequencies.items():
+            amount = 0
+            for n_gram_neighbour, frequency_neighbour in self.n_gram_frequencies.items():
+                if n_gram[:-1] == n_gram_neighbour[:-1]:
+                    amount += frequency_neighbour
+            self.n_gram_log_probabilities[n_gram] = math.log(frequency / amount, math.e)
+        return 0
 
 
 # 6
@@ -276,7 +276,7 @@ class LanguageProfile:
     """
     Stores and manages language profile information
     """
-    
+
     def __init__(self, letter_storage: LetterStorage, language_name: str):
         self.storage = letter_storage
         self.language = language_name
