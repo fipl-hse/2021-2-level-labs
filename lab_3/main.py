@@ -173,7 +173,6 @@ def __init__(self, x_values: int, letter_storage: LetterStorage):
     self.n_gram_frequencies = {}
     self.n_gram_log_probabilities = {}
 
-
     # 6 - biGrams
     # 8 - threeGrams
     # 10 - nGrams
