@@ -58,8 +58,7 @@ class LetterStorage:
     
     def __init__(self):
         self.storage = {}
-        self.uid_startval = 1
-        self.uid = self.uid_startval
+        self.counter = 1
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -70,8 +69,8 @@ class LetterStorage:
         if not isinstance(letter, str):
             return -1
         if letter not in self.storage:
-            self.storage[letter] = self.uid
-            self.uid += 1
+            self.storage[letter] = self.counter
+            self.counter += 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -90,10 +89,10 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        if not isinstance(letter_id, int) or (letter_id not in range(self.uid_startval, self.uid)):
+        storage_upside_down = dict(zip(self.storage.values(), self.storafe.keys()))
+        if not isinstance(letter_id, int) or letter_id not in storage_upside_down:
             return -1
-        poz = letter_id - self.uid_startval
-        return self.storage.keys()[poz]
+        return storage_upside_down[letter_id]
 
     def update(self, corpus: tuple) -> int:
         """
