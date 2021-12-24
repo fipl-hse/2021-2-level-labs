@@ -2,11 +2,11 @@
 Lab 3
 Language classification using n-grams
 """
-
 import json
 import math
 from typing import Dict, Tuple
 import re
+
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -52,10 +52,10 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 # 4
 class LetterStorage:
-
     """
     Stores and manages letters
     """
+    
     def __init__(self):
         self.storage = {}
         self.uid_startval = 1
