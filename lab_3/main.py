@@ -24,10 +24,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return ()
-    umlaut_replace = {'ö': 'oe',
-                  'ü': 'ue',
-                  'ä': 'ae',
-                  'ß': 'ss'}
     sentence_raw = re.split(r"[!.?]\W(?=[\wöüäßÜÖÄẞ])", text)
     sentence_raw = [sentence_raw.lower().strip() for sentence_raw in sentence_raw if sentence_raw]
     text_tuple = []
@@ -35,18 +31,15 @@ def tokenize_by_sentence(text: str) -> tuple:
         words_raw = sentence_raw.split()
         sentence_tuple = []
         for word_raw in words_raw:
-            for key, value in umlaut_replace.items():
-                word_raw = word_raw.replace(key, value)
             word_tuple = [letter for letter in word_raw if letter.isalpha()]
             if word_tuple:
                 word_tuple.append('_')
                 word_tuple.insert(0, '_')
-                word_tuple = tuple(word_tuple)
-                sentence_tuple.append(word_tuple)
-        sentence_tuple = tuple(sentence_tuple)
-        if len(sentence_tuple) > 0:
-            text_tuple.append(sentence_tuple)
-    text_tuple = tuple(sentence_tuple)
+            word_tuple = tuple(word_tuple)
+            sentence_tuple.append(word_tuple)
+        sentence_tuple = tuple(word_tuple for word_tuple in sentence_tuple if word_tuple)
+        text_tuple.append(sentence_tuple)
+    text_tuple = tuple(sentence_tuple for sentence_tuple in text_tuple if sentence_tuple)
     return text_tuple
 
 
