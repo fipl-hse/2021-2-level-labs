@@ -29,7 +29,6 @@ def is_passed(lint_output: str, target_score: int) -> int:
         print(lint_output)
         return 0
     else:
-        print('\nLint check passed!\n')
         return 0
 
 
