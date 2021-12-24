@@ -55,7 +55,7 @@ class LetterStorage:
     """
     Stores and manages letters
     """
-    
+
     def __init__(self):
         self.storage = {}
         self.counter = 1
@@ -89,7 +89,7 @@ class LetterStorage:
         :param letter_id: a unique id
         :return: letter
         """
-        storage_upside_down = dict(zip(self.storage.values(), self.storafe.keys()))
+        storage_upside_down = dict(zip(self.storage.values(), self.storage.keys()))
         if not isinstance(letter_id, int) or letter_id not in storage_upside_down:
             return -1
         return storage_upside_down[letter_id]
