@@ -28,10 +28,10 @@ def tokenize_by_sentence(text: str) -> tuple:
                   'ü': 'ue',
                   'ä': 'ae',
                   'ß': 'ss'}
-    text = re.split(r"[!.?]\W(?=[\wöüäßÜÖÄẞ])", text)
-    text = [text.lower().strip() for sentence_raw in text if sentence_raw]
+    sentence_raw = re.split(r"[!.?]\W(?=[\wöüäßÜÖÄẞ])", text)
+    sentence_raw = [sentence_raw.lower().strip() for sentence_raw in sentence_raw if sentence_raw]
     text_tuple = []
-    for sentence_raw in text:
+    for sentence_raw in sentence_raw:
         words_raw = sentence_raw.split()
         sentence_tuple = []
         for word_raw in words_raw:
