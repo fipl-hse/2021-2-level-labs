@@ -49,6 +49,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     text_tuple = tuple(sentence_tuple)
     return text_tuple
 
+
 # 4
 class LetterStorage:
 
@@ -68,7 +69,6 @@ class LetterStorage:
         """
         if not isinstance(letter, str):
             return -1
-
         if letter not in self.storage:
             self.storage[letter] = self.uid
             self.uid += 1
