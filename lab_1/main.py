@@ -2,6 +2,7 @@
 Lab 1
 Language detection
 """
+import re
 
 
 def tokenize(text: str) -> list or None:
@@ -11,7 +12,8 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    pass
+    text = re.sub(r'[^\w\s]', '', text)
+    return text.split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
