@@ -56,7 +56,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
     list_of_words = [(key, freq_dict[key]) for key in freq_dict]
-    list_of_words.sort(key=lambda x: x[1])
+    list_of_words.sort(key=lambda x: x[1], reverse = True)
     list_of_words = list_of_words[:top_n]
     return [word[0] for word in list_of_words]
 
