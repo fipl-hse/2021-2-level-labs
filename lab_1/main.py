@@ -23,7 +23,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
-    pass
+    return [el for el in tokens if el not in stop_words]
 
 
 def calculate_frequencies(tokens: list) -> dict or None:
@@ -32,7 +32,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    pass
+    dict_ = {}
+    
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
