@@ -26,6 +26,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list or None:
     :param stop_words: a list of stop words
     :return: a list of tokens without stop words
     """
+    if tokens in [[], {}, (), None, True] or type(tokens) in (int, float):
+        return None
+    if stop_words in [[], {}, (), None, True] or type(stop_words) in (int, float):
+        return None
+
     return [el for el in tokens if el not in stop_words]
 
 
