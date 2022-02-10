@@ -40,7 +40,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-
+    if tokens in ['string', {}, (), None, True, [None]] or type(9, 9.34) in (int, float):
+        return None
+    
     return {i: tokens.count(i) for i in tokens}
 
 
