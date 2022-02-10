@@ -13,10 +13,7 @@ def tokenize(text: str) -> list or None:
     :return: a list of lower-cased tokens without punctuation
     """
     text = re.sub(r'[^\w\s]', '', text)
-    TL = text.split()
-    for tl in range(len(TL)):
-        TL[tl] = TL[tl].lower()
-    return TL
+    return [el.lower() for el in text.split()]
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list or None:
