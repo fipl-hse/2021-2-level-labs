@@ -56,7 +56,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
 
     if freq_dict in ['string', (), None, 9, 9.34, True, [None], []] or type(freq_dict) in (str, int, float):
         return None
-    
+
     list_of_words = [(key, freq_dict[key]) for key in freq_dict]
     list_of_words.sort(key=lambda x: x[1], reverse=True)
     list_of_words = list_of_words[:top_n]
@@ -71,7 +71,7 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    freq = calculate_frequencies(tokenize(text))
+    freq = calculate_frequencies(remove_stop_words(tokenize(text), stop_words))
     return {"name": language,
             "freq": freq,
             "n_words": len(freq)}
