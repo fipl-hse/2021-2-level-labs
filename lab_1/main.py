@@ -40,12 +40,8 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    counter = {}
 
-    for elem in tokens:
-        counter[elem] = counter.get(elem, 0) + 1
-
-    return {element: count for element, count in counter.items() if count > 1}
+    return {i: tokens.count(i) for i in tokens}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
@@ -56,7 +52,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :return: a list of the most common words
     """
     list_of_words = [(key, freq_dict[key]) for key in freq_dict]
-    list_of_words.sort(key=lambda x: x[1], reverse = True)
+    list_of_words.sort(key=lambda x: x[1], reverse=True)
     list_of_words = list_of_words[:top_n]
     return [word[0] for word in list_of_words]
 
@@ -145,4 +141,3 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
-
