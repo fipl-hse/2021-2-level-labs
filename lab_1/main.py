@@ -40,9 +40,9 @@ def calculate_frequencies(tokens: list) -> dict or None:
     :param tokens: a list of tokens
     :return: a dictionary with frequencies
     """
-    if tokens in ['string', {}, (), None, True, [None]] or type(9, 9.34) in (int, float):
+    if tokens in [{}, (), None, True, [None]] or type(tokens) in (int, float, str):
         return None
-    
+
     return {i: tokens.count(i) for i in tokens}
 
 
@@ -53,6 +53,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list or None:
     :param top_n: a number of the most common words
     :return: a list of the most common words
     """
+
+    if freq_dict in ['string', (), None, 9, 9.34, True, [None], []] or type(freq_dict) in (str, int, float):
+        return None
+    
     list_of_words = [(key, freq_dict[key]) for key in freq_dict]
     list_of_words.sort(key=lambda x: x[1], reverse=True)
     list_of_words = list_of_words[:top_n]
