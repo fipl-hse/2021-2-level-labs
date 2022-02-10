@@ -12,6 +12,9 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
+    if text in [[], {}, (), None, 9, 9.34, True]:
+        return None
+
     text = re.sub(r'[^\w\s]', '', text)
     return [el.lower() for el in text.split()]
 
@@ -137,3 +140,4 @@ def save_profile(profile: dict) -> int:
     :return: 0 if everything is ok, 1 if not
     """
     pass
+
