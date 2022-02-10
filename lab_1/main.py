@@ -64,7 +64,10 @@ def create_language_profile(language: str, text: str, stop_words: list) -> dict 
     :param stop_words: a list of stop words
     :return: a dictionary with three keys – name, freq, n_words
     """
-    pass
+    freq = calculate_frequencies(tokenize(text))
+    return {"name": language,
+            "freq": freq,
+            "n_words": len(freq)}
 
 
 def compare_profiles(unknown_profile: dict, profile_to_compare: dict, top_n: int) -> float or None:
