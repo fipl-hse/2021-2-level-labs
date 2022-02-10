@@ -12,7 +12,7 @@ def tokenize(text: str) -> list or None:
     :param text: a text
     :return: a list of lower-cased tokens without punctuation
     """
-    if text in [[], {}, (), None, 9, 9.34, True]:
+    if text in [[], {}, (), None, True] or type(text) in (int, float):
         return None
 
     text = re.sub(r'[^\w\s]', '', text)
